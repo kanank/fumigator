@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.711,C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\@source\Delphi\Fumigator\DOC\ClassFrmBase.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.995,C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\@source\Delphi\Fumigator\ClassSprForm.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.801,=C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.543,=C:\@source\Delphi\Fumigator\frmMain.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.072,=C:\@source\Delphi\Fumigator\frmWorker.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.816,C:\@source\Delphi\Fumigator\frmWorker.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.568,C:\@source\Delphi\Fumigator\frmWorker.pas=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.230,=C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.020,C:\@source\Delphi\Fumigator\formLogin.pas=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.576,=C:\@source\Delphi\Fumigator\frmWorkers.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.915,E:\@install\Delphi\@sources\Fumigator\uLocalizeDevExpress.pas=E:\@install\Delphi\@sources\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.652,=E:\@install\Delphi\@sources\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.711,C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\@source\Delphi\Fumigator\DOC\ClassFrmBase.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.995,C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\@source\Delphi\Fumigator\ClassSprForm.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.568,C:\@source\Delphi\Fumigator\frmWorker.dfm=C:\@source\Delphi\Fumigator\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.443,C:\Users\Катерина\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\@source\Delphi\Fumigator\fumigator.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.743,C:\@source\Delphi\Fumigator\Unit1.pas=C:\@source\Delphi\Fumigator\Classes\ClassSimpleForm.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.220,C:\@source\Delphi\Fumigator\Unit1.pas=C:\@source\Delphi\Fumigator\DM_Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.743,C:\@source\Delphi\Fumigator\Unit1.dfm=C:\@source\Delphi\Fumigator\Classes\ClassSimpleForm.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.220,C:\@source\Delphi\Fumigator\Unit1.dfm=C:\@source\Delphi\Fumigator\DM_Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.609,=C:\@source\Delphi\Fumigator\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.619,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.722,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.020,C:\@source\Delphi\Fumigator\formLogin.dfm=C:\@source\Delphi\Fumigator\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.587,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.116,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.726,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.778,=C:\@source\Delphi\Fumigator\Unit1.pas</Transaction>
+    <Transaction>2016.03.18 02:22:20.033,=C:\@source\GitHub\fumigator\Unit1.pas</Transaction>
+    <Transaction>2016.03.18 02:46:21.129,C:\@source\GitHub\fumigator\formDictionaries.dfm=C:\@source\GitHub\fumigator\Unit1.dfm</Transaction>
+    <Transaction>2016.03.18 02:46:21.129,C:\@source\GitHub\fumigator\formDictionaries.pas=C:\@source\GitHub\fumigator\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

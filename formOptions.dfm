@@ -5,7 +5,6 @@ inherited frmOptions: TfrmOptions
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitLeft = -116
   ExplicitWidth = 907
   ExplicitHeight = 468
   PixelsPerInch = 96
@@ -278,7 +277,7 @@ inherited frmOptions: TfrmOptions
       GridView = cxGridDBTableView1
     end
   end
-  object AddFile_btn: TRzButton
+  object btnTuneDictionaries: TRzButton
     Left = 345
     Top = 285
     Width = 184
@@ -294,8 +293,9 @@ inherited frmOptions: TfrmOptions
     ParentFont = False
     TabOrder = 7
     ThemeAware = False
+    OnClick = btnTuneDictionariesClick
   end
-  object RzButton1: TRzButton
+  object btnTuneOPClentList: TRzButton
     Left = 345
     Top = 320
     Width = 184

@@ -41,8 +41,8 @@ type
     Label3: TLabel;
     rights_upd: TIBUpdateSQL;
     RightsTran: TIBTransaction;
-    AddFile_btn: TRzButton;
-    RzButton1: TRzButton;
+    btnTuneDictionaries: TRzButton;
+    btnTuneOPClentList: TRzButton;
     btnAccept: TRzButton;
     memRights_list: TdxMemData;
     procedure FormCreate(Sender: TObject);
@@ -56,6 +56,7 @@ type
       AShift: TShiftState; var AHandled: Boolean);
     procedure DS_rights_listDataChange(Sender: TObject; Field: TField);
     procedure btnAcceptClick(Sender: TObject);
+    procedure btnTuneDictionariesClick(Sender: TObject);
   private
     procedure FilterRights;
   public
@@ -70,7 +71,19 @@ implementation
 {$R *.dfm}
 
 uses
-  Datasnap.Provider;
+  Datasnap.Provider, formDictionaries;
+
+procedure TfrmOptions.btnTuneDictionariesClick(Sender: TObject);
+var
+  frm: TfrmDictionaries;
+begin
+  frm := TfrmDictionaries.Create(nil);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
+end;
 
 procedure TfrmOptions.btnAcceptClick(Sender: TObject);
 var

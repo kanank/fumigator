@@ -4,7 +4,6 @@ inherited frmWorker: TfrmWorker
   ClientWidth = 714
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -70
   ExplicitWidth = 730
   ExplicitHeight = 660
   PixelsPerInch = 96

@@ -13,7 +13,8 @@ uses
   formOptions in 'formOptions.pas' {frmOptions},
   formLogin in 'formLogin.pas' {frmLogin},
   uLocalizeDevExpress in 'uLocalizeDevExpress.pas',
-  formDictionaries in 'formDictionaries.pas' {frmDictionaries};
+  formDictionaries in 'formDictionaries.pas' {frmDictionaries},
+  ClassSimpleSprForm in 'Classes\ClassSimpleSprForm.pas' {frmSimpleSpr};
 
 {$R *.res}
 
@@ -22,7 +23,7 @@ begin
   Application.MainFormOnTaskbar := True;
    Application.Title := 'Фумигатор';
 
-  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TDataModuleMain, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;

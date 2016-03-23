@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
-  IBX.IBQuery, IBX.IBUpdateSQL;
+  IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics;
 
 
 
@@ -84,6 +84,15 @@ type
     Worker_Q: TIBQuery;
     worker_tr: TIBTransaction;
     DsWorker: TDataSource;
+    ImgList: TcxImageList;
+    DicServices: TIBQuery;
+    DSDicServices: TDataSource;
+    DSDicMaterials: TDataSource;
+    DicMaterials: TIBQuery;
+    DicMaterials_upd: TIBUpdateSQL;
+    DicServices_upd: TIBUpdateSQL;
+    DicUserTypes_upd: TIBUpdateSQL;
+    DicWorkerProfs_upd: TIBUpdateSQL;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -191,6 +200,8 @@ begin
     //DicUserRight.Open;
     DicUserTypes.Open;
     DicWorkerProfs.Open;
+    DicServices.Open;
+    DicMaterials.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

@@ -1,0 +1,108 @@
+inherited frmDictionaries: TfrmDictionaries
+  Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+  ClientWidth = 1027
+  ExplicitWidth = 1043
+  ExplicitHeight = 396
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited img1: TImage
+    Left = 842
+  end
+  inherited RzPanel1: TRzPanel
+    Width = 1027
+    inherited Exit_bnt: TRzButton
+      Left = 893
+    end
+  end
+  object GridUserTypes: TcxGrid
+    Left = 8
+    Top = 8
+    Width = 208
+    Height = 254
+    TabOrder = 1
+    object cxGridDBTableView1: TcxGridDBTableView
+      Navigator.Buttons.CustomButtons = <>
+      Navigator.InfoPanel.Visible = True
+      DataController.DataSource = DataModuleMain.DSDicUserTypes
+      DataController.Options = [dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText]
+      DataController.Summary.DefaultGroupSummaryItems = <>
+      DataController.Summary.FooterSummaryItems = <>
+      DataController.Summary.SummaryGroups = <>
+      OptionsCustomize.ColumnFiltering = False
+      OptionsCustomize.ColumnGrouping = False
+      OptionsData.CancelOnExit = False
+      OptionsData.Deleting = False
+      OptionsData.DeletingConfirmation = False
+      OptionsData.Editing = False
+      OptionsData.Inserting = False
+      OptionsSelection.CellSelect = False
+      OptionsView.FocusRect = False
+      OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
+      OptionsView.GridLines = glNone
+      OptionsView.GroupByBox = False
+      object cxGridDBColumn1: TcxGridDBColumn
+        Caption = #1058#1080#1087' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
+        DataBinding.FieldName = 'NAME'
+        HeaderAlignmentHorz = taCenter
+        Options.Editing = False
+        Options.Filtering = False
+        Options.FilteringAddValueItems = False
+        Options.FilteringFilteredItemsList = False
+        Options.FilteringMRUItemsList = False
+        Options.FilteringPopup = False
+        Options.FilteringPopupMultiSelect = False
+        Options.IgnoreTimeForFiltering = False
+        Options.ShowEditButtons = isebNever
+        Options.AutoWidthSizable = False
+        Options.GroupFooters = False
+        Options.Grouping = False
+        Options.Moving = False
+        Width = 205
+      end
+    end
+    object cxGridLevel1: TcxGridLevel
+      GridView = cxGridDBTableView1
+    end
+  end
+  object pnlEdit: TRzPanel
+    Left = 8
+    Top = 268
+    Width = 208
+    Height = 33
+    Align = alCustom
+    BorderInner = fsStatus
+    BorderOuter = fsPopup
+    BorderSides = [sdLeft, sdRight, sdBottom]
+    TabOrder = 2
+    object btnAdd: TRzBitBtn
+      Left = 7
+      Top = 2
+      Width = 28
+      Height = 28
+      Hint = #1044#1086#1073#1072#1074#1080#1090#1100
+      TabOrder = 0
+      ImageIndex = 0
+      Images = DataModuleMain.ImgList
+    end
+    object btnEdit: TRzBitBtn
+      Left = 41
+      Top = 2
+      Width = 28
+      Height = 28
+      Hint = #1048#1079#1084#1077#1085#1080#1090#1100
+      TabOrder = 1
+      ImageIndex = 2
+      Images = DataModuleMain.ImgList
+    end
+    object btnDel: TRzBitBtn
+      Left = 173
+      Top = 2
+      Width = 28
+      Height = 28
+      Hint = #1059#1076#1072#1083#1080#1090#1100
+      TabOrder = 2
+      ImageIndex = 3
+      Images = DataModuleMain.ImgList
+    end
+  end
+end

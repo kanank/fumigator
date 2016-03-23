@@ -17,8 +17,6 @@ type
     { Public declarations }
   end;
 
-var
-  SimpleForm: TSimpleForm;
 
 implementation
 

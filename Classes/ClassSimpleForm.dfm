@@ -24,8 +24,6 @@ inherited SimpleForm: TSimpleForm
     BorderOuter = fsBump
     BorderSides = [sdTop, sdBottom]
     TabOrder = 0
-    ExplicitLeft = -38
-    ExplicitWidth = 679
     DesignSize = (
       641
       44)

@@ -7,6 +7,9 @@ inherited frmSimpleSpr: TfrmSimpleSpr
   Position = poOwnerFormCenter
   ExplicitWidth = 454
   ExplicitHeight = 219
+  DesignSize = (
+    448
+    191)
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -36,9 +39,11 @@ inherited frmSimpleSpr: TfrmSimpleSpr
   inherited RzPanel1: TRzPanel
     Top = 147
     Width = 448
-    ExplicitLeft = 8
-    ExplicitTop = 194
-    ExplicitWidth = 438
+    ExplicitTop = 147
+    ExplicitWidth = 448
+    DesignSize = (
+      448
+      44)
     inherited Exit_bnt: TRzButton
       Left = 66
       Top = 7

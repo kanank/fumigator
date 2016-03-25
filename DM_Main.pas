@@ -93,17 +93,26 @@ type
     DicServices_upd: TIBUpdateSQL;
     DicUserTypes_upd: TIBUpdateSQL;
     DicWorkerProfs_upd: TIBUpdateSQL;
+    DicMaterialType: TIBQuery;
+    DsDicMaterialType: TDataSource;
+    DicMaterialType_upd: TIBUpdateSQL;
+    DicMaterialSubTypes: TIBQuery;
+    DsDicMaterialSubTypes: TDataSource;
+    DicMaterialSubTypes_upd: TIBUpdateSQL;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
-    function CreateRWQuery: TIBQuery;
-    function LoadSpr: boolean; // загрузка вспомогательных справочников
+
     function BeforeLogin: boolean;
     function AfterLogin: boolean;
     procedure AppMessage(var Msg: TMsg; var Handled: Boolean);
+
+    //данные
+    function CreateRWQuery: TIBQuery;
+    function LoadSpr: boolean; // загрузка вспомогательных справочников
 
     function GetCurrentUser(id: integer): CurrentUserRec; //установка текущего пользователя
     function ShowWorkerForm(DS: TDataSource; Worker_ID: integer;
@@ -201,6 +210,8 @@ begin
     DicUserTypes.Open;
     DicWorkerProfs.Open;
     DicServices.Open;
+    DicMaterialType.Open;
+    DicMaterialSubTypes.Open;
     DicMaterials.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
@@ -242,6 +253,7 @@ begin
    CurrentUserSets.DebugMode := true;
    CurrentUserSets.ATS_Phone_Num := '112'; *)
 end;
+
 
 procedure TDataModuleMain.AppMessage(var Msg: TMsg; var Handled: Boolean);
 begin

@@ -1,0 +1,57 @@
+unit ClassSimpleSprTypeForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleSprForm, cxGraphics,
+  cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit,
+  RzButton, cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit,
+  cxDBLookupComboBox, Data.DB, cxTextEdit, cxDBEdit, Vcl.ExtCtrls, RzPanel,
+  Vcl.StdCtrls, dxGDIPlusClasses, ClassProc;
+
+type
+  TfrmSimpleSprType = class(TfrmSimpleSpr)
+    DsLookup: TDataSource;
+    Label1: TLabel;
+    cmbLookup: TcxDBLookupComboBox;
+    btnAdd: TRzBitBtn;
+    procedure btnAddClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmSimpleSprType.btnAddClick(Sender: TObject);
+var
+  frm: TfrmSimpleSpr;
+  sErr: string;
+begin
+  frm := nil;
+  frm := TfrmSimpleSpr.Create(self);
+  try
+    frm.DS := Self.DsLookup;
+    DsLookup.DataSet.Append;
+    try
+      frm.ShowModal;
+      if frm.ModalResult = mrOk then
+        if not ApplyUpdate(Self.DsLookup, sErr);
+        begin
+          MessageDlg('Ошибка сохранения:' + #13#10 + sErr, mtError, mbOk).
+        end;
+
+    except
+
+    end;
+  finally
+
+  end;
+end;
+
+end.

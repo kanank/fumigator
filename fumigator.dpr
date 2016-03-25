@@ -14,7 +14,10 @@ uses
   formLogin in 'formLogin.pas' {frmLogin},
   uLocalizeDevExpress in 'uLocalizeDevExpress.pas',
   formDictionaries in 'formDictionaries.pas' {frmDictionaries},
-  ClassSimpleSprForm in 'Classes\ClassSimpleSprForm.pas' {frmSimpleSpr};
+  ClassSimpleSprForm in 'Classes\ClassSimpleSprForm.pas' {frmSimpleSpr},
+  ClassSimpleSprTypeForm in 'Classes\ClassSimpleSprTypeForm.pas' {frmSimpleSprType},
+  ClassProc in 'Classes\ClassProc.pas',
+  formClients in 'formClients.pas' {frmClients};
 
 {$R *.res}
 

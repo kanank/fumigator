@@ -23,15 +23,15 @@ type
     btnDel: TRzBitBtn;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
-    cxGrid1: TcxGrid;
+    GridProfs: TcxGrid;
     cxGridDBTableView2: TcxGridDBTableView;
     cxGridDBColumn2: TcxGridDBColumn;
     cxGridLevel2: TcxGridLevel;
-    cxGrid2: TcxGrid;
+    GridMaterials: TcxGrid;
     cxGridDBTableView3: TcxGridDBTableView;
     cxGridDBColumn3: TcxGridDBColumn;
     cxGridLevel3: TcxGridLevel;
-    cxGrid3: TcxGrid;
+    GridServices: TcxGrid;
     cxGridDBTableView4: TcxGridDBTableView;
     cxGridDBColumn4: TcxGridDBColumn;
     cxGridLevel4: TcxGridLevel;
@@ -39,6 +39,7 @@ type
     procedure btnAddClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnEditClick(Sender: TObject);
+    procedure btnDelClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -52,7 +53,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, ClassSimpleSprForm, IBX.IBQuery;
+  DM_Main, ClassSimpleSprForm, ClassSimpleSprTypeForm, IBX.IBQuery, System.UITypes;
 
 procedure TfrmDictionaries.btnAddClick(Sender: TObject);
 var
@@ -93,6 +94,24 @@ begin
   end;
 end;
 
+procedure TfrmDictionaries.btnDelClick(Sender: TObject);
+var
+  data: TDataSet;
+  s: string;
+begin
+  data := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).DataController.DataSet;
+  s := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).Columns[0].Caption;
+
+  if MessageDlg('¬ы действительно хотите удалить текущую запись?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+    Exit;
+
+   data.Delete;
+   TIBQuery(data).ApplyUpdates;
+   if TIBQuery(data).Transaction.InTransaction then
+     TIBQuery(data).Transaction.CommitRetaining;
+
+end;
+
 procedure TfrmDictionaries.btnEditClick(Sender: TObject);
 var
   data: TDataSet;
@@ -103,7 +122,7 @@ begin
   s := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).Columns[0].Caption;
   try
     try
-      frm := TfrmSimpleSpr.Create(Self, s + ' [добавление]');
+      frm := TfrmSimpleSpr.Create(Self, s + ' [изменение]');
       frm.DS.DataSet := data;
       data.Edit;
       frm.ShowModal;

@@ -1,0 +1,24 @@
+unit ClassProc;
+
+interface
+
+implementation
+uses
+  System, IBX.IBQuery;
+
+function ApplyUpdate(Data: TIBQuery; var err: string): boolean;
+begin
+  Result := False;
+  try
+    data.Post;
+    data.ApplyUpdates;
+    if data.Transaction.InTransaction then
+      data.Transaction.CommitRetaining;
+    Result := True;
+  except
+    Result := False;
+    err := Exception(ExceptObject).Message;
+  end;
+end;
+
+end.

@@ -5,7 +5,7 @@
         <FrameworkType>VCL</FrameworkType>
         <MainSource>fumigator.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -139,6 +139,15 @@
         </DCCReference>
         <DCCReference Include="Classes\ClassSimpleSprForm.pas">
             <Form>frmSimpleSpr</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\ClassSimpleSprTypeForm.pas">
+            <Form>frmSimpleSprType</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\ClassProc.pas"/>
+        <DCCReference Include="formClients.pas">
+            <Form>frmClients</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

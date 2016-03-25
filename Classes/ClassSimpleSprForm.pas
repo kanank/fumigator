@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit,
   cxDBEdit, Vcl.StdCtrls, Data.DB, RzButton, Vcl.ExtCtrls, RzPanel,
-  dxGDIPlusClasses;
+  dxGDIPlusClasses,
+  ClassProc;
 
 type
   TfrmSimpleSpr = class(TSimpleForm)

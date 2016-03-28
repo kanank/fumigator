@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -16,7 +15,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     Left = 80
     Top = 24
   end
@@ -469,15 +467,20 @@ object DataModuleMain: TDataModuleMain
     Left = 343
     Top = 277
   end
-  object DicMaterials: TIBQuery
+  object DicMaterials0: TIBQuery
     Database = DB
     Transaction = DefTr
     BufferChunks = 1000
     CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
-      'select * from DIC_MATERIALS')
-    UpdateObject = DicMaterials_upd
+      'select m.id, m.name, m.service_id, type_id, mt.name type_name,'
+      'subtype_id, mts.name subtype_name'
+      
+        'from dic_materials m left join dic_material_types mt on m.type_i' +
+        'd=mt.id'
+      'left join dic_material_subtypes mts on mts.id = m.subtype_id'
+      'order by service_id, type_id, m.name')
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIALS_ID'
     GeneratorField.ApplyEvent = gamOnServer
@@ -486,15 +489,13 @@ object DataModuleMain: TDataModuleMain
   end
   object DicMaterials_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
-      'Select '
-      '  ID,'
-      '  NAME,'
-      '  TYPE_ID,'
-      '  SERVICE_ID,'
-      '  SUBTYPE_ID'
-      'from DIC_MATERIALS '
-      'where'
-      '  ID = :ID')
+      'select m.id, m.name, m.service_id, type_id, mt.name type_name,'
+      'subtype_id, mts.name subtype_name'
+      
+        'from dic_materials m left join dic_material_types mt on m.type_i' +
+        'd=mt.id'
+      'left join dic_material_subtypes mts on mts.id = m.subtype_id'
+      'where m.ID = :ID')
     ModifySQL.Strings = (
       'update DIC_MATERIALS'
       'set'
@@ -654,5 +655,17 @@ object DataModuleMain: TDataModuleMain
       '  ID = :OLD_ID')
     Left = 256
     Top = 360
+  end
+  object DicMaterials: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from get_materials_tree')
+    UpdateObject = DicMaterials_upd
+    Left = 344
+    Top = 168
   end
 end

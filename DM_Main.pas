@@ -88,7 +88,7 @@ type
     DicServices: TIBQuery;
     DSDicServices: TDataSource;
     DSDicMaterials: TDataSource;
-    DicMaterials: TIBQuery;
+    DicMaterials0: TIBQuery;
     DicMaterials_upd: TIBUpdateSQL;
     DicServices_upd: TIBUpdateSQL;
     DicUserTypes_upd: TIBUpdateSQL;
@@ -99,6 +99,7 @@ type
     DicMaterialSubTypes: TIBQuery;
     DsDicMaterialSubTypes: TDataSource;
     DicMaterialSubTypes_upd: TIBUpdateSQL;
+    DicMaterials: TIBQuery;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }

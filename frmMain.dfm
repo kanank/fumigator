@@ -104,9 +104,11 @@ inherited frmMain: TfrmMain
     Top = 16
     object NewFizClnt_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
+      OnClick = NewFizClnt_miClick
     end
     object NewURClnt_mi: TMenuItem
       Caption = #1070#1088#1080#1076#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
+      OnClick = NewURClnt_miClick
     end
   end
   object Clients_PUM: TPopupMenu

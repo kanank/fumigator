@@ -1,22 +1,23 @@
 inherited frmDictionaries: TfrmDictionaries
   Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-  ClientWidth = 898
+  ClientWidth = 906
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitWidth = 914
+  ExplicitLeft = -110
+  ExplicitWidth = 922
   ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 713
+    Left = 721
     Visible = False
     ExplicitLeft = 713
   end
   inherited RzPanel1: TRzPanel
-    Width = 898
+    Width = 906
     ExplicitWidth = 898
     inherited Exit_bnt: TRzButton
-      Left = 764
+      Left = 772
       ExplicitLeft = 764
     end
   end
@@ -254,6 +255,30 @@ inherited frmDictionaries: TfrmDictionaries
     object cxGridLevel4: TcxGridLevel
       GridView = cxGridDBTableView4
     end
+  end
+  object tvMaterials: TdxDBTreeView
+    Left = 456
+    Top = 27
+    Width = 208
+    Height = 246
+    ShowNodeHint = True
+    RowSelect = True
+    DataSource = DataModuleMain.DSDicMaterials
+    DisplayField = 'NAME'
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ParentField = 'PARENT'
+    RootValue = 0
+    SeparatedSt = ' - '
+    RaiseOnError = True
+    ReadOnly = True
+    HideSelection = False
+    Indent = 19
+    ParentColor = False
+    Options = [trDBConfirmDelete, trCanDBNavigate, trSmartRecordCopy, trCheckHasChildren]
+    SelectedIndex = -1
+    TabOrder = 6
+    OnEnter = tvMaterialsEnter
   end
   object cxStyleRepository1: TcxStyleRepository
     PixelsPerInch = 96

@@ -24,6 +24,8 @@ type
     procedure btnTuneClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure UrClients_miClick(Sender: TObject);
+    procedure NewFizClnt_miClick(Sender: TObject);
+    procedure NewURClnt_miClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -38,7 +40,7 @@ implementation
 {$R *.dfm}
 
 uses
-  frmWorkers, formOptions, formClients;
+  frmWorkers, formOptions, formClients, formClientFiz, formClientUr;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -64,6 +66,20 @@ procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
  // Title := Caption;
+end;
+
+procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
+begin
+  frmClientFiz := TfrmClientFiz.Create(self);
+  frmClientFiz.ShowModal;
+  FreeAndNil(frmClientFiz);
+end;
+
+procedure TfrmMain.NewURClnt_miClick(Sender: TObject);
+begin
+  frmClientUr := TfrmClientUr.Create(self);
+  frmClientUr.ShowModal;
+  FreeAndNil(frmClientUr);
 end;
 
 procedure TfrmMain.UrClients_miClick(Sender: TObject);

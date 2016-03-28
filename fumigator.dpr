@@ -17,7 +17,9 @@ uses
   ClassSimpleSprForm in 'Classes\ClassSimpleSprForm.pas' {frmSimpleSpr},
   ClassSimpleSprTypeForm in 'Classes\ClassSimpleSprTypeForm.pas' {frmSimpleSprType},
   ClassProc in 'Classes\ClassProc.pas',
-  formClients in 'formClients.pas' {frmClients};
+  formClients in 'formClients.pas' {frmClients},
+  formClientUr in 'formClientUr.pas' {frmClientUr},
+  formClientFiz in 'formClientFiz.pas' {frmClientFiz};
 
 {$R *.res}
 

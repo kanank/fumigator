@@ -9,7 +9,7 @@ uses
   cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter, cxData,
   cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, cxGridLevel,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
-  cxGridCustomView, cxGrid;
+  cxGridCustomView, cxGrid, Vcl.ComCtrls, dxtree, dxdbtree;
 
 type
   TfrmDictionaries = class(TSimpleForm)
@@ -35,11 +35,13 @@ type
     cxGridDBTableView4: TcxGridDBTableView;
     cxGridDBColumn4: TcxGridDBColumn;
     cxGridLevel4: TcxGridLevel;
+    tvMaterials: TdxDBTreeView;
     procedure GridUserTypesEnter(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnEditClick(Sender: TObject);
     procedure btnDelClick(Sender: TObject);
+    procedure tvMaterialsEnter(Sender: TObject);
   private
     { Private declarations }
   public
@@ -161,5 +163,11 @@ begin
   pnlEdit.Left := TcxGrid(Sender).Left;
   pnlEdit.Tag := Integer(TcxGrid(Sender));
  end;
+
+procedure TfrmDictionaries.tvMaterialsEnter(Sender: TObject);
+begin
+  GridUserTypesEnter(GridMaterials);
+
+end;
 
 end.

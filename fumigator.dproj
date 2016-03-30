@@ -158,6 +158,11 @@
             <Form>frmClientFiz</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uFramePerson.pas">
+            <Form>FramePerson</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

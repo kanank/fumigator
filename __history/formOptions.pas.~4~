@@ -1,0 +1,207 @@
+unit formOptions;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, cxGraphics, cxControls,
+  cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxListBox,
+  cxDBEdit, cxTextEdit, Vcl.StdCtrls, RzButton, Vcl.ExtCtrls, RzPanel,
+  dxGDIPlusClasses,
+  DM_Main, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery, cxStyles, cxCustomData,
+  cxFilter, cxData, cxDataStorage, cxNavigator, cxDBData, cxClasses,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGridLevel,
+  cxGridCustomView, cxGrid, cxCheckBox, IBX.IBUpdateSQL, IBX.IBDatabase,
+  Datasnap.DBClient, dxmdaset;
+
+type
+  TfrmOptions = class(TSimpleForm)
+    Label22: TLabel;
+    txtDBPath: TcxTextEdit;
+    Label1: TLabel;
+    txtSMTP: TcxTextEdit;
+    Label2: TLabel;
+    txtTemp: TcxTextEdit;
+    cxDBListBox1: TcxDBListBox;
+    rights_list: TIBQuery;
+    DS_rights_list: TDataSource;
+    GridRights: TcxGrid;
+    GridRightsView: TcxGridDBTableView;
+    GridRightsLevel1: TcxGridLevel;
+    GridRightsViewColumn1: TcxGridDBColumn;
+    GridRightsViewColumn2: TcxGridDBColumn;
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
+    cxStyle2: TcxStyle;
+    cxStyle3: TcxStyle;
+    GridUserTypes: TcxGrid;
+    cxGridDBTableView1: TcxGridDBTableView;
+    cxGridDBColumn1: TcxGridDBColumn;
+    cxGridLevel1: TcxGridLevel;
+    Label3: TLabel;
+    rights_upd: TIBUpdateSQL;
+    RightsTran: TIBTransaction;
+    btnTuneDictionaries: TRzButton;
+    btnTuneOPClentList: TRzButton;
+    btnAccept: TRzButton;
+    memRights_list: TdxMemData;
+    procedure FormCreate(Sender: TObject);
+    procedure cxGridDBTableView1CellClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure rights_listFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+    procedure GridRightsViewCellClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
+    procedure DS_rights_listDataChange(Sender: TObject; Field: TField);
+    procedure btnAcceptClick(Sender: TObject);
+    procedure btnTuneDictionariesClick(Sender: TObject);
+  private
+    procedure FilterRights;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmOptions: TfrmOptions;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  Datasnap.Provider, formDictionaries;
+
+procedure TfrmOptions.btnTuneDictionariesClick(Sender: TObject);
+var
+  frm: TfrmDictionaries;
+begin
+  frm := TfrmDictionaries.Create(nil);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
+end;
+
+procedure TfrmOptions.btnAcceptClick(Sender: TObject);
+var
+  Q: TIBQuery;
+
+  function SendUpdate: boolean;
+  begin
+    Result := false;
+    try
+      Q.Close;
+      Q.Open;
+
+      if Q.Transaction.Active then
+           Q.Transaction.Commit;
+      result := True;
+     except
+       if Q.Transaction.Active then
+           Q.Transaction.Rollback;
+     end;
+  end;
+
+
+begin
+  Q := nil;
+  try
+    memRights_list.Filtered := False;
+    memRights_list.First;
+    rights_list.First;
+    while not memRights_list.Eof do
+    begin
+      if memRights_list.FieldByName('val').AsInteger <>
+           Rights_list.FieldByName('val').AsInteger then
+      begin
+         if Q = nil then
+         begin
+           Q := DM.CreateRWQuery;
+           Q.ParamCheck := True;
+           Q.DataSource := DS_rights_list;
+           Q.SQL.Text := 'select * from update_rights (:ur_id, :user_id, :right_id, :val)';
+         end;
+         if not SendUpdate then
+          raise Exception.Create('Ошибка обновления прав!');
+      end;
+      memRights_list.Next;
+      Rights_list.Next;
+    end;
+  finally
+    FreeAndNil(Q);
+  end;
+
+    btnAccept.Visible := False;
+    FilterRights;
+end;
+
+procedure TfrmOptions.cxGridDBTableView1CellClick(
+  Sender: TcxCustomGridTableView; ACellViewInfo: TcxGridTableDataCellViewInfo;
+  AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
+begin
+   FilterRights;
+end;
+
+procedure TfrmOptions.DS_rights_listDataChange(Sender: TObject; Field: TField);
+begin
+  if Field <> nil then
+    btnAccept.Visible := Field.DataSet.Modified;
+end;
+
+procedure TfrmOptions.FilterRights;
+begin
+  memRights_list.Filtered := false;
+  memRights_list.Filtered := True;
+end;
+
+procedure TfrmOptions.FormCreate(Sender: TObject);
+begin
+  inherited;
+  DM.DicUserTypes.Open;
+  DM.DicUserTypes.FetchAll;
+  rights_list.Open;
+  rights_list.FetchAll;
+
+  memRights_list.CopyFromDataSet(rights_list);
+  memRights_list.Open;
+  memRights_list.Filtered := True;
+
+end;
+
+procedure TfrmOptions.FormShow(Sender: TObject);
+begin
+  FilterRights;
+end;
+
+
+procedure TfrmOptions.GridRightsViewCellClick(Sender: TcxCustomGridTableView;
+  ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+  AShift: TShiftState; var AHandled: Boolean);
+var
+  AColumn: TcxGridDBColumn;
+begin
+  AColumn := TcxGridDBColumn(ACellViewInfo.Item);
+  if (AColumn <> nil) and (LowerCase(AColumn.DataBinding.FieldName) = 'val') then
+  begin
+    //AColumn.DataBinding.DataController.DataSet;
+    memRights_list.Edit;
+    memRights_list.FieldByName('val').AsInteger :=
+      Abs(memRights_list.FieldByName('val').AsInteger - 1);
+    memRights_list.Post;
+  end;
+ end;
+
+procedure TfrmOptions.rights_listFilterRecord(DataSet: TDataSet;
+  var Accept: Boolean);
+begin
+  if DataSet.FieldByName('user_id').AsInteger = DM.DicUserTypes.FieldByName('id').AsInteger then
+    Accept := True
+  else
+    Accept := False;
+
+end;
+
+end.

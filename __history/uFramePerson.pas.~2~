@@ -1,0 +1,35 @@
+unit uFramePerson;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls,
+  cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxMaskEdit,
+  cxDropDownEdit, cxCalendar, cxDBEdit, cxTextEdit, Vcl.StdCtrls;
+
+type
+  TFramePerson = class(TFrame)
+    Label11: TLabel;
+    Label10: TLabel;
+    Label9: TLabel;
+    edtSurName: TcxDBTextEdit;
+    edtName: TcxDBTextEdit;
+    edtFamily: TcxDBTextEdit;
+    Label8: TLabel;
+    F_BirthDate_dp: TcxDBDateEdit;
+    cmbSex: TcxDBComboBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    cxDBTextEdit1: TcxDBTextEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     Left = 80
     Top = 24
   end

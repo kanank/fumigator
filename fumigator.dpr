@@ -19,7 +19,8 @@ uses
   ClassProc in 'Classes\ClassProc.pas',
   formClients in 'formClients.pas' {frmClients},
   formClientUr in 'formClientUr.pas' {frmClientUr},
-  formClientFiz in 'formClientFiz.pas' {frmClientFiz};
+  formClientFiz in 'formClientFiz.pas' {frmClientFiz},
+  uFramePerson in 'uFramePerson.pas' {FramePerson: TFrame};
 
 {$R *.res}
 

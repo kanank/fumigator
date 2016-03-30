@@ -1,0 +1,485 @@
+inherited frmClientUr: TfrmClientUr
+  Caption = 'frmClientUr'
+  ClientHeight = 485
+  ClientWidth = 789
+  ExplicitWidth = 805
+  ExplicitHeight = 523
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited img1: TImage
+    Left = 632
+    Top = 382
+    Width = 149
+    Height = 57
+    ExplicitLeft = 560
+    ExplicitTop = 238
+    ExplicitWidth = 149
+    ExplicitHeight = 57
+  end
+  object Label6: TLabel [1]
+    Left = 5
+    Top = 269
+    Width = 228
+    Height = 13
+    Anchors = [akLeft, akBottom]
+    Caption = #1041#1072#1085#1082#1086#1074#1089#1082#1072#1103' '#1080' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1086#1085#1085#1072#1103' '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1103':'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 5850400
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 225
+  end
+  object Label8: TLabel [2]
+    Left = 6
+    Top = 16
+    Width = 88
+    Height = 13
+    Caption = #1055#1088#1072#1074#1086#1074#1072#1103' '#1092#1086#1088#1084#1072':'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = -1
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  inherited RzPanel1: TRzPanel
+    Top = 441
+    Width = 789
+    ExplicitTop = 297
+    ExplicitWidth = 717
+    inherited Exit_bnt: TRzButton
+      Left = 655
+      ExplicitLeft = 583
+    end
+  end
+  object Passp_pnl: TRzPanel
+    AlignWithMargins = True
+    Left = 8
+    Top = 304
+    Width = 454
+    Height = 131
+    BorderOuter = fsGroove
+    TabOrder = 1
+    object Label10: TLabel
+      Left = 6
+      Top = 12
+      Width = 31
+      Height = 13
+      Caption = #1054#1043#1056#1053':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 7
+      Top = 36
+      Width = 110
+      Height = 13
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1073#1072#1085#1082#1072':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 131
+      Top = 12
+      Width = 25
+      Height = 13
+      Caption = #1048#1053#1053':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 243
+      Top = 12
+      Width = 25
+      Height = 13
+      Caption = #1050#1055#1055':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label12: TLabel
+      Left = 346
+      Top = 12
+      Width = 24
+      Height = 13
+      Caption = #1041#1048#1050':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 7
+      Top = 80
+      Width = 85
+      Height = 13
+      Caption = #1056#1072#1089#1095#1077#1090#1085#1099#1081' '#1089#1095#1077#1090':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label13: TLabel
+      Left = 179
+      Top = 80
+      Width = 132
+      Height = 13
+      Caption = #1050#1086#1088#1088#1077#1089#1087#1086#1085#1076#1077#1085#1090#1089#1082#1080#1081' '#1089#1095#1077#1090':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object OGRN_edt: TcxDBMaskEdit
+      Left = 40
+      Top = 9
+      DataBinding.DataField = 'OGRN'
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 0
+      Width = 86
+    end
+    object Bank_edt: TcxDBMaskEdit
+      Left = 7
+      Top = 53
+      DataBinding.DataField = 'BANK_NAME'
+      Properties.MaskKind = emkRegExprEx
+      Properties.MaxLength = 128
+      TabOrder = 4
+      Width = 440
+    end
+    object INN_edt: TcxDBMaskEdit
+      Left = 159
+      Top = 9
+      DataBinding.DataField = 'INN'
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 1
+      Width = 78
+    end
+    object KPP_edt: TcxDBMaskEdit
+      Left = 274
+      Top = 9
+      DataBinding.DataField = 'KPP'
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 2
+      Width = 64
+    end
+    object BIK_edt: TcxDBMaskEdit
+      Left = 376
+      Top = 9
+      DataBinding.DataField = 'BIK'
+      Properties.IgnoreMaskBlank = True
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 3
+      Width = 71
+    end
+    object RSchet_edt: TcxDBMaskEdit
+      Left = 7
+      Top = 99
+      DataBinding.DataField = 'RAS_SCHET'
+      Properties.HideSelection = False
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 5
+      Width = 155
+    end
+    object KorrShet_edt: TcxDBMaskEdit
+      Left = 179
+      Top = 99
+      DataBinding.DataField = 'KOR_SCHET'
+      Properties.MaskKind = emkRegExprEx
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d'
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      TabOrder = 6
+      Width = 174
+    end
+  end
+  object Main_pnl: TRzPanel
+    AlignWithMargins = True
+    Left = 5
+    Top = 67
+    Width = 460
+    Height = 212
+    Margins.Left = 0
+    Margins.Top = 5
+    Margins.Right = 0
+    BorderOuter = fsNone
+    Constraints.MaxHeight = 212
+    Constraints.MaxWidth = 460
+    Constraints.MinHeight = 212
+    Constraints.MinWidth = 460
+    TabOrder = 2
+    DesignSize = (
+      460
+      212)
+    object Label4: TLabel
+      Left = 9
+      Top = 95
+      Width = 156
+      Height = 13
+      Caption = #1044#1086#1083#1078#1085#1086#1089#1090#1100' '#1082#1086#1085#1090#1072#1082#1090#1085#1086#1075#1086' '#1083#1080#1094#1072':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 300
+      Top = 49
+      Width = 88
+      Height = 13
+      Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 9
+      Top = 49
+      Width = 92
+      Height = 13
+      Caption = #1050#1086#1085#1090#1072#1082#1090#1085#1086#1077' '#1083#1080#1094#1086':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 9
+      Top = 6
+      Width = 144
+      Height = 13
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label14: TLabel
+      Left = 9
+      Top = 141
+      Width = 235
+      Height = 13
+      Caption = #1044#1086#1087#1086#1083#1085#1080#1090#1077#1083#1100#1085#1072#1103' '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1103' ('#1082#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081'): '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label15: TLabel
+      Left = 300
+      Top = 99
+      Width = 122
+      Height = 13
+      Caption = #1050#1088#1072#1090#1082#1086#1077' '#1085#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clPurple
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DirJob_edt: TcxDBTextEdit
+      Left = 9
+      Top = 114
+      BeepOnEnter = False
+      DataBinding.DataField = 'CONTACT_JOB'
+      Properties.MaxLength = 80
+      Style.HotTrack = False
+      Style.LookAndFeel.Kind = lfFlat
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.LookAndFeel.Kind = lfFlat
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.Kind = lfFlat
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.Kind = lfFlat
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 3
+      Width = 272
+    end
+    object Phone_edt: TcxDBTextEdit
+      Left = 300
+      Top = 68
+      Anchors = [akLeft, akTop, akRight]
+      BeepOnEnter = False
+      DataBinding.DataField = 'PHONE'
+      ParentFont = False
+      Properties.MaxLength = 16
+      Style.Font.Charset = DEFAULT_CHARSET
+      Style.Font.Color = clWindowText
+      Style.Font.Height = -11
+      Style.Font.Name = 'Tahoma'
+      Style.Font.Style = []
+      Style.HotTrack = False
+      Style.LookAndFeel.Kind = lfFlat
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      Style.IsFontAssigned = True
+      StyleDisabled.LookAndFeel.Kind = lfFlat
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.Kind = lfFlat
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.Kind = lfFlat
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 2
+      Width = 150
+    end
+    object DirectorName_edt: TcxDBTextEdit
+      Left = 8
+      Top = 68
+      BeepOnEnter = False
+      DataBinding.DataField = 'CONTACT_FIO'
+      Properties.MaxLength = 80
+      Style.HotTrack = False
+      Style.LookAndFeel.Kind = lfFlat
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.LookAndFeel.Kind = lfFlat
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.Kind = lfFlat
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.Kind = lfFlat
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 1
+      Width = 273
+    end
+    object OrgName_Edt: TcxDBTextEdit
+      Left = 9
+      Top = 22
+      BeepOnEnter = False
+      DataBinding.DataField = 'FULL_NAME'
+      Properties.MaxLength = 128
+      Properties.ReadOnly = False
+      Style.HotTrack = False
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.Color = clBtnFace
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 0
+      Width = 273
+    end
+    object Comments_memo: TcxDBMemo
+      Left = 9
+      Top = 161
+      Anchors = [akLeft, akTop, akRight]
+      DataBinding.DataField = 'COMMENTS'
+      Properties.MaxLength = 256
+      TabOrder = 5
+      Height = 48
+      Width = 440
+    end
+    object ShortName_edt: TcxDBTextEdit
+      Left = 300
+      Top = 118
+      Anchors = [akLeft, akTop, akRight]
+      BeepOnEnter = False
+      DataBinding.DataField = 'SHORT_NAME'
+      Properties.MaxLength = 16
+      Properties.ReadOnly = False
+      Style.HotTrack = False
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.Color = clBtnFace
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 4
+      Width = 150
+    end
+  end
+  object ID_edt: TcxDBTextEdit
+    Left = 406
+    Top = 215
+    Anchors = [akLeft, akTop, akRight]
+    BeepOnEnter = False
+    DataBinding.DataField = 'ID'
+    ParentFont = False
+    Style.Color = 13421823
+    Style.Font.Charset = DEFAULT_CHARSET
+    Style.Font.Color = clWindowText
+    Style.Font.Height = -11
+    Style.Font.Name = 'Tahoma'
+    Style.Font.Style = []
+    Style.HotTrack = False
+    Style.LookAndFeel.Kind = lfFlat
+    Style.LookAndFeel.NativeStyle = True
+    Style.TransparentBorder = True
+    Style.IsFontAssigned = True
+    StyleDisabled.LookAndFeel.Kind = lfFlat
+    StyleDisabled.LookAndFeel.NativeStyle = True
+    StyleFocused.LookAndFeel.Kind = lfFlat
+    StyleFocused.LookAndFeel.NativeStyle = True
+    StyleHot.LookAndFeel.Kind = lfFlat
+    StyleHot.LookAndFeel.NativeStyle = True
+    TabOrder = 3
+    Visible = False
+    ExplicitWidth = 43
+    Width = 115
+  end
+  object Forma_cb: TcxDBComboBox
+    Left = 100
+    Top = 8
+    Anchors = [akLeft, akTop, akRight]
+    DataBinding.DataField = 'FORMA'
+    Properties.Items.Strings = (
+      #1054#1054#1054
+      #1047#1040#1054
+      #1054#1040#1054
+      #1048#1055
+      #1060#1086#1085#1076)
+    Properties.MaxLength = 16
+    TabOrder = 4
+    Width = 109
+  end
+end

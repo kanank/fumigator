@@ -5,70 +5,9 @@ interface
 uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
-  IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics;
+  IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
+  CommonVars, CommonTypes;
 
-
-
-const
-  CfgFileName :string ='Fumigator.cfg';
-  TempFolder :string = 'Temp';
-  PrintTempsFolder :string = 'Шаблоны';
-
-  FormAlphaBlend :byte = 100;
-
-type
-  CurrentUserRec = record
-  ID: Integer;
-  UserName :string;
-  UserType :smallint;
-  userTypeName :string;
-  ATS_Phone_Num :string;
-  session_id: integer;
-
-  DebugMode : Boolean;
-  HideOnClose :Boolean;
-end;
-
-type
-  FtpProps = record  //настройки фтп
-  Host:     string;
-  Login:    string;
-  Psw:      string;
-  Passive:  boolean;
-  Dir:      string;
-end;
-
- type TClientType = (clFiz, clUr);
- type TActionStr = (asCreate,asEdit,asShow);
- type TTrayView =(trayNormal, trayMissed);
-
- type
-   ClientInfoParams = record
-   clType :TClientType;
-   ClientName: string;
-   ClientInfo :string;
-   ClientComms :string;
-end;
-
-type
-  ClientCallParams = record
-  id_call: integer;
-  Client_Type :string;
-  Client_id :Integer;
-  TelNum :string;
-  ClientName :string;
-  INN :string;
-  clientContact :string;
-  Author :string;
-  ClientInfoParams :ClientInfoParams;
-end;
-
-type
-  FormResult = record
-  New_Id: Integer;
-  ModalRes: TModalResult;
-  Comments: string;
-end;
 
 type
   TDataModuleMain = class(TDataModule)
@@ -100,6 +39,12 @@ type
     DsDicMaterialSubTypes: TDataSource;
     DicMaterialSubTypes_upd: TIBUpdateSQL;
     DicMaterials: TIBQuery;
+    DicFormatsCli: TIBQuery;
+    DsFormatsCli: TDataSource;
+    Clients: TIBQuery;
+    Clients_upd: TIBUpdateSQL;
+    Clients_tr: TIBTransaction;
+    DsClients: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -214,6 +159,7 @@ begin
     DicMaterialType.Open;
     DicMaterialSubTypes.Open;
     DicMaterials.Open;
+    DicFormatsCli.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

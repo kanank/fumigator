@@ -146,23 +146,32 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Classes\ClassProc.pas"/>
-        <DCCReference Include="formClients.pas">
+        <DCCReference Include="clients\formClients.pas">
             <Form>frmClients</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="formClientUr.pas">
+        <DCCReference Include="clients\formClientUr.pas">
             <Form>frmClientUr</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="formClientFiz.pas">
+        <DCCReference Include="clients\formClientFiz.pas">
             <Form>frmClientFiz</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="uFramePerson.pas">
-            <Form>FramePerson</Form>
+        <DCCReference Include="uFramePerson0.pas">
+            <Form>FramePerson0</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="Classes\frameBase.pas">
+            <Form>DbFrameBase</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frPersonSmall.pas">
+            <Form>FramePersonSmall</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CommonVars.pas"/>
+        <DCCReference Include="Classes\CommonTypes.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

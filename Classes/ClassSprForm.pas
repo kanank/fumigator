@@ -29,13 +29,14 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+//    constructor Create(AOwner: TComponent; ATitle: string=''); override;
   end;
 
 
 implementation
 
 {$R *.dfm}
+
 
 procedure TSprForm.GridViewCellDblClick(Sender: TcxCustomGridTableView;
   ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;

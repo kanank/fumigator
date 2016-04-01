@@ -38,7 +38,7 @@ implementation
 {$R *.dfm}
 
  uses
-   DM_Main;
+   DM_Main, CommonVars, CommonTypes;
 
 procedure TfrmWorkers.Add_btnClick(Sender: TObject);
 begin

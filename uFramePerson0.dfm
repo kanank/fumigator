@@ -1,4 +1,4 @@
-object FramePerson: TFramePerson
+object FramePerson0: TFramePerson0
   Left = 0
   Top = 0
   Width = 291
@@ -150,7 +150,6 @@ object FramePerson: TFramePerson
     DataBinding.DataField = 'DATE_BIRTH'
     DataBinding.DataSource = DS
     TabOrder = 3
-    ExplicitWidth = 93
     Width = 64
   end
   object cmbSex: TcxDBComboBox

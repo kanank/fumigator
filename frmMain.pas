@@ -40,7 +40,8 @@ implementation
 {$R *.dfm}
 
 uses
-  frmWorkers, formOptions, formClients, formClientFiz, formClientUr;
+  DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
+  formClientUr, CommonTypes;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -51,6 +52,9 @@ end;
 
 procedure TfrmMain.btnWorkersClick(Sender: TObject);
 begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
   frmClients := TfrmClients.Create(self);
   frmClients.ShowModal;
   FreeAndNil(frmClients);
@@ -65,12 +69,16 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
- // Title := Caption;
+  Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
+    '(' + DM.CurrentUserSets.UserTypeName + ')';
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
+var
+  prm: TFrmCreateParam;
 begin
-  frmClientFiz := TfrmClientFiz.Create(self);
+  prm := NewFrmCreateParam(asCreate, DM.Clients);
+  frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
   frmClientFiz.ShowModal;
   FreeAndNil(frmClientFiz);
 end;

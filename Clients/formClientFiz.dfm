@@ -3,6 +3,7 @@ inherited frmClientFiz: TfrmClientFiz
   ClientHeight = 341
   ClientWidth = 717
   Position = poDesktopCenter
+  OnCreate = FormCreate
   ExplicitWidth = 733
   ExplicitHeight = 379
   PixelsPerInch = 96
@@ -18,8 +19,8 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitHeight = 57
   end
   object Label6: TLabel [1]
-    Left = 437
-    Top = 11
+    Left = 524
+    Top = 37
     Width = 42
     Height = 13
     Anchors = [akLeft, akBottom]
@@ -31,35 +32,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label1: TLabel [2]
-    Left = 9
-    Top = 10
-    Width = 44
-    Height = 13
-    Caption = #1060#1072#1084#1080#1083#1080#1103
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label2: TLabel [3]
-    Left = 9
-    Top = 40
-    Width = 19
-    Height = 13
-    Caption = #1048#1084#1103
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label3: TLabel [4]
-    Left = 213
-    Top = 52
+  object Label3: TLabel [2]
+    Left = 302
+    Top = 85
     Width = 84
     Height = 13
     Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072
@@ -70,35 +45,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label4: TLabel [5]
+  object Label8: TLabel [3]
     Left = 8
-    Top = 69
-    Width = 49
-    Height = 13
-    Caption = #1054#1090#1095#1077#1089#1090#1074#1086
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label5: TLabel [6]
-    Left = 8
-    Top = 105
-    Width = 80
-    Height = 13
-    Caption = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label8: TLabel [7]
-    Left = 8
-    Top = 138
+    Top = 185
     Width = 98
     Height = 13
     Caption = #1040#1076#1088#1077#1089' '#1088#1077#1075#1080#1089#1090#1088#1072#1094#1080#1080
@@ -109,9 +58,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label14: TLabel [8]
+  object Label14: TLabel [4]
     Left = 307
-    Top = 218
+    Top = 265
     Width = 67
     Height = 13
     Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
@@ -122,9 +71,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label9: TLabel [9]
+  object Label9: TLabel [5]
     Left = 8
-    Top = 177
+    Top = 224
     Width = 35
     Height = 13
     Caption = #1056#1077#1075#1080#1086#1085
@@ -135,9 +84,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label16: TLabel [10]
+  object Label16: TLabel [6]
     Left = 238
-    Top = 177
+    Top = 224
     Width = 55
     Height = 13
     Caption = #1053#1072#1089'. '#1087#1091#1085#1082#1090
@@ -148,22 +97,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label7: TLabel [11]
-    Left = 213
-    Top = 110
-    Width = 19
-    Height = 13
-    Caption = #1055#1086#1083
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label17: TLabel [12]
+  object Label17: TLabel [7]
     Left = 9
-    Top = 218
+    Top = 265
     Width = 31
     Height = 13
     Caption = #1040#1076#1088#1077#1089
@@ -174,9 +110,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label15: TLabel [13]
-    Left = 205
-    Top = 11
+  object Label15: TLabel [8]
+    Left = 297
+    Top = 16
     Width = 36
     Height = 13
     Caption = #1057#1090#1072#1090#1091#1089
@@ -187,9 +123,9 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
-  object Label18: TLabel [14]
-    Left = 318
-    Top = 11
+  object Label18: TLabel [9]
+    Left = 410
+    Top = 16
     Width = 38
     Height = 13
     Caption = #1060#1086#1088#1084#1072#1090
@@ -213,7 +149,7 @@ inherited frmClientFiz: TfrmClientFiz
   object Passp_pnl: TRzPanel
     AlignWithMargins = True
     Left = 437
-    Top = 27
+    Top = 74
     Width = 277
     Height = 143
     BorderOuter = fsGroove
@@ -319,66 +255,9 @@ inherited frmClientFiz: TfrmClientFiz
       Width = 186
     end
   end
-  object Family_Edt: TcxDBTextEdit
-    Left = 63
-    Top = 10
-    BeepOnEnter = False
-    DataBinding.DataField = 'C_FAMILY'
-    Properties.MaxLength = 0
-    Properties.ValidationOptions = [evoShowErrorIcon]
-    Style.HotTrack = False
-    Style.LookAndFeel.NativeStyle = True
-    Style.TransparentBorder = True
-    StyleDisabled.Color = clBtnFace
-    StyleDisabled.LookAndFeel.NativeStyle = True
-    StyleFocused.LookAndFeel.NativeStyle = True
-    StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 2
-    Width = 131
-  end
-  object Name_edt: TcxDBTextEdit
-    Left = 62
-    Top = 37
-    BeepOnEnter = False
-    DataBinding.DataField = 'C_NAME'
-    Properties.MaxLength = 32
-    Properties.ValidationOptions = [evoShowErrorIcon]
-    Style.HotTrack = False
-    Style.LookAndFeel.Kind = lfFlat
-    Style.LookAndFeel.NativeStyle = True
-    Style.TransparentBorder = True
-    StyleDisabled.LookAndFeel.Kind = lfFlat
-    StyleDisabled.LookAndFeel.NativeStyle = True
-    StyleFocused.LookAndFeel.Kind = lfFlat
-    StyleFocused.LookAndFeel.NativeStyle = True
-    StyleHot.LookAndFeel.Kind = lfFlat
-    StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 3
-    Width = 131
-  end
-  object SurName_edt: TcxDBTextEdit
-    Left = 62
-    Top = 66
-    BeepOnEnter = False
-    DataBinding.DataField = 'C_OTCH'
-    Properties.MaxLength = 32
-    Properties.ValidationOptions = [evoShowErrorIcon]
-    Style.HotTrack = False
-    Style.LookAndFeel.Kind = lfFlat
-    Style.LookAndFeel.NativeStyle = True
-    Style.TransparentBorder = True
-    StyleDisabled.LookAndFeel.Kind = lfFlat
-    StyleDisabled.LookAndFeel.NativeStyle = True
-    StyleFocused.LookAndFeel.Kind = lfFlat
-    StyleFocused.LookAndFeel.NativeStyle = True
-    StyleHot.LookAndFeel.Kind = lfFlat
-    StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 4
-    Width = 131
-  end
   object Phone_edt: TcxDBTextEdit
-    Left = 213
-    Top = 66
+    Left = 302
+    Top = 104
     BeepOnEnter = False
     DataBinding.DataField = 'PHONE'
     ParentFont = False
@@ -401,30 +280,12 @@ inherited frmClientFiz: TfrmClientFiz
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfFlat
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 5
+    TabOrder = 2
     Width = 135
-  end
-  object BirthDate_dp: TcxDBDateEdit
-    Left = 98
-    Top = 102
-    DataBinding.DataField = 'BIRTH_DATE'
-    TabOrder = 6
-    Width = 95
-  end
-  object Gender_CB: TcxComboBox
-    Left = 246
-    Top = 102
-    Properties.ClearKey = 46
-    Properties.DropDownListStyle = lsEditFixedList
-    Properties.Items.Strings = (
-      #1046#1077#1085'.'
-      #1052#1091#1078'.')
-    TabOrder = 7
-    Width = 55
   end
   object ID_edt: TcxDBTextEdit
     Left = 307
-    Top = 102
+    Top = 149
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
     DataBinding.DataField = 'ID'
@@ -446,33 +307,33 @@ inherited frmClientFiz: TfrmClientFiz
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfFlat
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 8
+    TabOrder = 3
     Visible = False
     Width = 43
   end
   object Adres_memo: TcxDBMemo
     Left = 116
-    Top = 129
+    Top = 176
     DataBinding.DataField = 'ADRESS'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 9
+    TabOrder = 4
     Height = 22
     Width = 302
   end
   object Comments_memo: TcxDBMemo
     Left = 380
-    Top = 201
+    Top = 248
     DataBinding.DataField = 'COMMENTS'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 10
+    TabOrder = 5
     Height = 31
     Width = 295
   end
   object InfoGer_CB: TcxDBComboBox
     Left = 49
-    Top = 174
+    Top = 221
     DataBinding.DataField = 'INFOGET'
     Properties.Items.Strings = (
       #1088#1077#1082#1083#1072#1084#1072' TV'
@@ -481,12 +342,12 @@ inherited frmClientFiz: TfrmClientFiz
       #1087#1086#1080#1089#1082' '#1074' '#1080#1085#1090#1077#1088#1085#1077#1090#1077' '#1074' '#1089#1080#1089#1090#1077#1084#1077' Google')
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 11
+    TabOrder = 6
     Width = 119
   end
   object cxDBComboBox1: TcxDBComboBox
     Left = 299
-    Top = 174
+    Top = 221
     DataBinding.DataField = 'INFOGET'
     Properties.Items.Strings = (
       #1088#1077#1082#1083#1072#1084#1072' TV'
@@ -495,22 +356,22 @@ inherited frmClientFiz: TfrmClientFiz
       #1087#1086#1080#1089#1082' '#1074' '#1080#1085#1090#1077#1088#1085#1077#1090#1077' '#1074' '#1089#1080#1089#1090#1077#1084#1077' Google')
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 12
+    TabOrder = 7
     Width = 119
   end
   object cxDBMemo1: TcxDBMemo
     Left = 46
-    Top = 209
+    Top = 256
     DataBinding.DataField = 'ADRESS'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 13
+    TabOrder = 8
     Height = 22
     Width = 247
   end
   object cxDBComboBox2: TcxDBComboBox
-    Left = 246
-    Top = 8
+    Left = 338
+    Top = 13
     DataBinding.DataField = 'INFOGET'
     Properties.Items.Strings = (
       #1088#1077#1082#1083#1072#1084#1072' TV'
@@ -519,12 +380,12 @@ inherited frmClientFiz: TfrmClientFiz
       #1087#1086#1080#1089#1082' '#1074' '#1080#1085#1090#1077#1088#1085#1077#1090#1077' '#1074' '#1089#1080#1089#1090#1077#1084#1077' Google')
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 14
+    TabOrder = 9
     Width = 67
   end
   object cxDBComboBox3: TcxDBComboBox
-    Left = 359
-    Top = 8
+    Left = 451
+    Top = 13
     DataBinding.DataField = 'INFOGET'
     Properties.Items.Strings = (
       #1088#1077#1082#1083#1072#1084#1072' TV'
@@ -533,7 +394,24 @@ inherited frmClientFiz: TfrmClientFiz
       #1087#1086#1080#1089#1082' '#1074' '#1080#1085#1090#1077#1088#1085#1077#1090#1077' '#1074' '#1089#1080#1089#1090#1077#1084#1077' Google')
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 15
+    TabOrder = 10
     Width = 67
+  end
+  inline FramePersonSmall1: TFramePersonSmall
+    Left = 6
+    Top = 8
+    Width = 290
+    Height = 130
+    TabOrder = 11
+    ExplicitLeft = 6
+    ExplicitTop = 8
+    inherited cmbSex: TcxDBComboBox
+      Top = 77
+      ExplicitTop = 77
+    end
+  end
+  object DS: TDataSource
+    Left = 480
+    Top = 311
   end
 end

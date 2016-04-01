@@ -1,4 +1,4 @@
-unit uFramePerson;
+unit uFramePerson0;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL;
 
 type
-  TFramePerson = class(TFrame)
+  TFramePerson0 = class(TFrame)
     Label11: TLabel;
     Label10: TLabel;
     Label9: TLabel;
@@ -44,7 +44,7 @@ uses
 
 { TFramePerson }
 
-function TFramePerson.OpenData(Aid: integer): Boolean;
+function TFramePerson0.OpenData(Aid: integer): Boolean;
 begin
   result:= False;
   Query.Close;
@@ -59,7 +59,7 @@ begin
 
 end;
 
-function TFramePerson.SaveData: Boolean;
+function TFramePerson0.SaveData: Boolean;
 begin
   Result := false;
   if not (Query.Modified or Query.UpdatesPending) then

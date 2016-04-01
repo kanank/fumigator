@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -16,7 +15,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     Left = 80
     Top = 24
   end
@@ -669,5 +667,65 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = DicMaterials_upd
     Left = 344
     Top = 168
+  end
+  object DicFormatsCli: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from DIC_FORMATS_CLI')
+    Left = 210
+    Top = 250
+  end
+  object DsFormatsCli: TDataSource
+    AutoEdit = False
+    DataSet = DicFormatsCli
+    Left = 210
+    Top = 301
+  end
+  object Clients: TIBQuery
+    Database = DB
+    Transaction = Clients_tr
+    ForcedRefresh = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from clientslist(null, null)')
+    UpdateObject = Clients_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_CLIENTS_ID'
+    GeneratorField.ApplyEvent = gamOnServer
+    Left = 152
+    Top = 120
+  end
+  object Clients_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from clientslist(:id, null)')
+    ModifySQL.Strings = (
+      '')
+    DeleteSQL.Strings = (
+      'delete from clients where id = :id')
+    Left = 208
+    Top = 120
+  end
+  object Clients_tr: TIBTransaction
+    DefaultDatabase = DB
+    Params.Strings = (
+      'read_committed'
+      'rec_version'
+      'nowait')
+    AutoStopAction = saCommit
+    Left = 264
+    Top = 120
+  end
+  object DsClients: TDataSource
+    AutoEdit = False
+    DataSet = Clients
+    OnDataChange = DsWorkerDataChange
+    Left = 325
+    Top = 120
   end
 end

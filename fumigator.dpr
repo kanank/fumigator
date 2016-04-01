@@ -17,10 +17,14 @@ uses
   ClassSimpleSprForm in 'Classes\ClassSimpleSprForm.pas' {frmSimpleSpr},
   ClassSimpleSprTypeForm in 'Classes\ClassSimpleSprTypeForm.pas' {frmSimpleSprType},
   ClassProc in 'Classes\ClassProc.pas',
-  formClients in 'formClients.pas' {frmClients},
-  formClientUr in 'formClientUr.pas' {frmClientUr},
-  formClientFiz in 'formClientFiz.pas' {frmClientFiz},
-  uFramePerson in 'uFramePerson.pas' {FramePerson: TFrame};
+  formClients in 'clients\formClients.pas' {frmClients},
+  formClientUr in 'clients\formClientUr.pas' {frmClientUr},
+  formClientFiz in 'clients\formClientFiz.pas' {frmClientFiz},
+  uFramePerson0 in 'uFramePerson0.pas' {FramePerson0: TFrame},
+  frameBase in 'Classes\frameBase.pas' {DbFrameBase: TFrame},
+  frPersonSmall in 'Frames\frPersonSmall.pas' {FramePersonSmall: TFrame},
+  CommonVars in 'CommonVars.pas',
+  CommonTypes in 'Classes\CommonTypes.pas';
 
 {$R *.res}
 

@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     Left = 80
     Top = 24
   end
@@ -727,5 +729,22 @@ object DataModuleMain: TDataModuleMain
     OnDataChange = DsWorkerDataChange
     Left = 325
     Top = 120
+  end
+  object DicStatusCli: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from DIC_STATUS_CLI')
+    Left = 154
+    Top = 250
+  end
+  object DsDicStatusCli: TDataSource
+    AutoEdit = False
+    DataSet = DicStatusCli
+    Left = 154
+    Top = 301
   end
 end

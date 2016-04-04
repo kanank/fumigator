@@ -155,23 +155,62 @@
         <DCCReference Include="clients\formClientFiz.pas">
             <Form>frmClientFiz</Form>
         </DCCReference>
-        <DCCReference Include="uFramePerson0.pas">
-            <Form>FramePerson0</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Classes\frameBase.pas">
+        <DCCReference Include="Frames\frameBase.pas">
             <Form>DbFrameBase</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Frames\frPersonSmall.pas">
-            <Form>FramePersonSmall</Form>
+        <DCCReference Include="Frames\frPasport.pas">
+            <Form>FramePassport</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="CommonVars.pas"/>
         <DCCReference Include="Classes\CommonTypes.pas"/>
+        <DCCReference Include="Frames\frPersonSmall.pas">
+            <Form>FramePersonSmall</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frListBase.pas">
+            <Form>FrameListBase</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frPhones.pas">
+            <Form>FramePhones</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frKLADR.pas">
+            <Form>FrameKLADR</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frAddress.pas">
+            <Form>FrameKLADRAdr</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frRegion.pas">
+            <Form>FrameKLADRRegion</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frPersonFull.pas">
+            <Form>FramePersonFull</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frAddressRegion.pas">
+            <Form>FrameKLADRAdrRegion</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frUslugi.pas">
+            <Form>FrameUslugi</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

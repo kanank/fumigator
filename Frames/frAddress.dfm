@@ -1,0 +1,2 @@
+inherited FrameKLADRAdr: TFrameKLADRAdr
+end

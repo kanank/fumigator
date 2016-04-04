@@ -45,6 +45,8 @@ type
     Clients_upd: TIBUpdateSQL;
     Clients_tr: TIBTransaction;
     DsClients: TDataSource;
+    DicStatusCli: TIBQuery;
+    DsDicStatusCli: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -160,6 +162,7 @@ begin
     DicMaterialSubTypes.Open;
     DicMaterials.Open;
     DicFormatsCli.Open;
+    DicStatusCli.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

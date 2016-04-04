@@ -20,11 +20,19 @@ uses
   formClients in 'clients\formClients.pas' {frmClients},
   formClientUr in 'clients\formClientUr.pas' {frmClientUr},
   formClientFiz in 'clients\formClientFiz.pas' {frmClientFiz},
-  uFramePerson0 in 'uFramePerson0.pas' {FramePerson0: TFrame},
-  frameBase in 'Classes\frameBase.pas' {DbFrameBase: TFrame},
-  frPersonSmall in 'Frames\frPersonSmall.pas' {FramePersonSmall: TFrame},
+  frameBase in 'Frames\frameBase.pas' {DbFrameBase: TFrame},
+  frPasport in 'Frames\frPasport.pas' {FramePassport: TFrame},
   CommonVars in 'CommonVars.pas',
-  CommonTypes in 'Classes\CommonTypes.pas';
+  CommonTypes in 'Classes\CommonTypes.pas',
+  frPersonSmall in 'Frames\frPersonSmall.pas' {FramePersonSmall: TFrame},
+  frListBase in 'Frames\frListBase.pas' {FrameListBase: TFrame},
+  frPhones in 'Frames\frPhones.pas' {FramePhones: TFrame},
+  frKLADR in 'Frames\frKLADR.pas' {FrameKLADR: TFrame},
+  frAddress in 'Frames\frAddress.pas' {FrameKLADRAdr: TFrame},
+  frRegion in 'Frames\frRegion.pas' {FrameKLADRRegion: TFrame},
+  frPersonFull in 'Frames\frPersonFull.pas' {FramePersonFull: TFrame},
+  frAddressRegion in 'Frames\frAddressRegion.pas' {FrameKLADRAdrRegion: TFrame},
+  frUslugi in 'Frames\frUslugi.pas' {FrameUslugi: TFrame};
 
 {$R *.res}
 

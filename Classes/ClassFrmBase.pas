@@ -34,7 +34,7 @@ begin
   inherited Create(AOwner);
   if ATitle = '' then
     ATitle := Caption;
-  fFrmParam := AParam;
+  fFrmParam := AParam^;
 
   Title := ATitle;
 end;

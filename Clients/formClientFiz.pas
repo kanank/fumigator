@@ -8,39 +8,23 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxDBEdit,
   cxDropDownEdit, cxMemo, cxCalendar, cxTextEdit, cxMaskEdit, Vcl.StdCtrls,
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
-  frPersonSmall;
+  frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
+  frPasport, frAddress, frListBase, frPersonFull, frKLADR, frUslugi,
+  frAddressRegion;
 
 type
   TfrmClientFiz = class(TSimpleForm)
-    Label6: TLabel;
-    Passp_pnl: TRzPanel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    PassNum_medt: TcxDBMaskEdit;
-    PassDate_DP: TcxDBDateEdit;
-    PassCode_edt: TcxDBTextEdit;
-    PassOrg_memo: TcxDBMemo;
-    Label3: TLabel;
-    Phone_edt: TcxDBTextEdit;
     ID_edt: TcxDBTextEdit;
-    Label8: TLabel;
-    Adres_memo: TcxDBMemo;
     Label14: TLabel;
     Comments_memo: TcxDBMemo;
-    Label9: TLabel;
-    InfoGer_CB: TcxDBComboBox;
-    Label16: TLabel;
-    cxDBComboBox1: TcxDBComboBox;
-    Label17: TLabel;
-    cxDBMemo1: TcxDBMemo;
-    cxDBComboBox2: TcxDBComboBox;
     Label15: TLabel;
     Label18: TLabel;
-    cxDBComboBox3: TcxDBComboBox;
     DS: TDataSource;
-    FramePersonSmall1: TFramePersonSmall;
+    cmbFormat: TcxDBLookupComboBox;
+    cmbStatus: TcxDBLookupComboBox;
+    FramePersonFull1: TFramePersonFull;
+    FrameKLADRAdrRegion1: TFrameKLADRAdrRegion;
+    FrameUslugi1: TFrameUslugi;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -54,6 +38,8 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  DM_Main, CommonTypes;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);
 begin

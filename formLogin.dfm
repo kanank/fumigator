@@ -264,8 +264,8 @@ object frmLogin: TfrmLogin
     TabOrder = 1
   end
   object btnOK: TRzButton
-    Left = 25
-    Top = 154
+    Left = 24
+    Top = 151
     Width = 110
     Height = 29
     Default = True

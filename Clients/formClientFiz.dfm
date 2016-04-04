@@ -60,11 +60,31 @@ inherited frmClientFiz: TfrmClientFiz
   inherited RzPanel1: TRzPanel
     Top = 309
     Width = 734
-    ExplicitTop = 297
-    ExplicitWidth = 717
+    ExplicitTop = 309
+    ExplicitWidth = 734
     inherited Exit_bnt: TRzButton
       Left = 600
-      ExplicitLeft = 583
+      ExplicitLeft = 600
+    end
+    object butOK: TRzButton
+      Left = 456
+      Top = 8
+      Width = 124
+      Height = 29
+      ModalResult = 1
+      Anchors = [akTop, akRight]
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 1
+      ThemeAware = False
+      OnClick = butOKClick
     end
   end
   object ID_edt: TcxDBTextEdit
@@ -93,7 +113,6 @@ inherited frmClientFiz: TfrmClientFiz
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 1
     Visible = False
-    ExplicitWidth = 82
     Width = 21
   end
   object Comments_memo: TcxDBMemo
@@ -106,13 +125,13 @@ inherited frmClientFiz: TfrmClientFiz
     Height = 31
     Width = 392
   end
-  inline FramePersonFull1: TFramePersonFull
+  inline FramePerson: TFramePersonFull
     Left = 0
     Top = 0
     Width = 733
     Height = 172
     TabOrder = 5
-    inherited FramePhones1: TFramePhones
+    inherited FramePhones: TFramePhones
       Left = 288
       Top = 31
       Height = 105
@@ -130,7 +149,7 @@ inherited frmClientFiz: TfrmClientFiz
         end
         inherited RzPanel2: TRzPanel
           Height = 92
-          ExplicitHeight = 123
+          ExplicitHeight = 92
           inherited btnEdit: TRzBitBtn
             Top = 29
             ExplicitTop = 29
@@ -142,7 +161,7 @@ inherited frmClientFiz: TfrmClientFiz
         end
       end
     end
-    inherited FrameAddress1: TFrameKLADR
+    inherited FramePersonAdr: TFrameKLADRAdr
       inherited Adres_memo: TcxDBMemo
         ExplicitWidth = 364
         Width = 364
@@ -151,9 +170,6 @@ inherited frmClientFiz: TfrmClientFiz
         Left = 476
         ExplicitLeft = 476
       end
-    end
-    inherited RzPanel1: TRzPanel
-      ExplicitHeight = 135
     end
   end
   object cmbFormat: TcxDBLookupComboBox
@@ -192,7 +208,7 @@ inherited frmClientFiz: TfrmClientFiz
     TabOrder = 4
     Width = 62
   end
-  inline FrameKLADRAdrRegion1: TFrameKLADRAdrRegion
+  inline FrameAddress: TFrameKLADRAdrRegion
     Left = 8
     Top = 166
     Width = 507
@@ -226,7 +242,7 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitWidth = 216
   end
   object DS: TDataSource
-    Left = 480
-    Top = 311
+    Left = 352
+    Top = 319
   end
 end

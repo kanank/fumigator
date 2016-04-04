@@ -69,7 +69,7 @@ begin
     end;
 
     FreeAndNil(Q);
-    DM.UnMakeTopForm(self);
+    //DM.UnMakeTopForm(self);
   end;
 
   if not cancel then
@@ -85,7 +85,9 @@ begin
   if not DM.DB.Connected then
   begin
     DM.BeforeLogin;
-    self.FormStyle := fsStayonTop;
+    //DM.MakeTopForm(self);
+    self.FormStyle := fsNormal;
+    BringWindowToTop(Self.Handle);
   end;
 end;
 

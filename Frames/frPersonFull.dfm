@@ -6,7 +6,7 @@ inherited FramePersonFull: TFramePersonFull
   DesignSize = (
     733
     172)
-  inline FramePassport1: TFramePassport [0]
+  inline FramePassport: TFramePassport [0]
     Left = 512
     Top = 0
     Width = 218
@@ -14,7 +14,7 @@ inherited FramePersonFull: TFramePersonFull
     TabOrder = 0
     ExplicitLeft = 512
   end
-  inline FramePhones1: TFramePhones [1]
+  inline FramePhones: TFramePhones [1]
     Left = 285
     Top = 0
     Width = 218
@@ -24,27 +24,30 @@ inherited FramePersonFull: TFramePersonFull
     ExplicitHeight = 140
     inherited grpPhone: TRzGroupBox
       Height = 138
+      ExplicitHeight = 138
       inherited grdPhone: TcxGrid
         Height = 119
         ExplicitHeight = 119
       end
       inherited RzPanel2: TRzPanel
         Height = 123
-        ExplicitLeft = 182
-        ExplicitHeight = 128
+        ExplicitHeight = 123
         inherited btnAdd: TRzBitBtn
           Top = 2
+          ExplicitTop = 2
         end
         inherited btnEdit: TRzBitBtn
           Top = 33
+          ExplicitTop = 33
         end
         inherited btnDel: TRzBitBtn
           Top = 93
+          ExplicitTop = 93
         end
       end
     end
   end
-  inline FrameAddress1: TFrameKLADR [2]
+  inline FramePersonAdr: TFrameKLADRAdr [2]
     Left = 0
     Top = 141
     Width = 507
@@ -80,8 +83,24 @@ inherited FramePersonFull: TFramePersonFull
     Height = 135
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
+    ExplicitHeight = 135
     DesignSize = (
       285
       135)
+  end
+  inherited Query_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'select * from PERSONS where id = :NEW_ID')
+  end
+  inherited Query: TIBQuery
+    SQL.Strings = (
+      'select * '
+      'from persons where id = :person_id')
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'person_id'
+        ParamType = ptUnknown
+      end>
   end
 end

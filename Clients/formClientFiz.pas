@@ -9,8 +9,8 @@ uses
   cxDropDownEdit, cxMemo, cxCalendar, cxTextEdit, cxMaskEdit, Vcl.StdCtrls,
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
   frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
-  frPasport, frAddress, frListBase, frPersonFull, frKLADR, frUslugi,
-  frAddressRegion;
+  frPasport, frAddress, frListBase, frPersonFull, frUslugi,
+  frAddressRegion, frKLADR;
 
 type
   TfrmClientFiz = class(TSimpleForm)
@@ -22,10 +22,12 @@ type
     DS: TDataSource;
     cmbFormat: TcxDBLookupComboBox;
     cmbStatus: TcxDBLookupComboBox;
-    FramePersonFull1: TFramePersonFull;
-    FrameKLADRAdrRegion1: TFrameKLADRAdrRegion;
+    FramePerson: TFramePersonFull;
+    FrameAddress: TFrameKLADRAdrRegion;
     FrameUslugi1: TFrameUslugi;
+    butOK: TRzButton;
     procedure FormCreate(Sender: TObject);
+    procedure butOKClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,7 +41,37 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes;
+  DM_Main, CommonTypes, IBX.IBQuery;
+
+procedure TfrmClientFiz.butOKClick(Sender: TObject);
+var
+  res: Boolean;
+begin
+  res := False;
+  try
+    try
+      if not TIBQuery(DS.DataSet).Transaction.Active then
+        TIBQuery(DS.DataSet).Transaction.StartTransaction;
+      DS.DataSet.Post;
+      TIBQuery(DS.DataSet).ApplyUpdates;
+
+      res := FramePersonFull.SaveData;
+    except
+      res := False;
+      ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
+      Exception(ExceptObject).Message);
+    end;
+  finally
+    if Res then
+    begin
+      if  TIBQuery(DS.DataSet).Transaction.InTransaction then
+         TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+    end
+    else
+      if  TIBQuery(DS.DataSet).Transaction.InTransaction then
+         TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
+  end;
+end;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);
 begin
@@ -52,7 +84,10 @@ begin
       begin
         Title := '[новая запись]';
         if (DS.DataSet <> nil) and DS.DataSet.Active then
+        begin
           DS.DataSet.Append;
+          DS.DataSet.FieldByName('TYPE_CLI').AsInteger := 0;
+        end;
       end;
     asEdit:
       begin
@@ -64,8 +99,12 @@ begin
       begin
         Title := '[просмотр]';
       end;
-
   end;
+
+  FramePerson.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FramePerson.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FramePerson.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
+  FramePerson.OpenData;
 end;
 
 end.

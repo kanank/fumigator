@@ -66,6 +66,7 @@ inherited FramePassport: TFramePassport
       Left = 119
       Top = 16
       DataBinding.DataField = 'PASS_NUM'
+      DataBinding.DataSource = DS
       Properties.MaskKind = emkRegExprEx
       Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
       Properties.MaxLength = 0
@@ -77,6 +78,7 @@ inherited FramePassport: TFramePassport
       Left = 119
       Top = 41
       DataBinding.DataField = 'PASS_DATE'
+      DataBinding.DataSource = DS
       TabOrder = 1
       Width = 90
     end
@@ -85,6 +87,7 @@ inherited FramePassport: TFramePassport
       Top = 66
       BeepOnEnter = False
       DataBinding.DataField = 'PASE_CODE'
+      DataBinding.DataSource = DS
       Properties.MaxLength = 16
       Properties.ValidationOptions = [evoShowErrorIcon]
       Style.HotTrack = False
@@ -104,6 +107,7 @@ inherited FramePassport: TFramePassport
       Left = 13
       Top = 106
       DataBinding.DataField = 'PASS_ORG'
+      DataBinding.DataSource = DS
       Properties.MaxLength = 128
       Properties.ValidationOptions = [evoShowErrorIcon]
       TabOrder = 3

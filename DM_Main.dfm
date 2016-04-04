@@ -707,7 +707,42 @@ object DataModuleMain: TDataModuleMain
     RefreshSQL.Strings = (
       'Select * from clientslist(:id, null)')
     ModifySQL.Strings = (
-      '')
+      'update clients'
+      'set'
+      'NAME'#9#9'= :NAME,'
+      'TYPE_CLI'#9#9'= :TYPE_CLI,'
+      'STATUS_ID'#9'= :STATUS_ID,'
+      'FORMAT_ID'#9'= :FORMAT_ID,'
+      'PERSON_ID'#9'= :PERSON_ID,'
+      'ADRES_ID'#9'= :ADRES_ID,'
+      'EMAIL'#9#9'= :EMAIL,'
+      'WORKER_ID'#9'= :WORKER_ID,'
+      'COMMENT'#9'= :COMMENT'
+      'where id = :ID')
+    InsertSQL.Strings = (
+      'insert into clients('
+      'NAME,'
+      'TYPE_CLI,'
+      'STATUS_ID,'
+      'FORMAT_ID,'
+      'PERSON_ID,'
+      'ADRES_ID,'
+      'EMAIL,'
+      'WORKER_ID,'
+      'COMMENT'
+      ')'
+      'values'
+      '('
+      ':NAME,'
+      ':TYPE_CLI,'
+      ':STATUS_ID,'
+      ':FORMAT_ID,'
+      ':PERSON_ID,'
+      ':ADRES_ID,'
+      ':EMAIL,'
+      ':WORKER_ID,'
+      ':COMMENT'
+      ')')
     DeleteSQL.Strings = (
       'delete from clients where id = :id')
     Left = 208
@@ -719,7 +754,6 @@ object DataModuleMain: TDataModuleMain
       'read_committed'
       'rec_version'
       'nowait')
-    AutoStopAction = saCommit
     Left = 264
     Top = 120
   end

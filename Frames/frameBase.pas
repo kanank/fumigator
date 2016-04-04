@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB,
-  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL;
+  IBX.IBCustomDataSet, IBX.IBDatabase, IBX.IBQuery, IBX.IBUpdateSQL;
 
 type
   TDbFrameBase = class(TFrame)
@@ -16,8 +16,11 @@ type
     FParams: TStringList;
     FFieldId: string;
     FId: Integer;
-    fErr: string;
+    fTransaction: TIBTransaction;
     function QuerySetParams: Boolean;
+  protected
+    fErr: string;
+    procedure SetTransaction(AValue: TIBTransaction); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -28,6 +31,7 @@ type
     property FieldId: string read FFieldId write FFieldId;
     property Id: Integer read FId write FId;
     property Err: string read fErr;
+    property Transaction: TIBTransaction read fTransaction write SetTransaction;
   end;
 
 implementation
@@ -57,6 +61,9 @@ begin
     //Query.ParamByName('id').AsInteger := Aid;
     QuerySetParams;
     Query.Open;
+    if Query.RecordCount = 0 then
+      Query.Append;
+    DS.DataSet := Query;
     Result := True;
     FId := Aid;
   except
@@ -69,6 +76,9 @@ end;
 function TDbFrameBase.SaveData: Boolean;
 begin
   Result := false;
+  if Query.Modified then
+    Query.Post;
+
   if not (Query.Modified or Query.UpdatesPending) then
   begin
     Result := True;
@@ -85,6 +95,15 @@ begin
   end;
 end;
 
+procedure TDbFrameBase.SetTransaction(AValue: TIBTransaction);
+begin
+  if fTransaction <> AValue then
+  begin
+    fTransaction := AValue;
+    Query.Transaction := AValue;
+  end
+end;
+
 function TDbFrameBase.AddParam(Aname: string; Afield: TField): integer;
 begin
   Result := FParams.AddObject(Aname, AField);
@@ -96,13 +115,19 @@ var
   prm: TParam;
   fld: TField;
 begin
-  for I := 0 to Query.ParamCount - 1 do
-  begin
-    prm := Query.Params[i];
-    ind := FParams.IndexOf(prm.Name);
-    prm.Clear;
-    if ind > - 1 then
-      prm.Value := TField(FParams.Objects[i]).Value;
+  result := false;
+  try
+    for I := 0 to Query.ParamCount - 1 do
+    begin
+      prm := Query.Params[i];
+      ind := FParams.IndexOf(prm.Name);
+      prm.Clear;
+      if ind > - 1 then
+        prm.Value := TField(FParams.Objects[i]).Value;
+    end;
+    Result := True;
+  Except
+    result := False;
   end;
 end;
 end.

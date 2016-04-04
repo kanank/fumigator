@@ -77,6 +77,9 @@ procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
 begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
   prm := NewFrmCreateParam(asCreate, DM.Clients);
   frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
   frmClientFiz.ShowModal;

@@ -78,6 +78,12 @@ begin
       //Query.Post;
       Result := inherited SaveData;
 
+      if not result then
+        Exit;
+
+       //сохраняем телефоны
+       Result := FramePhones.SaveData;
+
     except
       Result := false;
       fErr := 'SaveData error:'+ #13#10 + Exception(ExceptObject).Message;

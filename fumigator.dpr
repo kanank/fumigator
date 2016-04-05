@@ -32,7 +32,9 @@ uses
   frRegion in 'Frames\frRegion.pas' {FrameKLADRRegion: TFrame},
   frPersonFull in 'Frames\frPersonFull.pas' {FramePersonFull: TFrame},
   frAddressRegion in 'Frames\frAddressRegion.pas' {FrameKLADRAdrRegion: TFrame},
-  frUslugi in 'Frames\frUslugi.pas' {FrameUslugi: TFrame};
+  frUslugi in 'Frames\frUslugi.pas' {FrameUslugi: TFrame},
+  ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData},
+  formEditPhone in 'Frames\formEditPhone.pas' {frmEditPhone};
 
 {$R *.res}
 
@@ -43,6 +45,7 @@ begin
 
   Application.CreateForm(TDataModuleMain, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
+
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;
 

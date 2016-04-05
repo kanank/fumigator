@@ -9,7 +9,8 @@ uses
   cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, RzButton,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGridLevel,
   cxClasses, cxGridCustomView, cxGrid, Vcl.ExtCtrls, RzPanel,
-  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL;
+  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL,
+  ClassFormEditData;
 
 type
   TFrameListBase = class(TDbFrameBase)
@@ -23,15 +24,15 @@ type
     btnAdd: TRzBitBtn;
     btnEdit: TRzBitBtn;
     btnDel: TRzBitBtn;
+    procedure btnAddClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDelClick(Sender: TObject);
   private
-    FEditClass: TComponentClass;
+    FEditFormClass: TfrmEditDataClass;
   public
     constructor Create(AOwner: TComponent); override;
-    property EditClass: TComponentClass read FEditClass write FEditClass;
+    property EditFormClass: TfrmEditDataClass read FEditFormClass write FEditFormClass;
   end;
-
-var
-  FrameListBase: TFrameListBase;
 
 implementation
 
@@ -39,10 +40,65 @@ implementation
 
 { TFrameListBase }
 
+procedure TFrameListBase.btnAddClick(Sender: TObject);
+var
+  frm: TfrmEditData;
+begin
+  try
+    try
+      Query.Append;
+      frm := EditFormClass.Create(self);
+      frm.DS.DataSet := Query;
+
+      frm.ShowModal;
+      if frm.ModalResult = mrOk then
+        Query.Post
+      else
+        Query.Cancel;
+    except
+      Query.Cancel;
+    end;
+  finally
+    FreeAndNil(frm);
+  end;
+end;
+
+procedure TFrameListBase.btnDelClick(Sender: TObject);
+begin
+  if MessageDlg('Вы действительно хотите удалить запись?',
+      mtConfirmation, mbYesNo, 0) = mrNo then
+    Exit;
+  Query.Delete;
+end;
+
+procedure TFrameListBase.btnEditClick(Sender: TObject);
+var
+  frm: TfrmEditData;
+begin
+  try
+    try
+      Query.Edit;
+      frm := EditFormClass.Create(self);
+      frm.DS.DataSet := Query;
+
+      frm.ShowModal;
+      if frm.ModalResult = mrOk then
+        Query.Post
+      else
+        Query.Cancel;
+    except
+      Query.Cancel;
+    end;
+  finally
+    FreeAndNil(frm);
+  end;
+end;
+
 constructor TFrameListBase.Create(AOwner: TComponent);
 begin
   inherited;
   fAutoAppend := False; //для списков выключаем
+  EditFormClass := TfrmEditData;
 end;
 
 end.

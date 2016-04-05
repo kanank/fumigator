@@ -12,7 +12,7 @@ type
     btnWorkers: TRzMenuButton;
     btnTune: TRzMenuButton;
     RzMenuButton1: TRzMenuButton;
-    RzMenuButton2: TRzMenuButton;
+    btnClients: TRzMenuButton;
     NewClientBtn_PUM: TPopupMenu;
     NewFizClnt_mi: TMenuItem;
     NewURClnt_mi: TMenuItem;
@@ -26,6 +26,7 @@ type
     procedure UrClients_miClick(Sender: TObject);
     procedure NewFizClnt_miClick(Sender: TObject);
     procedure NewURClnt_miClick(Sender: TObject);
+    procedure btnClientsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -52,12 +53,9 @@ end;
 
 procedure TfrmMain.btnWorkersClick(Sender: TObject);
 begin
-  if not DM.Clients.Active then
-    DM.Clients.Open;
-
-  frmClients := TfrmClients.Create(self);
-  frmClients.ShowModal;
-  FreeAndNil(frmClients);
+  formWorkers := TfrmWorkers.Create(self);
+  formWorkers.ShowModal;
+  FreeAndNil(formWorkers);
 end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -91,6 +89,16 @@ begin
   frmClientUr := TfrmClientUr.Create(self);
   frmClientUr.ShowModal;
   FreeAndNil(frmClientUr);
+end;
+
+procedure TfrmMain.btnClientsClick(Sender: TObject);
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  frmClients := TfrmClients.Create(self);
+  frmClients.ShowModal;
+  FreeAndNil(frmClients);
 end;
 
 procedure TfrmMain.UrClients_miClick(Sender: TObject);

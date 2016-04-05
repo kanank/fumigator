@@ -87,10 +87,16 @@ inherited FramePersonFull: TFramePersonFull
       285
       135)
     inherited edtCitizen: TcxDBTextEdit
+      Left = 92
       TabOrder = 5
+      ExplicitLeft = 92
+      ExplicitWidth = 94
+      Width = 94
     end
     inherited cmbDateBirth: TcxDBDateEdit
       TabOrder = 3
+      ExplicitWidth = 94
+      Width = 94
     end
     inherited edtName: TcxDBTextEdit
       TabOrder = 1
@@ -99,6 +105,7 @@ inherited FramePersonFull: TFramePersonFull
       TabOrder = 0
     end
     inherited cmbSex: TcxDBComboBox
+      Properties.Alignment.Horz = taCenter
       TabOrder = 4
     end
   end

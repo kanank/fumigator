@@ -68,7 +68,7 @@ begin
       Query.Append;
     DS.DataSet := Query;
     Result := True;
-    FId := Aid;
+    FId := Query.FieldByName(FieldId).AsInteger;
   except
     Result := false;
     fErr := 'OpenData error:'+ #13#10 + Exception(ExceptObject).Message;

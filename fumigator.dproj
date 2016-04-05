@@ -211,6 +211,14 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="Classes\ClassFormEditData.pas">
+            <Form>frmEditData</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Frames\formEditPhone.pas">
+            <Form>frmEditPhone</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

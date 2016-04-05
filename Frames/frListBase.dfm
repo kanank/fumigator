@@ -56,12 +56,13 @@ inherited FrameListBase: TFrameListBase
         103)
       object btnAdd: TRzBitBtn
         Left = 2
-        Top = 2
+        Top = -1
         Width = 28
         Height = 28
         Hint = #1044#1086#1073#1072#1074#1080#1090#1100
         Anchors = [akLeft, akBottom]
         TabOrder = 0
+        OnClick = btnAddClick
         ImageIndex = 0
         Images = DataModuleMain.ImgList
       end
@@ -73,6 +74,7 @@ inherited FrameListBase: TFrameListBase
         Hint = #1048#1079#1084#1077#1085#1080#1090#1100
         Anchors = [akLeft, akBottom]
         TabOrder = 1
+        OnClick = btnEditClick
         ImageIndex = 2
         Images = DataModuleMain.ImgList
       end
@@ -84,6 +86,7 @@ inherited FrameListBase: TFrameListBase
         Hint = #1059#1076#1072#1083#1080#1090#1100
         Anchors = [akLeft, akBottom]
         TabOrder = 2
+        OnClick = btnDelClick
         ImageIndex = 3
         Images = DataModuleMain.ImgList
       end

@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -77,7 +79,7 @@ inherited frmMain: TfrmMain
     DropDownMenu = NewClientBtn_PUM
     ShowArrow = False
   end
-  object RzMenuButton2: TRzMenuButton
+  object btnClients: TRzMenuButton
     Left = 8
     Top = 45
     Width = 170
@@ -94,7 +96,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 3
     ThemeAware = False
-    OnClick = btnWorkersClick
+    OnClick = btnClientsClick
     ShowArrow = False
   end
   object NewClientBtn_PUM: TPopupMenu

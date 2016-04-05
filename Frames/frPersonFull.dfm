@@ -11,7 +11,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 0
     Width = 218
     Height = 140
-    TabOrder = 0
+    TabOrder = 3
     ExplicitLeft = 512
   end
   inline FramePhones: TFramePhones [1]
@@ -19,7 +19,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 0
     Width = 218
     Height = 140
-    TabOrder = 1
+    TabOrder = 2
     ExplicitLeft = 285
     ExplicitHeight = 140
     inherited grpPhone: TRzGroupBox
@@ -52,7 +52,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 141
     Width = 507
     Height = 27
-    TabOrder = 2
+    TabOrder = 1
     ExplicitTop = 141
     ExplicitWidth = 507
     inherited Label8: TLabel
@@ -82,15 +82,63 @@ inherited FramePersonFull: TFramePersonFull
   inherited RzPanel1: TRzPanel [3]
     Height = 135
     Anchors = [akLeft, akTop, akRight]
-    TabOrder = 3
     ExplicitHeight = 135
     DesignSize = (
       285
       135)
+    inherited edtCitizen: TcxDBTextEdit
+      TabOrder = 5
+    end
+    inherited cmbDateBirth: TcxDBDateEdit
+      TabOrder = 3
+    end
+    inherited edtName: TcxDBTextEdit
+      TabOrder = 1
+    end
+    inherited edtFamily: TcxDBTextEdit
+      TabOrder = 0
+    end
+    inherited cmbSex: TcxDBComboBox
+      TabOrder = 4
+    end
   end
   inherited Query_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
       'select * from PERSONS where id = :NEW_ID')
+    ModifySQL.Strings = (
+      'update PERSONS set '
+      'FAMILY = :FAMILY,'
+      'NAME = :NAME,'
+      'SURNAME = :SURNAME,'
+      'ADR_ID = :ADR_ID,'
+      'PASS_ID = :PASS_ID,'
+      'DATE_BIRTH = :DATE_BIRTH,'
+      'SEX = :SEX,'
+      'CITIZEN = :CITIZEN'
+      'where id = :ID')
+    InsertSQL.Strings = (
+      'insert into PERSONS('
+      'ID,'
+      'FAMILY,'
+      'NAME,'
+      'SURNAME,'
+      'ADR_ID,'
+      'PASS_ID,'
+      'DATE_BIRTH,'
+      'SEX,'
+      'CITIZEN'
+      ') '
+      'values('
+      ':ID,'
+      ':FAMILY,'
+      ':NAME,'
+      ':SURNAME,'
+      ':ADR_ID,'
+      ':PASS_ID,'
+      ':DATE_BIRTH,'
+      ':SEX,'
+      ':CITIZEN'
+      ')')
   end
   inherited Query: TIBQuery
     SQL.Strings = (

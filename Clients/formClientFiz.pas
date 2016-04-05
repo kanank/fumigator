@@ -52,10 +52,23 @@ begin
     try
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
+      DS.DataSet.FieldByName('name').AsString :=
+        //сохраняем имя
+        DM.GetPersonFullName(FramePerson.Query.FieldByName('FAMILY').AsString,
+          FramePerson.Query.FieldByName('NAME').AsString,
+          FramePerson.Query.FieldByName('SURNAME').AsString);
+
+      //сохраняем ссылки
+      res := FramePerson.SaveData;
+      if not res then
+        Exit;
+
+      // PERSON_ID
+      DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePerson.Id;
+
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
 
-      res := FramePersonFull.SaveData;
     except
       res := False;
       ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
@@ -64,12 +77,12 @@ begin
   finally
     if Res then
     begin
-      if  TIBQuery(DS.DataSet).Transaction.InTransaction then
-         TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.CommitRetaining;
     end
     else
-      if  TIBQuery(DS.DataSet).Transaction.InTransaction then
-         TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
   end;
 end;
 
@@ -82,22 +95,24 @@ begin
   case fFrmParam.action of
     asCreate:
       begin
-        Title := '[новая запись]';
+        Title := Title + ' [новая запись]';
         if (DS.DataSet <> nil) and DS.DataSet.Active then
         begin
           DS.DataSet.Append;
           DS.DataSet.FieldByName('TYPE_CLI').AsInteger := 0;
+          DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
         end;
       end;
     asEdit:
       begin
-        Title := '[редактирование]';
+        Title := Title + ' [редактирование]';
         if (DS.DataSet <> nil) and DS.DataSet.Active then
           DS.DataSet.Edit;
       end;
     asShow:
       begin
-        Title := '[просмотр]';
+        Title := Title + ' [просмотр]';
       end;
   end;
 

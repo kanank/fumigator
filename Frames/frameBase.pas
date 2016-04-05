@@ -20,6 +20,7 @@ type
     function QuerySetParams: Boolean;
   protected
     fErr: string;
+    fAutoAppend: Boolean;
     procedure SetTransaction(AValue: TIBTransaction); virtual;
   public
     constructor Create(AOwner: TComponent); override;
@@ -32,6 +33,7 @@ type
     property Id: Integer read FId write FId;
     property Err: string read fErr;
     property Transaction: TIBTransaction read fTransaction write SetTransaction;
+    property AllowAutoAppend: Boolean read fAutoAppend write fAutoAppend;
   end;
 
 implementation
@@ -45,6 +47,7 @@ begin
   inherited;
   FParams := TStringList.Create;
   FFieldId := 'ID';
+  fAutoAppend := True;
 end;
 
 destructor TDbFrameBase.Destroy;
@@ -61,7 +64,7 @@ begin
     //Query.ParamByName('id').AsInteger := Aid;
     QuerySetParams;
     Query.Open;
-    if Query.RecordCount = 0 then
+    if (Query.RecordCount = 0) and fAutoAppend then
       Query.Append;
     DS.DataSet := Query;
     Result := True;
@@ -123,7 +126,7 @@ begin
       ind := FParams.IndexOf(prm.Name);
       prm.Clear;
       if ind > - 1 then
-        prm.Value := TField(FParams.Objects[i]).Value;
+        prm.Value := TField(FParams.Objects[ind]).Value;
     end;
     Result := True;
   Except

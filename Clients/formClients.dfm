@@ -6,7 +6,6 @@ inherited frmClients: TfrmClients
   PixelsPerInch = 96
   TextHeight = 13
   inherited RzPanel2: TRzPanel
-    ExplicitTop = -7
     inherited Image1: TImage
       Left = 7
       Top = 4
@@ -19,7 +18,6 @@ inherited frmClients: TfrmClients
       Width = 130
       Height = 27
       GroupIndex = 2
-      Down = True
       FrameColor = clGray
       ShowDownPattern = False
       Anchors = [akTop, akRight]
@@ -43,6 +41,7 @@ inherited frmClients: TfrmClients
       Width = 130
       Height = 27
       GroupIndex = 2
+      Down = True
       FrameColor = clGray
       ShowDownPattern = False
       Anchors = [akTop, akRight]
@@ -56,6 +55,8 @@ inherited frmClients: TfrmClients
       HotTrack = True
       HotTrackColor = 16625984
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       ThemeAware = False
       OnClick = Ur_btnClick
@@ -64,6 +65,12 @@ inherited frmClients: TfrmClients
   inherited RzPanel1: TRzPanel
     inherited Cancel_btn: TRzButton
       ExplicitLeft = 505
+    end
+    inherited Edit_btn: TRzButton
+      OnClick = Edit_btnClick
+    end
+    inherited Add_btn: TRzButton
+      OnClick = Add_btnClick
     end
   end
   inherited Grid: TcxGrid
@@ -90,7 +97,7 @@ inherited frmClients: TfrmClients
         Width = 106
       end
       object GridViewColumn4: TcxGridDBColumn
-        DataBinding.FieldName = 'EMAIL'
+        DataBinding.FieldName = 'Email'
         HeaderAlignmentHorz = taCenter
         Width = 112
       end

@@ -39,6 +39,8 @@ begin
   if not result then
     Exit;
 
+  if Query.State = dsInsert then
+    Query.FieldByName('SEX').AsString := 'Ì';
   Result := False;
   try
     FramePassport.AddParam('ID', Query.FieldByName('PASS_ID'));
@@ -66,7 +68,6 @@ begin
       if not Result then
         Exit;
 
-
       if not (Query.State in [dsInsert, dsEdit]) then
         Query.Edit;
 
@@ -74,7 +75,7 @@ begin
         Query.FieldByName('PASS_ID').AsInteger :=
                                              FramePassport.Id;
 
-      Query.Post;
+      //Query.Post;
       Result := inherited SaveData;
 
     except

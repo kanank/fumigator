@@ -126,16 +126,30 @@ inherited FramePassport: TFramePassport
       '  PASS_CODE = :PASS_CODE '
       'where id = :ID')
     InsertSQL.Strings = (
-      'insert into PERSONS(name, surname, family, date_birth, sex) '
-      'values(:name, :surname, :family, ;date_birth, :sex)')
+      'insert into PASSPORTS('
+      'ID,'
+      'PASS_NUM,'
+      'PASS_ORG,'
+      'PASS_DATE,'
+      'PASS_CODE'
+      ') '
+      'values('
+      ':ID,'
+      ':PASS_NUM,'
+      ':PASS_ORG,'
+      ':PASS_DATE,'
+      ':PASS_CODE'
+      ')')
     DeleteSQL.Strings = (
-      'delete from PERSONS where id= :OLD_ID')
+      'delete from PASSPORTS where id= :OLD_ID')
     Left = 176
     Top = 96
   end
   inherited Query: TIBQuery
     SQL.Strings = (
       'select * from passports where id = :id')
+    GeneratorField.Generator = 'GEN_PASSPORTS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 144
     Top = 96
     ParamData = <

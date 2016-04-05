@@ -212,6 +212,7 @@ inherited FramePersonSmall: TFramePersonSmall
     SQL.Strings = (
       'select id, name, surname, family, date_birth, sex '
       'from persons where id = :id')
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 208
     Top = 107
     ParamData = <

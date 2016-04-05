@@ -26,6 +26,7 @@ type
   private
     FEditClass: TComponentClass;
   public
+    constructor Create(AOwner: TComponent); override;
     property EditClass: TComponentClass read FEditClass write FEditClass;
   end;
 
@@ -35,5 +36,13 @@ var
 implementation
 
 {$R *.dfm}
+
+{ TFrameListBase }
+
+constructor TFrameListBase.Create(AOwner: TComponent);
+begin
+  inherited;
+  fAutoAppend := False; //для списков выключаем
+end;
 
 end.

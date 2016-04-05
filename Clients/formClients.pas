@@ -25,6 +25,8 @@ type
     DS: TDataSource;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
+    procedure Edit_btnClick(Sender: TObject);
+    procedure Add_btnClick(Sender: TObject);
   private
     FisUr: integer;
     procedure SetFilter;
@@ -41,8 +43,17 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, frmMain, formClientFiz, formClientUr, CommonTypes;
 
+
+procedure TfrmClients.Add_btnClick(Sender: TObject);
+begin
+  if FisUr = 1 then
+    formMain.NewURClnt_mi.Click
+  else
+    formMain.NewFizClnt_mi.Click;
+
+end;
 
 constructor TfrmClients.Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0);
 begin
@@ -50,6 +61,29 @@ begin
   if ADataSet = nil then
     DS.DataSet := DM.Clients;
   isUr := AisUr;
+end;
+
+procedure TfrmClients.Edit_btnClick(Sender: TObject);
+var
+  prm: TFrmCreateParam;
+begin
+  //if not DM.Clients.Active then
+  //  DM.Clients.Open;
+  DM.GetDataset(DM.Clients);
+
+  prm := NewFrmCreateParam(asEdit, DM.Clients);
+  if fIsUr = 0 then
+  begin
+    frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
+    frmClientFiz.ShowModal;
+    FreeAndNil(frmClientFiz);
+  end
+  else
+  begin
+    frmClientUr := TfrmClientUr.Create(self, '', @prm);
+    frmClientUr.ShowModal;
+    FreeAndNil(frmClientUr);
+  end
 end;
 
 procedure TfrmClients.Fiz_btnClick(Sender: TObject);
@@ -61,7 +95,7 @@ end;
 procedure TfrmClients.SetFilter;
 begin
   DS.DataSet.Filtered := false;
-  DS.DataSet.Filter := Format('isUr = %d', [isUr]);
+  DS.DataSet.Filter := Format('type_cli = %d', [isUr]);
   DS.DataSet.Filtered := True;
 end;
 
@@ -72,8 +106,21 @@ begin
     fisUr := AValue;
     SetFilter;
   end;
-  Ur_btn.Down  := (AValue = 1);
-  Fiz_btn.Down := (Avalue = 0);
+  if AValue = 1 then
+  begin
+    Ur_btn.Down   := True;
+    Fiz_btn.Down  := False;
+    Ur_btn.Color  := $00FAECDE;
+    Fiz_btn.Color := $00E9F4F8;
+  end
+  else
+  begin
+    Ur_btn.Down   := False;
+    Fiz_btn.Down  := True;
+    Ur_btn.Color  := $00E9F4F8;
+    Fiz_btn.Color := $00FAECDE;  
+  end;
+
 end;
 
 procedure TfrmClients.Ur_btnClick(Sender: TObject);

@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -16,7 +15,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     Left = 80
     Top = 24
   end
@@ -692,14 +690,14 @@ object DataModuleMain: TDataModuleMain
     Transaction = Clients_tr
     ForcedRefresh = True
     BufferChunks = 1000
-    CachedUpdates = False
+    CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
       'select * from clientslist(null, null)')
     UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 152
     Top = 120
   end
@@ -721,6 +719,7 @@ object DataModuleMain: TDataModuleMain
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
+      'id,'
       'NAME,'
       'TYPE_CLI,'
       'STATUS_ID,'
@@ -733,6 +732,7 @@ object DataModuleMain: TDataModuleMain
       ')'
       'values'
       '('
+      ':ID,'
       ':NAME,'
       ':TYPE_CLI,'
       ':STATUS_ID,'

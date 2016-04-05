@@ -65,7 +65,10 @@ type
     function GetCurrentUser(id: integer): CurrentUserRec; //установка текущего пользователя
     function ShowWorkerForm(DS: TDataSource; Worker_ID: integer;
       ActionStr: TActionStr; ParentForm: TForm; ShowModal: Boolean=true): FormResult;
+    function GetPersonShortName(f, i, o: string): string;
+    function GetPersonFullName(f, i, o: string): string;
 
+    function GetDataset(AQuery: TIBQuery): TIBQuery;
   var
     CurrentUserSets: CurrentUserRec;
     //FtpProp: FtpProps;
@@ -352,6 +355,51 @@ begin
   finally
     Q.Transaction.Free;
     FreeAndNil(Q);
+  end;
+end;
+
+function TDataModuleMain.GetDataset(AQuery: TIBQuery): TIBQuery;
+begin
+  result := AQuery;
+  if not AQuery.Active then
+  try
+    AQuery.Open;
+  except
+    result := nil;
+  end;
+end;
+
+function TDataModuleMain.GetPersonFullName(f, i, o: string): string;
+var
+  fio: string;
+begin
+  Result := f;
+
+  if (Result <> '') and (i <> '') then
+  begin
+    Result  := Result + ' ' + i;
+    if o <> '' then
+    begin
+      Result  := Result + ' ' + o;
+    end;
+  end;
+end;
+
+function TDataModuleMain.GetPersonShortName(f, i, o: string): string;
+var
+  fio: string;
+begin
+  fio := f; result := f;
+
+  if (fio <> '') and (i <> '') then
+  begin
+    fio  := fio + ' ' + i;
+    result := result + ' ' + LeftStr(i, 1) + '. ';
+    if o <> '' then
+    begin
+      fio  := fio + ' ' + o;
+      result := result + ' ' + LeftStr(o, 1) + '. ';
+    end;
   end;
 end;
 

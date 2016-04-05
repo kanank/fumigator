@@ -26,14 +26,18 @@ inherited FramePhones: TFramePhones
     inherited RzPanel2: TRzPanel
       Left = 182
       Height = 128
+      ExplicitLeft = 182
+      ExplicitHeight = 128
       DesignSize = (
         31
         128)
       inherited btnAdd: TRzBitBtn
         Top = 1
+        ExplicitTop = 1
       end
       inherited btnEdit: TRzBitBtn
         Top = 32
+        ExplicitTop = 32
       end
       inherited btnDel: TRzBitBtn
         Top = 98
@@ -44,6 +48,8 @@ inherited FramePhones: TFramePhones
   inherited Query: TIBQuery
     SQL.Strings = (
       'select * from phones where client_id = :client_id')
+    GeneratorField.Generator = 'GEN_PHONES_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     ParamData = <
       item
         DataType = ftUnknown

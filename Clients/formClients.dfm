@@ -1,6 +1,7 @@
 inherited frmClients: TfrmClients
   Caption = #1050#1083#1080#1077#1085#1090#1099
   Position = poDesktopCenter
+  OnDestroy = FormDestroy
   ExplicitWidth = 657
   ExplicitHeight = 396
   PixelsPerInch = 96

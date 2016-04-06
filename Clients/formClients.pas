@@ -27,10 +27,12 @@ type
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
     procedure Add_btnClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     FisUr: integer;
     procedure SetFilter;
     procedure SetIsUr(AValue: integer);
+    procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
   public
     constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0);
     property isUr: Integer read FisUr write SetIsUr;
@@ -61,6 +63,7 @@ begin
   if ADataSet = nil then
     DS.DataSet := DM.Clients;
   isUr := AisUr;
+  DS.DataSet.OnFilterRecord := Self.FilterRecord;
 end;
 
 procedure TfrmClients.Edit_btnClick(Sender: TObject);
@@ -86,16 +89,28 @@ begin
   end
 end;
 
+procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
+begin
+  Accept := (DataSet.FieldByName('type_cli').AsInteger = isUr);
+end;
+
 procedure TfrmClients.Fiz_btnClick(Sender: TObject);
 begin
   inherited;
   isUr := 0;
 end;
 
+procedure TfrmClients.FormDestroy(Sender: TObject);
+begin
+  DS.DataSet.OnFilterRecord := nil;
+  DS.DataSet.Filtered := False;
+  inherited;
+end;
+
 procedure TfrmClients.SetFilter;
 begin
   DS.DataSet.Filtered := false;
-  DS.DataSet.Filter := Format('type_cli = %d', [isUr]);
+  //DS.DataSet.Filter := Format('type_cli = %d', [isUr]);
   DS.DataSet.Filtered := True;
 end;
 

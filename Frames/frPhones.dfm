@@ -22,18 +22,32 @@ inherited FramePhones: TFramePhones
       Height = 125
       ExplicitWidth = 177
       ExplicitHeight = 125
-      inherited grdPhoneDBTableView1: TcxGridDBTableView
+      object grdPhoneDBTableView2: TcxGridDBTableView [1]
+        Navigator.Buttons.CustomButtons = <>
+        DataController.DataSource = DS
+        DataController.KeyFieldNames = 'ID'
+        DataController.MasterKeyFieldNames = 'ID'
+        DataController.Options = [dcoAssignMasterDetailKeys, dcoSaveExpanding]
+        DataController.Summary.DefaultGroupSummaryItems = <>
+        DataController.Summary.FooterSummaryItems = <>
+        DataController.Summary.SummaryGroups = <>
+        OptionsData.CancelOnExit = False
         OptionsData.Deleting = False
         OptionsData.DeletingConfirmation = False
         OptionsData.Editing = False
         OptionsData.Inserting = False
-        inherited grdPhoneDBTableView1Column2: TcxGridDBColumn [0]
+        OptionsView.GridLines = glNone
+        OptionsView.GroupByBox = False
+        OptionsView.Header = False
+        object grdPhoneDBTableView2Column2: TcxGridDBColumn
+          DataBinding.FieldName = 'phone'
           Options.Editing = False
           Options.Moving = False
           Options.ShowCaption = False
           Width = 146
         end
-        inherited grdPhoneDBTableView1Column1: TcxGridDBColumn [1]
+        object grdPhoneDBTableView2Column1: TcxGridDBColumn
+          DataBinding.FieldName = 'ismain'
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
           Properties.DisplayChecked = '1'
@@ -43,9 +57,13 @@ inherited FramePhones: TFramePhones
           Properties.ValueUnchecked = '0'
           Options.Editing = False
           Options.AutoWidthSizable = False
+          Options.Moving = False
           Options.ShowCaption = False
           Width = 30
         end
+      end
+      inherited grdPhoneLevel1: TcxGridLevel
+        GridView = grdPhoneDBTableView2
       end
     end
     inherited RzPanel2: TRzPanel
@@ -58,7 +76,6 @@ inherited FramePhones: TFramePhones
         128)
       inherited btnAdd: TRzBitBtn
         Top = 1
-        OnClick = btnAddClick
         ExplicitTop = 1
       end
       inherited btnEdit: TRzBitBtn

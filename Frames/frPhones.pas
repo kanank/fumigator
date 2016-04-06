@@ -13,6 +13,9 @@ uses
 
 type
   TFramePhones = class(TFrameListBase)
+    grdPhoneDBTableView2: TcxGridDBTableView;
+    grdPhoneDBTableView2Column1: TcxGridDBColumn;
+	grdPhoneDBTableView2Column2: TcxGridDBColumn;
     procedure QueryAfterPost(DataSet: TDataSet);
   private
     procedure SetMainPhone(id: integer);

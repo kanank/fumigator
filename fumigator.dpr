@@ -18,7 +18,6 @@ uses
   ClassSimpleSprTypeForm in 'Classes\ClassSimpleSprTypeForm.pas' {frmSimpleSprType},
   ClassProc in 'Classes\ClassProc.pas',
   formClients in 'clients\formClients.pas' {frmClients},
-  formClientUr in 'clients\formClientUr.pas' {frmClientUr},
   formClientFiz in 'clients\formClientFiz.pas' {frmClientFiz},
   frameBase in 'Frames\frameBase.pas' {DbFrameBase: TFrame},
   frPasport in 'Frames\frPasport.pas' {FramePassport: TFrame},
@@ -34,7 +33,11 @@ uses
   frAddressRegion in 'Frames\frAddressRegion.pas' {FrameKLADRAdrRegion: TFrame},
   frUslugi in 'Frames\frUslugi.pas' {FrameUslugi: TFrame},
   ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData},
-  formEditPhone in 'Frames\formEditPhone.pas' {frmEditPhone};
+  formEditPhone in 'Frames\formEditPhone.pas' {frmEditPhone},
+  formAddress in 'Frames\formAddress.pas' {frmAddress},
+  frBank in 'Frames\frBank.pas' {FrameBank: TFrame},
+  frClientExtUr in 'Frames\frClientExtUr.pas' {FrameClientExtUr: TFrame},
+  formClientUr in 'Clients\formClientUr.pas' {frmClientUr};
 
 {$R *.res}
 

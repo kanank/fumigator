@@ -37,7 +37,8 @@ uses
   formAddress in 'Frames\formAddress.pas' {frmAddress},
   frBank in 'Frames\frBank.pas' {FrameBank: TFrame},
   frClientExtUr in 'Frames\frClientExtUr.pas' {FrameClientExtUr: TFrame},
-  formClientUr in 'Clients\formClientUr.pas' {frmClientUr};
+  formClientUr in 'Clients\formClientUr.pas' {frmClientUr},
+  formSelService in 'Frames\formSelService.pas' {frmSelectService};
 
 {$R *.res}
 

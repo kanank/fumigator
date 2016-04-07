@@ -15,11 +15,8 @@ uses
 type
   TFrameListBase = class(TDbFrameBase)
     grpPhone: TRzGroupBox;
-    grdPhoneDBTableView1: TcxGridDBTableView;
     grdPhoneLevel1: TcxGridLevel;
     grdPhone: TcxGrid;
-    grdPhoneDBTableView1Column1: TcxGridDBColumn;
-    grdPhoneDBTableView1Column2: TcxGridDBColumn;
     RzPanel2: TRzPanel;
     btnAdd: TRzBitBtn;
     btnEdit: TRzBitBtn;
@@ -27,8 +24,11 @@ type
     procedure btnAddClick(Sender: TObject);
     procedure btnEditClick(Sender: TObject);
     procedure btnDelClick(Sender: TObject);
+    procedure DSDataChange(Sender: TObject; Field: TField);
   private
     FEditFormClass: TfrmEditDataClass;
+  protected
+    procedure SetEnabled; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     property EditFormClass: TfrmEditDataClass read FEditFormClass write FEditFormClass;
@@ -99,6 +99,19 @@ begin
   inherited;
   fAutoAppend := False; //для списков выключаем
   EditFormClass := TfrmEditData;
+end;
+
+procedure TFrameListBase.DSDataChange(Sender: TObject; Field: TField);
+begin
+  inherited;
+  SetEnabled;
+end;
+
+procedure TFrameListBase.SetEnabled;
+begin
+  btnAdd.Enabled := True;
+  btnEdit.Enabled := (Query.RecordCount > 0);
+  btnDel.Enabled := btnEdit.Enabled;
 end;
 
 end.

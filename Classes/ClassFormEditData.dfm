@@ -12,6 +12,7 @@ object frmEditData: TfrmEditData
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poOwnerFormCenter
   DesignSize = (
     345
     84)

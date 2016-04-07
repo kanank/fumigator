@@ -24,8 +24,9 @@ type
     cmbStatus: TcxDBLookupComboBox;
     FramePerson: TFramePersonFull;
     FrameAddress: TFrameKLADRAdrRegion;
-    FrameUslugi1: TFrameUslugi;
+    FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
+    Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
   private
@@ -69,6 +70,8 @@ begin
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
 
+      //услуги
+      res := FrameUslugi.SaveData;
     except
       res := False;
       ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
@@ -120,6 +123,11 @@ begin
   FramePerson.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FramePerson.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
   FramePerson.OpenData;
+
+  FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FrameUslugi.OpenData;
+
 end;
 
 end.

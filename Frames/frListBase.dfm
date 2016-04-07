@@ -21,26 +21,7 @@ inherited FrameListBase: TFrameListBase
       Height = 101
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
-      object grdPhoneDBTableView1: TcxGridDBTableView
-        Navigator.Buttons.CustomButtons = <>
-        DataController.DataSource = DS
-        DataController.KeyFieldNames = 'ID'
-        DataController.Summary.DefaultGroupSummaryItems = <>
-        DataController.Summary.FooterSummaryItems = <>
-        DataController.Summary.SummaryGroups = <>
-        OptionsData.CancelOnExit = False
-        OptionsView.GridLines = glNone
-        OptionsView.GroupByBox = False
-        OptionsView.Header = False
-        object grdPhoneDBTableView1Column1: TcxGridDBColumn
-          DataBinding.FieldName = 'ISMAIN'
-        end
-        object grdPhoneDBTableView1Column2: TcxGridDBColumn
-          DataBinding.FieldName = 'PHONE'
-        end
-      end
       object grdPhoneLevel1: TcxGridLevel
-        GridView = grdPhoneDBTableView1
       end
     end
     object RzPanel2: TRzPanel
@@ -101,6 +82,7 @@ inherited FrameListBase: TFrameListBase
     Top = 75
   end
   inherited DS: TDataSource
+    OnDataChange = DSDataChange
     Left = 8
     Top = 75
   end

@@ -1,10 +1,10 @@
 inherited FramePhones: TFramePhones
-  Width = 218
+  Width = 222
   Height = 145
-  ExplicitWidth = 218
+  ExplicitWidth = 222
   ExplicitHeight = 145
   DesignSize = (
-    218
+    222
     145)
   inherited grpPhone: TRzGroupBox
     Left = 4
@@ -22,7 +22,7 @@ inherited FramePhones: TFramePhones
       Height = 125
       ExplicitWidth = 177
       ExplicitHeight = 125
-      object grdPhoneDBTableView2: TcxGridDBTableView [1]
+      object grdPhoneDBTableView2: TcxGridDBTableView [0]
         Navigator.Buttons.CustomButtons = <>
         DataController.DataSource = DS
         DataController.KeyFieldNames = 'ID'
@@ -31,11 +31,13 @@ inherited FramePhones: TFramePhones
         DataController.Summary.DefaultGroupSummaryItems = <>
         DataController.Summary.FooterSummaryItems = <>
         DataController.Summary.SummaryGroups = <>
+        OptionsBehavior.IncSearchItem = grdPhoneDBTableView2Column2
         OptionsData.CancelOnExit = False
         OptionsData.Deleting = False
         OptionsData.DeletingConfirmation = False
         OptionsData.Editing = False
         OptionsData.Inserting = False
+        OptionsView.ScrollBars = ssVertical
         OptionsView.GridLines = glNone
         OptionsView.GroupByBox = False
         OptionsView.Header = False
@@ -53,9 +55,8 @@ inherited FramePhones: TFramePhones
           Properties.DisplayChecked = '1'
           Properties.DisplayUnchecked = '0'
           Properties.ReadOnly = False
-          Properties.ValueChecked = '1'
-          Properties.ValueUnchecked = '0'
-          Options.Editing = False
+          Properties.ValueChecked = 1
+          Properties.ValueUnchecked = 0
           Options.AutoWidthSizable = False
           Options.Moving = False
           Options.ShowCaption = False
@@ -69,21 +70,27 @@ inherited FramePhones: TFramePhones
     inherited RzPanel2: TRzPanel
       Left = 182
       Height = 128
-      ExplicitLeft = 182
+      ExplicitLeft = 181
       ExplicitHeight = 128
       DesignSize = (
         31
         128)
       inherited btnAdd: TRzBitBtn
+        Left = 0
         Top = 1
+        ExplicitLeft = 0
         ExplicitTop = 1
       end
       inherited btnEdit: TRzBitBtn
+        Left = 0
         Top = 35
+        ExplicitLeft = 0
         ExplicitTop = 35
       end
       inherited btnDel: TRzBitBtn
+        Left = 0
         Top = 98
+        ExplicitLeft = 0
         ExplicitTop = 98
       end
     end

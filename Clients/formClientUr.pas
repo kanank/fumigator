@@ -32,8 +32,8 @@ type
     RzPanel5: TRzPanel;
     Label14: TLabel;
     Comments_memo: TcxDBMemo;
-    FrameUslugi1: TFrameUslugi;
     butOK: TRzButton;
+    FrameUslugi1: TFrameUslugi;
   private
     { Private declarations }
   public

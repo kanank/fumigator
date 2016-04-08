@@ -17,6 +17,8 @@ inherited frmClientUr: TfrmClientUr
   inherited RzPanel1: TRzPanel
     Top = 310
     Width = 724
+    ExplicitTop = 310
+    ExplicitWidth = 724
     inherited Exit_bnt: TRzButton
       Left = 595
       ExplicitLeft = 595
@@ -197,7 +199,7 @@ inherited frmClientUr: TfrmClientUr
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsFormatsCli
       TabOrder = 0
-      Width = 68
+      Width = 81
     end
     object cxDBLookupComboBox1: TcxDBLookupComboBox
       Left = 172
@@ -228,8 +230,8 @@ inherited frmClientUr: TfrmClientUr
     object Label3: TLabel
       Left = 5
       Top = 4
-      Width = 108
-      Height = 30
+      Width = 76
+      Height = 26
       Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
@@ -285,7 +287,7 @@ inherited frmClientUr: TfrmClientUr
         Left = 157
         Height = 108
         ExplicitLeft = 157
-        ExplicitHeight = 129
+        ExplicitHeight = 108
         inherited btnEdit: TRzBitBtn
           Top = 30
           ExplicitTop = 30
@@ -394,53 +396,54 @@ inherited frmClientUr: TfrmClientUr
   end
   inline FrameUslugi1: TFrameUslugi
     Left = 501
-    Top = 207
+    Top = 206
     Width = 217
-    Height = 100
+    Height = 104
     TabOrder = 9
     ExplicitLeft = 501
-    ExplicitTop = 207
-    ExplicitHeight = 100
+    ExplicitTop = 206
+    ExplicitWidth = 217
+    ExplicitHeight = 104
     inherited grpPhone: TRzGroupBox
-      Height = 96
+      Width = 214
+      Height = 100
       inherited grdPhone: TcxGrid
-        Top = 15
-        Height = 77
-        ExplicitTop = 15
-        ExplicitHeight = 77
+        Width = 205
+        Height = 56
+        ExplicitWidth = 205
+        ExplicitHeight = 56
+        inherited grdPhoneDBTableView1: TcxGridDBTableView
+          inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
+            IsCaptionAssigned = True
+          end
+        end
       end
       inherited RzPanel2: TRzPanel
-        Height = 81
-        ExplicitTop = 15
-        ExplicitHeight = 73
+        Top = 72
+        Width = 212
+        Height = 27
+        ExplicitTop = 72
+        ExplicitWidth = 212
+        ExplicitHeight = 27
         inherited btnAdd: TRzBitBtn
-          Top = 0
-          Height = 23
-          ExplicitTop = 0
-          ExplicitHeight = 23
+          Left = 3
+          Top = -1
+          ExplicitLeft = 3
+          ExplicitTop = -1
         end
         inherited btnEdit: TRzBitBtn
-          Top = 22
-          Height = 23
-          ExplicitTop = 22
-          ExplicitHeight = 23
+          Top = 0
+          ExplicitTop = 0
         end
         inherited btnDel: TRzBitBtn
-          Top = 55
-          Height = 23
-          ExplicitTop = 55
-          ExplicitHeight = 23
+          Left = 175
+          Top = -1
+          Width = 32
+          ExplicitLeft = 175
+          ExplicitTop = -1
+          ExplicitWidth = 32
         end
       end
-    end
-    inherited Query_upd: TIBUpdateSQL
-      Top = 41
-    end
-    inherited Query: TIBQuery
-      Top = 41
-    end
-    inherited DS: TDataSource
-      Top = 41
     end
   end
 end

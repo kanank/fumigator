@@ -47,6 +47,12 @@ type
     DsClients: TDataSource;
     DicStatusCli: TIBQuery;
     DsDicStatusCli: TDataSource;
+    DicCliProfs: TIBQuery;
+    DsDicCliProfs: TDataSource;
+    DicUrForm: TIBQuery;
+    DsDicUrForm: TDataSource;
+    DicCliSfera: TIBQuery;
+    DsDicCliSfera: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -166,6 +172,9 @@ begin
     DicMaterials.Open;
     DicFormatsCli.Open;
     DicStatusCli.Open;
+    DicUrForm.Open;
+    DicCliProfs.Open;
+    DicCliSfera.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

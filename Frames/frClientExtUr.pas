@@ -35,5 +35,7 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  DM_Main;
 
 end.

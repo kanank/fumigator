@@ -7,6 +7,8 @@ inherited frmClients: TfrmClients
   PixelsPerInch = 96
   TextHeight = 13
   inherited RzPanel2: TRzPanel
+    Height = 30
+    ExplicitHeight = 30
     inherited Image1: TImage
       Left = 7
       Top = 4
@@ -15,7 +17,7 @@ inherited frmClients: TfrmClients
     end
     object Fiz_btn: TRzButton
       Left = 368
-      Top = 2
+      Top = 1
       Width = 130
       Height = 27
       GroupIndex = 2
@@ -38,7 +40,7 @@ inherited frmClients: TfrmClients
     end
     object Ur_btn: TRzButton
       Left = 504
-      Top = 2
+      Top = 1
       Width = 130
       Height = 27
       GroupIndex = 2
@@ -75,6 +77,10 @@ inherited frmClients: TfrmClients
     end
   end
   inherited Grid: TcxGrid
+    Top = 48
+    Height = 260
+    ExplicitTop = 48
+    ExplicitHeight = 260
     inherited GridView: TcxGridDBTableView
       DataController.DataSource = DS
       OptionsView.GridLines = glVertical
@@ -115,7 +121,55 @@ inherited frmClients: TfrmClients
       end
     end
   end
+  object btnCli: TRzButton
+    Left = 0
+    Top = 30
+    Width = 65
+    Height = 18
+    GroupIndex = 2
+    FrameColor = clGray
+    ShowDownPattern = False
+    Caption = #1050#1083#1080#1077#1085#1090#1099
+    Color = 16444638
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 3
+    ThemeAware = False
+    OnClick = btnCliClick
+  end
+  object btnLid: TRzButton
+    Left = 65
+    Top = 30
+    Width = 65
+    Height = 18
+    GroupIndex = 2
+    Down = True
+    FrameColor = clGray
+    ShowDownPattern = False
+    Caption = #1051#1080#1076#1099
+    Color = 15332600
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
+    ThemeAware = False
+    OnClick = btnLidClick
+  end
   object cxStyleRepository1: TcxStyleRepository
+    Left = 184
     PixelsPerInch = 96
     object cxStyle1: TcxStyle
       AssignedValues = [svFont]

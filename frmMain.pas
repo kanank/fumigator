@@ -85,8 +85,13 @@ begin
 end;
 
 procedure TfrmMain.NewURClnt_miClick(Sender: TObject);
+var
+  prm: TFrmCreateParam;
 begin
-  frmClientUr := TfrmClientUr.Create(self);
+  DM.GetDataset(DM.Clients);
+
+  prm := NewFrmCreateParam(asCreate, DM.Clients);
+  frmClientUr := TfrmClientUr.Create(self, '', @prm);
   frmClientUr.ShowModal;
   FreeAndNil(frmClientUr);
 end;

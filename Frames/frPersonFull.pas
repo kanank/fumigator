@@ -8,7 +8,8 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, frListBase,
   frPhones, frameBase, frPasport, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery,
   IBX.IBUpdateSQL, IBX.IBDatabase, cxDropDownEdit, cxDBEdit, cxMaskEdit, cxCalendar, cxTextEdit,
-  Vcl.StdCtrls, Vcl.ExtCtrls, RzPanel, frAddress, frKLADR;
+  Vcl.StdCtrls, Vcl.ExtCtrls, RzPanel, frAddress, frKLADR, cxLookupEdit,
+  cxDBLookupEdit, cxDBLookupComboBox;
 
 type
   TFramePersonFull = class(TFramePersonSmall)
@@ -30,6 +31,8 @@ var
 implementation
 
 {$R *.dfm}
+ uses
+   DM_Main;
 
 { TFramePersonFull }
 

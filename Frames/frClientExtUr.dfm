@@ -68,56 +68,7 @@ inherited FrameClientExtUr: TFrameClientExtUr
     Font.Style = []
     ParentFont = False
   end
-  object cmbFormat: TcxDBLookupComboBox [5]
-    Left = 93
-    Top = 6
-    DataBinding.DataField = 'FORMA_ID'
-    DataBinding.DataSource = DS
-    Properties.DropDownListStyle = lsFixedList
-    Properties.KeyFieldNames = 'ID'
-    Properties.ListColumns = <
-      item
-        FieldName = 'NAME'
-      end>
-    Properties.ListOptions.AnsiSort = True
-    Properties.ListOptions.GridLines = glNone
-    Properties.ListOptions.ShowHeader = False
-    Properties.ListSource = DataModuleMain.DsDicUrForm
-    TabOrder = 0
-    Width = 68
-  end
-  object cxDBLookupComboBox1: TcxDBLookupComboBox [6]
-    Left = 218
-    Top = 6
-    DataBinding.DataField = 'SPHERA_ID'
-    DataBinding.DataSource = DS
-    Properties.DropDownListStyle = lsFixedList
-    Properties.KeyFieldNames = 'ID'
-    Properties.ListColumns = <
-      item
-        FieldName = 'NAME'
-      end>
-    Properties.ListOptions.AnsiSort = True
-    Properties.ListOptions.GridLines = glNone
-    Properties.ListOptions.ShowHeader = False
-    Properties.ListSource = DataModuleMain.DsDicCliSfera
-    TabOrder = 1
-    Width = 68
-  end
-  inline FrameBank1: TFrameBank [7]
-    Left = 378
-    Top = 1
-    Width = 220
-    Height = 135
-    TabOrder = 2
-    ExplicitLeft = 378
-    ExplicitTop = 1
-    inherited RzGroupBox1: TRzGroupBox
-      Top = 3
-      ExplicitTop = 3
-    end
-  end
-  object cxDBMaskEdit1: TcxDBMaskEdit [8]
+  object cxDBMaskEdit1: TcxDBMaskEdit [5]
     Left = 410
     Top = 150
     DataBinding.DataField = 'INN'
@@ -126,10 +77,10 @@ inherited FrameClientExtUr: TFrameClientExtUr
     Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 3
+    TabOrder = 0
     Width = 185
   end
-  object cxDBMaskEdit3: TcxDBMaskEdit [9]
+  object cxDBMaskEdit3: TcxDBMaskEdit [6]
     Left = 410
     Top = 177
     DataBinding.DataField = 'KPP'
@@ -138,10 +89,10 @@ inherited FrameClientExtUr: TFrameClientExtUr
     Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 4
+    TabOrder = 1
     Width = 185
   end
-  object cxDBMaskEdit4: TcxDBMaskEdit [10]
+  object cxDBMaskEdit4: TcxDBMaskEdit [7]
     Left = 410
     Top = 204
     DataBinding.DataField = 'OGRN'
@@ -150,8 +101,50 @@ inherited FrameClientExtUr: TFrameClientExtUr
     Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 5
+    TabOrder = 2
     Width = 185
+  end
+  object cmbForma: TcxDBLookupComboBox [8]
+    Left = 93
+    Top = 7
+    DataBinding.DataField = 'FORMA_ID'
+    DataBinding.DataSource = DS
+    Properties.KeyFieldNames = 'ID'
+    Properties.ListColumns = <
+      item
+        FieldName = 'NAME'
+      end>
+    Properties.ListOptions.GridLines = glNone
+    Properties.ListOptions.ShowHeader = False
+    Properties.ListSource = DataModuleMain.DsDicUrForm
+    Properties.ReadOnly = False
+    TabOrder = 3
+    Width = 68
+  end
+  object cmbSfera: TcxDBLookupComboBox [9]
+    Left = 218
+    Top = 7
+    DataBinding.DataField = 'SPHERA_ID'
+    DataBinding.DataSource = DS
+    Properties.KeyFieldNames = 'ID'
+    Properties.ListColumns = <
+      item
+        FieldName = 'NAME'
+      end>
+    Properties.ListOptions.GridLines = glNone
+    Properties.ListOptions.ShowHeader = False
+    Properties.ListSource = DataModuleMain.DsDicCliSfera
+    TabOrder = 4
+    Width = 68
+  end
+  inline FrameRekvizits: TFrameRekvizits [10]
+    Left = 378
+    Top = 3
+    Width = 220
+    Height = 135
+    TabOrder = 5
+    ExplicitLeft = 378
+    ExplicitTop = 3
   end
   inherited Query_upd: TIBUpdateSQL [11]
     RefreshSQL.Strings = (
@@ -192,9 +185,15 @@ inherited FrameClientExtUr: TFrameClientExtUr
   end
   inherited Query: TIBQuery [12]
     SQL.Strings = (
-      'select * from CLIENTS_EXT_UR')
+      'select * from CLIENTS_EXT_UR where client_id = :client_id')
     GeneratorField.Generator = 'GEN_CLIENTS_EXT_UR_ID'
     Top = 32
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'client_id'
+        ParamType = ptUnknown
+      end>
   end
   inherited DS: TDataSource
     Top = 32

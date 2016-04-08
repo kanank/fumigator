@@ -68,7 +68,7 @@ begin
     Query.Next;
   end;
 
-  inherited SaveData;
+  result := inherited SaveData;
 end;
 
 procedure TFrameUslugi.SetServices(ASource: TDataset);

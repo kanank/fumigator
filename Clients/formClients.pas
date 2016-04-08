@@ -32,6 +32,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure btnCliClick(Sender: TObject);
     procedure btnLidClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -126,6 +127,12 @@ begin
   DS.DataSet.OnFilterRecord := nil;
   DS.DataSet.Filtered := False;
   inherited;
+end;
+
+procedure TfrmClients.FormShow(Sender: TObject);
+begin
+  inherited;
+  SetFilter;
 end;
 
 procedure TfrmClients.SetFilter;

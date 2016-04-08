@@ -1,11 +1,11 @@
 inherited FrameKLADRAdrRegion: TFrameKLADRAdrRegion
   Width = 507
-  Height = 62
+  Height = 59
   ExplicitWidth = 507
-  ExplicitHeight = 62
+  ExplicitHeight = 59
   DesignSize = (
     507
-    62)
+    59)
   inherited Label8: TLabel
     Top = 36
     ExplicitTop = 36
@@ -51,6 +51,8 @@ inherited FrameKLADRAdrRegion: TFrameKLADRAdrRegion
     Height = 32
     Margins.Left = 6
     Alignment = taCenter
+    ImageIndex = 8
+    Layout = blGlyphTop
     ExplicitLeft = 469
     ExplicitTop = 13
     ExplicitWidth = 32

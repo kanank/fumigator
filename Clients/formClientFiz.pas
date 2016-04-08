@@ -65,7 +65,8 @@ begin
         Exit;
 
       // PERSON_ID
-      DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePerson.Id;
+      if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePerson.Id then
+        DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePerson.Id;
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
@@ -127,7 +128,6 @@ begin
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FrameUslugi.OpenData;
-
 end;
 
 end.

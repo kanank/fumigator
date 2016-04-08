@@ -47,8 +47,6 @@ type
     DsClients: TDataSource;
     DicStatusCli: TIBQuery;
     DsDicStatusCli: TDataSource;
-    DicCliProfs: TIBQuery;
-    DsDicCliProfs: TDataSource;
     DicUrForm: TIBQuery;
     DsDicUrForm: TDataSource;
     DicCliSfera: TIBQuery;
@@ -173,7 +171,6 @@ begin
     DicFormatsCli.Open;
     DicStatusCli.Open;
     DicUrForm.Open;
-    DicCliProfs.Open;
     DicCliSfera.Open;
    // DicWorkerStatus.Open;
     Workers.Open;

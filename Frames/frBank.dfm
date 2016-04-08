@@ -1,4 +1,4 @@
-inherited FrameBank: TFrameBank
+inherited FrameRekvizits: TFrameRekvizits
   Width = 220
   Height = 135
   ExplicitWidth = 220
@@ -65,10 +65,10 @@ inherited FrameBank: TFrameBank
     object cxDBMaskEdit1: TcxDBMaskEdit
       Left = 32
       Top = 54
-      DataBinding.DataField = 'PASS_NUM'
+      DataBinding.DataField = 'BIK'
       DataBinding.DataSource = DS
       Properties.MaskKind = emkRegExprEx
-      Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d'
       Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]
       TabOrder = 0
@@ -78,7 +78,7 @@ inherited FrameBank: TFrameBank
       Left = 6
       Top = 30
       BeepOnEnter = False
-      DataBinding.DataField = 'PASE_CODE'
+      DataBinding.DataField = 'BANK_NAME'
       DataBinding.DataSource = DS
       Properties.MaxLength = 16
       Properties.ValidationOptions = [evoShowErrorIcon]
@@ -98,10 +98,10 @@ inherited FrameBank: TFrameBank
     object cxDBMaskEdit2: TcxDBMaskEdit
       Left = 32
       Top = 77
-      DataBinding.DataField = 'PASS_NUM'
+      DataBinding.DataField = 'KS'
       DataBinding.DataSource = DS
       Properties.MaskKind = emkRegExprEx
-      Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
+      Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d\d\d\d'
       Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]
       TabOrder = 2
@@ -111,22 +111,59 @@ inherited FrameBank: TFrameBank
   object cxDBMaskEdit3: TcxDBMaskEdit [2]
     Left = 32
     Top = 105
-    DataBinding.DataField = 'PASS_NUM'
+    DataBinding.DataField = 'RS'
     DataBinding.DataSource = DS
     Properties.MaskKind = emkRegExprEx
-    Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
+    Properties.EditMask = '\d\d\d\d\d\d\d\d\d\d\d\d\d'
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 1
     Width = 178
   end
   inherited Query_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'select * from REKVIZITS where id :=id')
+    ModifySQL.Strings = (
+      'update REKVIZITS set '
+      'ID  = :ID, '
+      'BIK  = :BIK, '
+      'KS  = :KS, '
+      'BANK_NAME  = :BANK_NAME, '
+      'RS = :RS'
+      'where id = :ID')
+    InsertSQL.Strings = (
+      'insert into REKVIZITS('
+      'ID, '
+      'BIK, '
+      'KS, '
+      'BANK_NAME, '
+      'RS'
+      ')'
+      'values('
+      ':ID, '
+      ':BIK, '
+      ':KS, '
+      ':BANK_NAME, '
+      ':RS'
+      ')')
+    DeleteSQL.Strings = (
+      'delete from REKVIZITS  where id = :id')
     Left = 176
     Top = 51
   end
   inherited Query: TIBQuery
+    SQL.Strings = (
+      'select * from REKVIZITS where id = :REKVIZIT_ID')
+    GeneratorField.Generator = 'GEN_REKVIZITS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 176
     Top = 11
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'REKVIZIT_ID'
+        ParamType = ptUnknown
+      end>
   end
   inherited DS: TDataSource
     Left = 144

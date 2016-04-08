@@ -10,7 +10,7 @@ uses
   IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL;
 
 type
-  TFrameBank = class(TDbFrameBase)
+  TFrameRekvizits = class(TDbFrameBase)
     RzGroupBox1: TRzGroupBox;
     Label1: TLabel;
     Label3: TLabel;
@@ -26,8 +26,6 @@ type
     { Public declarations }
   end;
 
-var
-  FrameBank: TFrameBank;
 
 implementation
 

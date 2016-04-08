@@ -75,7 +75,7 @@ begin
     Query.Next;
   end;
 
-  inherited SaveData;
+  Result := inherited SaveData;
 end;
 
 procedure TFramePhones.SetMainPhone(id: integer);

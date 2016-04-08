@@ -2,6 +2,7 @@ inherited frmClients: TfrmClients
   Caption = #1050#1083#1080#1077#1085#1090#1099
   Position = poDesktopCenter
   OnDestroy = FormDestroy
+  OnShow = FormShow
   ExplicitWidth = 657
   ExplicitHeight = 396
   PixelsPerInch = 96
@@ -106,6 +107,12 @@ inherited frmClients: TfrmClients
       object GridViewColumn4: TcxGridDBColumn
         DataBinding.FieldName = 'Email'
         HeaderAlignmentHorz = taCenter
+        MinWidth = 112
+        Options.Editing = False
+        Options.AutoWidthSizable = False
+        Options.Grouping = False
+        Options.HorzSizing = False
+        Options.Moving = False
         Width = 112
       end
       object GridViewColumn5: TcxGridDBColumn

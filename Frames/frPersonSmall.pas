@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxDropDownEdit,
   cxDBEdit, cxMaskEdit, cxCalendar, cxTextEdit, Vcl.StdCtrls, Data.DB,
-  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ExtCtrls, RzPanel;
+  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ExtCtrls, RzPanel,
+  cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox;
 
 type
   TFramePersonSmall = class(TDbFrameBase)
@@ -24,17 +25,19 @@ type
     edtName: TcxDBTextEdit;
     edtFamily: TcxDBTextEdit;
     cmbSex: TcxDBComboBox;
+    Label4: TLabel;
+    cmbProf: TcxDBLookupComboBox;
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
-var
-  FramePersonSmall: TFramePersonSmall;
 
 implementation
 
 {$R *.dfm}
+uses
+  DM_Main;
 
 end.

@@ -39,7 +39,7 @@ inherited FrameKLADR: TFrameKLADR
     Alignment = taLeftJustify
     Anchors = [akTop, akRight]
     TabOrder = 1
-    ImageIndex = 2
+    ImageIndex = 8
     Images = DataModuleMain.ImgList
     Spacing = 1
   end

@@ -9,6 +9,9 @@ uses
   cxTextEdit, cxMemo, cxDBEdit, Vcl.StdCtrls, Data.DB, IBX.IBCustomDataSet,
   IBX.IBQuery, IBX.IBUpdateSQL;
 
+const
+  SearchStr =  '%:searchstr%';
+
 type TTypeItemKladr = (tikRegion, tikArea, tikCity, tikSite, tikStreet,
   tikDom);
 
@@ -20,6 +23,8 @@ type
     edtSocr: TcxTextEdit;
     QuerySearch: TIBQuery;
     procedure btnEditClick(Sender: TObject);
+    procedure QueryBeforeOpen(DataSet: TDataSet);
+    procedure QuerySearchBeforeOpen(DataSet: TDataSet);
   private
     fTypeItem: TTypeItemKladr;
     fCode: string; // код КЛАДР
@@ -30,9 +35,11 @@ type
     fStreet: Integer;
     fDom:    Integer;
     fActive: Integer;
+
   protected
     procedure SetCode(AValue: string);
     procedure SetEdtText(AQuery: TIBQuery);
+    procedure SetQueryParam(AQuery: TIBQuery);
   public
     property Code: string read fCode write SetCode;
     property Region: Integer read fRegion;
@@ -41,6 +48,7 @@ type
     property Site:   Integer read fSite;
     property Street: Integer read fStreet;
     property Dom:    Integer read fDom;
+    property ActiveKLADR: Integer read fActive;
 
     function OpenData(Aid: integer = 0): Boolean; override;
     function SaveData: Boolean; override;
@@ -62,11 +70,17 @@ var
 begin
   if QuerySearch.Active then
     QuerySearch.Close;
-  if edtName.Text <> '' then
-    QuerySearch.ParamByName('search').AsString := edtName.Text
-  else
-    QuerySearch.ParamByName('search').AsString := '*';
+  if QuerySearch.Params.FindParam('searchStr') <> nil then
+  begin
+    if edtName.Text <> '' then
+      QuerySearch.ParamByName('searchStr').AsString :=
+        ReplaceStr(SearchStr, ':searchstr', edtName.Text)
+    else
+      QuerySearch.ParamByName('searchStr').AsString :=
+        ReplaceStr(SearchStr, ':searchstr', '?');
+  end;
   QuerySearch.Open;
+  QuerySearch.FetchAll;
   if QuerySearch.RecordCount = 0 then
   begin
     ShowMessage('Не найдено');
@@ -108,6 +122,16 @@ begin
   SetEdtText(Query);
 end;
 
+procedure TFrameItemKLADR.QueryBeforeOpen(DataSet: TDataSet);
+begin
+  SetQueryParam(TIBQuery(DataSet));
+end;
+
+procedure TFrameItemKLADR.QuerySearchBeforeOpen(DataSet: TDataSet);
+begin
+  SetQueryParam(TIBQuery(DataSet));
+end;
+
 function TFrameItemKLADR.SaveData: Boolean;
 begin
   fCode := Query.FieldByName('CODE').AsString;
@@ -139,6 +163,39 @@ begin
     edtName.Text := AQuery.FieldByName('NAME').AsString;
     edtSocr.Text := AQuery.FieldByName('SOCR').AsString;
   end;
+end;
+
+procedure TFrameItemKLADR.SetQueryParam(AQuery: TIBQuery);
+var
+  prm: TParam;
+begin
+  prm := AQuery.Params.FindParam('REGION_ID'); // регион
+  if prm <> nil then
+    prm.AsInteger := fRegion;
+
+  prm := AQuery.Params.FindParam('AREA_ID'); //район
+  if prm <> nil then
+    prm.AsInteger := fArea;
+
+  prm := AQuery.Params.FindParam('CITY_ID'); //город
+  if prm <> nil then
+    prm.AsInteger := fCity;
+
+  prm := AQuery.Params.FindParam('CITY_ID'); //нас. пункт
+  if prm <> nil then
+    prm.AsInteger := fSite;
+
+  prm := AQuery.Params.FindParam('Street_ID'); // улица
+  if prm <> nil then
+    prm.AsInteger := fStreet;
+
+  prm := AQuery.Params.FindParam('Dom_ID'); // дом
+  if prm <> nil then
+    prm.AsInteger := fDom;
+
+  //prm := AQuery.ParamByName('search'); // дом
+  //if prm <> nil then
+  //  prm.AsString := edtName.text;
 end;
 
 end.

@@ -9,11 +9,9 @@ inherited frmKLADRList: TfrmKLADRList
   inherited lblData: TLabel
     Left = 312
     Top = 8
-    Width = 25
     Visible = False
     ExplicitLeft = 312
     ExplicitTop = 8
-    ExplicitWidth = 25
   end
   inherited edtData: TcxDBMaskEdit
     Left = 304
@@ -48,7 +46,6 @@ inherited frmKLADRList: TfrmKLADRList
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
       OptionsBehavior.IncSearch = True
-      OptionsBehavior.IncSearchItem = gridDBTableView1Column1
       OptionsCustomize.ColumnGrouping = False
       OptionsCustomize.ColumnHidingOnGrouping = False
       OptionsCustomize.ColumnMoving = False
@@ -60,20 +57,14 @@ inherited frmKLADRList: TfrmKLADRList
       OptionsView.ScrollBars = ssVertical
       OptionsView.GridLines = glNone
       OptionsView.GroupByBox = False
+      OptionsView.Header = False
       object gridDBTableView1Column1: TcxGridDBColumn
-        DataBinding.FieldName = 'SERVICE_ID'
-        PropertiesClassName = 'TcxLookupComboBoxProperties'
-        Properties.GridMode = True
-        Properties.HideSelection = False
-        Properties.KeyFieldNames = 'ID'
-        Properties.ListColumns = <
-          item
-            FieldName = 'NAME'
-          end>
-        Properties.ListSource = DataModuleMain.DSDicServices
-        Options.Editing = False
-        Width = 281
-        IsCaptionAssigned = True
+        DataBinding.FieldName = 'SOCR'
+        Width = 40
+      end
+      object gridDBTableView1Column2: TcxGridDBColumn
+        DataBinding.FieldName = 'NAME'
+        Width = 222
       end
     end
     object gridLevel1: TcxGridLevel

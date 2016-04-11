@@ -313,16 +313,6 @@ inherited frmClientFiz: TfrmClientFiz
         end
       end
     end
-    inherited FramePersonAdr: TFrameKLADRAdr
-      inherited Adres_memo: TcxDBMemo
-        ExplicitWidth = 364
-        Width = 364
-      end
-      inherited btnEdit: TRzBitBtn
-        Left = 476
-        ExplicitLeft = 476
-      end
-    end
     inherited RzPanel1: TRzPanel
       inherited Label10: TLabel [0]
       end
@@ -335,12 +325,12 @@ inherited frmClientFiz: TfrmClientFiz
       inherited Label11: TLabel [3]
         Visible = False
       end
-      inherited Label2: TLabel
+      inherited Label4: TLabel [4]
+        Visible = False
+      end
+      inherited Label2: TLabel [5]
         Top = 113
         ExplicitTop = 113
-      end
-      inherited Label4: TLabel [5]
-        Visible = False
       end
       inherited Label8: TLabel [6]
         Top = 85
@@ -367,6 +357,11 @@ inherited frmClientFiz: TfrmClientFiz
         Top = 80
         ExplicitTop = 80
       end
+    end
+    inherited FrameAddress: TFrameKladrAdrFull
+      Height = 26
+      Visible = True
+      ExplicitHeight = 26
     end
   end
   object cmbFormat: TcxDBLookupComboBox
@@ -405,36 +400,12 @@ inherited frmClientFiz: TfrmClientFiz
     TabOrder = 4
     Width = 62
   end
-  inline FrameAddress: TFrameKLADRAdrRegion
-    Left = 8
-    Top = 168
-    Width = 507
-    Height = 62
-    TabOrder = 6
-    ExplicitLeft = 8
-    ExplicitTop = 168
-    ExplicitHeight = 62
-    inherited Adres_memo: TcxDBMemo
-      ExplicitWidth = 425
-      Width = 425
-    end
-    inherited btnEdit: TRzBitBtn
-      Left = 468
-      Width = 28
-      ExplicitLeft = 468
-      ExplicitWidth = 28
-    end
-    inherited cxDBMemo2: TcxDBMemo
-      ExplicitWidth = 177
-      Width = 177
-    end
-  end
   inline FrameUslugi: TFrameUslugi
     Left = 514
     Top = 144
     Width = 216
     Height = 123
-    TabOrder = 7
+    TabOrder = 6
     ExplicitLeft = 514
     ExplicitTop = 144
     ExplicitWidth = 216
@@ -468,6 +439,60 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 173
         end
       end
+    end
+  end
+  inline FrameAddress: TFrameKladrAdrFull
+    Left = 6
+    Top = 175
+    Width = 498
+    Height = 47
+    TabOrder = 7
+    ExplicitLeft = 6
+    ExplicitTop = 175
+    ExplicitWidth = 498
+    ExplicitHeight = 47
+    inherited Label8: TLabel
+      Top = 8
+      Visible = False
+      ExplicitTop = 8
+    end
+    inherited Label2: TLabel
+      Left = 1
+      Top = 4
+      Visible = False
+      ExplicitLeft = 1
+      ExplicitTop = 4
+    end
+    inherited edtAddress: TcxTextEdit [3]
+      Left = 63
+      Top = 3
+      Visible = False
+      ExplicitLeft = 63
+      ExplicitTop = 3
+      ExplicitWidth = 401
+      Width = 401
+    end
+    inherited FrameRegion: TFrameItemKLADR [4]
+    end
+    inherited FrameCity: TFrameItemKLADR [5]
+    end
+    inherited FrameSite: TFrameItemKLADR [6]
+    end
+    inherited FrameDom: TFrameItemKLADR [7]
+    end
+    inherited FrameStreet: TFrameItemKLADR [8]
+    end
+    inherited FrameArea: TFrameItemKLADR [9]
+    end
+    inherited btnEdit: TRzBitBtn [10]
+      Left = 352
+      Top = 1
+      ExplicitLeft = 352
+      ExplicitTop = 1
+    end
+    inherited edtRegion: TcxTextEdit [11]
+    end
+    inherited edtSite: TcxTextEdit [12]
     end
   end
   object DS: TDataSource

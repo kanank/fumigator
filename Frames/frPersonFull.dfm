@@ -20,7 +20,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 0
     Width = 218
     Height = 144
-    TabOrder = 2
+    TabOrder = 1
     ExplicitLeft = 287
     ExplicitWidth = 218
     ExplicitHeight = 144
@@ -49,39 +49,7 @@ inherited FramePersonFull: TFramePersonFull
       end
     end
   end
-  inline FramePersonAdr: TFrameKLADRAdr [2]
-    Left = 0
-    Top = 143
-    Width = 507
-    Height = 27
-    TabOrder = 1
-    ExplicitTop = 143
-    ExplicitWidth = 507
-    inherited Label8: TLabel
-      Left = 8
-      Width = 98
-      Caption = #1040#1076#1088#1077#1089' '#1088#1077#1075#1080#1089#1090#1088#1072#1094#1080#1080
-      ExplicitLeft = 8
-      ExplicitWidth = 98
-    end
-    inherited Adres_memo: TcxDBMemo
-      Left = 109
-      Top = 2
-      ExplicitLeft = 109
-      ExplicitTop = 2
-      ExplicitWidth = 360
-      ExplicitHeight = 23
-      Height = 23
-      Width = 360
-    end
-    inherited btnEdit: TRzBitBtn
-      Left = 473
-      Width = 28
-      ExplicitLeft = 473
-      ExplicitWidth = 28
-    end
-  end
-  inherited RzPanel1: TRzPanel [3]
+  inherited RzPanel1: TRzPanel [2]
     Left = 3
     Height = 142
     Anchors = [akLeft, akTop, akRight]
@@ -176,6 +144,50 @@ inherited FramePersonFull: TFramePersonFull
       Top = 96
       ExplicitLeft = 72
       ExplicitTop = 96
+    end
+  end
+  inline FrameAddress: TFrameKladrAdrFull [3]
+    Left = 6
+    Top = 146
+    Width = 498
+    Height = 27
+    TabOrder = 2
+    Visible = False
+    ExplicitLeft = 6
+    ExplicitTop = 146
+    ExplicitWidth = 498
+    ExplicitHeight = 27
+    inherited Label8: TLabel
+      Visible = False
+    end
+    inherited Label1: TLabel
+      Visible = False
+    end
+    inherited Label2: TLabel
+      Left = 1
+      Top = 4
+      ExplicitLeft = 1
+      ExplicitTop = 4
+    end
+    inherited btnEdit: TRzBitBtn
+      Left = 467
+      Top = 0
+      ExplicitLeft = 467
+      ExplicitTop = 0
+    end
+    inherited edtRegion: TcxTextEdit
+      Visible = False
+    end
+    inherited edtSite: TcxTextEdit
+      Visible = False
+    end
+    inherited edtAddress: TcxTextEdit
+      Left = 63
+      Top = 1
+      ExplicitLeft = 63
+      ExplicitTop = 1
+      ExplicitWidth = 401
+      Width = 401
     end
   end
   inherited Query_upd: TIBUpdateSQL

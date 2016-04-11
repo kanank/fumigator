@@ -9,8 +9,7 @@ uses
   cxDropDownEdit, cxMemo, cxCalendar, cxTextEdit, cxMaskEdit, Vcl.StdCtrls,
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
   frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
-  frPasport, frAddress, frListBase, frPersonFull, frUslugi,
-  frAddressRegion, frKLADR;
+  frPasport, frListBase, frPersonFull, frUslugi, frKladrAll, FrKladrAdrFull;
 
 type
   TfrmClientFiz = class(TSimpleForm)
@@ -23,10 +22,10 @@ type
     cmbFormat: TcxDBLookupComboBox;
     cmbStatus: TcxDBLookupComboBox;
     FramePerson: TFramePersonFull;
-    FrameAddress: TFrameKLADRAdrRegion;
     FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
     Image1: TImage;
+    FrameAddress: TFrameKladrAdrFull;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
   private

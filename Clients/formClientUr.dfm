@@ -541,35 +541,13 @@ inherited frmClientUr: TfrmClientUr
       Width = 161
     end
   end
-  inline FrameAddress: TFrameKLADRAdrRegion
-    Left = 8
-    Top = 214
-    Width = 507
-    Height = 62
-    TabOrder = 7
-    ExplicitLeft = 8
-    ExplicitTop = 214
-    ExplicitHeight = 62
-    inherited Adres_memo: TcxDBMemo
-      ExplicitWidth = 411
-      Width = 411
-    end
-    inherited btnEdit: TRzBitBtn
-      Left = 451
-      ExplicitLeft = 451
-    end
-    inherited cxDBMemo2: TcxDBMemo
-      ExplicitWidth = 163
-      Width = 163
-    end
-  end
   object RzPanel5: TRzPanel
     Left = 8
     Top = 275
     Width = 485
     Height = 32
     BorderSides = []
-    TabOrder = 8
+    TabOrder = 7
     object Label14: TLabel
       Left = 2
       Top = 7
@@ -599,7 +577,7 @@ inherited frmClientUr: TfrmClientUr
     Top = 201
     Width = 217
     Height = 104
-    TabOrder = 9
+    TabOrder = 8
     ExplicitLeft = 501
     ExplicitTop = 201
     ExplicitWidth = 217
@@ -630,10 +608,10 @@ inherited frmClientUr: TfrmClientUr
         end
       end
       inherited RzPanel2: TRzPanel
-        Top = 79
+        Top = 83
         Width = 212
         Height = 27
-        ExplicitTop = 72
+        ExplicitTop = 79
         ExplicitWidth = 212
         ExplicitHeight = 27
         inherited btnAdd: TRzBitBtn

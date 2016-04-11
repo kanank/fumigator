@@ -163,11 +163,6 @@
         </DCCReference>
         <DCCReference Include="CommonVars.pas"/>
         <DCCReference Include="Classes\CommonTypes.pas"/>
-        <DCCReference Include="Frames\frPersonSmall.pas">
-            <Form>FramePersonSmall</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="Frames\frListBase.pas">
             <Form>FrameListBase</Form>
             <FormType>dfm</FormType>
@@ -178,61 +173,19 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Frames\frKLADR.pas">
-            <Form>FrameKLADR</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames\frAddress.pas">
-            <Form>FrameKLADRAdr</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames\frRegion.pas">
-            <Form>FrameKLADRRegion</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames\frPersonFull.pas">
-            <Form>FramePersonFull</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames\frAddressRegion.pas">
-            <Form>FrameKLADRAdrRegion</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="Frames\frUslugi.pas">
             <Form>FrameUslugi</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Classes\ClassFormEditData.pas">
-            <Form>frmEditData</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Frames\formEditPhone.pas">
             <Form>frmEditPhone</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Frames\formAddress.pas">
-            <Form>frmAddress</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Frames\frBank.pas">
-            <Form>FrameBank</Form>
+            <Form>FrameRekvizits</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames\frClientExtUr.pas">
-            <Form>FrameClientExtUr</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Clients\formClientUr.pas">
-            <Form>frmClientUr</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Frames\formSelService.pas">
             <Form>frmSelectService</Form>
@@ -243,8 +196,38 @@
         </DCCReference>
         <DCCReference Include="Frames\frItemKLADR.pas">
             <Form>FrameItemKLADR</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frKladrAll.pas">
+            <Form>FrameKladrAll</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\formKladrAdr.pas">
+            <Form>frmKladrAdr</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Frames\FrKladrAdrFull.pas">
+            <Form>FrameKladrAdrFull</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frPersonSmall.pas">
+            <Form>FramePersonSmall</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frPersonFull.pas">
+            <Form>FramePersonFull</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\frClientExtUr.pas">
+            <Form>FrameClientExtUr</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Clients\formClientUr.pas">
+            <Form>frmClientUr</Form>
+        </DCCReference>
+        <DCCReference Include="Classes\ClassFormEditData.pas">
+            <Form>frmEditData</Form>
         </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

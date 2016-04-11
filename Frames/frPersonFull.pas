@@ -8,14 +8,14 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, frListBase,
   frPhones, frameBase, frPasport, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery,
   IBX.IBUpdateSQL, IBX.IBDatabase, cxDropDownEdit, cxDBEdit, cxMaskEdit, cxCalendar, cxTextEdit,
-  Vcl.StdCtrls, Vcl.ExtCtrls, RzPanel, frAddress, frKLADR, cxLookupEdit,
-  cxDBLookupEdit, cxDBLookupComboBox;
+  Vcl.StdCtrls, Vcl.ExtCtrls, RzPanel, cxLookupEdit,
+  cxDBLookupEdit, cxDBLookupComboBox, FrKladrAdrFull, frKladrAll;
 
 type
   TFramePersonFull = class(TFramePersonSmall)
     FramePassport: TFramePassport;
     FramePhones: TFramePhones;
-    FramePersonAdr: TFrameKLADRAdr;
+	FrameAddress: TFrameKladrAdrFull;
   private
     { Private declarations }
   protected
@@ -50,8 +50,8 @@ begin
     FramePassport.OpenData;
     FramePhones.AddParam('CLIENT_ID', Query.FieldByName('ID'));
     FramePhones.OpenData;
-    FramePersonAdr.AddParam('ID', Query.FieldByName('ADR_ID'));
-    //FramePersonAdr.OpenData;
+    FrameAddress.AddParam('ID', Query.FieldByName('ADR_ID'));
+    FrameAddress.OpenData;
     Result := True;
   except
     Result := False;
@@ -74,9 +74,14 @@ begin
       if not (Query.State in [dsInsert, dsEdit]) then
         Query.Edit;
 
-      if Query.FieldByName('PASS_ID').AsInteger = 0 then
+      if Query.FieldByName('PASS_ID').AsInteger <>
+                                        FramePassport.Id then
         Query.FieldByName('PASS_ID').AsInteger :=
                                              FramePassport.Id;
+      if Query.FieldByName('ADR_ID').AsInteger <>
+                                        FrameAddress.Id then
+        Query.FieldByName('ADR_ID').AsInteger :=
+                                             FrameAddress.Id;
 
       //Query.Post;
       Result := inherited SaveData;
@@ -101,7 +106,7 @@ begin
   inherited;
   FramePassport.Transaction := AValue;
   FramePhones.Transaction := AValue;
-  FramePersonAdr.Transaction := AValue;
+  FrameAddress.Transaction := AValue;
 end;
 
 end.

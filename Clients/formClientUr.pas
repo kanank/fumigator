@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxMemo, cxDBEdit,
-  frKLADR, frAddress, frAddressRegion, frListBase, frPhones, cxTextEdit,
+  frListBase, frPhones, cxTextEdit,
   cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
   Vcl.StdCtrls, frPersonSmall, RzPanel, frameBase, frClientExtUr, RzButton,
   Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB;
@@ -28,7 +28,6 @@ type
     RzPanel4: TRzPanel;
     cxDBTextEdit2: TcxDBTextEdit;
     Label4: TLabel;
-    FrameAddress: TFrameKLADRAdrRegion;
     RzPanel5: TRzPanel;
     Label14: TLabel;
     Comments_memo: TcxDBMemo;

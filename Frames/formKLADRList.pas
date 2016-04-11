@@ -15,8 +15,9 @@ type
   TfrmKLADRList = class(TfrmEditData)
     grid: TcxGrid;
     gridDBTableView1: TcxGridDBTableView;
-    gridDBTableView1Column1: TcxGridDBColumn;
     gridLevel1: TcxGridLevel;
+    gridDBTableView1Column2: TcxGridDBColumn;
+    gridDBTableView1Column1: TcxGridDBColumn;
   private
     { Private declarations }
   public

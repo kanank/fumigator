@@ -7,7 +7,11 @@ inherited frmAddress: TfrmAddress
   PixelsPerInch = 96
   TextHeight = 13
   inherited lblData: TLabel
+    Left = 408
+    Top = 8
     Visible = False
+    ExplicitLeft = 408
+    ExplicitTop = 8
   end
   object Label1: TLabel [1]
     Left = 8
@@ -23,7 +27,13 @@ inherited frmAddress: TfrmAddress
     ParentFont = False
   end
   inherited edtData: TcxDBMaskEdit
+    Left = 448
+    Top = 8
     Visible = False
+    ExplicitLeft = 448
+    ExplicitTop = 8
+    ExplicitWidth = 33
+    Width = 33
   end
   inherited btnOK: TRzButton
     Left = 168

@@ -38,7 +38,9 @@ uses
   frBank in 'Frames\frBank.pas' {FrameBank: TFrame},
   frClientExtUr in 'Frames\frClientExtUr.pas' {FrameClientExtUr: TFrame},
   formClientUr in 'Clients\formClientUr.pas' {frmClientUr},
-  formSelService in 'Frames\formSelService.pas' {frmSelectService};
+  formSelService in 'Frames\formSelService.pas' {frmSelectService},
+  formKLADRList in 'Frames\formKLADRList.pas' {frmKLADRList},
+  frItemKLADR in 'Frames\frItemKLADR.pas' {FrameItemKLADR: TFrame};
 
 {$R *.res}
 

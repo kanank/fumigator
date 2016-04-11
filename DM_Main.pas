@@ -51,6 +51,8 @@ type
     DsDicUrForm: TDataSource;
     DicCliSfera: TIBQuery;
     DsDicCliSfera: TDataSource;
+    DicRegions: TIBQuery;
+    DsDicRegions: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -172,6 +174,7 @@ begin
     DicStatusCli.Open;
     DicUrForm.Open;
     DicCliSfera.Open;
+    DicRegions.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

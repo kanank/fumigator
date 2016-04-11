@@ -13,7 +13,7 @@ inherited FrameUslugi: TFrameUslugi
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
     Caption = #1059#1089#1083#1091#1075#1080
     ExplicitWidth = 176
-    ExplicitHeight = 163
+    ExplicitHeight = 148
     DesignSize = (
       176
       148)
@@ -69,8 +69,8 @@ inherited FrameUslugi: TFrameUslugi
       Height = 31
       Align = alBottom
       ExplicitLeft = 1
-      ExplicitTop = 131
-      ExplicitWidth = 210
+      ExplicitTop = 116
+      ExplicitWidth = 174
       ExplicitHeight = 31
       DesignSize = (
         174
@@ -99,7 +99,6 @@ inherited FrameUslugi: TFrameUslugi
       inherited btnDel: TRzBitBtn
         Left = 137
         Top = 1
-        Cancel = True
         Anchors = [akTop, akRight]
         ExplicitLeft = 137
         ExplicitTop = 1

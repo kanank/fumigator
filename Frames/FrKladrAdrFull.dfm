@@ -1,12 +1,12 @@
 inherited FrameKladrAdrFull: TFrameKladrAdrFull
   Width = 384
-  Height = 74
+  Height = 73
   Visible = False
   ExplicitWidth = 384
-  ExplicitHeight = 74
+  ExplicitHeight = 73
   DesignSize = (
     384
-    74)
+    73)
   object Label8: TLabel [0]
     Left = 3
     Top = 6
@@ -53,22 +53,129 @@ inherited FrameKladrAdrFull: TFrameKladrAdrFull
   inherited FrameCity: TFrameItemKLADR
     Top = 109
     ExplicitTop = 109
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and city_id > 0 and'
+        'Site_id = 0')
+    end
   end
   inherited FrameSite: TFrameItemKLADR
     Top = 134
     ExplicitTop = 134
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and site_id >0')
+    end
   end
   inherited FrameDom: TFrameItemKLADR
     Top = 186
     ExplicitTop = 186
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_DOMA'
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and'
+        'street_id = :street_id and'
+        'dom_id = :dom_id and dom_id > 0')
+    end
+    inherited QuerySearch: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_DOMA'
+        'where '
+        'REGION_ID =:REGION_ID  and'
+        'Area_id =:Area_id  and'
+        'City_id =:City_id  and'
+        'Site_id = :Site_id  and'
+        'street_id = :street_id'
+        'and dom_id > 0')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'REGION_ID'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Site_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'street_id'
+          ParamType = ptUnknown
+        end>
+    end
   end
   inherited FrameStreet: TFrameItemKLADR
     Top = 159
     ExplicitTop = 159
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_STREET '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and'
+        'street_id = :street_id and street_id > 0')
+    end
+    inherited QuerySearch: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_STREET'
+        'where '
+        'Region_id = :Region_id  and'
+        'Area_id = :Area_id  and'
+        'City_id = :City_id  and'
+        'Site_id = :Site_id  and '
+        'street_id > 0 and'
+        'actual = 0')
+    end
   end
   inherited FrameArea: TFrameItemKLADR
     Top = 83
     ExplicitTop = 83
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id  > 0 and area_id = :area_id and'
+        'City_id = 0 and'
+        'Site_id = 0')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'Region_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'area_id'
+          ParamType = ptUnknown
+        end>
+    end
   end
   object btnEdit: TRzBitBtn [9]
     Left = 353

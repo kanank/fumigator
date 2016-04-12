@@ -43,6 +43,11 @@ inherited FrameItemKLADR: TFrameItemKLADR
     Left = 67
     Top = 4
     Enabled = False
+    Style.BorderStyle = ebsNone
+    Style.Color = clBtnFace
+    Style.HotTrack = False
+    Style.Shadow = False
+    StyleDisabled.TextColor = clCaptionText
     TabOrder = 2
     Width = 33
   end
@@ -102,11 +107,18 @@ inherited FrameItemKLADR: TFrameItemKLADR
       'Area_id =0 and'
       'City_id =0 and'
       'Site_id = 0 and'
-      'actual = 0')
+      'actual = 0 and'
+      'upper(name) like upper(:searchstr)')
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_PERSONS_ID'
     GeneratorField.ApplyEvent = gamOnServer
     Left = 233
     Top = 2
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'searchstr'
+        ParamType = ptUnknown
+      end>
   end
 end

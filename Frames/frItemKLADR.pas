@@ -10,7 +10,7 @@ uses
   IBX.IBQuery, IBX.IBUpdateSQL;
 
 const
-  SearchStr =  '%:searchstr%';
+  SearchStr =  '''%:searchstr%''';
 
 type TTypeItemKladr = (tikRegion, tikArea, tikCity, tikSite, tikStreet,
   tikDom);
@@ -36,6 +36,8 @@ type
     fDom:    Integer;
     fActive: Integer;
 
+    fChildFrame: TFrameItemKLADR; //зависимый фрейм
+
   protected
     procedure SetCode(AValue: string);
     procedure SetEdtText(AQuery: TIBQuery);
@@ -49,6 +51,9 @@ type
     property Street: Integer read fStreet;
     property Dom:    Integer read fDom;
     property ActiveKLADR: Integer read fActive;
+
+    property TypeItem: TTypeItemKladr read fTypeItem write fTypeItem;
+    property ChildFrame: TFrameItemKLADR read fChildFrame write fChildFrame;
 
     function OpenData(Aid: integer = 0): Boolean; override;
     function SaveData: Boolean; override;
@@ -70,30 +75,25 @@ var
 begin
   if QuerySearch.Active then
     QuerySearch.Close;
-  if QuerySearch.Params.FindParam('searchStr') <> nil then
-  begin
-    if edtName.Text <> '' then
-      QuerySearch.ParamByName('searchStr').AsString :=
-        ReplaceStr(SearchStr, ':searchstr', edtName.Text)
-    else
-      QuerySearch.ParamByName('searchStr').AsString :=
-        ReplaceStr(SearchStr, ':searchstr', '?');
-  end;
+
+  if QuerySearch.Params.FindParam('searchstr') <> nil then
+    QuerySearch.ParamByName('searchstr').AsString :=
+      '%' + Trim(edtName.Text) + '%';
+
   QuerySearch.Open;
   QuerySearch.FetchAll;
-  if QuerySearch.RecordCount = 0 then
-  begin
-    ShowMessage('Не найдено');
-    Exit;
-  end;
+
   try
     frm := TfrmKLADRList.Create(self);
     frm.DS.DataSet := QuerySearch;
     frm.ShowModal;
     if frm.ModalResult = mrOk then
     begin
-      Code := QuerySearch.FieldByName('CODE').AsString;
-      SetEdtText(QuerySearch);
+      if QuerySearch.RecordCount > 0 then
+      begin
+        Code := QuerySearch.FieldByName('CODE').AsString;
+        SetEdtText(QuerySearch);
+      end;
     end;
   finally
      FreeAndNil(frm);
@@ -116,9 +116,15 @@ end;
 
 function TFrameItemKLADR.OpenData(Aid: integer): Boolean;
 begin
-  if Query.Active then
-     Query.Close;
-  Query.Open;
+  result := false;
+  try
+    if Query.Active then
+       Query.Close;
+    Query.Open;
+    result := true;
+  except
+    result := false;
+  end;
   SetEdtText(Query);
 end;
 
@@ -134,12 +140,13 @@ end;
 
 function TFrameItemKLADR.SaveData: Boolean;
 begin
+  result := true;
   fCode := Query.FieldByName('CODE').AsString;
 end;
 
 procedure TFrameItemKLADR.SetCode(AValue: string);
 begin
-  if fCode = Avalue then
+  if (fCode = Avalue) or (AValue = '') then
     Exit;
 
   fCode := AValue;
@@ -154,15 +161,32 @@ begin
     fDom := StrToInt(Copy(fCode, 16, 4));
   if Length(fCode) < 18 then
     fActive := StrToInt(RightStr(fCode, 2));
-end;
+
+  if Assigned(ChildFrame) then
+    if (ChildFrame.Region <> Region) or
+       (ChildFrame.Area <> Area) or
+       (ChildFrame.City <> City) or
+       (ChildFrame.Site <> Site) or
+       (ChildFrame.Street <> Street) then
+      ChildFrame.Code := Code;
+
+  if (region > 0) and ((TypeItem = tikArea) or
+                       (TypeItem = tikCity) or
+                       (TypeItem = tikSite) or
+                       (TypeItem = tikStreet)) then
+    self.Enabled := true;
+ end;
 
 procedure TFrameItemKLADR.SetEdtText(AQuery: TIBQuery);
 begin
   if AQuery.RecordCount > 0 then
   begin
-    edtName.Text := AQuery.FieldByName('NAME').AsString;
-    edtSocr.Text := AQuery.FieldByName('SOCR').AsString;
+    edtName.Text := Trim(AQuery.FieldByName('NAME').AsString);
+    edtSocr.Text := Trim(AQuery.FieldByName('SOCR').AsString);
   end;
+  if Assigned(fChildFrame) then
+    if AQuery.RecordCount > 0 then
+      fChildFrame.Enabled := true;
 end;
 
 procedure TFrameItemKLADR.SetQueryParam(AQuery: TIBQuery);

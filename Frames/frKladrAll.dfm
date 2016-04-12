@@ -39,7 +39,8 @@ inherited FrameKladrAll: TFrameKladrAll
         'AREA_ID = 0 and'
         'CITY_ID  = 0 and'
         'SITE_ID  = 0 and'
-        'ACTUAL  = 0 ')
+        'ACTUAL  = 0 '
+        'and upper(name) like upper(:searchstr)')
     end
   end
   inline FrameCity: TFrameItemKLADR [1]
@@ -86,8 +87,8 @@ inherited FrameKladrAll: TFrameKladrAll
         'AREA_ID = :AREA_ID  and'
         'CITY_ID > 0 and'
         'SITE_ID  = 0 and'
-        'ACTUAL  = 0 and'
-        'upper(name) like upper('#39'%:search%'#39')')
+        'ACTUAL  = 0 '
+        'and upper(name) like upper(:searchstr)')
       ParamData = <
         item
           DataType = ftUnknown
@@ -97,6 +98,11 @@ inherited FrameKladrAll: TFrameKladrAll
         item
           DataType = ftUnknown
           Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'searchstr'
           ParamType = ptUnknown
         end>
     end
@@ -122,8 +128,8 @@ inherited FrameKladrAll: TFrameKladrAll
         'AREA_ID = :AREA_ID  and'
         'CITY_ID  = :CITY_ID  and'
         'SITE_ID  > 0 and'
-        'ACTUAL  = 0 and'
-        'upper(name) like upper('#39'%:search%'#39')')
+        'ACTUAL  = 0'
+        'and upper(name) like upper(:searchstr)')
       ParamData = <
         item
           DataType = ftUnknown
@@ -138,6 +144,11 @@ inherited FrameKladrAll: TFrameKladrAll
         item
           DataType = ftUnknown
           Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'searchstr'
           ParamType = ptUnknown
         end>
     end
@@ -169,6 +180,90 @@ inherited FrameKladrAll: TFrameKladrAll
       Top = 3
       ExplicitTop = 3
     end
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_DOMA'
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and'
+        'street_id = :street_id and'
+        'dom_id = :dom_id')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'Region_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Site_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'street_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'dom_id'
+          ParamType = ptUnknown
+        end>
+    end
+    inherited QuerySearch: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_DOMA'
+        'where '
+        'REGION_ID =:REGION_ID  and'
+        'Area_id =:Area_id  and'
+        'City_id =:City_id  and'
+        'Site_id = :Site_id  and'
+        'street_id = :street_id'
+        'and upper(name) like upper(:searchstr)')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'REGION_ID'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Site_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'street_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'searchstr'
+          ParamType = ptUnknown
+        end>
+    end
   end
   inline FrameStreet: TFrameItemKLADR
     Left = 0
@@ -180,6 +275,73 @@ inherited FrameKladrAll: TFrameKladrAll
     ExplicitTop = 102
     inherited lblName: TLabel
       Caption = #1059#1083#1080#1094#1072
+    end
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_STREET '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and'
+        'street_id = :street_id')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'Region_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Site_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'street_id'
+          ParamType = ptUnknown
+        end>
+    end
+    inherited QuerySearch: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR_STREET'
+        'where '
+        'REGION_ID =:REGION_ID  and'
+        'Area_id =:Area_id  and'
+        'City_id =:City_id  and'
+        'Site_id = :Site_id  and'
+        'actual = 0')
+      ParamData = <
+        item
+          DataType = ftUnknown
+          Name = 'REGION_ID'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Area_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'City_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'Site_id'
+          ParamType = ptUnknown
+        end>
     end
   end
   inline FrameArea: TFrameItemKLADR
@@ -223,12 +385,17 @@ inherited FrameKladrAll: TFrameKladrAll
         'AREA_ID > 0 and'
         'CITY_ID  = 0 and'
         'SITE_ID  = 0 and'
-        'ACTUAL  = 0 and'
-        'upper(name) like upper('#39'%:search%'#39')')
+        'ACTUAL  = 0 '
+        'and upper(name) like upper(:searchstr)')
       ParamData = <
         item
           DataType = ftUnknown
           Name = 'Region_id'
+          ParamType = ptUnknown
+        end
+        item
+          DataType = ftUnknown
+          Name = 'searchstr'
           ParamType = ptUnknown
         end>
     end
@@ -245,8 +412,8 @@ inherited FrameKladrAll: TFrameKladrAll
       'values(:id, :code_kladr)')
     DeleteSQL.Strings = (
       'delete from address where id = :id')
-    Left = 248
-    Top = 57
+    Left = 56
+    Top = 81
   end
   inherited Query: TIBQuery
     SQL.Strings = (
@@ -254,8 +421,8 @@ inherited FrameKladrAll: TFrameKladrAll
       'where id = :id')
     GeneratorField.Generator = 'GEN_ADRESS_ID'
     GeneratorField.ApplyEvent = gamOnPost
-    Left = 248
-    Top = 17
+    Left = 56
+    Top = 41
     ParamData = <
       item
         DataType = ftUnknown
@@ -264,7 +431,7 @@ inherited FrameKladrAll: TFrameKladrAll
       end>
   end
   inherited DS: TDataSource
-    Left = 216
-    Top = 17
+    Left = 24
+    Top = 41
   end
 end

@@ -43,9 +43,59 @@ var
 begin
   try
     frm := TFrmKladrAdr.Create(self);
+
+    frm.FrameKladrAll1.FrameRegion.Code         := FrameRegion.Code;
+    frm.FrameKladrAll1.FrameRegion.edtSocr.text := FrameRegion.edtSocr.Text;
+    frm.FrameKladrAll1.FrameRegion.edtName.text := FrameRegion.edtName.Text;
+
+    frm.FrameKladrAll1.FrameArea.Code         := FrameArea.Code;
+    frm.FrameKladrAll1.FrameArea.edtSocr.text := FrameArea.edtSocr.Text;
+    frm.FrameKladrAll1.FrameArea.edtName.text := FrameArea.edtName.Text;
+
+    frm.FrameKladrAll1.FrameCity.Code         := FrameCity.Code;
+    frm.FrameKladrAll1.FrameCity.edtSocr.text := FrameCity.edtSocr.Text;
+    frm.FrameKladrAll1.FrameCity.edtName.text := FrameCity.edtName.Text;
+
+    frm.FrameKladrAll1.FrameSite.Code         := FrameSite.Code;
+    frm.FrameKladrAll1.FrameSite.edtSocr.text := FrameSite.edtSocr.Text;
+    frm.FrameKladrAll1.FrameSite.edtName.text := FrameSite.edtName.Text;
+
+    frm.FrameKladrAll1.FrameStreet.Code         := FrameStreet.Code;
+    frm.FrameKladrAll1.FrameStreet.edtSocr.text := FrameStreet.edtSocr.Text;
+    frm.FrameKladrAll1.FrameStreet.edtName.text := FrameStreet.edtName.Text;
+
+    frm.FrameKladrAll1.FrameDom.Code         := FrameDom.Code;
+    frm.FrameKladrAll1.FrameDom.edtSocr.text := FrameDom.edtSocr.Text;
+    frm.FrameKladrAll1.FrameDom.edtName.text := FrameDom.edtName.Text;
+
     frm.ShowModal;
     if frm.ModalResult <> mrOk then
       Exit;
+
+    FrameRegion.Code := frm.FrameKladrAll1.FrameRegion.Code;
+    FrameRegion.edtSocr.Text := frm.FrameKladrAll1.FrameRegion.edtSocr.text;
+    FrameRegion.edtName.Text := frm.FrameKladrAll1.FrameRegion.edtName.text;
+
+    FrameArea.Code := frm.FrameKladrAll1.FrameArea.Code;
+    FrameArea.edtSocr.Text := frm.FrameKladrAll1.FrameArea.edtSocr.text;
+    FrameArea.edtName.Text := frm.FrameKladrAll1.FrameArea.edtName.text;
+
+    FrameCity.Code := frm.FrameKladrAll1.FrameCity.Code;
+    FrameCity.edtSocr.Text := frm.FrameKladrAll1.FrameCity.edtSocr.text;
+    FrameCity.edtName.Text := frm.FrameKladrAll1.FrameCity.edtName.text;
+
+    FrameSite.Code := frm.FrameKladrAll1.FrameSite.Code;
+    FrameSite.edtSocr.Text := frm.FrameKladrAll1.FrameSite.edtSocr.text;
+    FrameSite.edtName.Text := frm.FrameKladrAll1.FrameSite.edtName.text;
+
+    FrameStreet.Code := frm.FrameKladrAll1.FrameStreet.Code;
+    FrameStreet.edtSocr.Text := frm.FrameKladrAll1.FrameStreet.edtSocr.text;
+    FrameStreet.edtName.Text := frm.FrameKladrAll1.FrameStreet.edtName.text;
+
+    FrameDom.Code := frm.FrameKladrAll1.FrameDom.Code;
+    FrameDom.edtSocr.Text := frm.FrameKladrAll1.FrameDom.edtSocr.text;
+    FrameDom.edtName.Text := frm.FrameKladrAll1.FrameDom.edtName.text;
+
     SetEdtText;
   finally
     FreeAndNil(frm);

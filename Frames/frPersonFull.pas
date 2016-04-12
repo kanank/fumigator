@@ -71,6 +71,10 @@ begin
       if not Result then
         Exit;
 
+       Result := FrameAddress.SaveData;
+      if not Result then
+        Exit;
+
       if not (Query.State in [dsInsert, dsEdit]) then
         Query.Edit;
 

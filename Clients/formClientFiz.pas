@@ -63,9 +63,16 @@ begin
       if not res then
         Exit;
 
+      res := FrameAddress.SaveData;
+      if not res then
+        Exit;
+
       // PERSON_ID
       if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePerson.Id then
         DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePerson.Id;
+
+      if DS.DataSet.FieldByName('ADRES_ID').AsInteger <> FrameAddress.Id then
+        DS.DataSet.FieldByName('ADRES_ID').AsInteger := FrameAddress.Id;
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
@@ -127,6 +134,11 @@ begin
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FrameUslugi.OpenData;
+
+  FrameAddress.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FrameAddress.AddParam('ID', DS.DataSet.FindField('ADRES_ID'));
+  FrameAddress.OpenData;
+  FrameAddress.Visible := true;
 end;
 
 end.

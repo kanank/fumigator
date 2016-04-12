@@ -43,6 +43,7 @@ type
     property Street: Integer read GetStreet;
     property Dom:    Integer read GetDom;
 
+    constructor Create(AOwner: TComponent); override;
     function OpenData(Aid: integer = 0): Boolean; override;
     function SaveData: Boolean; override;
   end;
@@ -53,6 +54,23 @@ implementation
 {$R *.dfm}
 
 { TFrameKladrAll }
+
+constructor TFrameKladrAll.Create(AOwner: TComponent);
+begin
+  inherited;
+  FrameRegion.TypeItem := tikRegion;
+  FrameArea.TypeItem := tikArea;
+  FrameCity.TypeItem := tikCity;
+  FrameSite.TypeItem := tikSite;
+  FrameStreet.TypeItem := tikStreet;
+  FrameDom.TypeItem := tikDom;
+
+  FrameRegion.ChildFrame := FrameArea;
+  FrameArea.ChildFrame   := FrameCity;
+  FrameCity.ChildFrame   := FrameSite;
+  FrameSite.ChildFrame   := FrameStreet;
+  FrameStreet.ChildFrame := FrameDom;
+end;
 
 function TFrameKladrAll.GetArea: Integer;
 begin
@@ -85,10 +103,8 @@ begin
 end;
 
 function TFrameKladrAll.OpenData(Aid: integer): Boolean;
-var
-  res: Boolean;
 begin
-  res := inherited OpenData;
+  result := inherited OpenData;
   fCode := Query.FieldByName('code_kladr').AsString;
   if fCode = '' then
     Exit;
@@ -100,31 +116,36 @@ begin
   FrameStreet.Code := fCode;
   FrameDom.Code := fCode;
 
-  res := FrameRegion.OpenData;
-  res := FrameArea.OpenData;
-  res := FrameCity.OpenData;
-  res := FrameSite.OpenData;
-  res := FrameStreet.OpenData;
-  res := FrameDom.OpenData;
+  result := FrameRegion.OpenData;
+  result := FrameArea.OpenData;
+  result := FrameCity.OpenData;
+  result := FrameSite.OpenData;
+  result := FrameStreet.OpenData;
+  result := FrameDom.OpenData;
 end;
 
 function TFrameKladrAll.SaveData: Boolean;
 begin
-  if Region > 0 then
+  if FrameRegion.Region > 0 then
     fCode := FrameRegion.Code;
-  if Area > 0 then
+  if FrameArea.Area > 0 then
     fCode := FrameArea.Code;
-  if City > 0 then
+  if FrameCity.City > 0 then
     fCode := FrameCity.Code;
-  if Site > 0 then
+  if FrameSite.Site > 0 then
     fCode := FrameSite.Code;
-  if Street > 0 then
+  if FrameStreet.Street > 0 then
     fCode := FrameStreet.Code;
-  if Dom > 0 then
+  if FrameDom.Dom > 0 then
     fCode := FrameDom.Code;
 
-  Query.FieldByName('code_kladr').AsString := fCode;
-  inherited;
+  if Query.FieldByName('code_kladr').AsString <> fCode then
+  begin
+    if not (Query.State in [dsEdit, dsInsert]) then
+      Query.Edit;
+    Query.FieldByName('code_kladr').AsString := fCode;
+  end;
+  result := inherited SaveData;
 end;
 
 procedure TFrameKladrAll.SetCode(AValue: string);

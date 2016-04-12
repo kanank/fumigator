@@ -34,27 +34,5 @@ inherited frmKladrAdr: TfrmKladrAdr
     Width = 335
     Height = 158
     TabOrder = 3
-    inherited FrameStreet: TFrameItemKLADR
-      inherited QuerySearch: TIBQuery
-        SQL.Strings = (
-          'select * from KLADR_STREET'
-          'where '
-          'Region_id = :Region_id  and'
-          'Area_id = :Area_id  and'
-          'City_id = :City_id  and'
-          'Site_id = :Site_id  and'
-          'actual = 0')
-      end
-    end
-    inherited Query_upd: TIBUpdateSQL
-      RefreshSQL.Strings = (
-        'select id, code_kladr from ADRESS where id = :id')
-      ModifySQL.Strings = (
-        'update ADRESS set '
-        'code_kladr = :code_kladr'
-        'where id = :ID')
-      DeleteSQL.Strings = (
-        'delete from ADRESS where id = :id')
-    end
   end
 end

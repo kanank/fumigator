@@ -110,11 +110,11 @@ begin
     Exit;
 
   FrameRegion.Code := fCode;
-  FrameArea.Code := fCode;
-  FrameCity.Code := fCode;
-  FrameSite.Code := fCode;
+  FrameArea.Code   := fCode;
+  FrameCity.Code   := fCode;
+  FrameSite.Code   := fCode;
   FrameStreet.Code := fCode;
-  FrameDom.Code := fCode;
+  FrameDom.Code    := fCode;
 
   result := FrameRegion.OpenData;
   result := FrameArea.OpenData;

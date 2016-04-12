@@ -57,37 +57,9 @@ inherited FrameItemKLADR: TFrameItemKLADR
   end
   inherited Query: TIBQuery
     BeforeOpen = QueryBeforeOpen
-    SQL.Strings = (
-      'select * from KLADR '
-      'where '
-      'Region_id = :Region_id and'
-      'Area_id = :Area_id and'
-      'City_id = :City_id and'
-      'Site_id = :Site_id')
     UpdateObject = nil
     Left = 121
     Top = 0
-    ParamData = <
-      item
-        DataType = ftUnknown
-        Name = 'Region_id'
-        ParamType = ptUnknown
-      end
-      item
-        DataType = ftUnknown
-        Name = 'Area_id'
-        ParamType = ptUnknown
-      end
-      item
-        DataType = ftUnknown
-        Name = 'City_id'
-        ParamType = ptUnknown
-      end
-      item
-        DataType = ftUnknown
-        Name = 'Site_id'
-        ParamType = ptUnknown
-      end>
   end
   inherited DS: TDataSource
     Left = 193
@@ -98,27 +70,9 @@ inherited FrameItemKLADR: TFrameItemKLADR
     Transaction = DataModuleMain.DefTr
     BeforeOpen = QuerySearchBeforeOpen
     BufferChunks = 1000
-    CachedUpdates = False
+    CachedUpdates = True
     ParamCheck = True
-    SQL.Strings = (
-      'select * from KLADR '
-      'where '
-      'REGION_ID >0 and'
-      'Area_id =0 and'
-      'City_id =0 and'
-      'Site_id = 0 and'
-      'actual = 0 and'
-      'upper(name) like upper(:searchstr)')
-    GeneratorField.Field = 'ID'
-    GeneratorField.Generator = 'GEN_PERSONS_ID'
-    GeneratorField.ApplyEvent = gamOnServer
     Left = 233
     Top = 2
-    ParamData = <
-      item
-        DataType = ftUnknown
-        Name = 'searchstr'
-        ParamType = ptUnknown
-      end>
   end
 end

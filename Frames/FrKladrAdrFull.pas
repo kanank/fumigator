@@ -44,6 +44,7 @@ begin
   try
     frm := TFrmKladrAdr.Create(self);
 
+    frm.FrameKladrAll1.Transaction := Self.Transaction;
     frm.FrameKladrAll1.FrameRegion.Code         := FrameRegion.Code;
     frm.FrameKladrAll1.FrameRegion.edtSocr.text := FrameRegion.edtSocr.Text;
     frm.FrameKladrAll1.FrameRegion.edtName.text := FrameRegion.edtName.Text;

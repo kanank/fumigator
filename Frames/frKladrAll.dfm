@@ -20,7 +20,7 @@ inherited FrameKladrAll: TFrameKladrAll
       SQL.Strings = (
         'select * from KLADR '
         'where '
-        'Region_id = :Region_id and'
+        'Region_id = :Region_id and region_id > 0 and'
         'Area_id =0 and'
         'City_id = 0 and'
         'Site_id = 0')
@@ -39,8 +39,7 @@ inherited FrameKladrAll: TFrameKladrAll
         'AREA_ID = 0 and'
         'CITY_ID  = 0 and'
         'SITE_ID  = 0 and'
-        'ACTUAL  = 0 '
-        'and upper(name) like upper(:searchstr)')
+        'ACTUAL  = 0 ')
     end
   end
   inline FrameCity: TFrameItemKLADR [1]
@@ -58,10 +57,10 @@ inherited FrameKladrAll: TFrameKladrAll
       SQL.Strings = (
         'select * from KLADR '
         'where '
-        'Region_id = :Region_id and'
-        'Area_id = :Area_id and'
-        'City_id = :City_id and'
-        'Site_id = 0')
+        'region_id = :Region_id and'
+        'area_id = :Area_id and'
+        'city_id = :City_id and city_id >0 and'
+        'site_id = 0')
       ParamData = <
         item
           DataType = ftUnknown
@@ -119,6 +118,15 @@ inherited FrameKladrAll: TFrameKladrAll
       Width = 55
       Caption = #1053#1072#1089'. '#1087#1091#1085#1082#1090
       ExplicitWidth = 55
+    end
+    inherited Query: TIBQuery
+      SQL.Strings = (
+        'select * from KLADR '
+        'where '
+        'Region_id = :Region_id and'
+        'Area_id = :Area_id and'
+        'City_id = :City_id and'
+        'Site_id = :Site_id and site_id>0')
     end
     inherited QuerySearch: TIBQuery
       SQL.Strings = (
@@ -189,7 +197,7 @@ inherited FrameKladrAll: TFrameKladrAll
         'City_id = :City_id and'
         'Site_id = :Site_id and'
         'street_id = :street_id and'
-        'dom_id = :dom_id')
+        'dom_id = :dom_id and dom_id > 0')
       ParamData = <
         item
           DataType = ftUnknown
@@ -284,7 +292,7 @@ inherited FrameKladrAll: TFrameKladrAll
         'Area_id = :Area_id and'
         'City_id = :City_id and'
         'Site_id = :Site_id and'
-        'street_id = :street_id')
+        'street_id = :street_id and street_id >0')
       ParamData = <
         item
           DataType = ftUnknown
@@ -316,9 +324,9 @@ inherited FrameKladrAll: TFrameKladrAll
       SQL.Strings = (
         'select * from KLADR_STREET'
         'where '
-        'REGION_ID =:REGION_ID  and'
-        'Area_id =:Area_id  and'
-        'City_id =:City_id  and'
+        'REGION_ID = :Region_id  and'
+        'Area_id = :Area_id  and'
+        'City_id = :City_id  and'
         'Site_id = :Site_id  and'
         'actual = 0')
       ParamData = <
@@ -362,7 +370,7 @@ inherited FrameKladrAll: TFrameKladrAll
         'select * from KLADR '
         'where '
         'Region_id = :Region_id and'
-        'Area_id = :Area_id and'
+        'Area_id = :Area_id and area_id > 0 and'
         'City_id = 0 and'
         'Site_id = 0')
       ParamData = <
@@ -402,16 +410,16 @@ inherited FrameKladrAll: TFrameKladrAll
   end
   inherited Query_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
-      'select id, code_kladr from address where id = :id')
+      'select id, code_kladr from adress where id = :id')
     ModifySQL.Strings = (
-      'update address set '
+      'update adress set '
       'code_kladr = :code_kladr'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into adress (id, code_kladr)'
       'values(:id, :code_kladr)')
     DeleteSQL.Strings = (
-      'delete from address where id = :id')
+      'delete from adress where id = :id')
     Left = 56
     Top = 81
   end

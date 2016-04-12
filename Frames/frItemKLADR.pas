@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, RzButton,
   cxTextEdit, cxMemo, cxDBEdit, Vcl.StdCtrls, Data.DB, IBX.IBCustomDataSet,
-  IBX.IBQuery, IBX.IBUpdateSQL;
+  IBX.IBQuery, IBX.IBUpdateSQL, IBX.IBDatabase;
 
 const
   SearchStr =  '''%:searchstr%''';
@@ -42,6 +42,7 @@ type
     procedure SetCode(AValue: string);
     procedure SetEdtText(AQuery: TIBQuery);
     procedure SetQueryParam(AQuery: TIBQuery);
+    procedure SetTransaction(AValue: TIBTransaction);override;
   public
     property Code: string read fCode write SetCode;
     property Region: Integer read fRegion;
@@ -65,7 +66,7 @@ implementation
 
 {$R *.dfm}
 uses
-  System.StrUtils, formKLADRList;
+  System.StrUtils, formKLADRList, DM_Main;
 
 { TFrameItemKLADR }
 
@@ -76,12 +77,8 @@ begin
   if QuerySearch.Active then
     QuerySearch.Close;
 
-  if QuerySearch.Params.FindParam('searchstr') <> nil then
-    QuerySearch.ParamByName('searchstr').AsString :=
-      '%' + Trim(edtName.Text) + '%';
-
-  QuerySearch.Open;
-  QuerySearch.FetchAll;
+    QuerySearch.Open;
+    QuerySearch.FetchAll;
 
   try
     frm := TfrmKLADRList.Create(self);
@@ -96,7 +93,7 @@ begin
       end;
     end;
   finally
-     FreeAndNil(frm);
+    FreeAndNil(frm);
   end;
 
 
@@ -105,6 +102,7 @@ end;
 constructor TFrameItemKLADR.Create(AOwner: TComponent);
 begin
   inherited;
+  fAutoAppend := False;
   fRegion := 0;
   fArea := 0;
   fCity := 0;
@@ -116,11 +114,13 @@ end;
 
 function TFrameItemKLADR.OpenData(Aid: integer): Boolean;
 begin
-  result := false;
+  //result := inherited OpenData(aid);
   try
     if Query.Active then
        Query.Close;
+    SetQueryParam(Query);
     Query.Open;
+    DS.DataSet := Query;
     result := true;
   except
     result := false;
@@ -193,6 +193,9 @@ procedure TFrameItemKLADR.SetQueryParam(AQuery: TIBQuery);
 var
   prm: TParam;
 begin
+//  AQuery.Params.ParseSQL(AQuery.SQL.text, true);
+//  AQuery.ParamCheck := True;
+
   prm := AQuery.Params.FindParam('REGION_ID'); // регион
   if prm <> nil then
     prm.AsInteger := fRegion;
@@ -205,7 +208,7 @@ begin
   if prm <> nil then
     prm.AsInteger := fCity;
 
-  prm := AQuery.Params.FindParam('CITY_ID'); //нас. пункт
+  prm := AQuery.Params.FindParam('SITE_ID'); //нас. пункт
   if prm <> nil then
     prm.AsInteger := fSite;
 
@@ -217,9 +220,20 @@ begin
   if prm <> nil then
     prm.AsInteger := fDom;
 
+
+  if AQuery.Params.FindParam('searchstr') <> nil then
+    AQuery.ParamByName('searchstr').AsString :=
+      '%' + Trim(edtName.Text) + '%';
+
   //prm := AQuery.ParamByName('search'); // дом
   //if prm <> nil then
   //  prm.AsString := edtName.text;
+end;
+
+procedure TFrameItemKLADR.SetTransaction(AValue: TIBTransaction);
+begin
+  inherited;
+  QuerySearch.Transaction := AValue;
 end;
 
 end.

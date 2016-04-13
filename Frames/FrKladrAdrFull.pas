@@ -5,11 +5,11 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  RzButton,
-  FrKladrAll, cxGraphics, cxControls, cxLookAndFeels,
+  RzButton, system.StrUtils,
+  cxGraphics, cxControls, cxLookAndFeels,
   cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit, Vcl.StdCtrls,
   Data.DB, IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL,
-  frameBase, frItemKLADR;
+  frameBase, frItemKLADR, frItemDomKLADR, frKladrAll;
 
 type
   TFrameKladrAdrFull = class(TFrameKladrAll)
@@ -22,7 +22,7 @@ type
     edtAddress: TcxTextEdit;
     procedure btnEditClick(Sender: TObject);
   private
-    { Private declarations }
+    function BuildStr(s0, s1, s2: string):string;
   protected
     procedure SetEdtText; virtual;
   public
@@ -68,6 +68,8 @@ begin
     frm.FrameKladrAll1.FrameDom.Code         := FrameDom.Code;
     frm.FrameKladrAll1.FrameDom.edtSocr.text := FrameDom.edtSocr.Text;
     frm.FrameKladrAll1.FrameDom.edtName.text := FrameDom.edtName.Text;
+    frm.FrameKladrAll1.FrameDom.cmbName.text := FrameDom.cmbName.Text;
+    frm.FrameKladrAll1.edtKvartira.text      := edtKvartira.Text;
 
     frm.ShowModal;
     if frm.ModalResult <> mrOk then
@@ -96,6 +98,8 @@ begin
     FrameDom.Code := frm.FrameKladrAll1.FrameDom.Code;
     FrameDom.edtSocr.Text := frm.FrameKladrAll1.FrameDom.edtSocr.text;
     FrameDom.edtName.Text := frm.FrameKladrAll1.FrameDom.edtName.text;
+    FrameDom.cmbName.Text := frm.FrameKladrAll1.FrameDom.cmbName.text;
+    edtKvartira.Text      := frm.FrameKladrAll1.edtKvartira.text;
 
     SetEdtText;
   finally
@@ -114,17 +118,43 @@ begin
   Result := inherited SaveData;
 end;
 
-procedure TFrameKladrAdrFull.SetEdtText;
+function TFrameKladrAdrFull.BuildStr(s0, s1, s2: string): string;
 begin
-  edtRegion.Text := FrameRegion.edtSocr.Text + ' ' + FrameRegion.edtName.Text;
-  edtSite.Text := FrameCity.edtSocr.Text + ' ' +
-                    FrameCity.edtName.Text + ' ' +
-                  FrameSite.edtSocr.Text + ' ' +
-                    FrameSite.edtName.Text;
-  edtAddress.Text := edtSite.Text + FrameStreet.edtSocr.Text +
-                       FrameStreet.edtName.text + ' ' +
-                     FrameDom.edtSocr.Text + FrameDom.edtName.Text;
+ result := s0;
 
+ if (s1 <> '') and (s2 <> '') then
+   result := result + ' ' + s1;
+ if s2 <> '' then
+   result := result + ' ' + s2;
+end;
+
+procedure TFrameKladrAdrFull.SetEdtText;
+var
+  regionSocr, regionName, CitySocr, CityName, SiteSocr, SiteName,
+  StreetSocr, StreetName, DomSocr, DomName, Kvartira: string;
+begin
+  regionSocr := FrameRegion.edtSocr.Text;
+  regionName := FrameRegion.edtName.Text;
+  CitySocr := FrameCity.edtSocr.Text;
+  CityName := FrameCity.edtName.Text;
+  SiteSocr := FrameSite.edtSocr.Text;
+  SiteName := FrameSite.edtName.Text;
+  StreetSocr := FrameStreet.edtSocr.Text;
+  StreetName := FrameStreet.edtName.text;
+  DomSocr := LowerCase(FrameDom.edtSocr.Text);
+  DomName := FrameDom.cmbName.Text;
+  Kvartira := edtKvartira.Text;
+
+  edtRegion.Text := BuildStr('', RegionSocr, RegionName);
+
+  edtSite.Text := BuildStr('', CitySocr, CityName);
+  edtSite.Text := BuildStr(edtSite.Text, SiteSocr, SiteName);
+
+  edtAddress.Text := BuildStr('', CitySocr, CityName);
+  edtAddress.Text := BuildStr(edtAddress.Text, SiteSocr, SiteName);
+  edtAddress.Text := BuildStr(edtAddress.Text, StreetSocr, StreetName);
+  edtAddress.Text := BuildStr(edtAddress.Text, DomSocr, DomName);
+  edtAddress.Text := BuildStr(edtAddress.Text, 'кв', Kvartira)
 end;
 
 end.

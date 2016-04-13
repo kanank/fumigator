@@ -5,16 +5,20 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameBase, frItemKLADR, Data.DB,
-  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, IBX.IBDatabase;
+  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, IBX.IBDatabase, cxGraphics,
+  cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit,
+  cxTextEdit, Vcl.StdCtrls, frItemDomKLADR;
 
 type
   TFrameKladrAll = class(TDbFrameBase)
     FrameRegion: TFrameItemKLADR;
     FrameCity: TFrameItemKLADR;
     FrameSite: TFrameItemKLADR;
-    FrameDom: TFrameItemKLADR;
     FrameStreet: TFrameItemKLADR;
     FrameArea: TFrameItemKLADR;
+    FrameDom: TFrameItemDomKLADR;
+    lblName: TLabel;
+    edtKvartira: TcxTextEdit;
 
   private
     fCode: string; // код КЛАДР
@@ -26,6 +30,8 @@ type
     fDom:    Integer;
     fActive1: Integer;
     fActive2: Integer;
+    fDomNomer: string; //выбранный из списка КЛАДР дом
+    fKvartira: string;
     procedure SetCode(AValue: string);
     function GetRegion: Integer;
     function GetArea: Integer;
@@ -42,6 +48,9 @@ type
     property Site:   Integer read GetSite;
     property Street: Integer read GetStreet;
     property Dom:    Integer read GetDom;
+
+    property DomStr: string read fDomNomer;
+    property Kvartira: string read fKvartira;
 
     constructor Create(AOwner: TComponent); override;
     function OpenData(Aid: integer = 0): Boolean; override;
@@ -122,6 +131,9 @@ begin
   result := FrameSite.OpenData;
   result := FrameStreet.OpenData;
   result := FrameDom.OpenData;
+  FrameDom.DomStr  := Query.FieldByName('DOM').AsString;
+
+  edtKvartira.Text := Query.FieldByName('FLAT').AsString;
 end;
 
 function TFrameKladrAll.SaveData: Boolean;
@@ -144,6 +156,8 @@ begin
     if not (Query.State in [dsEdit, dsInsert]) then
       Query.Edit;
     Query.FieldByName('code_kladr').AsString := fCode;
+    Query.FieldByName('dom').AsString := FrameDom.cmbName.Text;
+    Query.FieldByName('flat').AsString := edtKvartira.Text;
   end;
   result := inherited SaveData;
 end;

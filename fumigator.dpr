@@ -38,7 +38,8 @@ uses
   frPersonFull in 'Frames\frPersonFull.pas' {FramePersonFull: TFrame},
   frClientExtUr in 'Frames\frClientExtUr.pas' {FrameClientExtUr: TFrame},
   formClientUr in 'Clients\formClientUr.pas' {frmClientUr},
-    ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData};
+  ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData},
+  frItemDomKLADR in 'Frames\frItemDomKLADR.pas' {FrameItemDomKLADR: TFrame};
 
 {$R *.res}
 
@@ -49,7 +50,6 @@ begin
 
   Application.CreateForm(TDataModuleMain, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
-
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;
 

@@ -9,7 +9,7 @@ uses
   frListBase, frPhones, cxTextEdit,
   cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
   Vcl.StdCtrls, frPersonSmall, RzPanel, frameBase, frClientExtUr, RzButton,
-  Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB;
+  Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB, frKladrAll, FrKladrAdrFull;
 
 type
   TfrmClientUr = class(TSimpleForm)
@@ -35,6 +35,7 @@ type
     FrameUslugi: TFrameUslugi;
     DS: TDataSource;
     Image1: TImage;
+    FrameAddress: TFrameKladrAdrFull;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
   private
@@ -67,11 +68,18 @@ begin
       if not res then
         Exit;
 
+      res := FrameAddress.SaveData;
+      if not res then
+        Exit;
+
       // PERSON_ID
       if DS.DataSet.FieldByName('PERSON_ID').AsInteger <>
                                             FramePerson.Id then
         DS.DataSet.FieldByName('PERSON_ID').AsInteger :=
                                                  FramePerson.Id;
+
+      if DS.DataSet.FieldByName('ADRES_ID').AsInteger <> FrameAddress.Id then
+        DS.DataSet.FieldByName('ADRES_ID').AsInteger := FrameAddress.Id;
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
@@ -154,6 +162,11 @@ begin
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FrameUslugi.OpenData;
+
+  FrameAddress.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FrameAddress.AddParam('ID', DS.DataSet.FindField('ADRES_ID'));
+  FrameAddress.OpenData;
+  FrameAddress.Visible := true;
 end;
 
 end.

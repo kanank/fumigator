@@ -26,8 +26,11 @@ type
     procedure QueryBeforeOpen(DataSet: TDataSet);
     procedure QuerySearchBeforeOpen(DataSet: TDataSet);
   private
-    fTypeItem: TTypeItemKladr;
+
+  protected
     fCode: string; // код КЛАДР
+    fTypeItem: TTypeItemKladr;
+
     fRegion: Integer;
     fArea:   Integer;
     fCity:   Integer;
@@ -38,9 +41,8 @@ type
 
     fChildFrame: TFrameItemKLADR; //зависимый фрейм
 
-  protected
-    procedure SetCode(AValue: string);
-    procedure SetEdtText(AQuery: TIBQuery);
+    procedure SetCode(AValue: string); virtual;
+    procedure SetEdtText(AQuery: TIBQuery); virtual;
     procedure SetQueryParam(AQuery: TIBQuery);
     procedure SetTransaction(AValue: TIBTransaction);override;
   public

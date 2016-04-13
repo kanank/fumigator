@@ -58,10 +58,6 @@ inherited FrameKladrAdrFull: TFrameKladrAdrFull
     Top = 134
     ExplicitTop = 134
   end
-  inherited FrameDom: TFrameItemKLADR
-    Top = 186
-    ExplicitTop = 186
-  end
   inherited FrameStreet: TFrameItemKLADR
     Top = 159
     ExplicitTop = 159
@@ -78,7 +74,7 @@ inherited FrameKladrAdrFull: TFrameKladrAdrFull
     Hint = #1048#1079#1084#1077#1085#1080#1090#1100
     Alignment = taLeftJustify
     Anchors = [akTop, akRight]
-    TabOrder = 6
+    TabOrder = 10
     OnClick = btnEditClick
     ImageIndex = 8
     Images = DataModuleMain.ImgList
@@ -87,20 +83,27 @@ inherited FrameKladrAdrFull: TFrameKladrAdrFull
   object edtRegion: TcxTextEdit [10]
     Left = 64
     Top = 3
+    Properties.ReadOnly = True
     TabOrder = 7
     Width = 287
   end
   object edtSite: TcxTextEdit [11]
     Left = 64
     Top = 26
+    Properties.ReadOnly = True
     TabOrder = 8
     Width = 287
   end
   object edtAddress: TcxTextEdit [12]
     Left = 65
     Top = 49
+    Properties.ReadOnly = True
     TabOrder = 9
     Width = 287
+  end
+  inherited FrameDom: TFrameItemDomKLADR
+    Top = 186
+    ExplicitTop = 186
   end
   inherited Query_upd: TIBUpdateSQL
     Top = 114

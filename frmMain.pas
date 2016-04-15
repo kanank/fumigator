@@ -68,7 +68,7 @@ procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
-    '(' + DM.CurrentUserSets.UserTypeName + ')';
+    ' (' + DM.CurrentUserSets.UserTypeName + ')';
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);

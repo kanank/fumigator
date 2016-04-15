@@ -68,12 +68,19 @@ inherited frmClients: TfrmClients
   end
   inherited RzPanel1: TRzPanel
     inherited Cancel_btn: TRzButton
-      ExplicitLeft = 505
+      Left = 504
+      Caption = #1042#1099#1093#1086#1076
+      ExplicitLeft = 504
     end
     inherited Edit_btn: TRzButton
+      Font.Color = clBlack
       OnClick = Edit_btnClick
     end
+    inherited Del_btn: TRzButton
+      Font.Color = clBlack
+    end
     inherited Add_btn: TRzButton
+      Font.Color = clBlack
       OnClick = Add_btnClick
     end
   end

@@ -6,11 +6,14 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFormEditData, cxGraphics,
   cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit,
-  Data.DB, RzButton, cxTextEdit, cxMaskEdit, cxDBEdit, Vcl.StdCtrls, cxCheckBox;
+  Data.DB, RzButton, cxTextEdit, cxMaskEdit, cxDBEdit, Vcl.StdCtrls, cxCheckBox,
+  cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox;
 
 type
   TfrmEditPhone = class(TfrmEditData)
     chbkIsMain: TcxDBCheckBox;
+    Label2: TLabel;
+    cmbPhoneType: TcxDBLookupComboBox;
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }
@@ -24,7 +27,8 @@ type
 implementation
 
 {$R *.dfm}
-
+uses
+  DM_Main;
 
 procedure TfrmEditPhone.FormShow(Sender: TObject);
 var

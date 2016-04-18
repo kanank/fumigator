@@ -41,13 +41,6 @@ inherited FramePhones: TFramePhones
         OptionsView.GridLines = glNone
         OptionsView.GroupByBox = False
         OptionsView.Header = False
-        object grdPhoneDBTableView2Column2: TcxGridDBColumn
-          DataBinding.FieldName = 'phone'
-          Options.Editing = False
-          Options.Moving = False
-          Options.ShowCaption = False
-          Width = 146
-        end
         object grdPhoneDBTableView2Column1: TcxGridDBColumn
           DataBinding.FieldName = 'ismain'
           PropertiesClassName = 'TcxCheckBoxProperties'
@@ -62,6 +55,17 @@ inherited FramePhones: TFramePhones
           Options.ShowCaption = False
           Width = 30
         end
+        object grdPhoneDBTableView2Column2: TcxGridDBColumn
+          DataBinding.FieldName = 'phone'
+          Options.Editing = False
+          Options.Moving = False
+          Options.ShowCaption = False
+          Width = 95
+        end
+        object grdPhoneDBTableView2Column3: TcxGridDBColumn
+          DataBinding.FieldName = 'PHONE_TYPE_ID'
+          Width = 33
+        end
       end
       inherited grdPhoneLevel1: TcxGridLevel
         GridView = grdPhoneDBTableView2
@@ -70,7 +74,7 @@ inherited FramePhones: TFramePhones
     inherited RzPanel2: TRzPanel
       Left = 182
       Height = 128
-      ExplicitLeft = 181
+      ExplicitLeft = 182
       ExplicitHeight = 128
       DesignSize = (
         31
@@ -101,7 +105,8 @@ inherited FramePhones: TFramePhones
       'PHONE = :PHONE,'
       'CLIENT_ID = :CLIENT_ID,'
       'ISMAIN = :ISMAIN,'
-      '"TYPE" = :TYPE'
+      '"TYPE" = :TYPE,'
+      'PHONE_TYPE_ID = :PHONE_TYPE_ID'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into phones('
@@ -109,14 +114,16 @@ inherited FramePhones: TFramePhones
       'PHONE,'
       'CLIENT_ID,'
       'ISMAIN,'
-      'TYPE'
+      'TYPE,'
+      'PHONE_TYPE_ID'
       ')'
       'values('
       ':ID,'
       ':PHONE,'
       ':CLIENT_ID,'
       ':ISMAIN,'
-      ':TYPE'
+      ':TYPE,'
+      ':PHONE_TYPE_ID'
       ')')
     DeleteSQL.Strings = (
       'delete from phones where id = :ID')
@@ -124,7 +131,7 @@ inherited FramePhones: TFramePhones
   inherited Query: TIBQuery
     AfterPost = QueryAfterPost
     SQL.Strings = (
-      'select * from phones where client_id = :client_id')
+      'select * from phones where client_id = :client_id and type=0')
     GeneratorField.Generator = 'GEN_PHONES_ID'
     GeneratorField.ApplyEvent = gamOnPost
     ParamData = <

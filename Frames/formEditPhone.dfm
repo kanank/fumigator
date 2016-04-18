@@ -1,15 +1,27 @@
 inherited frmEditPhone: TfrmEditPhone
   Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072
-  ClientHeight = 91
+  ClientHeight = 107
   ClientWidth = 168
-  Position = poOwnerFormCenter
   OnShow = FormShow
   ExplicitWidth = 174
-  ExplicitHeight = 119
+  ExplicitHeight = 135
   PixelsPerInch = 96
   TextHeight = 13
   inherited lblData: TLabel
     Visible = False
+  end
+  object Label2: TLabel [1]
+    Left = 8
+    Top = 51
+    Width = 18
+    Height = 13
+    Caption = #1058#1080#1087
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
   end
   inherited edtData: TcxDBMaskEdit
     Top = 24
@@ -21,19 +33,19 @@ inherited frmEditPhone: TfrmEditPhone
   end
   inherited btnOK: TRzButton
     Left = 7
-    Top = 58
+    Top = 75
     Anchors = [akTop]
-    ExplicitLeft = 8
-    ExplicitTop = 58
+    ExplicitLeft = 7
+    ExplicitTop = 75
   end
   inherited bntCancel: TRzButton
     Left = 88
-    Top = 58
+    Top = 75
     Anchors = [akTop]
     ExplicitLeft = 88
-    ExplicitTop = 58
+    ExplicitTop = 75
   end
-  object chbkIsMain: TcxDBCheckBox [4]
+  object chbkIsMain: TcxDBCheckBox [5]
     Left = 5
     Top = 2
     AutoSize = False
@@ -50,6 +62,22 @@ inherited frmEditPhone: TfrmEditPhone
     Transparent = True
     Height = 21
     Width = 121
+  end
+  object cmbPhoneType: TcxDBLookupComboBox [6]
+    Left = 41
+    Top = 48
+    DataBinding.DataField = 'PHONE_TYPE_ID'
+    DataBinding.DataSource = DataModuleMain.DsDicPhoneType
+    Properties.KeyFieldNames = 'ID'
+    Properties.ListColumns = <
+      item
+        FieldName = 'NAME'
+      end>
+    Properties.ListOptions.GridLines = glNone
+    Properties.ListOptions.ShowHeader = False
+    Properties.ListSource = DataModuleMain.DsDicCliSfera
+    TabOrder = 4
+    Width = 117
   end
   inherited DS: TDataSource
     Left = 133

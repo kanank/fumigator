@@ -53,6 +53,8 @@ type
     DsDicCliSfera: TDataSource;
     DicRegions: TIBQuery;
     DsDicRegions: TDataSource;
+    DicPhoneType: TIBQuery;
+    DsDicPhoneType: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }

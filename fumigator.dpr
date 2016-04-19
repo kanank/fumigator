@@ -39,7 +39,9 @@ uses
   frClientExtUr in 'Frames\frClientExtUr.pas' {FrameClientExtUr: TFrame},
   formClientUr in 'Clients\formClientUr.pas' {frmClientUr},
   ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData},
-  frItemDomKLADR in 'Frames\frItemDomKLADR.pas' {FrameItemDomKLADR: TFrame};
+  frItemDomKLADR in 'Frames\frItemDomKLADR.pas' {FrameItemDomKLADR: TFrame},
+  frPersonSmallFoto in 'Frames\frPersonSmallFoto.pas' {FramePersonSmallFoto: TFrame},
+  frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame};
 
 {$R *.res}
 
@@ -48,7 +50,7 @@ begin
   Application.MainFormOnTaskbar := True;
    Application.Title := 'Фумигатор';
 
-  Application.CreateForm(TDataModuleMain, DM);
+  Application.CreateForm(TDM, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;

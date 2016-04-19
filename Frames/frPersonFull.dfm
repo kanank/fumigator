@@ -6,7 +6,33 @@ inherited FramePersonFull: TFramePersonFull
   DesignSize = (
     733
     172)
-  inline FramePassport: TFramePassport [0]
+  object Label3: TLabel [0]
+    Left = 367
+    Top = 152
+    Width = 47
+    Height = 13
+    Caption = 'Emal '#1083#1080#1095'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label5: TLabel [1]
+    Left = 553
+    Top = 153
+    Width = 47
+    Height = 13
+    Caption = 'Emal '#1088#1072#1073'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  inline FramePassport: TFramePassport [2]
     Left = 512
     Top = 0
     Width = 218
@@ -15,7 +41,7 @@ inherited FramePersonFull: TFramePersonFull
     ExplicitLeft = 512
     ExplicitHeight = 142
   end
-  inline FramePhones: TFramePhones [1]
+  inline FramePhones: TFramePhones [3]
     Left = 287
     Top = 0
     Width = 218
@@ -49,7 +75,7 @@ inherited FramePersonFull: TFramePersonFull
       end
     end
   end
-  inherited RzPanel1: TRzPanel [2]
+  inherited RzPanel1: TRzPanel [4]
     Left = 3
     Height = 142
     Anchors = [akLeft, akTop, akRight]
@@ -146,16 +172,16 @@ inherited FramePersonFull: TFramePersonFull
       ExplicitTop = 96
     end
   end
-  inline FrameAddress: TFrameKladrAdrFull [3]
-    Left = 6
-    Top = 146
-    Width = 498
+  inline FrameAddress: TFrameKladrAdrFull [5]
+    Left = 3
+    Top = 148
+    Width = 356
     Height = 27
     TabOrder = 2
     Visible = False
-    ExplicitLeft = 6
-    ExplicitTop = 146
-    ExplicitWidth = 498
+    ExplicitLeft = 3
+    ExplicitTop = 148
+    ExplicitWidth = 356
     ExplicitHeight = 27
     inherited Label8: TLabel
       Visible = False
@@ -170,13 +196,15 @@ inherited FramePersonFull: TFramePersonFull
       ExplicitTop = 4
     end
     inherited btnEdit: TRzBitBtn
-      Left = 467
+      Left = 325
       Top = 0
       ExplicitLeft = 467
       ExplicitTop = 0
     end
     inherited edtRegion: TcxTextEdit
       Visible = False
+      ExplicitWidth = 218
+      Width = 218
     end
     inherited edtSite: TcxTextEdit
       Visible = False
@@ -186,9 +214,51 @@ inherited FramePersonFull: TFramePersonFull
       Top = 1
       ExplicitLeft = 63
       ExplicitTop = 1
-      ExplicitWidth = 401
-      Width = 401
+      ExplicitWidth = 262
+      Width = 262
     end
+  end
+  object edtEmailPrivate: TcxDBTextEdit
+    Left = 417
+    Top = 149
+    Anchors = [akLeft, akTop, akRight]
+    BeepOnEnter = False
+    DataBinding.DataField = 'NAME'
+    DataBinding.DataSource = DS
+    Style.BorderStyle = ebsFlat
+    Style.HotTrack = False
+    Style.LookAndFeel.Kind = lfFlat
+    Style.LookAndFeel.NativeStyle = True
+    Style.TransparentBorder = True
+    StyleDisabled.LookAndFeel.Kind = lfFlat
+    StyleDisabled.LookAndFeel.NativeStyle = True
+    StyleFocused.LookAndFeel.Kind = lfFlat
+    StyleFocused.LookAndFeel.NativeStyle = True
+    StyleHot.LookAndFeel.Kind = lfFlat
+    StyleHot.LookAndFeel.NativeStyle = True
+    TabOrder = 4
+    Width = 123
+  end
+  object edtEmailWork: TcxDBTextEdit
+    Left = 606
+    Top = 149
+    Anchors = [akLeft, akTop, akRight]
+    BeepOnEnter = False
+    DataBinding.DataField = 'NAME'
+    DataBinding.DataSource = DS
+    Style.BorderStyle = ebsFlat
+    Style.HotTrack = False
+    Style.LookAndFeel.Kind = lfFlat
+    Style.LookAndFeel.NativeStyle = True
+    Style.TransparentBorder = True
+    StyleDisabled.LookAndFeel.Kind = lfFlat
+    StyleDisabled.LookAndFeel.NativeStyle = True
+    StyleFocused.LookAndFeel.Kind = lfFlat
+    StyleFocused.LookAndFeel.NativeStyle = True
+    StyleHot.LookAndFeel.Kind = lfFlat
+    StyleHot.LookAndFeel.NativeStyle = True
+    TabOrder = 5
+    Width = 123
   end
   inherited Query_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -202,7 +272,10 @@ inherited FramePersonFull: TFramePersonFull
       'PASS_ID = :PASS_ID,'
       'DATE_BIRTH = :DATE_BIRTH,'
       'SEX = :SEX,'
-      'CITIZEN = :CITIZEN'
+      'CITIZEN = :CITIZEN,'
+      'PROF_ID = :PROF_ID,'
+      'EMAIL_PRIVATE = :EMAIL_PRIVATE,'
+      'EMAIL_WORK = :EMAIL_WORK'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into PERSONS('
@@ -214,7 +287,10 @@ inherited FramePersonFull: TFramePersonFull
       'PASS_ID,'
       'DATE_BIRTH,'
       'SEX,'
-      'CITIZEN'
+      'CITIZEN,'
+      'PROF_ID,'
+      'EMAIL_PRIVATE,'
+      'EMAIL_WORK'
       ') '
       'values('
       ':ID,'
@@ -225,7 +301,10 @@ inherited FramePersonFull: TFramePersonFull
       ':PASS_ID,'
       ':DATE_BIRTH,'
       ':SEX,'
-      ':CITIZEN'
+      ':CITIZEN,'
+      ':PROF_ID,'
+      ':EMAIL_PRIVATE,'
+      ':EMAIL_WORK'
       ')')
     Left = 240
     Top = 11

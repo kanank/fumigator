@@ -177,6 +177,7 @@ begin
     DicUrForm.Open;
     DicCliSfera.Open;
     DicRegions.Open;
+    DicPhoneType.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
     Result := True;

@@ -9,7 +9,8 @@ uses
   cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData,
   IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, RzButton, cxGridLevel,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
-  cxGridCustomView, cxGrid, Vcl.ExtCtrls, RzPanel, cxCheckBox;
+  cxGridCustomView, cxGrid, Vcl.ExtCtrls, RzPanel, cxCheckBox,
+  cxDBLookupComboBox;
 
 type
   TFramePhones = class(TFrameListBase)
@@ -30,7 +31,7 @@ implementation
 
 {$R *.dfm}
 uses
-  formEditPhone;
+  formEditPhone, DM_Main;
 
 { TFramePhones }
 

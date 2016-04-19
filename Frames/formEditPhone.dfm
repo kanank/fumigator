@@ -75,7 +75,7 @@ inherited frmEditPhone: TfrmEditPhone
       end>
     Properties.ListOptions.GridLines = glNone
     Properties.ListOptions.ShowHeader = False
-    Properties.ListSource = DataModuleMain.DsDicCliSfera
+    Properties.ListSource = DataModuleMain.DsDicPhoneType
     TabOrder = 4
     Width = 117
   end

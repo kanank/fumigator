@@ -64,6 +64,17 @@ inherited FramePhones: TFramePhones
         end
         object grdPhoneDBTableView2Column3: TcxGridDBColumn
           DataBinding.FieldName = 'PHONE_TYPE_ID'
+          PropertiesClassName = 'TcxLookupComboBoxProperties'
+          Properties.DropDownListStyle = lsFixedList
+          Properties.GridMode = True
+          Properties.KeyFieldNames = 'ID'
+          Properties.ListColumns = <
+            item
+              FieldName = 'SHORTNAME'
+            end>
+          Properties.ListOptions.GridLines = glNone
+          Properties.ListOptions.ShowHeader = False
+          Properties.ListSource = DataModuleMain.DsDicPhoneType
           Width = 33
         end
       end

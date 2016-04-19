@@ -16,6 +16,10 @@ type
     FramePassport: TFramePassport;
     FramePhones: TFramePhones;
 	FrameAddress: TFrameKladrAdrFull;
+    Label3: TLabel;
+    edtEmailPrivate: TcxDBTextEdit;
+    Label5: TLabel;
+    edtEmailWork: TcxDBTextEdit;
   private
     { Private declarations }
   protected

@@ -38,19 +38,29 @@ implementation
 {$R *.dfm}
 
  uses
-   DM_Main, CommonVars, CommonTypes;
+   DM_Main, CommonVars, CommonTypes, frmWorker;
 
 procedure TfrmWorkers.Add_btnClick(Sender: TObject);
-begin
+(*begin
   if DM.Worker_Q.Active then
     DM.Worker_Q.Close;
   DM.Worker_Q.ParamByName('ID').AsInteger := 0;
   DM.Worker_Q.Open;
-  DM.ShowWorkerForm (DM.DsWorker, 0, asCreate, self, True);
+  DM.ShowWorkerForm (DM.DsWorker, 0, asCreate, self, True);*)
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Workers.Active then
+    DM.Workers.Open;
+
+  prm := NewFrmCreateParam(asCreate, DM.Workers);
+  formWorker := TfrmWorker.Create(self, '', @prm);
+  formWorker.ShowModal;
+  FreeAndNil(formWorker);
 end;
 
 procedure TfrmWorkers.Edit_btnClick(Sender: TObject);
-var
+(*var
   id: integer;
 begin
   id := DM.Workers.FieldByName('ID').AsInteger;
@@ -58,7 +68,17 @@ begin
     DM.Worker_Q.Close;
   DM.Worker_Q.ParamByName('ID').AsInteger := id;
   DM.Worker_Q.Open;
-  DM.ShowWorkerForm (DM.DsWorker, id, asEdit, self, true);
+  DM.ShowWorkerForm (DM.DsWorker, id, asEdit, self, true);*)
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Workers.Active then
+    DM.Workers.Open;
+
+  prm := NewFrmCreateParam(asEdit, DM.Workers);
+  formWorker := TfrmWorker.Create(self, '', @prm);
+  formWorker.ShowModal;
+  FreeAndNil(formWorker);
 end;
 
 

@@ -55,6 +55,8 @@ type
     DsDicRegions: TDataSource;
     DicPhoneType: TIBQuery;
     DsDicPhoneType: TDataSource;
+    DicCliProfs: TIBQuery;
+    DsDicCliProfs: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -113,11 +115,12 @@ begin
       DS.Dataset.Edit;
 
     form := TfrmWorker.Create(self);
+    form.DS.DataSet := Worker_q;
 
     if ActionStr = asCreate then
     begin
       form.Caption := form.Caption + '.Новый';
-      Worker_q.FieldByName('USER_BLOCKED').AsInteger := 0;
+      //Worker_q.FieldByName('USER_BLOCKED').AsInteger := 0;
       Worker_q.FieldByName('IS_DELETED').AsInteger := 0;
     end
     else
@@ -176,6 +179,7 @@ begin
     DicStatusCli.Open;
     DicUrForm.Open;
     DicCliSfera.Open;
+    DicCliProfs.Open;
     DicRegions.Open;
     DicPhoneType.Open;
    // DicWorkerStatus.Open;

@@ -12,95 +12,38 @@ uses
   cxFilter, cxData, cxDataStorage, cxNavigator, Data.DB, cxDBData, cxGridLevel,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
   cxGridCustomView, cxGrid, cxListBox, cxImage, ClassSimpleForm,
-  dxGDIPlusClasses;
+  dxGDIPlusClasses, frameBase, frPersonSmall, frPersonSmallFoto,
+  frPersonFullFoto;
 
 type
   TfrmWorker = class(TSimpleForm)
     RzPageControl1: TRzPageControl;
     Short_Tab: TRzTabSheet;
-    Mail_pln: TcxGroupBox;
-    Label5: TLabel;
-    Label4: TLabel;
-    Label2: TLabel;
-    Label1: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    BirthDate_dp: TcxDBDateEdit;
-    SurName_edt: TcxDBTextEdit;
-    Name_edt: TcxDBTextEdit;
-    Family_Edt: TcxDBTextEdit;
-    WorkerFoto_pnl: TRzPanel;
-    Foto_img: TImage;
-    Phone_edt: TcxDBTextEdit;
-    Email_edt: TcxDBTextEdit;
-    cxDBImage1: TcxDBImage;
     Full_Tab: TRzTabSheet;
     RzPanel3: TRzPanel;
     Save_btn: TRzButton;
     Cancel_btn: TRzButton;
-    cxGroupBox1: TcxGroupBox;
-    Label8: TLabel;
-    Label9: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label3: TLabel;
-    Label15: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
-    Label23: TLabel;
-    Label24: TLabel;
-    Label28: TLabel;
-    F_BirthDate_dp: TcxDBDateEdit;
-    F_SurName_edt: TcxDBTextEdit;
-    F_Name_edt: TcxDBTextEdit;
-    F_Family_edt: TcxDBTextEdit;
-    RzPanel4: TRzPanel;
-    F_Foto_img: TImage;
-    RzBitBtn2: TRzBitBtn;
-    RzBitBtn3: TRzBitBtn;
-    F_ShortName_edt: TcxDBTextEdit;
-    F_Phone_Work_edt: TcxDBTextEdit;
-    F_Email_Work_edt: TcxDBTextEdit;
-    F_Phone_Priv_edt: TcxDBTextEdit;
-    F_Email_Priv_edt: TcxDBTextEdit;
-    RzGroupBox1: TRzGroupBox;
-    Label16: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    PassOrg_memo: TcxDBMemo;
-    PassCode_edt: TcxDBTextEdit;
-    PassDate_DP: TcxDBDateEdit;
-    PassNum_medt: TcxDBMaskEdit;
-    Tabel_edt: TcxDBTextEdit;
-    Status_LCB: TcxDBLookupComboBox;
-    Comments_memo: TcxDBMemo;
-    Job_LCB: TcxDBLookupComboBox;
-    Oklad_cedt: TcxDBCurrencyEdit;
-    ATSNUM_edt: TcxDBTextEdit;
-    ID_edt: TcxDBTextEdit;
     RzPanel5: TRzPanel;
-    UserParams_pnl: TcxGroupBox;
+    FullForm_btn: TRzButton;
+    FramePersonSmall: TFramePersonSmallFoto;
+    FramePersonFull: TFramePersonFullFoto;
+    RzPanel4: TRzPanel;
+    Label28: TLabel;
+    ATSNUM_edt: TcxDBTextEdit;
     Label25: TLabel;
     Label26: TLabel;
-    Label27: TLabel;
-    User_Login_edt: TcxDBTextEdit;
-    User_Pass_edt: TcxDBTextEdit;
-    User_Role_edt: TcxDBLookupComboBox;
-    User_Blocked_cb: TcxDBCheckBox;
-    cxGroupBox2: TcxGroupBox;
     RzPanel6: TRzPanel;
-    DelFile_btn: TRzButton;
-    AddFile_btn: TRzButton;
-    cxListBox1: TcxListBox;
-    imgFoto: TcxDBImage;
-    FullForm_btn: TRzButton;
+    Label1: TLabel;
+    cxDBTextEdit1: TcxDBTextEdit;
+    Label2: TLabel;
+    cxDBTextEdit2: TcxDBTextEdit;
+    RzPanel2: TRzPanel;
+    Label3: TLabel;
+    cxDBTextEdit3: TcxDBTextEdit;
+    DS: TDataSource;
     procedure FullForm_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Save_btnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -115,32 +58,124 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils;
+  System.StrUtils, CommonTypes, IBX.IBQuery;
+
 
 procedure TfrmWorker.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  self.Constraints.MaxHeight := 354 ;
-  self.Constraints.MaxWidth  := 459 ;
-  self.Constraints.MinHeight := 354 ;
-  self.Constraints.MinWidth  := 459 ;
-  // права
-  Full_Tab.TabVisible := false;
+begin
+  inherited;
+  if fFrmParam.Dataset <> nil then
+    DS.DataSet := fFrmParam.Dataset;
+
+  case fFrmParam.action of
+    asCreate:
+      begin
+        FullForm_btn.Click;
+
+        Title := Title + ' [новая запись]';
+        if (DS.DataSet <> nil) and DS.DataSet.Active then
+        begin
+          DS.DataSet.Append;
+          DS.DataSet.FieldByName('USER_BLOCKED').AsInteger := 0;
+          DS.DataSet.FieldByName('IS_DELETED').AsInteger := 0;
+        end;
+      end;
+    asEdit:
+      begin
+        Title := Title + ' [редактирование]';
+        if (DS.DataSet <> nil) and DS.DataSet.Active then
+          DS.DataSet.Edit;
+      end;
+    asShow:
+      begin
+        Title := Title + ' [просмотр]';
+      end;
+  end;
+
+  if fFrmParam.action <> asCreate then
+  begin
+    FramePersonSmall.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+    FramePersonSmall.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+    FramePersonSmall.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
+    FramePersonSmall.OpenData;
+  end;
+
+  FramePersonFull.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FramePersonFull.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FramePersonFull.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
+  FramePersonFull.OpenData;
 end;
+
+
+end;
+
 
 procedure TfrmWorker.FullForm_btnClick(Sender: TObject);
 begin
-  self.Constraints.MaxHeight := 660 ;
-  self.Constraints.MaxWidth  := 715 ;
-  self.Constraints.MinHeight := 660 ;
-  self.Constraints.MinWidth  := 715 ;
+  self.Constraints.MaxHeight := 363 ;
+  self.Constraints.MaxWidth  := 788 ;
+  self.Constraints.MinHeight := 363 ;
+  self.Constraints.MinWidth  := 788 ;
 
   RzPageControl1.ActivePage := Full_Tab;
-  Short_Tab.TabVisible := false;
-  Full_Tab.TabVisible := true;
+  Short_Tab.TabVisible := False;
+  Full_Tab.TabVisible  := True;
   FullForm_btn.Visible := False;
 end;
 
+
+procedure TfrmWorker.Save_btnClick(Sender: TObject);
+var
+  res: Boolean;
+begin
+  res := False;
+  try
+    try
+      if not TIBQuery(DS.DataSet).Transaction.Active then
+        TIBQuery(DS.DataSet).Transaction.StartTransaction;
+      //сохраняем полное имя
+      DS.DataSet.FieldByName('full_name').AsString :=
+        DM.GetPersonFullName(FramePersonFull.Query.FieldByName('FAMILY').AsString,
+          FramePersonFull.Query.FieldByName('NAME').AsString,
+          FramePersonFull.Query.FieldByName('SURNAME').AsString);
+      DS.DataSet.FieldByName('full_name').AsString :=
+        //сохраняем короткое имя
+        DM.GetPersonShortName(FramePersonFull.Query.FieldByName('FAMILY').AsString,
+          FramePersonFull.Query.FieldByName('NAME').AsString,
+          FramePersonFull.Query.FieldByName('SURNAME').AsString);
+      //сохраняем ссылки
+      res := FramePersonFull.SaveData;
+      if not res then
+        Exit;
+
+
+      // PERSON_ID
+      if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePersonFull.Id then
+        DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePersonFull.Id;
+
+      DS.DataSet.Post;
+      TIBQuery(DS.DataSet).ApplyUpdates;
+
+      //услуги
+      //res := FrameUslugi.SaveData;
+    except
+      res := False;
+      ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
+      Exception(ExceptObject).Message);
+    end;
+  finally
+    if Res then
+    begin
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+    end
+    else
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
+  end;
+end;
 
 end.

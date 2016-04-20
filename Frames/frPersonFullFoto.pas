@@ -1,27 +1,25 @@
-unit frPersonFull;
+unit frPersonFullFoto;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frPersonSmall, cxGraphics, cxControls,
-  cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, frListBase,
-  frPhones, frameBase, frPasport, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery,
-  IBX.IBUpdateSQL, IBX.IBDatabase, cxDropDownEdit, cxDBEdit, cxMaskEdit, cxCalendar, cxTextEdit,
-  Vcl.StdCtrls, Vcl.ExtCtrls, RzPanel, cxLookupEdit,
-  cxDBLookupEdit, cxDBLookupComboBox, FrKladrAdrFull, frKladrAll;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frPersonSmallFoto, cxGraphics,
+  cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit,
+  Data.DB, IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, IBX.IBDatabase, cxDropDownEdit,
+  cxCalendar, cxDBEdit, frListBase, frPhones, frameBase, frFoto, cxLookupEdit,
+  cxDBLookupEdit, cxDBLookupComboBox, cxMaskEdit, cxTextEdit, Vcl.StdCtrls,
+  Vcl.ExtCtrls, RzPanel, frPasport;
 
 type
-  TFramePersonFull = class(TFramePersonSmall)
-    FramePassport: TFramePassport;
-    FramePhones: TFramePhones;
-	FrameAddress: TFrameKladrAdrFull;
+  TFramePersonFullFoto = class(TFramePersonSmallFoto)
     Label3: TLabel;
     edtEmailPrivate: TcxDBTextEdit;
-    Label5: TLabel;
-    edtEmailWork: TcxDBTextEdit;
+    Label6: TLabel;
+    Label7: TLabel;
+    FramePassport: TFramePassport;
   private
-    { Private declarations }
+
   protected
     procedure SetTransaction(AValue: TIBTransaction); override;
   public
@@ -29,15 +27,12 @@ type
     function SaveData: Boolean; override;
   end;
 
+
 implementation
 
 {$R *.dfm}
- uses
-   DM_Main;
 
-{ TFramePersonFull }
-
-function TFramePersonFull.OpenData(Aid: integer): Boolean;
+function TFramePersonFullFoto.OpenData(Aid: integer): Boolean;
 begin
   Result := inherited OpenData(Aid);
   if not result then
@@ -50,16 +45,17 @@ begin
     FramePassport.AddParam('ID', Query.FieldByName('PASS_ID'));
     FramePassport.OpenData;
     FramePhones.AddParam('CLIENT_ID', Query.FieldByName('ID'));
+    FramePhones.TypePhone := 1;
     FramePhones.OpenData;
-    FrameAddress.AddParam('ID', Query.FieldByName('ADR_ID'));
-    FrameAddress.OpenData;
+    FrameFoto.AddParam('ID', Query.FieldByName('PHONE_ID'));
+    FrameFoto.OpenData;
     Result := True;
   except
     Result := False;
   end;
 end;
 
-function TFramePersonFull.SaveData: Boolean;
+function TFramePersonFullFoto.SaveData: Boolean;
 begin
   Result := false;
 
@@ -72,7 +68,7 @@ begin
       if not Result then
         Exit;
 
-       Result := FrameAddress.SaveData;
+       Result := FrameFoto.SaveData;
       if not Result then
         Exit;
 
@@ -83,10 +79,10 @@ begin
                                         FramePassport.Id then
         Query.FieldByName('PASS_ID').AsInteger :=
                                              FramePassport.Id;
-      if Query.FieldByName('ADR_ID').AsInteger <>
-                                        FrameAddress.Id then
-        Query.FieldByName('ADR_ID').AsInteger :=
-                                             FrameAddress.Id;
+      if Query.FieldByName('PHOTO_ID').AsInteger <>
+                                        FrameFoto.Id then
+        Query.FieldByName('PHOTO_ID').AsInteger :=
+                                             FrameFoto.Id;
 
       //Query.Post;
       Result := inherited SaveData;
@@ -106,12 +102,12 @@ begin
   end;
 end;
 
-procedure TFramePersonFull.SetTransaction(AValue: TIBTransaction);
+procedure TFramePersonFullFoto.SetTransaction(AValue: TIBTransaction);
 begin
   inherited;
   FramePassport.Transaction := AValue;
   FramePhones.Transaction := AValue;
-  FrameAddress.Transaction := AValue;
+  FrameFoto.Transaction := AValue;
 end;
 
 end.

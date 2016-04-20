@@ -41,7 +41,8 @@ uses
   ClassFormEditData in 'Classes\ClassFormEditData.pas' {frmEditData},
   frItemDomKLADR in 'Frames\frItemDomKLADR.pas' {FrameItemDomKLADR: TFrame},
   frPersonSmallFoto in 'Frames\frPersonSmallFoto.pas' {FramePersonSmallFoto: TFrame},
-  frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame};
+  frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame},
+  frPersonFullFoto in 'Frames\frPersonFullFoto.pas' {FramePersonFullFoto: TFrame};
 
 {$R *.res}
 
@@ -50,7 +51,7 @@ begin
   Application.MainFormOnTaskbar := True;
    Application.Title := 'Фумигатор';
 
-  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TDataModuleMain, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;

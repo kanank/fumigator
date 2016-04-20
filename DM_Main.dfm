@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -16,7 +15,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -33,14 +31,14 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_USER_TYPES_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 591
-    Top = 226
+    Left = 599
+    Top = 130
   end
   object DSDicUserTypes: TDataSource
     AutoEdit = False
     DataSet = DicUserTypes
-    Left = 591
-    Top = 277
+    Left = 599
+    Top = 181
   end
   object DicWorkerProfs: TIBQuery
     Database = DB
@@ -54,31 +52,32 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_WORKER_PROFS_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 660
-    Top = 206
+    Left = 668
+    Top = 110
   end
   object DSDicWorkerProfs: TDataSource
     AutoEdit = False
     DataSet = DicWorkerProfs
-    Left = 661
-    Top = 257
+    Left = 669
+    Top = 161
   end
   object Workers: TIBQuery
     Database = DB
-    Transaction = DefTr
+    Transaction = worker_tr
     BufferChunks = 1000
     CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
       'select * from WORKERS')
-    Left = 722
-    Top = 234
+    UpdateObject = Worker_upd
+    Left = 730
+    Top = 138
   end
   object DSWorkers: TDataSource
     AutoEdit = False
     DataSet = Workers
-    Left = 722
-    Top = 285
+    Left = 730
+    Top = 189
   end
   object Worker_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -117,65 +116,37 @@ object DataModuleMain: TDataModuleMain
       'where id = :OLD_ID')
     InsertSQL.Strings = (
       'INSERT INTO WORKERS ('
-      #9'W_FAMILY,'
-      #9'W_NAME,'
-      #9'W_OTCH,'
+      '                PERSON_ID,'
       #9'FULL_NAME,'
       #9'SHORT_NAME,'
-      #9'BIRTH_DATE,'
-      #9'PASS_NUM,'
-      #9'PASS_ORG,'
-      #9'PASS_DATE,'
-      #9'PASS_CODE,'
-      #9'PROFESSION_ID,'
-      #9'E_MAIL_WORK,'
-      #9'E_MAIL_PRIV,'
-      #9'PHONE_WORK,'
-      #9'PHONE_PRIV,'
-      #9'OKLAD,'
       #9'STATUS,'
       #9'TABELNUM,'
-      #9'COMMENTS,'
       #9'IS_DELETED,'
       #9'USER_LOGIN,'
       #9'USER_PASSWORD,'
       #9'USER_TYPE,'
       #9'USER_BLOCKED,'
       #9'ATS_NUM, '
-      '                FOTO)'
+      '                PHOTO_ID)'
       'Values('
-      #9':W_FAMILY,'
-      #9':W_NAME,'
-      #9':W_OTCH,'
+      '    '#9':PERSON_ID,'
       #9':FULL_NAME,'
       #9':SHORT_NAME,'
-      #9':BIRTH_DATE,'
-      #9':PASS_NUM,'
-      #9':PASS_ORG,'
-      #9':PASS_DATE,'
-      #9':PASS_CODE,'
-      #9':PROFESSION_ID,'
-      #9':E_MAIL_WORK,'
-      #9':E_MAIL_PRIV,'
-      #9':PHONE_WORK,'
-      #9':PHONE_PRIV,'
-      #9':OKLAD,'
       #9':STATUS,'
       #9':TABELNUM,'
-      #9':COMMENTS,'
       #9':IS_DELETED,'
       #9':USER_LOGIN,'
       #9':USER_PASSWORD,'
       #9':USER_TYPE,'
       #9':USER_BLOCKED,'
-      #9':ATS_NUM,'
-      '                :FOTO)'#9)
+      #9':ATS_NUM, '
+      '    '#9':PHOTO_ID)'#9)
     DeleteSQL.Strings = (
       'delete from workers'
       'where'
       '  ID = :OLD_ID')
-    Left = 216
-    Top = 64
+    Left = 728
+    Top = 56
   end
   object Worker_Q: TIBQuery
     Database = DB
@@ -186,12 +157,11 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from workers where id = :ID')
-    UpdateObject = Worker_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_WORKERS_ID'
     GeneratorField.ApplyEvent = gamOnPost
-    Left = 160
-    Top = 64
+    Left = 632
+    Top = 8
     ParamData = <
       item
         DataType = ftUnknown
@@ -206,15 +176,14 @@ object DataModuleMain: TDataModuleMain
       'rec_version'
       'nowait')
     AutoStopAction = saCommit
-    Left = 272
-    Top = 64
+    Left = 728
+    Top = 96
   end
   object DsWorker: TDataSource
     AutoEdit = False
     DataSet = Worker_Q
-    OnDataChange = DsWorkerDataChange
-    Left = 333
-    Top = 64
+    Left = 669
+    Top = 8
   end
   object ImgList: TcxImageList
     FormatVersion = 1
@@ -603,20 +572,20 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_SERVICES_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 535
-    Top = 198
+    Left = 543
+    Top = 102
   end
   object DSDicServices: TDataSource
     AutoEdit = False
     DataSet = DicServices
-    Left = 535
-    Top = 257
+    Left = 543
+    Top = 161
   end
   object DSDicMaterials: TDataSource
     AutoEdit = False
     DataSet = DicMaterials
-    Left = 479
-    Top = 285
+    Left = 487
+    Top = 189
   end
   object DicMaterials0: TIBQuery
     Database = DB
@@ -635,8 +604,8 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIALS_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 479
-    Top = 226
+    Left = 487
+    Top = 130
   end
   object DicMaterials_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -665,8 +634,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_MATERIALS'
       'where'
       '  ID = :OLD_ID')
-    Left = 480
-    Top = 336
+    Left = 488
+    Top = 240
   end
   object DicServices_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -679,8 +648,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_SERVICES'
       'where'
       '  ID = :OLD_ID')
-    Left = 536
-    Top = 304
+    Left = 544
+    Top = 208
   end
   object DicUserTypes_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -693,8 +662,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_USER_TYPES'
       'where'
       '  ID = :OLD_ID')
-    Left = 592
-    Top = 320
+    Left = 600
+    Top = 224
   end
   object DicWorkerProfs_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -707,8 +676,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_WORKER_PROFS'
       'where'
       '  ID = :OLD_ID')
-    Left = 664
-    Top = 304
+    Left = 672
+    Top = 208
   end
   object DicMaterialType: TIBQuery
     Database = DB
@@ -722,14 +691,14 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIAL_TYPES_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 385
-    Top = 218
+    Left = 393
+    Top = 122
   end
   object DsDicMaterialType: TDataSource
     AutoEdit = False
     DataSet = DicMaterialType
-    Left = 385
-    Top = 266
+    Left = 393
+    Top = 170
   end
   object DicMaterialType_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -755,8 +724,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_MATERIAL_TYPES'
       'where'
       '  ID = :OLD_ID')
-    Left = 386
-    Top = 312
+    Left = 394
+    Top = 216
   end
   object DicMaterialSubTypes: TIBQuery
     Database = DB
@@ -770,14 +739,14 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIAL_TYPES_ID'
     GeneratorField.ApplyEvent = gamOnServer
-    Left = 309
-    Top = 235
+    Left = 317
+    Top = 139
   end
   object DsDicMaterialSubTypes: TDataSource
     AutoEdit = False
     DataSet = DicMaterialSubTypes
-    Left = 309
-    Top = 282
+    Left = 317
+    Top = 186
   end
   object DicMaterialSubTypes_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -804,8 +773,8 @@ object DataModuleMain: TDataModuleMain
       'delete from DIC_MATERIAL_SUBTYPES'
       'where'
       '  ID = :OLD_ID')
-    Left = 310
-    Top = 326
+    Left = 318
+    Top = 230
   end
   object DicMaterials: TIBQuery
     Database = DB
@@ -816,8 +785,8 @@ object DataModuleMain: TDataModuleMain
     SQL.Strings = (
       'select * from get_materials_tree')
     UpdateObject = DicMaterials_upd
-    Left = 480
-    Top = 176
+    Left = 488
+    Top = 80
   end
   object DicFormatsCli: TIBQuery
     Database = DB
@@ -827,14 +796,14 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from DIC_FORMATS_CLI')
-    Left = 242
-    Top = 219
+    Left = 250
+    Top = 123
   end
   object DsFormatsCli: TDataSource
     AutoEdit = False
     DataSet = DicFormatsCli
-    Left = 242
-    Top = 264
+    Left = 250
+    Top = 168
   end
   object Clients: TIBQuery
     Database = DB
@@ -849,8 +818,8 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
     GeneratorField.ApplyEvent = gamOnPost
-    Left = 152
-    Top = 120
+    Left = 160
+    Top = 24
   end
   object Clients_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -896,8 +865,8 @@ object DataModuleMain: TDataModuleMain
       ')')
     DeleteSQL.Strings = (
       'delete from clients where id = :id')
-    Left = 208
-    Top = 120
+    Left = 216
+    Top = 24
   end
   object Clients_tr: TIBTransaction
     DefaultDatabase = DB
@@ -905,15 +874,15 @@ object DataModuleMain: TDataModuleMain
       'read_committed'
       'rec_version'
       'nowait')
-    Left = 264
-    Top = 120
+    Left = 272
+    Top = 24
   end
   object DsClients: TDataSource
     AutoEdit = False
     DataSet = Clients
     OnDataChange = DsWorkerDataChange
-    Left = 325
-    Top = 120
+    Left = 333
+    Top = 24
   end
   object DicStatusCli: TIBQuery
     Database = DB
@@ -923,14 +892,14 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from DIC_STATUS_CLI')
-    Left = 191
-    Top = 235
+    Left = 199
+    Top = 139
   end
   object DsDicStatusCli: TDataSource
     AutoEdit = False
     DataSet = DicStatusCli
-    Left = 191
-    Top = 280
+    Left = 199
+    Top = 184
   end
   object DicUrForm: TIBQuery
     Database = DB
@@ -941,14 +910,14 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from DIC_UR_FORMA')
-    Left = 94
-    Top = 235
+    Left = 102
+    Top = 139
   end
   object DsDicUrForm: TDataSource
     AutoEdit = False
     DataSet = DicUrForm
-    Left = 94
-    Top = 280
+    Left = 102
+    Top = 184
   end
   object DicCliSfera: TIBQuery
     Database = DB
@@ -958,14 +927,14 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select *  from DIC_CLIENT_SFERA')
-    Left = 53
-    Top = 219
+    Left = 61
+    Top = 123
   end
   object DsDicCliSfera: TDataSource
     AutoEdit = False
     DataSet = DicCliSfera
-    Left = 53
-    Top = 264
+    Left = 61
+    Top = 168
   end
   object DicRegions: TIBQuery
     Database = DB
@@ -978,14 +947,14 @@ object DataModuleMain: TDataModuleMain
       
         'where region_id > 0 and area_id = 0 and city_id = 0 and site_id ' +
         '= 0')
-    Left = 142
-    Top = 219
+    Left = 150
+    Top = 123
   end
   object DsDicRegions: TDataSource
     AutoEdit = False
     DataSet = DicRegions
-    Left = 142
-    Top = 264
+    Left = 150
+    Top = 168
   end
   object DicPhoneType: TIBQuery
     Database = DB
@@ -995,13 +964,30 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select *  from PHONE_TYPES')
-    Left = 10
-    Top = 239
+    Left = 18
+    Top = 143
   end
   object DsDicPhoneType: TDataSource
     AutoEdit = False
     DataSet = DicPhoneType
-    Left = 10
-    Top = 284
+    Left = 18
+    Top = 188
+  end
+  object DicCliProfs: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from DIC_CLIENTS_PROFS')
+    Left = 21
+    Top = 259
+  end
+  object DsDicCliProfs: TDataSource
+    AutoEdit = False
+    DataSet = DicCliProfs
+    Left = 21
+    Top = 304
   end
 end

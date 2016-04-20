@@ -198,7 +198,7 @@ inherited FramePersonFull: TFramePersonFull
     inherited btnEdit: TRzBitBtn
       Left = 325
       Top = 0
-      ExplicitLeft = 467
+      ExplicitLeft = 325
       ExplicitTop = 0
     end
     inherited edtRegion: TcxTextEdit
@@ -223,7 +223,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 149
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
-    DataBinding.DataField = 'NAME'
+    DataBinding.DataField = 'EMAIL_PRIVATE'
     DataBinding.DataSource = DS
     Style.BorderStyle = ebsFlat
     Style.HotTrack = False
@@ -244,7 +244,7 @@ inherited FramePersonFull: TFramePersonFull
     Top = 149
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
-    DataBinding.DataField = 'NAME'
+    DataBinding.DataField = 'EMAIL_WORK'
     DataBinding.DataSource = DS
     Style.BorderStyle = ebsFlat
     Style.HotTrack = False

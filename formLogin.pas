@@ -18,6 +18,7 @@ type
     lblMess: TRzLabel;
     img1: TImage;
     Label3: TLabel;
+    Shape1: TShape;
     procedure btnOKClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
 
@@ -82,6 +83,9 @@ end;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);
 begin
+  Shape1.Height := self.Height;
+  Shape1.Width := self.Width;
+
   if not DM.DB.Connected then
   begin
     DM.BeforeLogin;

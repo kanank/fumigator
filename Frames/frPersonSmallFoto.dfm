@@ -35,10 +35,8 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
     end
     inherited Label2: TLabel
       Top = 106
-      Width = 53
       Visible = False
       ExplicitTop = 106
-      ExplicitWidth = 53
     end
     inherited Label1: TLabel
       Left = 151
@@ -67,7 +65,7 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       Top = 102
       Visible = False
       ExplicitTop = 102
-      ExplicitWidth = 149
+      ExplicitWidth = 0
       Width = 0
     end
     inherited edtSurName: TcxDBTextEdit [9]
@@ -125,13 +123,15 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
         inherited btnLoad: TRzBitBtn
           Top = 95
           Visible = False
+          OnClick = nil
+          ExplicitTop = 95
         end
         inherited btnClear: TRzBitBtn
           Left = 10
           Top = 95
           Visible = False
           ExplicitLeft = 10
-          ExplicitTop = 115
+          ExplicitTop = 95
         end
         inherited imgFoto: TcxDBImage
           Top = 3
@@ -155,6 +155,14 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
         Top = 32
       end
     end
+    inherited cmbDateBirth: TcxDBDateEdit
+      Left = 340
+      Top = 5
+      ExplicitLeft = 340
+      ExplicitTop = 5
+      ExplicitWidth = 109
+      Width = 109
+    end
     inline FramePhones: TFramePhones
       Left = 253
       Top = 26
@@ -171,7 +179,7 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
         Height = 69
         ExplicitLeft = 0
         ExplicitWidth = 199
-        ExplicitHeight = 71
+        ExplicitHeight = 69
         inherited RzPanel2: TRzPanel [0]
           Left = 141
           Height = 43
@@ -183,16 +191,18 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
             Top = 13
             Height = 20
             Visible = False
-            ExplicitTop = 20
+            ExplicitTop = 13
             ExplicitHeight = 20
           end
           inherited btnAdd: TRzBitBtn [1]
             Top = -84
             Visible = False
+            ExplicitTop = -84
           end
           inherited btnEdit: TRzBitBtn [2]
             Top = -50
             Visible = False
+            ExplicitTop = -50
           end
         end
         inherited grdPhone: TcxGrid [1]
@@ -226,14 +236,6 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       TabOrder = 9
       Height = 21
       Width = 143
-    end
-    inherited cmbDateBirth: TcxDBDateEdit
-      Left = 340
-      Top = 5
-      ExplicitLeft = 340
-      ExplicitTop = 5
-      ExplicitWidth = 109
-      Width = 109
     end
   end
   inherited Query_upd: TIBUpdateSQL

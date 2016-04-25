@@ -42,7 +42,8 @@ uses
   frItemDomKLADR in 'Frames\frItemDomKLADR.pas' {FrameItemDomKLADR: TFrame},
   frPersonSmallFoto in 'Frames\frPersonSmallFoto.pas' {FramePersonSmallFoto: TFrame},
   frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame},
-  frPersonFullFoto in 'Frames\frPersonFullFoto.pas' {FramePersonFullFoto: TFrame};
+  frPersonFullFoto in 'Frames\frPersonFullFoto.pas' {FramePersonFullFoto: TFrame},
+  formWorkerShedule in 'formWorkerShedule.pas' {frmWorkerShedule};
 
 {$R *.res}
 
@@ -53,6 +54,7 @@ begin
 
   Application.CreateForm(TDataModuleMain, DM);
   Application.CreateForm(TfrmLogin, frmLogin);
+  Application.CreateForm(TfrmWorkerShedule, frmWorkerShedule);
   if frmLogin.ShowModal <> mrOk then
     Application.Terminate;
 

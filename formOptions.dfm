@@ -311,6 +311,7 @@ inherited frmOptions: TfrmOptions
     ParentFont = False
     TabOrder = 8
     ThemeAware = False
+    OnClick = btnTuneOPClentListClick
   end
   object rights_list: TIBQuery
     Database = DataModuleMain.DB

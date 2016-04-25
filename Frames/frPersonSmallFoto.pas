@@ -30,6 +30,8 @@ implementation
 
 {$R *.dfm}
 
+
+
 function TFramePersonSmallFoto.OpenData(Aid: integer): Boolean;
 begin
   Result := inherited OpenData(Aid);
@@ -53,8 +55,13 @@ end;
 
 function TFramePersonSmallFoto.SaveData: Boolean;
 begin
-  Result := true;
-  exit;
+  if self.ReadOnly then
+  begin
+    Result := true;
+    exit;
+  end
+  else
+    Result := inherited SaveData;
 end;
 
 procedure TFramePersonSmallFoto.SetTransaction(AValue: TIBTransaction);

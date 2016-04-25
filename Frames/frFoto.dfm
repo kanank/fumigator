@@ -40,6 +40,7 @@ inherited FrameFoto: TFrameFoto
       HotTrackColor = 10811858
       TabOrder = 1
       ThemeAware = False
+      OnClick = btnClearClick
     end
     object imgFoto: TcxDBImage
       Left = 4
@@ -48,7 +49,7 @@ inherited FrameFoto: TFrameFoto
       DataBinding.DataSource = DS
       Properties.CustomFilter = #1060#1086#1090#1086' (*.jpg)|*.jpg'
       Properties.GraphicClassName = 'TdxSmartImage'
-      Properties.PopupMenuLayout.MenuItems = [pmiCopy, pmiPaste, pmiDelete]
+      Properties.PopupMenuLayout.MenuItems = [pmiCopy, pmiPaste, pmiDelete, pmiLoad]
       TabOrder = 2
       Transparent = True
       Height = 183

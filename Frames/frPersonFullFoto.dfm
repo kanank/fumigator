@@ -52,10 +52,8 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
     inherited Label2: TLabel
       Left = 5
       Top = 71
-      Width = 68
       ExplicitLeft = 5
       ExplicitTop = 71
-      ExplicitWidth = 68
     end
     inherited Label1: TLabel
       Left = 54
@@ -171,8 +169,8 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         inherited btnLoad: TRzBitBtn
           Left = 6
           Width = 75
+          Visible = True
           ExplicitLeft = 6
-          ExplicitTop = 95
           ExplicitWidth = 75
         end
         inherited btnClear: TRzBitBtn
@@ -180,6 +178,7 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
           Top = 114
           Width = 75
           Height = 16
+          Visible = True
           ExplicitLeft = 6
           ExplicitTop = 114
           ExplicitWidth = 75
@@ -198,6 +197,12 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         Left = 16
         Top = 22
       end
+    end
+    inherited cmbDateBirth: TcxDBDateEdit
+      Left = 595
+      ExplicitLeft = 595
+      ExplicitWidth = 69
+      Width = 69
     end
     inherited FramePhones: TFramePhones
       Left = 1
@@ -218,22 +223,24 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
           Height = 74
           Align = alRight
           Visible = True
-          ExplicitLeft = 169
-          ExplicitTop = 15
+          ExplicitLeft = 142
           ExplicitHeight = 74
           inherited btnDel: TRzBitBtn
             Top = 51
+            Visible = True
             ExplicitTop = 51
           end
           inherited btnAdd: TRzBitBtn
             Top = 0
             Height = 25
+            Visible = True
             ExplicitTop = 0
             ExplicitHeight = 25
           end
           inherited btnEdit: TRzBitBtn
             Top = 25
             Height = 25
+            Visible = True
             ExplicitTop = 25
             ExplicitHeight = 25
           end
@@ -245,7 +252,7 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
           Height = 71
           ExplicitLeft = 3
           ExplicitTop = 14
-          ExplicitWidth = 165
+          ExplicitWidth = 138
           ExplicitHeight = 71
         end
       end
@@ -255,12 +262,6 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       Top = 32
       ExplicitLeft = 280
       ExplicitTop = 32
-    end
-    inherited cmbDateBirth: TcxDBDateEdit
-      Left = 595
-      ExplicitLeft = 595
-      ExplicitWidth = 69
-      Width = 69
     end
     inline FramePassport: TFramePassport
       Left = 0
@@ -287,13 +288,9 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         inherited Label3: TLabel
           Left = 231
           Top = 38
-          Width = 110
-          Height = 18
           WordWrap = True
           ExplicitLeft = 231
           ExplicitTop = 38
-          ExplicitWidth = 110
-          ExplicitHeight = 18
         end
         inherited Label4: TLabel
           Top = 38
@@ -355,10 +352,33 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
     Width = 143
   end
   inherited Query_upd: TIBUpdateSQL
+    ModifySQL.Strings = (
+      'update PERSONS set '
+      'NAME = :NAME, '
+      'SURNAME = :SURNAME , '
+      'FAMILY = :FAMILY , '
+      'DATE_BIRTH = :DATE_BIRTH , '
+      'SEX = :SEX,'
+      'PASS_ID = :PASS_ID,'
+      'PROF_ID = :PROF_ID,'
+      'PHOTO_ID = :PHOTO_ID,'
+      'EMAIL_WORK = :EMAIL_WORK '
+      'where id = :ID')
+    InsertSQL.Strings = (
+      
+        'insert into PERSONS(id, name, surname, family, date_birth, sex,p' +
+        'ass_id, prof_id, photo_id, email_work) '
+      
+        'values(:id, :name, :surname, :family, :date_birth, :sex, :pass_i' +
+        'd, :prof_id, :photo_id, :email_work)')
     Left = 88
     Top = 3
   end
   inherited Query: TIBQuery
+    SQL.Strings = (
+      'select *'
+      'from persons'
+      'where id = :person_id')
     Left = 56
     Top = 3
   end

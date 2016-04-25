@@ -54,6 +54,14 @@ inherited frmWorkers: TfrmWorkers
       object GridViewColumn5: TcxGridDBColumn
         Caption = #1044#1086#1083#1078#1085#1086#1089#1090#1100
         DataBinding.FieldName = 'PROFESSION_ID'
+        PropertiesClassName = 'TcxLookupComboBoxProperties'
+        Properties.GridMode = True
+        Properties.KeyFieldNames = 'ID'
+        Properties.ListColumns = <
+          item
+            FieldName = 'NAME'
+          end>
+        Properties.ListSource = DataModuleMain.DSDicWorkerProfs
         Width = 118
       end
       object GridViewColumn6: TcxGridDBColumn

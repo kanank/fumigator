@@ -17,13 +17,13 @@ inherited frmWorker: TfrmWorker
   inherited RzPanel1: TRzPanel
     Top = 281
     Width = 772
-    ExplicitTop = 578
-    ExplicitWidth = 714
+    ExplicitTop = 281
+    ExplicitWidth = 772
     inherited Exit_bnt: TRzButton
       Left = 638
       Top = 5
       Font.Color = clWindowText
-      ExplicitLeft = 580
+      ExplicitLeft = 638
       ExplicitTop = 5
     end
     object FullForm_btn: TRzButton
@@ -42,30 +42,31 @@ inherited frmWorker: TfrmWorker
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
+      Visible = False
       OnClick = FullForm_btnClick
     end
   end
   object RzPageControl1: TRzPageControl
-    AlignWithMargins = True
-    Left = 3
+    Left = 0
     Top = 0
-    Width = 766
+    Width = 772
     Height = 281
     Hint = ''
     Margins.Top = 0
     Margins.Bottom = 0
     ActivePage = Full_Tab
-    ActivePageDefault = Short_Tab
+    ActivePageDefault = Full_Tab
     Align = alClient
     ShowShadow = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 1
     TabStyle = tsBackSlant
     TextColors.Selected = 8224125
-    ExplicitWidth = 708
-    ExplicitHeight = 578
+    ExplicitLeft = 2
+    ExplicitWidth = 766
     FixedDimension = 19
     object Short_Tab: TRzTabSheet
+      TabVisible = False
       Caption = #1057#1086#1082#1088#1072#1097#1077#1085#1085#1072#1103' '#1092#1086#1088#1084#1072
       Font.Charset = DEFAULT_CHARSET
       Font.Color = -1
@@ -73,9 +74,8 @@ inherited frmWorker: TfrmWorker
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitWidth = 706
-      ExplicitHeight = 557
-      inline FramePersonSmall: TFramePersonSmallFoto
+      ExplicitWidth = 764
+      inline _FramePersonSmall: TFramePersonSmallFoto
         Left = -1
         Top = 8
         Width = 579
@@ -86,40 +86,16 @@ inherited frmWorker: TfrmWorker
         inherited RzPanel1: TRzPanel
           Top = 3
           ExplicitTop = 3
-          inherited Label2: TLabel
-            Width = 68
-            ExplicitWidth = 68
-          end
-          inherited edtCitizen: TcxDBTextEdit
-            ExplicitWidth = 0
-          end
           inherited FrameFoto: TFrameFoto
             inherited RzPanel4: TRzPanel
               Left = 2
               ExplicitLeft = 2
-              inherited btnLoad: TRzBitBtn
-                ExplicitTop = 95
-              end
-              inherited btnClear: TRzBitBtn
-                ExplicitTop = 95
-              end
             end
           end
           inherited FramePhones: TFramePhones
             inherited grpPhone: TRzGroupBox
               Height = 68
               ExplicitHeight = 68
-              inherited RzPanel2: TRzPanel
-                inherited btnDel: TRzBitBtn
-                  ExplicitTop = 13
-                end
-                inherited btnAdd: TRzBitBtn
-                  ExplicitTop = -84
-                end
-                inherited btnEdit: TRzBitBtn
-                  ExplicitTop = -50
-                end
-              end
               inherited grdPhone: TcxGrid
                 Width = 162
                 ExplicitWidth = 162
@@ -131,20 +107,19 @@ inherited frmWorker: TfrmWorker
     end
     object Full_Tab: TRzTabSheet
       Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1072#1103' '#1092#1086#1088#1084#1072
-      ExplicitWidth = 706
-      ExplicitHeight = 557
+      ExplicitWidth = 764
       object RzPanel3: TRzPanel
         Left = 0
         Top = 222
-        Width = 764
+        Width = 770
         Height = 38
         Align = alBottom
         BorderOuter = fsBump
         BorderSides = [sdTop, sdBottom]
         TabOrder = 0
-        ExplicitTop = 230
+        ExplicitWidth = 764
         DesignSize = (
-          764
+          770
           38)
         object Save_btn: TRzButton
           Left = 211
@@ -166,7 +141,7 @@ inherited frmWorker: TfrmWorker
           OnClick = Save_btnClick
         end
         object Cancel_btn: TRzButton
-          Left = 437
+          Left = 443
           Top = 5
           Width = 124
           Height = 29
@@ -183,17 +158,18 @@ inherited frmWorker: TfrmWorker
           ParentFont = False
           TabOrder = 1
           ThemeAware = False
+          ExplicitLeft = 437
         end
       end
       object RzPanel5: TRzPanel
         Left = 0
         Top = 0
-        Width = 764
+        Width = 770
         Height = 222
         Align = alClient
         BorderOuter = fsNone
         TabOrder = 1
-        ExplicitHeight = 238
+        ExplicitWidth = 764
         object Label25: TLabel
           Left = 6
           Top = 22
@@ -220,7 +196,7 @@ inherited frmWorker: TfrmWorker
           Font.Style = []
           ParentFont = False
         end
-        inline FramePersonFull: TFramePersonFullFoto
+        inline _FramePersonFull: TFramePersonFullFoto
           Left = 0
           Top = 1
           Width = 764
@@ -252,8 +228,6 @@ inherited frmWorker: TfrmWorker
                 ExplicitHeight = 88
                 inherited RzPanel2: TRzPanel
                   Height = 73
-                  ExplicitLeft = 142
-                  ExplicitTop = 14
                   ExplicitHeight = 73
                   inherited btnEdit: TRzBitBtn
                     Top = 24
@@ -263,16 +237,6 @@ inherited frmWorker: TfrmWorker
                 inherited grdPhone: TcxGrid
                   Width = 137
                   ExplicitWidth = 137
-                end
-              end
-            end
-            inherited FramePassport: TFramePassport
-              inherited RzGroupBox1: TRzGroupBox
-                inherited Label3: TLabel
-                  Width = 102
-                  Height = 13
-                  ExplicitWidth = 102
-                  ExplicitHeight = 13
                 end
               end
             end

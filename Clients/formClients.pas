@@ -33,6 +33,7 @@ type
     procedure btnCliClick(Sender: TObject);
     procedure btnLidClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Del_btnClick(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -53,6 +54,7 @@ implementation
 
 {$R *.dfm}
 uses
+  IBX.IBQuery,
   DM_Main, frmMain, formClientFiz, formClientUr, CommonTypes;
 
 
@@ -87,6 +89,14 @@ begin
   DS.DataSet.OnFilterRecord := Self.FilterRecord;
 end;
 
+procedure TfrmClients.Del_btnClick(Sender: TObject);
+begin
+  DS.DataSet.FieldByName('active').AsInteger := 0;
+  DS.DataSet.Post;
+  TIBQuery(DS.DataSet).ApplyUpdates;
+
+end;
+
 procedure TfrmClients.Edit_btnClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
@@ -112,7 +122,8 @@ end;
 
 procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
 begin
-  Accept := (DataSet.FieldByName('type_cli').AsInteger = isUr) and
+  Accept := (DataSet.FieldByName('active').AsInteger = 1) and
+            (DataSet.FieldByName('type_cli').AsInteger = isUr) and
             (DataSet.FieldByName('status_id').AsInteger = status);
 end;
 

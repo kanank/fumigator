@@ -9,7 +9,7 @@ uses
   cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, cxGridLevel,
   cxClasses, cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses,
-  cxLocalization;
+  cxLocalization, cxDBLookupComboBox;
 
 type
   TfrmWorkers = class(TSprForm)

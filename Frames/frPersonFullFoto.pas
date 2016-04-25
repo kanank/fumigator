@@ -47,7 +47,7 @@ begin
     FramePhones.AddParam('CLIENT_ID', Query.FieldByName('ID'));
     FramePhones.TypePhone := 1;
     FramePhones.OpenData;
-    FrameFoto.AddParam('ID', Query.FieldByName('PHONE_ID'));
+    FrameFoto.AddParam('ID', Query.FieldByName('PHOTO_ID'));
     FrameFoto.OpenData;
     Result := True;
   except
@@ -58,8 +58,6 @@ end;
 function TFramePersonFullFoto.SaveData: Boolean;
 begin
   Result := false;
-
-  // если добавлялся паспорт
 
   try
     try

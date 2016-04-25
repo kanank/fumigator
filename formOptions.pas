@@ -57,6 +57,7 @@ type
     procedure DS_rights_listDataChange(Sender: TObject; Field: TField);
     procedure btnAcceptClick(Sender: TObject);
     procedure btnTuneDictionariesClick(Sender: TObject);
+    procedure btnTuneOPClentListClick(Sender: TObject);
   private
     procedure FilterRights;
   public
@@ -71,7 +72,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Datasnap.Provider, formDictionaries;
+  Datasnap.Provider, formDictionaries, formWorkerShedule;
 
 procedure TfrmOptions.btnTuneDictionariesClick(Sender: TObject);
 var
@@ -83,6 +84,18 @@ begin
   finally
     frm.Free;
   end;
+end;
+
+procedure TfrmOptions.btnTuneOPClentListClick(Sender: TObject);
+begin
+  try
+    DM.GetDataset(DM.Clients);
+    frmWorkerShedule := TfrmWorkerShedule.Create(self);
+    frmWorkerShedule.ShowModal;
+  finally
+    FreeAndNil(frmWorkerShedule);
+  end;
+
 end;
 
 procedure TfrmOptions.btnAcceptClick(Sender: TObject);

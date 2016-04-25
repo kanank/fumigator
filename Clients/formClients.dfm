@@ -78,6 +78,7 @@ inherited frmClients: TfrmClients
     end
     inherited Del_btn: TRzButton
       Font.Color = clBlack
+      OnClick = Del_btnClick
     end
     inherited Add_btn: TRzButton
       Font.Color = clBlack

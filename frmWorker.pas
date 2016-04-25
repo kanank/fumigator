@@ -25,8 +25,8 @@ type
     Cancel_btn: TRzButton;
     RzPanel5: TRzPanel;
     FullForm_btn: TRzButton;
-    FramePersonSmall: TFramePersonSmallFoto;
-    FramePersonFull: TFramePersonFullFoto;
+    _FramePersonSmall: TFramePersonSmallFoto;
+    _FramePersonFull: TFramePersonFullFoto;
     RzPanel4: TRzPanel;
     Label28: TLabel;
     ATSNUM_edt: TcxDBTextEdit;
@@ -58,7 +58,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils, CommonTypes, IBX.IBQuery;
+  System.StrUtils, CommonTypes, IBX.IBQuery, frPersonFull;
 
 
 procedure TfrmWorker.FormCreate(Sender: TObject);
@@ -92,21 +92,30 @@ begin
     asShow:
       begin
         Title := Title + ' [просмотр]';
+
+        Short_tab.TabVisible := True;
+        RzPageControl1.ActivePage := Short_Tab;
+        FullForm_btn.Visible := True;
+        self.Constraints.MaxHeight := _FramePersonSmall.Height + 20 + RzPanel1.Height;
+        self.Constraints.MaxWidth  := _FramePersonSmall.Width + 2;
+        self.Constraints.MinHeight := _FramePersonSmall.Height + 20 + RzPanel1.Height;
+        self.Constraints.MinWidth  := _FramePersonSmall.Width + 2;
       end;
   end;
 
   if fFrmParam.action <> asCreate then
   begin
-    FramePersonSmall.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
-    FramePersonSmall.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
-    FramePersonSmall.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
-    FramePersonSmall.OpenData;
+    _FramePersonSmall.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+    _FramePersonSmall.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+    _FramePersonSmall.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
+    _FramePersonSmall.OpenData;
+    _FramePersonSmall.ReadOnly := True;
   end;
 
-  FramePersonFull.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
-  FramePersonFull.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
-  FramePersonFull.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
-  FramePersonFull.OpenData;
+  _FramePersonFull.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  _FramePersonFull.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  _FramePersonFull.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
+  _FramePersonFull.OpenData;
 end;
 
 
@@ -115,10 +124,15 @@ end;
 
 procedure TfrmWorker.FullForm_btnClick(Sender: TObject);
 begin
-  self.Constraints.MaxHeight := 363 ;
-  self.Constraints.MaxWidth  := 788 ;
-  self.Constraints.MinHeight := 363 ;
-  self.Constraints.MinWidth  := 788 ;
+//  self.Constraints.MaxHeight := 363 ;
+//  self.Constraints.MaxWidth  := 788 ;
+//  self.Constraints.MinHeight := 363 ;
+//  self.Constraints.MinWidth  := 788 ;
+
+  self.Constraints.MaxHeight := _FramePersonFull.Height + 20 + RzPanel1.Height;
+  self.Constraints.MaxWidth  := _FramePersonFull.Width + 2;
+  self.Constraints.MinHeight := self.Constraints.MaxHeight;
+  self.Constraints.MinWidth  := self.Constraints.MaxWidth;
 
   RzPageControl1.ActivePage := Full_Tab;
   Short_Tab.TabVisible := False;
@@ -138,23 +152,20 @@ begin
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
       //сохраняем полное имя
       DS.DataSet.FieldByName('full_name').AsString :=
-        DM.GetPersonFullName(FramePersonFull.Query.FieldByName('FAMILY').AsString,
-          FramePersonFull.Query.FieldByName('NAME').AsString,
-          FramePersonFull.Query.FieldByName('SURNAME').AsString);
-      DS.DataSet.FieldByName('full_name').AsString :=
-        //сохраняем короткое имя
-        DM.GetPersonShortName(FramePersonFull.Query.FieldByName('FAMILY').AsString,
-          FramePersonFull.Query.FieldByName('NAME').AsString,
-          FramePersonFull.Query.FieldByName('SURNAME').AsString);
+        _FramePersonFull.FullName;
+
+      //сохраняем короткое имя
+      DS.DataSet.FieldByName('short_name').AsString :=
+        _FramePersonFull.ShortName;
+
       //сохраняем ссылки
-      res := FramePersonFull.SaveData;
+      res := _FramePersonFull.SaveData;
       if not res then
         Exit;
 
-
       // PERSON_ID
-      if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePersonFull.Id then
-        DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePersonFull.Id;
+      if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> _FramePersonFull.Id then
+        DS.DataSet.FieldByName('PERSON_ID').AsInteger := _FramePersonFull.Id;
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;

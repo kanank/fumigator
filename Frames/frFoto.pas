@@ -16,6 +16,7 @@ type
     btnClear: TRzBitBtn;
     imgFoto: TcxDBImage;
     procedure btnLoadClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,6 +29,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFrameFoto.btnClearClick(Sender: TObject);
+begin
+  inherited;
+  imgFoto.Clear;
+end;
 
 procedure TFrameFoto.btnLoadClick(Sender: TObject);
 begin

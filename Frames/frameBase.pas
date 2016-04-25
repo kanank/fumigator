@@ -20,14 +20,19 @@ type
     function QuerySetParams: Boolean;
   protected
     fErr: string;
+    fReadOnly: boolean;
     fAutoAppend: Boolean;
     procedure SetTransaction(AValue: TIBTransaction); virtual;
+    procedure SetReadOnly(AValue: boolean);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function OpenData(Aid: integer = 0): Boolean; virtual;
     function SaveData: Boolean;  virtual;
     function AddParam(Aname: string; Afield: TField): integer;
+    procedure SetComponentProp(AComponent: TComponent; Aproperty: string; AValue: Variant);
+
+    property ReadOnly: boolean read fReadOnly write SetReadOnly;
     property QueryParams:TStringList read FParams write FParams;
     property FieldId: string read FFieldId write FFieldId;
     property Id: Integer read FId write FId;
@@ -40,7 +45,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, System.TypInfo;
 
 constructor TDbFrameBase.Create(AOwner: TComponent);
 begin
@@ -95,6 +100,26 @@ begin
   except
     Result := false;
     fErr := 'SaveData error:'+ #13#10 + Exception(ExceptObject).Message;
+  end;
+end;
+
+procedure TDbFrameBase.SetComponentProp(AComponent: TComponent; Aproperty: string; AValue: Variant);
+var
+  pi: PPropInfo;
+begin
+  pi := GetPropInfo(AComponent, AProperty);
+  if pi <> nil then
+    SetVariantProp(AComponent, pi, AValue);
+end;
+
+procedure TDbFrameBase.SetReadOnly(AValue: boolean);
+var
+  i:integer;
+begin
+  for I := 0 to self.ComponentCount -  1 do
+  begin
+    SetComponentProp(self.Components[i], 'readonly', AValue);
+    SetComponentProp(self.Components[i], 'enabled',  AValue)
   end;
 end;
 

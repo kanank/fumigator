@@ -62,8 +62,6 @@ inherited frmWorker: TfrmWorker
     TabOrder = 1
     TabStyle = tsBackSlant
     TextColors.Selected = 8224125
-    ExplicitLeft = 2
-    ExplicitWidth = 766
     FixedDimension = 19
     object Short_Tab: TRzTabSheet
       TabVisible = False
@@ -74,7 +72,6 @@ inherited frmWorker: TfrmWorker
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitWidth = 764
       inline _FramePersonSmall: TFramePersonSmallFoto
         Left = -1
         Top = 8
@@ -107,7 +104,6 @@ inherited frmWorker: TfrmWorker
     end
     object Full_Tab: TRzTabSheet
       Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1072#1103' '#1092#1086#1088#1084#1072
-      ExplicitWidth = 764
       object RzPanel3: TRzPanel
         Left = 0
         Top = 222
@@ -117,7 +113,6 @@ inherited frmWorker: TfrmWorker
         BorderOuter = fsBump
         BorderSides = [sdTop, sdBottom]
         TabOrder = 0
-        ExplicitWidth = 764
         DesignSize = (
           770
           38)
@@ -158,7 +153,6 @@ inherited frmWorker: TfrmWorker
           ParentFont = False
           TabOrder = 1
           ThemeAware = False
-          ExplicitLeft = 437
         end
       end
       object RzPanel5: TRzPanel
@@ -169,7 +163,6 @@ inherited frmWorker: TfrmWorker
         Align = alClient
         BorderOuter = fsNone
         TabOrder = 1
-        ExplicitWidth = 764
         object Label25: TLabel
           Left = 6
           Top = 22
@@ -306,6 +299,7 @@ inherited frmWorker: TfrmWorker
             Width = 30
             Height = 13
             Caption = #1051#1086#1075#1080#1085
+            FocusControl = cxDBTextEdit1
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clBlack
             Font.Height = -11
@@ -327,15 +321,18 @@ inherited frmWorker: TfrmWorker
             ParentFont = False
           end
           object cxDBTextEdit1: TcxDBTextEdit
-            Left = 43
-            Top = 6
+            Left = 42
+            Top = 9
             BeepOnEnter = False
             DataBinding.DataField = 'USER_LOGIN'
             DataBinding.DataSource = DS
+            Style.BorderColor = clWindowFrame
+            Style.BorderStyle = ebsFlat
+            Style.Color = clWindow
             Style.HotTrack = False
             Style.LookAndFeel.Kind = lfFlat
             Style.LookAndFeel.NativeStyle = True
-            Style.TransparentBorder = True
+            Style.TransparentBorder = False
             StyleDisabled.LookAndFeel.Kind = lfFlat
             StyleDisabled.LookAndFeel.NativeStyle = True
             StyleFocused.LookAndFeel.Kind = lfFlat
@@ -343,6 +340,7 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
+            OnDblClick = cxDBTextEdit1DblClick
             Width = 110
           end
           object cxDBTextEdit2: TcxDBTextEdit

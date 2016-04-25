@@ -31,6 +31,7 @@ type
     function SaveData: Boolean;  virtual;
     function AddParam(Aname: string; Afield: TField): integer;
     procedure SetComponentProp(AComponent: TComponent; Aproperty: string; AValue: Variant);
+    function ValidateData: boolean; virtual;
 
     property ReadOnly: boolean read fReadOnly write SetReadOnly;
     property QueryParams:TStringList read FParams write FParams;
@@ -45,7 +46,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, System.TypInfo;
+  DM_Main, System.TypInfo, ClassFrmBase;
 
 constructor TDbFrameBase.Create(AOwner: TComponent);
 begin
@@ -130,6 +131,11 @@ begin
     fTransaction := AValue;
     Query.Transaction := AValue;
   end
+end;
+
+function TDbFrameBase.ValidateData: boolean;
+begin
+  Result := TBaseForm.ValidateData(self.DS, self);
 end;
 
 function TDbFrameBase.AddParam(Aname: string; Afield: TField): integer;

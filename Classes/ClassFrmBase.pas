@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, dxGDIPlusClasses, Vcl.ExtCtrls,
-  CommonTypes;
+  CommonTypes, Data.DB;
 
 const
   AppCaption = 'Первая фумигационная компания';
@@ -20,6 +20,7 @@ type
     fFrmParam: TFrmCreateParam;
   public
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
+    class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil): Boolean; //проверка заполненности необходимых полей
   published
     property Title: string read fTitle write SetCaption;
   end;
@@ -28,6 +29,8 @@ type
 implementation
 
 {$R *.dfm}
+uses
+  System.TypInfo, cxDBEdit, frameBase;
 
 constructor TBaseForm.Create(AOwner: TComponent; ATitle: string=''; AParam: PFrmCreateParam=nil);
 begin
@@ -45,5 +48,62 @@ begin
   fTitle := AValue;
   Caption := AppCaption + '. ' + AValue;
 end;
+
+class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil): Boolean;
+
+  function SetRequiredBorder(AComponent: TComponent; AField: TField): boolean;
+  var
+    c: TComponent;
+    i: integer;
+    res: Boolean;
+  begin
+    Result := not AField.IsNull;
+    res := True;
+    for i := 0 to AComponent.ComponentCount - 1 do
+    begin
+      c := AComponent.Components[i];
+      if c.ComponentCount > 0 then
+      begin
+        SetRequiredBorder(C, AField);
+        if C is TDbFrameBase then
+          if not TDbFrameBase(C).ValidateData then
+            res := False;
+      end;
+
+      if (C is TcxDBTextEdit) and
+           (TcxDBTextEdit(C).DataBinding.Field = AField) then
+        if AField.IsNull then
+        begin
+          TcxDBTextEdit(C).Style.Color := clSkyBlue;
+          TcxDBTextEdit(C).Style.TransparentBorder := False;
+        end
+        else
+        begin
+          TcxDBTextEdit(C).Style.Color := clWindow;
+          TcxDBTextEdit(C).Style.TransparentBorder := true;
+        end;
+    end;
+    Result := res;
+  end;
+
+var
+  i: Integer;
+  res, resAll: Boolean;
+begin
+  if AComponent = nil then
+    AComponent := ADataSource.Owner;
+
+  resAll := True;
+  if Assigned(ADataSource.DataSet) then
+    for i  := 0 to ADataSource.DataSet.FieldCount - 1 do
+      if ADataSource.DataSet.Fields[i].Required then
+      begin
+        res := SetRequiredBorder(AComponent, ADataSource.DataSet.Fields[i]);
+        if not res then
+          resAll := False;
+      end;
+  Result := resAll;
+end;
+
 
 end.

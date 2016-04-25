@@ -44,6 +44,7 @@ type
     procedure FullForm_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Save_btnClick(Sender: TObject);
+    procedure cxDBTextEdit1DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,6 +61,12 @@ implementation
 uses
   System.StrUtils, CommonTypes, IBX.IBQuery, frPersonFull;
 
+
+procedure TfrmWorker.cxDBTextEdit1DblClick(Sender: TObject);
+begin
+  inherited;
+   ValidateData(self.DS, self);
+end;
 
 procedure TfrmWorker.FormCreate(Sender: TObject);
 begin
@@ -97,9 +104,9 @@ begin
         RzPageControl1.ActivePage := Short_Tab;
         FullForm_btn.Visible := True;
         self.Constraints.MaxHeight := _FramePersonSmall.Height + 20 + RzPanel1.Height;
-        self.Constraints.MaxWidth  := _FramePersonSmall.Width + 2;
+        self.Constraints.MaxWidth  := _FramePersonSmall.Width + 10;
         self.Constraints.MinHeight := _FramePersonSmall.Height + 20 + RzPanel1.Height;
-        self.Constraints.MinWidth  := _FramePersonSmall.Width + 2;
+        self.Constraints.MinWidth  := _FramePersonSmall.Width + 10;
       end;
   end;
 
@@ -129,8 +136,8 @@ begin
 //  self.Constraints.MinHeight := 363 ;
 //  self.Constraints.MinWidth  := 788 ;
 
-  self.Constraints.MaxHeight := _FramePersonFull.Height + 20 + RzPanel1.Height;
-  self.Constraints.MaxWidth  := _FramePersonFull.Width + 2;
+  self.Constraints.MaxHeight := RzPageControl1.Height + 40 + RzPanel1.Height;
+  self.Constraints.MaxWidth  := RzPageControl1.Width + 10;
   self.Constraints.MinHeight := self.Constraints.MaxHeight;
   self.Constraints.MinWidth  := self.Constraints.MaxWidth;
 

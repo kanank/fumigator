@@ -45,6 +45,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Save_btnClick(Sender: TObject);
     procedure cxDBTextEdit1DblClick(Sender: TObject);
+    procedure Cancel_btnClick(Sender: TObject);
+    procedure Exit_bntClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -62,10 +64,32 @@ uses
   System.StrUtils, CommonTypes, IBX.IBQuery, frPersonFull;
 
 
+procedure TfrmWorker.Cancel_btnClick(Sender: TObject);
+begin
+  if DS.DataSet.Modified then
+  begin
+    DS.DataSet.Cancel;
+    TIBQuery(DS.DataSet).CancelUpdates;
+    TIBQuery(DS.DataSet).RevertRecord;
+  end;
+  _FramePersonFull.Cancel;
+end;
+
 procedure TfrmWorker.cxDBTextEdit1DblClick(Sender: TObject);
 begin
   inherited;
    ValidateData(self.DS, self);
+end;
+
+procedure TfrmWorker.Exit_bntClick(Sender: TObject);
+begin
+  if DS.DataSet.Modified then
+    if Application.MessageBox('Имеются несохраненные изменения!' + #13#10 +
+        'Продолжить без сохранения?', 'Внимание',
+        MB_ICONWARNING + MB_YESNO) = IdNo then
+      TButton(Sender).ModalResult := mrNone
+    else
+      Cancel_btn.Click;
 end;
 
 procedure TfrmWorker.FormCreate(Sender: TObject);
@@ -152,18 +176,31 @@ procedure TfrmWorker.Save_btnClick(Sender: TObject);
 var
   res: Boolean;
 begin
+  //сохраняем полное имя
+  DS.DataSet.FieldByName('full_name').AsString :=
+    _FramePersonFull.FullName;
+
+  //сохраняем короткое имя
+  DS.DataSet.FieldByName('short_name').AsString :=
+    _FramePersonFull.ShortName;
+
+  //проверка
   res := False;
+//  if not ValidateData(DS, self) then
+//  begin
+//    Application.MessageBox('Не заполнены все необходимые поля!',
+//     'Внимание', MB_ICONWARNING + MB_OK);
+//    TRzButton(Sender).ModalResult := mrNone;
+//    Exit;
+//  end
+//  else
+    TButton(Sender).ModalResult := mrOk;
+
+  //прошли проверку
   try
     try
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
-      //сохраняем полное имя
-      DS.DataSet.FieldByName('full_name').AsString :=
-        _FramePersonFull.FullName;
-
-      //сохраняем короткое имя
-      DS.DataSet.FieldByName('short_name').AsString :=
-        _FramePersonFull.ShortName;
 
       //сохраняем ссылки
       res := _FramePersonFull.SaveData;
@@ -176,6 +213,7 @@ begin
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
+      TIBQuery(DS.DataSet).Refresh;
 
       //услуги
       //res := FrameUslugi.SaveData;

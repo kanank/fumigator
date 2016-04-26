@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -68,7 +70,10 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
-      'select * from WORKERS')
+      
+        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
+        ' from workers w'
+      'left join persons p on p.id = w.person_id')
     UpdateObject = Worker_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_WORKERS_ID'
@@ -84,10 +89,12 @@ object DataModuleMain: TDataModuleMain
   end
   object Worker_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
-      'Select *'
-      'from workers'
+      
+        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
+        ' from workers w'
+      'left join persons p on p.id = w.person_id'
       'where'
-      '  ID = :ID')
+      ' w. ID = :ID')
     ModifySQL.Strings = (
       'update WORKERS set'
       #9'PERSON_ID = :PERSON_ID,'
@@ -931,6 +938,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'

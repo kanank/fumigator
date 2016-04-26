@@ -63,6 +63,7 @@ function TFrameClientExtUr.SaveData: Boolean;
 var
   client_id, ind: Integer;
 begin
+  client_id := 0;
   //подготовка
   ind := QueryParams.IndexOf('CLIENT_ID');
   if ind > -1 then

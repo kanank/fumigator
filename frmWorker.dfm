@@ -17,12 +17,13 @@ inherited frmWorker: TfrmWorker
   inherited RzPanel1: TRzPanel
     Top = 281
     Width = 772
-    ExplicitTop = 281
+    ExplicitTop = 282
     ExplicitWidth = 772
     inherited Exit_bnt: TRzButton
       Left = 638
       Top = 5
       Font.Color = clWindowText
+      OnClick = Exit_bntClick
       ExplicitLeft = 638
       ExplicitTop = 5
     end
@@ -153,6 +154,7 @@ inherited frmWorker: TfrmWorker
           ParentFont = False
           TabOrder = 1
           ThemeAware = False
+          OnClick = Cancel_btnClick
         end
       end
       object RzPanel5: TRzPanel
@@ -261,7 +263,6 @@ inherited frmWorker: TfrmWorker
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
-            Visible = False
           end
           object ATSNUM_edt: TcxDBTextEdit
             Left = 133
@@ -282,7 +283,6 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
-            Visible = False
             Width = 82
           end
         end
@@ -340,7 +340,6 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
-            OnDblClick = cxDBTextEdit1DblClick
             Width = 110
           end
           object cxDBTextEdit2: TcxDBTextEdit
@@ -386,7 +385,6 @@ inherited frmWorker: TfrmWorker
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
-            Visible = False
           end
           object cxDBTextEdit3: TcxDBTextEdit
             Left = 133
@@ -407,7 +405,6 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
-            Visible = False
             Width = 82
           end
         end

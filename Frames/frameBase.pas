@@ -32,6 +32,7 @@ type
     function AddParam(Aname: string; Afield: TField): integer;
     procedure SetComponentProp(AComponent: TComponent; Aproperty: string; AValue: Variant);
     function ValidateData: boolean; virtual;
+    function Cancel: boolean; //отмена изменений
 
     property ReadOnly: boolean read fReadOnly write SetReadOnly;
     property QueryParams:TStringList read FParams write FParams;
@@ -47,6 +48,30 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, System.TypInfo, ClassFrmBase;
+
+function TDbFrameBase.Cancel: boolean;
+var
+  i: integer;
+begin
+  Result := False;
+  try
+    DS.DataSet.Cancel;
+    TIBQuery(DS.DataSet).CancelUpdates;
+    Result := True;
+  except
+    Result := False;
+  end;
+
+  if Result then
+
+  for i := 0 to ComponentCount - 1 do
+    if Components[i] is TDbFrameBase then
+    begin
+      Result := TDbFrameBase(Components[i]).Cancel;
+      if not Result then
+        Break;
+    end;
+end;
 
 constructor TDbFrameBase.Create(AOwner: TComponent);
 begin

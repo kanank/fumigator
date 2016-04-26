@@ -38,17 +38,17 @@ inherited frmWorkers: TfrmWorkers
       end
       object GridViewColumn2: TcxGridDBColumn
         Caption = #1060#1072#1084#1080#1083#1080#1103
-        DataBinding.FieldName = 'W_FAMILY'
+        DataBinding.FieldName = 'FAMILY'
         Width = 161
       end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #1048#1084#1103
-        DataBinding.FieldName = 'W_NAME'
+        DataBinding.FieldName = 'NAME'
         Width = 103
       end
       object GridViewColumn4: TcxGridDBColumn
         Caption = #1054#1090#1095#1077#1089#1090#1074#1086
-        DataBinding.FieldName = 'W_OTCH'
+        DataBinding.FieldName = 'SURNAME'
         Width = 100
       end
       object GridViewColumn5: TcxGridDBColumn

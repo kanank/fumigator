@@ -30,7 +30,7 @@ implementation
 
 {$R *.dfm}
 uses
-  System.TypInfo, cxDBEdit, frameBase;
+  System.TypInfo, IBX.IBQuery, cxDBEdit, cxDBLookupComboBox, frameBase;
 
 constructor TBaseForm.Create(AOwner: TComponent; ATitle: string=''; AParam: PFrmCreateParam=nil);
 begin
@@ -59,18 +59,19 @@ class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TCom
   begin
     Result := not AField.IsNull;
     res := True;
+
     for i := 0 to AComponent.ComponentCount - 1 do
     begin
       c := AComponent.Components[i];
       if c.ComponentCount > 0 then
       begin
         SetRequiredBorder(C, AField);
-        if C is TDbFrameBase then
+        if (C is TDbFrameBase) and not TDbFrameBase(C).ReadOnly then
           if not TDbFrameBase(C).ValidateData then
             res := False;
       end;
 
-      if (C is TcxDBTextEdit) and
+      if ((C is TcxDBTextEdit) or (C is TcxDBLookupComboBox)) and
            (TcxDBTextEdit(C).DataBinding.Field = AField) then
         if AField.IsNull then
         begin
@@ -83,7 +84,7 @@ class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TCom
           TcxDBTextEdit(C).Style.TransparentBorder := true;
         end;
     end;
-    Result := res;
+    Result := Result and res;
   end;
 
 var
@@ -96,7 +97,9 @@ begin
   resAll := True;
   if Assigned(ADataSource.DataSet) then
     for i  := 0 to ADataSource.DataSet.FieldCount - 1 do
-      if ADataSource.DataSet.Fields[i].Required then
+      if ADataSource.DataSet.Fields[i].Required and
+        (TIBQuery(ADataSource.DataSet).GeneratorField.Field <>
+          ADataSource.DataSet.Fields[i].FieldName) then //поля генератора исключаем из проверки
       begin
         res := SetRequiredBorder(AComponent, ADataSource.DataSet.Fields[i]);
         if not res then

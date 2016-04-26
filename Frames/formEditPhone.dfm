@@ -64,10 +64,10 @@ inherited frmEditPhone: TfrmEditPhone
     Width = 121
   end
   object cmbPhoneType: TcxDBLookupComboBox [6]
-    Left = 41
+    Left = 43
     Top = 48
     DataBinding.DataField = 'PHONE_TYPE_ID'
-    DataBinding.DataSource = DataModuleMain.DsDicPhoneType
+    DataBinding.DataSource = DS
     Properties.KeyFieldNames = 'ID'
     Properties.ListColumns = <
       item

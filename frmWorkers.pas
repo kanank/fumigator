@@ -21,11 +21,15 @@ type
     GridViewColumn6: TcxGridDBColumn;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
+    StyleHeader: TcxStyle;
     procedure Add_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
+    procedure Del_btnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
-    { Private declarations }
+    procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
   public
     { Public declarations }
   end;
@@ -41,12 +45,6 @@ implementation
    DM_Main, CommonVars, CommonTypes, frmWorker;
 
 procedure TfrmWorkers.Add_btnClick(Sender: TObject);
-(*begin
-  if DM.Worker_Q.Active then
-    DM.Worker_Q.Close;
-  DM.Worker_Q.ParamByName('ID').AsInteger := 0;
-  DM.Worker_Q.Open;
-  DM.ShowWorkerForm (DM.DsWorker, 0, asCreate, self, True);*)
 var
   prm: TFrmCreateParam;
 begin
@@ -59,16 +57,20 @@ begin
   FreeAndNil(formWorker);
 end;
 
-procedure TfrmWorkers.Edit_btnClick(Sender: TObject);
-(*var
-  id: integer;
+procedure TfrmWorkers.Del_btnClick(Sender: TObject);
 begin
-  id := DM.Workers.FieldByName('ID').AsInteger;
-  if DM.Worker_Q.Active then
-    DM.Worker_Q.Close;
-  DM.Worker_Q.ParamByName('ID').AsInteger := id;
-  DM.Worker_Q.Open;
-  DM.ShowWorkerForm (DM.DsWorker, id, asEdit, self, true);*)
+  try
+//    DM.Workers.Edit;
+//    DM.Workers.FieldByName('IS_DELETED').AsInteger := 1;
+//    DM.Workers.Post;
+    DM.Workers.Delete;
+    DM.Workers.ApplyUpdates;
+    DM.Workers.Transaction.CommitRetaining;
+  finally
+  end;
+end;
+
+procedure TfrmWorkers.Edit_btnClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
 begin
@@ -81,5 +83,23 @@ begin
   FreeAndNil(formWorker);
 end;
 
+procedure TfrmWorkers.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
+begin
+  Accept := (DataSet.FieldByName('is_deleted').AsInteger = 0);
+end;
+
+procedure TfrmWorkers.FormCreate(Sender: TObject);
+begin
+  inherited;
+  DM.Workers.OnFilterRecord := FilterRecord;
+  DM.Workers.Filtered := True;
+end;
+
+procedure TfrmWorkers.FormDestroy(Sender: TObject);
+begin
+  DM.Workers.OnFilterRecord := nil;
+  DM.Workers.Filtered := False;
+  inherited;
+end;
 
 end.

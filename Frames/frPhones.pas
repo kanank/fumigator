@@ -65,7 +65,8 @@ begin
         Query.Edit;
       Query.FieldByName('Client_id').AsInteger := client_id;
     end;
-    if Query.FieldByName('type').AsInteger <> typePhone then
+    if Query.FieldByName('type').IsNull or
+      (Query.FieldByName('type').AsInteger <> typePhone) then
     begin
       if Query.State = dsBrowse then
         Query.Edit;

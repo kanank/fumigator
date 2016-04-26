@@ -20,6 +20,7 @@ type
     edtEmailPrivate: TcxDBTextEdit;
     Label5: TLabel;
     edtEmailWork: TcxDBTextEdit;
+    procedure FramePhonesbtnAddClick(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -36,6 +37,13 @@ implementation
    DM_Main;
 
 { TFramePersonFull }
+
+procedure TFramePersonFull.FramePhonesbtnAddClick(Sender: TObject);
+begin
+  inherited;
+  FramePhones.btnAddClick(Sender);
+
+end;
 
 function TFramePersonFull.OpenData(Aid: integer): Boolean;
 begin

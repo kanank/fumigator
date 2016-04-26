@@ -86,7 +86,7 @@ inherited FramePassport: TFramePassport
       Left = 119
       Top = 66
       BeepOnEnter = False
-      DataBinding.DataField = 'PASE_CODE'
+      DataBinding.DataField = 'PASS_CODE'
       DataBinding.DataSource = DS
       Properties.MaxLength = 16
       Properties.ValidationOptions = [evoShowErrorIcon]

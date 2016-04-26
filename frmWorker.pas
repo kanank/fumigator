@@ -213,6 +213,7 @@ begin
 
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
+      TIBQuery(DS.DataSet).Transaction.CommitRetaining;
       TIBQuery(DS.DataSet).Refresh;
 
       //услуги

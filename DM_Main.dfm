@@ -72,7 +72,9 @@ object DataModuleMain: TDataModuleMain
     SQL.Strings = (
       
         'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
-        ' from workers w'
+        ','
+      'is_deleted'
+      'from workers w'
       'left join persons p on p.id = w.person_id')
     UpdateObject = Worker_upd
     GeneratorField.Field = 'ID'
@@ -137,9 +139,10 @@ object DataModuleMain: TDataModuleMain
       #9':USER_BLOCKED,'
       #9':ATS_NUM)'#9)
     DeleteSQL.Strings = (
-      'delete from workers'
+      'update workers'
+      'set IS_DELETED = 1'
       'where'
-      '  ID = :OLD_ID')
+      'ID = :ID')
     Left = 728
     Top = 56
   end

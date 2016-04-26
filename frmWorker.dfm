@@ -17,7 +17,7 @@ inherited frmWorker: TfrmWorker
   inherited RzPanel1: TRzPanel
     Top = 281
     Width = 772
-    ExplicitTop = 282
+    ExplicitTop = 281
     ExplicitWidth = 772
     inherited Exit_bnt: TRzButton
       Left = 638
@@ -118,8 +118,8 @@ inherited frmWorker: TfrmWorker
           770
           38)
         object Save_btn: TRzButton
-          Left = 211
-          Top = 5
+          Left = 216
+          Top = 4
           Width = 121
           Height = 29
           ModalResult = 1

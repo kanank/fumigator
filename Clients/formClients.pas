@@ -64,7 +64,6 @@ begin
     formMain.NewURClnt_mi.Click
   else
     formMain.NewFizClnt_mi.Click;
-
 end;
 
 procedure TfrmClients.btnCliClick(Sender: TObject);
@@ -94,12 +93,14 @@ begin
   DS.DataSet.FieldByName('active').AsInteger := 0;
   DS.DataSet.Post;
   TIBQuery(DS.DataSet).ApplyUpdates;
+  TIBQuery(DS.DataSet).Transaction.CommitRetaining;
 
 end;
 
 procedure TfrmClients.Edit_btnClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
+  mres: TModalResult;
 begin
   //if not DM.Clients.Active then
   //  DM.Clients.Open;
@@ -109,15 +110,21 @@ begin
   if fIsUr = 0 then
   begin
     frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
-    frmClientFiz.ShowModal;
+    mres := frmClientFiz.ShowModal;
     FreeAndNil(frmClientFiz);
   end
   else
   begin
     frmClientUr := TfrmClientUr.Create(self, '', @prm);
-    frmClientUr.ShowModal;
+    mres := frmClientUr.ShowModal;
     FreeAndNil(frmClientUr);
-  end
+  end;
+
+  if mres <> mrCancel then
+  begin
+    //DM.Clients.Transaction.CommitRetaining;
+    DM.Clients.Refresh;
+  end;
 end;
 
 procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);

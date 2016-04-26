@@ -80,7 +80,8 @@ begin
 
   prm := NewFrmCreateParam(asCreate, DM.Clients);
   frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
-  frmClientFiz.ShowModal;
+  if frmClientFiz.ShowModal = mrOk then
+    DM.Clients.Refresh;
   FreeAndNil(frmClientFiz);
 end;
 
@@ -92,7 +93,8 @@ begin
 
   prm := NewFrmCreateParam(asCreate, DM.Clients);
   frmClientUr := TfrmClientUr.Create(self, '', @prm);
-  frmClientUr.ShowModal;
+  if frmClientUr.ShowModal = mrOk then
+    DM.Clients.Refresh;
   FreeAndNil(frmClientUr);
 end;
 

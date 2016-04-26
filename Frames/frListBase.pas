@@ -65,8 +65,8 @@ end;
 
 procedure TFrameListBase.btnDelClick(Sender: TObject);
 begin
-  if MessageDlg('Вы действительно хотите удалить запись?',
-      mtConfirmation, mbYesNo, 0) = mrNo then
+  if Application.MessageBox('Вы действительно хотите удалить запись?',
+      'Подтверждение', MB_ICONQUESTION + MB_YESNO) = IDNO then
     Exit;
   Query.Delete;
 end;

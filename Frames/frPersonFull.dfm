@@ -62,6 +62,7 @@ inherited FramePersonFull: TFramePersonFull
         ExplicitHeight = 127
         inherited btnAdd: TRzBitBtn
           Top = 2
+          OnClick = FramePhonesbtnAddClick
           ExplicitTop = 2
         end
         inherited btnEdit: TRzBitBtn
@@ -173,13 +174,13 @@ inherited FramePersonFull: TFramePersonFull
     end
   end
   inline FrameAddress: TFrameKladrAdrFull [5]
-    Left = 3
+    Left = 5
     Top = 148
     Width = 356
     Height = 27
     TabOrder = 2
     Visible = False
-    ExplicitLeft = 3
+    ExplicitLeft = 5
     ExplicitTop = 148
     ExplicitWidth = 356
     ExplicitHeight = 27
@@ -202,20 +203,22 @@ inherited FramePersonFull: TFramePersonFull
       ExplicitTop = 0
     end
     inherited edtRegion: TcxTextEdit
+      Left = 72
       Visible = False
-      ExplicitWidth = 218
-      Width = 218
+      ExplicitLeft = 72
+      ExplicitWidth = 210
+      Width = 210
     end
     inherited edtSite: TcxTextEdit
       Visible = False
     end
     inherited edtAddress: TcxTextEdit
-      Left = 63
+      Left = 70
       Top = 1
-      ExplicitLeft = 63
+      ExplicitLeft = 70
       ExplicitTop = 1
-      ExplicitWidth = 262
-      Width = 262
+      ExplicitWidth = 253
+      Width = 253
     end
   end
   object edtEmailPrivate: TcxDBTextEdit

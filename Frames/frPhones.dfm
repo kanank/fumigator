@@ -125,7 +125,7 @@ inherited FramePhones: TFramePhones
       'PHONE,'
       'CLIENT_ID,'
       'ISMAIN,'
-      'TYPE,'
+      '"TYPE",'
       'PHONE_TYPE_ID'
       ')'
       'values('

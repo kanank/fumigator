@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
   IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
-  CommonVars, CommonTypes;
+  CommonVars, CommonTypes, Vcl.ExtCtrls;
 
 
 type
@@ -57,9 +57,15 @@ type
     DsDicPhoneType: TDataSource;
     DicCliProfs: TIBQuery;
     DsDicCliProfs: TDataSource;
+    CallS_Q: TIBQuery;
+    Calls_Tr: TIBTransaction;
+    Calls_UpdQ: TIBUpdateSQL;
+    Calls_Timer: TTimer;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
+    procedure Calls_TimerTimer(Sender: TObject);
   private
-    { Private declarations }
+    function SetReadedCall(id: integer): boolean;
+    function getClientCallParams(TelNum: string): ClientCallParams;
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
@@ -281,6 +287,86 @@ begin
     end;}
 end;
 
+procedure TDataModuleMain.Calls_TimerTimer(Sender: TObject);
+var Q : TIBQuery;
+    ClP :ClientCallParams;
+    tel :string;
+    id: integer;
+begin
+
+if Db.Connected = false then  Exit;
+
+Calls_Timer.Enabled := false;
+try
+  with CallS_Q do
+  begin
+       Close;
+       ParamByName('ATS_Num').AsString :=  CurrentUserSets.ATS_Phone_Num;
+       Open;
+
+       if FieldByName('ID').IsNull = false then
+       begin //если звонок есть.
+          tel := FieldByName('CALL_NUM').AsString;
+          id  := FieldByName('ID').AsInteger;
+          //Delete;
+          if Transaction.InTransaction then
+             Transaction.Commit;
+          //берем звонок в обработку
+          if not SetReadedCall(id) then
+          begin
+            // ошибка
+            exit;
+          end;
+
+          CLP := getClientCallParams(tel);
+          CLP.id_call := id;
+
+         if clp.Client_Type = '' then
+         begin  // ¬ызываем неизвестный звонок.
+           case dm.ShowUnknownCallForm(id, tel).ModalRes of
+             1: dm.ShowClientFForm(0, asCreate, MF, tel);
+             2: dm.ShowClientUrForm(0, asCreate, MF, tel);
+           end;
+         end
+         else
+         begin
+
+          if ClP.Client_Type = 'F' then begin
+               dm.ShowFizCallForm(clp);
+          end;
+
+          if ClP.Client_Type = 'U' then begin
+             dm.ShowUrCallForm(clp);
+          end;
+         end;
+       end;
+
+        if Transaction.Active then
+           Transaction.Commit;
+
+  end;
+
+//  with Miss_CallS_Count do
+//  begin
+//    Close;
+//    ParamByName('ATS_Num').AsString :=  CurrentUserSets.ATS_Phone_Num;
+//    Open;
+//
+//    MissCount := Fields[0].asInteger;
+//
+//    if MissCount > 0 then //есть пропущенные звонки
+//      trayView := trayMissed;
+//
+//    if Transaction.InTransaction then
+//      Transaction.Commit;
+//  end;
+
+finally
+
+  calls_timer.enabled := true;
+end;
+end;
+
 function TDataModuleMain.CreateRWQuery: TIBQuery;
 var
   TR: TIBTransaction;
@@ -442,6 +528,59 @@ with Form do
     Width,
     Height,
     SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+
+end;
+
+function TDataModuleMain.SetReadedCall(id: integer): boolean;
+var Q :TIBQuery;
+begin
+    try
+      Q := CreateRWQuery;
+      Q.SQL.Text := Format('Update CURRENT_CALLS set readed = 1 where id = %d', [Id]);
+      try
+        Q.ExecSQL;
+        if Q.Transaction.InTransaction then
+          Q.Transaction.Commit;
+        Result := true;
+      except
+        Result := false;
+      end;
+    finally
+      FreeAndNil(Q);
+    end;
+end;
+
+function TDataModuleMain.getClientCallParams(TelNum: string): ClientCallParams;
+var Q :TIBQuery;
+begin
+
+    try
+    Q := CreateRWQuery;
+    Q.SQL.Text := 'SELECT * FROM FINDCLINT_BYTEL('+ QuotedStr(TelNum) +')';
+    Q.open;
+
+    if q.FieldByName('Client_ID').IsNull = false  then begin
+       Result.Client_Type := q.FieldByName('CLIENT_TYPE').AsString;
+       Result.Client_id := q.FieldByName('CLIENT_ID').Asinteger;
+       Result.ClientName := q.FieldByName('FULL_NAME').AsString;
+       Result.Author := q.FieldByName('AUTHOR').AsString;
+       Result.TelNum := TelNum;
+       Result.INN :=  q.FieldByName('INN').AsString;
+       Result.clientContact := q.FieldByName('CONTACT_FIO').AsString;
+       Result.ClientInfoParams.ClientInfo := q.FieldByName('CLIENTINFO').AsString;
+       Result.ClientInfoParams.ClientComms := q.FieldByName('CLIENTCOMMS').AsString;
+
+ //   CLIENT_ID, CLIENT_TYPE, FULL_NAME, CREATOR_ID, CONTACT_FIO, INN, AUTHOR
+
+    end else
+        result.Client_Type := '';
+
+      if Q.Transaction.Active then
+           Q.Transaction.Commit;
+  finally
+      Q.Transaction.Free;
+      FreeAndNil(Q);
+  end;
 
 end;
 

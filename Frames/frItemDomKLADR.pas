@@ -12,6 +12,7 @@ uses
 type
   TFrameItemDomKLADR = class(TFrameItemKLADR)
     cmbName: TcxComboBox;
+    procedure btnEditClick(Sender: TObject);
   private
     function GetDomStr: string;
     procedure SetDomStr(AValue: string);
@@ -29,6 +30,15 @@ implementation
 {$R *.dfm}
 
 { TFrameItemDomKLADR }
+
+procedure TFrameItemDomKLADR.btnEditClick(Sender: TObject);
+begin
+  inherited;
+  if cmbName.Properties.Items.Count = 1 then
+    DomStr := cmbName.Properties.Items[0]
+  else
+    cmbName.DroppedDown := True;
+end;
 
 function TFrameItemDomKLADR.GetDomStr: string;
 begin

@@ -296,7 +296,7 @@ begin
 
 if Db.Connected = false then  Exit;
 
-Calls_Timer.Enabled := false;
+(*Calls_Timer.Enabled := false;
 try
   with CallS_Q do
   begin
@@ -364,7 +364,7 @@ try
 finally
 
   calls_timer.enabled := true;
-end;
+end; *)
 end;
 
 function TDataModuleMain.CreateRWQuery: TIBQuery;

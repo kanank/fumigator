@@ -11,6 +11,7 @@ type
   TSimpleForm = class(TBaseForm)
     RzPanel1: TRzPanel;
     Exit_bnt: TRzButton;
+    Image2: TImage;
   private
     { Private declarations }
   public

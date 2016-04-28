@@ -39,6 +39,7 @@ inherited FrameUslugi: TFrameUslugi
         OptionsData.DeletingConfirmation = False
         OptionsData.Editing = False
         OptionsData.Inserting = False
+        OptionsView.NoDataToDisplayInfoText = '<'#1059#1089#1083#1091#1075#1080' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1099'>'
         OptionsView.ScrollBars = ssVertical
         OptionsView.GridLines = glNone
         OptionsView.GroupByBox = False

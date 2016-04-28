@@ -3,7 +3,6 @@ inherited frmDictionaries: TfrmDictionaries
   ClientWidth = 906
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitLeft = -110
   ExplicitWidth = 922
   ExplicitHeight = 396
   PixelsPerInch = 96
@@ -15,10 +14,10 @@ inherited frmDictionaries: TfrmDictionaries
   end
   inherited RzPanel1: TRzPanel
     Width = 906
-    ExplicitWidth = 898
+    ExplicitWidth = 906
     inherited Exit_bnt: TRzButton
       Left = 772
-      ExplicitLeft = 764
+      ExplicitLeft = 772
     end
   end
   object GridUserTypes: TcxGrid

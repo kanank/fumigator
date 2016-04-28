@@ -277,7 +277,6 @@ inherited FramePersonFull: TFramePersonFull
       'SEX = :SEX,'
       'CITIZEN = :CITIZEN,'
       'PROF_ID = :PROF_ID,'
-      'PASS_ID = :PASS_ID,'
       'EMAIL_PRIVATE = :EMAIL_PRIVATE,'
       'EMAIL_WORK = :EMAIL_WORK'
       'where id = :ID')

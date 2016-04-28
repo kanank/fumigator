@@ -534,7 +534,8 @@ inherited frmClientUr: TfrmClientUr
       Left = 27
       Top = 4
       BeepOnEnter = False
-      DataBinding.DataField = 'PASE_CODE'
+      DataBinding.DataField = 'EMAIL'
+      DataBinding.DataSource = DS
       Properties.MaxLength = 16
       Properties.ValidationOptions = [evoShowErrorIcon]
       Style.HotTrack = False
@@ -574,7 +575,7 @@ inherited frmClientUr: TfrmClientUr
     object Comments_memo: TcxDBMemo
       Left = 71
       Top = 10
-      DataBinding.DataField = 'COMMENTS'
+      DataBinding.DataField = 'COMMENT'
       DataBinding.DataSource = DS
       Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]

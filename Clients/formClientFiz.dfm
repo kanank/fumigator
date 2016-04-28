@@ -268,9 +268,10 @@ inherited frmClientFiz: TfrmClientFiz
     Width = 21
   end
   object Comments_memo: TcxDBMemo
-    Left = 76
+    Left = 77
     Top = 234
-    DataBinding.DataField = 'COMMENTS'
+    DataBinding.DataField = 'COMMENT'
+    DataBinding.DataSource = DS
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 2
@@ -289,11 +290,11 @@ inherited frmClientFiz: TfrmClientFiz
     inherited Label5: TLabel
       Left = 367
       Top = 151
-      Width = 22
-      Caption = 'Emal'
+      Width = 24
+      Caption = 'Email'
       ExplicitLeft = 367
       ExplicitTop = 151
-      ExplicitWidth = 22
+      ExplicitWidth = 24
     end
     inherited FramePhones: TFramePhones
       Left = 288
@@ -386,8 +387,10 @@ inherited frmClientFiz: TfrmClientFiz
       Width = 80
     end
     inherited edtEmailWork: TcxDBTextEdit
-      Left = 393
-      ExplicitLeft = 393
+      Left = 394
+      Top = 148
+      ExplicitLeft = 394
+      ExplicitTop = 148
       ExplicitWidth = 114
       Width = 114
     end
@@ -397,7 +400,6 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 4
     DataBinding.DataField = 'FORMAT_ID'
     DataBinding.DataSource = DS
-    Properties.DropDownListStyle = lsFixedList
     Properties.KeyFieldNames = 'ID'
     Properties.ListColumns = <
       item
@@ -415,7 +417,6 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 5
     DataBinding.DataField = 'STATUS_ID'
     DataBinding.DataSource = DS
-    Properties.DropDownListStyle = lsFixedList
     Properties.KeyFieldNames = 'ID'
     Properties.ListColumns = <
       item
@@ -449,6 +450,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitWidth = 202
         ExplicitHeight = 79
         inherited grdPhoneDBTableView1: TcxGridDBTableView
+          OptionsView.Header = False
           inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
             Width = 200
             IsCaptionAssigned = True
@@ -489,9 +491,9 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited Label8: TLabel [1]
       Left = 5
-      Top = 8
+      Top = 7
       ExplicitLeft = 5
-      ExplicitTop = 8
+      ExplicitTop = 7
     end
     inherited Label1: TLabel [2]
       Left = 5
@@ -519,10 +521,8 @@ inherited frmClientFiz: TfrmClientFiz
     inherited FrameArea: TFrameItemKLADR [10]
     end
     inherited btnEdit: TRzBitBtn [11]
-      Left = 330
-      Top = 1
-      ExplicitLeft = 330
-      ExplicitTop = 1
+      Left = 331
+      ExplicitLeft = 331
     end
     inherited edtRegion: TcxTextEdit [12]
       Left = 75

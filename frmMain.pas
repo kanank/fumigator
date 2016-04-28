@@ -61,7 +61,7 @@ end;
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   inherited;
-  Application.MainForm.Close;
+  //Application.MainForm.Close;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);

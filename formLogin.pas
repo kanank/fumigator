@@ -37,7 +37,7 @@ implementation
 
 uses
   DM_Main,
-  IBX.IBQuery;
+  IBX.IBQuery, formLogo;
 
 procedure TfrmLogin.btnOKClick(Sender: TObject);
 var

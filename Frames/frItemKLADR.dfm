@@ -37,6 +37,7 @@ inherited FrameItemKLADR: TFrameItemKLADR
     Left = 102
     Top = 4
     TabOrder = 1
+    OnKeyPress = edtNameKeyPress
     Width = 199
   end
   object edtSocr: TcxTextEdit [3]

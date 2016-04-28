@@ -104,7 +104,8 @@ begin
   data := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).DataController.DataSet;
   s := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).Columns[0].Caption;
 
-  if MessageDlg('Вы действительно хотите удалить текущую запись?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+  if Application.MessageBox('Вы действительно хотите удалить текущую запись?', 'Подтверждение',
+        MB_ICONQUESTION + MB_YESNO) <> mrYes then
     Exit;
 
    data.Delete;

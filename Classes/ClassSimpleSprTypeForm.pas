@@ -46,7 +46,7 @@ begin
         if not ApplyUpdate(TIBQuery(Self.DsLookup.DataSet), sErr) then
         begin
           sErr := 'Ошибка сохранения:' + #13#10 + sErr;
-          MessageDlg(sErr, mtError, [mbOk], 0);
+          Application.MessageBox(PWideChar(sErr), 'Ошибка', MB_ICONERROR + MB_OK);
           Exit;
         end;
 

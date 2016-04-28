@@ -37,6 +37,7 @@ inherited FramePhones: TFramePhones
         OptionsData.DeletingConfirmation = False
         OptionsData.Editing = False
         OptionsData.Inserting = False
+        OptionsView.NoDataToDisplayInfoText = '<'#1053#1086#1084#1077#1088#1072' '#1085#1077' '#1076#1086#1073#1072#1074#1083#1077#1085#1099' >'
         OptionsView.ScrollBars = ssVertical
         OptionsView.GridLines = glNone
         OptionsView.GroupByBox = False
@@ -112,7 +113,7 @@ inherited FramePhones: TFramePhones
   end
   inherited Query_upd: TIBUpdateSQL
     ModifySQL.Strings = (
-      'updatePHONES set '
+      'update PHONES set '
       'PHONE = :PHONE,'
       'CLIENT_ID = :CLIENT_ID,'
       'ISMAIN = :ISMAIN,'

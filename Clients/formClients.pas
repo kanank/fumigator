@@ -90,6 +90,9 @@ end;
 
 procedure TfrmClients.Del_btnClick(Sender: TObject);
 begin
+  if not (DS.DataSet.State in [dsInsert, dsEdit]) then
+    DS.DataSet.Edit;
+
   DS.DataSet.FieldByName('active').AsInteger := 0;
   DS.DataSet.Post;
   TIBQuery(DS.DataSet).ApplyUpdates;

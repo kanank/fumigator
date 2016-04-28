@@ -18,6 +18,9 @@ type
     gridLevel1: TcxGridLevel;
     gridDBTableView1Column2: TcxGridDBColumn;
     gridDBTableView1Column1: TcxGridDBColumn;
+    procedure gridDBTableView1CellDblClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
   private
     { Private declarations }
   public
@@ -30,5 +33,13 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmKLADRList.gridDBTableView1CellDblClick(
+  Sender: TcxCustomGridTableView; ACellViewInfo: TcxGridTableDataCellViewInfo;
+  AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
+begin
+  inherited;
+  btnOK.Click;
+end;
 
 end.

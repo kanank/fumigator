@@ -32,7 +32,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = DicUserTypes_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_USER_TYPES_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 599
     Top = 210
   end
@@ -53,7 +53,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = DicWorkerProfs_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_WORKER_PROFS_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 668
     Top = 190
   end
@@ -643,7 +643,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = DicServices_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_SERVICES_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 543
     Top = 182
   end
@@ -675,7 +675,7 @@ object DataModuleMain: TDataModuleMain
       'order by service_id, type_id, m.name')
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIALS_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 487
     Top = 210
   end
@@ -699,9 +699,9 @@ object DataModuleMain: TDataModuleMain
       '  ID = :OLD_ID')
     InsertSQL.Strings = (
       'insert into DIC_MATERIALS'
-      '  (NAME, SERVICE_ID, SUBTYPE_ID, TYPE_ID)'
+      '  (id, NAME, SERVICE_ID, SUBTYPE_ID, TYPE_ID)'
       'values'
-      '  (:NAME, :SERVICE_ID, :SUBTYPE_ID, :TYPE_ID)')
+      '  (:id, :NAME, :SERVICE_ID, :SUBTYPE_ID, :TYPE_ID)')
     DeleteSQL.Strings = (
       'delete from DIC_MATERIALS'
       'where'
@@ -715,11 +715,11 @@ object DataModuleMain: TDataModuleMain
     ModifySQL.Strings = (
       'update DIC_SERVICES set NAME = :NAME where id = :OLD_ID')
     InsertSQL.Strings = (
-      'INSERT INTO DIC_SERVICES (NAME) Values(:NAME)'#9)
+      'INSERT INTO DIC_SERVICES (id, NAME) Values(:id, :NAME)'#9)
     DeleteSQL.Strings = (
       'delete from DIC_SERVICES'
       'where'
-      '  ID = :OLD_ID')
+      '  ID = :ID')
     Left = 544
     Top = 288
   end
@@ -729,7 +729,7 @@ object DataModuleMain: TDataModuleMain
     ModifySQL.Strings = (
       'update DIC_USER_TYPES set NAME = :NAME where id = :OLD_ID')
     InsertSQL.Strings = (
-      'INSERT INTO DIC_USER_TYPES (NAME) Values(:NAME)'#9)
+      'INSERT INTO DIC_USER_TYPES (id, NAME) Values(:id, :NAME)'#9)
     DeleteSQL.Strings = (
       'delete from DIC_USER_TYPES'
       'where'
@@ -743,7 +743,7 @@ object DataModuleMain: TDataModuleMain
     ModifySQL.Strings = (
       'update  DIC_WORKER_PROFS set NAME = :NAME where id = :OLD_ID')
     InsertSQL.Strings = (
-      'INSERT INTO  DIC_WORKER_PROFS (NAME) Values(:NAME)'#9)
+      'INSERT INTO  DIC_WORKER_PROFS (id, NAME) Values(:id, :NAME)'#9)
     DeleteSQL.Strings = (
       'delete from DIC_WORKER_PROFS'
       'where'
@@ -810,7 +810,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = DicMaterialSubTypes_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_MATERIAL_TYPES_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 317
     Top = 219
   end
@@ -838,9 +838,9 @@ object DataModuleMain: TDataModuleMain
       '  ID = :OLD_ID')
     InsertSQL.Strings = (
       'insert into DIC_MATERIAL_SUBTYPES'
-      '  (NAME, SERVICE_ID)'
+      '  (id, NAME, SERVICE_ID)'
       'values'
-      '  (:NAME, :SERVICE_ID)')
+      '  (:id, :NAME, :SERVICE_ID)')
     DeleteSQL.Strings = (
       'delete from DIC_MATERIAL_SUBTYPES'
       'where'

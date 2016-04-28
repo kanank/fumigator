@@ -1,76 +1,29 @@
-object frmLogin: TfrmLogin
+object frmLogo: TfrmLogo
   Left = 0
   Top = 0
   BorderIcons = []
   BorderStyle = bsNone
-  ClientHeight = 302
-  ClientWidth = 304
+  ClientHeight = 169
+  ClientWidth = 294
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
+  OldCreateOrder = False
   Position = poDesktopCenter
-  OnActivate = FormActivate
   DesignSize = (
-    304
-    302)
+    294
+    169)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 24
-    Top = 61
-    Width = 51
-    Height = 19
-    Caption = #1051#1086#1075#1080#1085':'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clGreen
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object Label2: TLabel
-    Left = 24
-    Top = 91
-    Width = 60
-    Height = 19
-    Caption = #1055#1072#1088#1086#1083#1100':'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clGreen
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object lblMess: TRzLabel
-    Left = 12
-    Top = 114
-    Width = 284
-    Height = 31
-    Alignment = taCenter
-    Anchors = [akLeft, akBottom]
-    AutoSize = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    Transparent = True
-    WordWrap = True
-    BlinkColor = 4227327
-  end
   object img1: TImage
-    Left = 17
-    Top = 205
-    Width = 263
-    Height = 85
-    Anchors = [akRight, akBottom]
+    Left = 10
+    Top = 15
+    Width = 272
+    Height = 146
+    Anchors = []
     Picture.Data = {
       0D546478536D617274496D61676589504E470D0A1A0A0000000D494844520000
       012000000059080200000011BB6E6A000000017352474200AECE1CE900000004
@@ -215,101 +168,17 @@ object frmLogin: TfrmLogin
     Proportional = True
     Stretch = True
   end
-  object Label3: TLabel
-    Left = 64
-    Top = 8
-    Width = 169
-    Height = 32
-    Alignment = taCenter
-    Caption = #1047#1076#1088#1072#1074#1089#1090#1074#1091#1081#1090#1077'!'#13#10#1040#1074#1090#1086#1088#1080#1079#1091#1081#1090#1077#1089#1100', '#1087#1086#1078#1072#1083#1091#1081#1089#1090#1072'.'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object Shape1: TShape
-    Left = 0
-    Top = 0
-    Width = 301
-    Height = 302
-    Anchors = [akLeft, akTop, akRight, akBottom]
-    Brush.Style = bsClear
-    Pen.Color = clGray
-    Pen.Style = psInsideFrame
-  end
-  object Edt1: TRzEdit
-    Left = 115
-    Top = 55
-    Width = 164
-    Height = 25
-    Text = ''
-    Ctl3D = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    TabOrder = 0
-  end
-  object Edt2: TRzEdit
-    Left = 115
-    Top = 85
-    Width = 164
-    Height = 25
-    Text = ''
-    Ctl3D = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    PasswordChar = '*'
-    TabOrder = 1
-  end
-  object btnOK: TRzButton
-    Left = 24
-    Top = 151
-    Width = 110
-    Height = 29
-    Default = True
-    Caption = #1042#1093#1086#1076
+  object Info: TRzLabel
+    Left = 117
+    Top = 134
+    Width = 51
+    Height = 16
+    Caption = #1047#1072#1075#1088#1091#1079#1082#1072
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'Tahoma'
-    Font.Style = []
-    HighlightColor = clHighlightText
-    HotTrack = True
-    HotTrackColor = clCream
+    Font.Style = [fsItalic]
     ParentFont = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
-    OnClick = btnOKClick
-  end
-  object btnCancel: TRzButton
-    Left = 162
-    Top = 151
-    Width = 110
-    Height = 29
-    Cancel = True
-    ModalResult = 2
-    Caption = #1054#1090#1084#1077#1085#1072
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    HotTrack = True
-    HotTrackColor = 16625984
-    ParentFont = False
-    TabOrder = 3
   end
 end

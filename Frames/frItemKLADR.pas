@@ -25,6 +25,7 @@ type
     procedure btnEditClick(Sender: TObject);
     procedure QueryBeforeOpen(DataSet: TDataSet);
     procedure QuerySearchBeforeOpen(DataSet: TDataSet);
+    procedure edtNameKeyPress(Sender: TObject; var Key: Char);
   private
 
   protected
@@ -39,7 +40,16 @@ type
     fDom:    Integer;
     fActive: Integer;
 
+    fCodeRegion: string; //колы для выбора элементов
+    fCodeArea:   string;
+    fCodeCity:   string;
+    fCodeSite:   string;
+    fCodeStreet: string;
+    fCodeDom:    string;
+
     fChildFrame: TFrameItemKLADR; //зависимый фрейм
+
+    fNotSelected: Boolean; //признак, что текст введен вручную
 
     procedure SetCode(AValue: string); virtual;
     procedure SetEdtText(AQuery: TIBQuery); virtual;
@@ -47,6 +57,14 @@ type
     procedure SetTransaction(AValue: TIBTransaction);override;
   public
     property Code: string read fCode write SetCode;
+
+    property CodeRegion: string read fCodeRegion;
+    property CodeArea:   string read fCodeArea;
+    property CodeCity:   string read fCodeCity;
+    property CodeSite:   string read fCodeSite;
+    property CodeStreet: string read fCodeStreet;
+    property CodeDom:    string read fCodeDom;
+
     property Region: Integer read fRegion;
     property Area:   Integer read fArea;
     property City:   Integer read fCity;
@@ -88,6 +106,7 @@ begin
     frm.ShowModal;
     if frm.ModalResult = mrOk then
     begin
+      fNotSelected := False;
       if QuerySearch.RecordCount > 0 then
       begin
         Code := QuerySearch.FieldByName('CODE').AsString;
@@ -112,6 +131,13 @@ begin
   fStreet := 0;
   fDom := 0;
   fActive := 0;
+end;
+
+procedure TFrameItemKLADR.edtNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Ord(Key) > 31 then
+    fNotSelected := True;
 end;
 
 function TFrameItemKLADR.OpenData(Aid: integer): Boolean;
@@ -153,14 +179,38 @@ begin
 
   fCode := AValue;
 
+  fCodeRegion := '';
+  fCodeArea   := '';
+  fCodeCity   := '';
+  fCodeSite   := '';
+  fCodeStreet := '';
+  fCodeDom    := '';
+
   fRegion := StrToInt(LeftStr(fCode, 2));
+  fCodeRegion := LeftStr(fCode, 2) + DupeString('0', 11);
+
   fArea := StrToInt(Copy(fCode, 3, 3));
+  if fArea > 0 then
+    fCodeArea := LeftStr(fCode, 2) + Copy(fCode, 3, 3) + DupeString('0', 8);
+
   fCity := StrToInt(Copy(fCode, 6, 3));
-  fSite := StrToInt(Copy(fCode, 8, 3));
+  if fCity > 0 then
+    fCodeCity := LeftStr(fCode, 5) + Copy(fCode, 6, 3) + DupeString('0', 5);
+
+  fSite := StrToInt(Copy(fCode, 9, 3));
+  if fSite > 0 then
+    fCodeSite := LeftStr(fCode, 8) + Copy(fCode, 9, 3) + DupeString('0', 2);
+
   if Length(fCode) > 13 then
     fStreet := StrToInt(Copy(fCode, 12, 4));
+  if fStreet > 0 then
+    fCodeStreet := LeftStr(fCode, 11) + Copy(fCode, 12, 4) + DupeString('0', 2);
+
   if Length(fCode) > 17 then
     fDom := StrToInt(Copy(fCode, 16, 4));
+  if fDom > 0 then
+    fCodeDom := fCode; //LeftStr(fCode, 15) + Copy(fCode, 16, 4);
+
   if Length(fCode) < 18 then
     fActive := StrToInt(RightStr(fCode, 2));
 
@@ -194,6 +244,7 @@ end;
 procedure TFrameItemKLADR.SetQueryParam(AQuery: TIBQuery);
 var
   prm: TParam;
+  sstr: string;
 begin
 //  AQuery.Params.ParseSQL(AQuery.SQL.text, true);
 //  AQuery.ParamCheck := True;
@@ -222,14 +273,36 @@ begin
   if prm <> nil then
     prm.AsInteger := fDom;
 
+  prm := AQuery.Params.FindParam('CODE_REGION'); // регион
+  if prm <> nil then
+    prm.AsString := fCodeRegion;
 
-  if AQuery.Params.FindParam('searchstr') <> nil then
+  prm := AQuery.Params.FindParam('CODE_AREA'); //район
+  if prm <> nil then
+    prm.AsString := fCodeArea;
+
+  prm := AQuery.Params.FindParam('CODE_CITY'); //город
+  if prm <> nil then
+    prm.AsString := fCodeCity;
+
+  prm := AQuery.Params.FindParam('CODE_SITE'); //нас. пункт
+  if prm <> nil then
+    prm.AsString := fCodeSite;
+
+  prm := AQuery.Params.FindParam('CODE_Street'); // улица
+  if prm <> nil then
+    prm.AsString := fCodeStreet;
+
+  prm := AQuery.Params.FindParam('CODE_Dom'); // дом
+  if prm <> nil then
+    prm.AsString := fCodeDom;
+
+  if fNotSelected then
+    sstr := Trim(edtName.Text);
+
+  if (AQuery.Params.FindParam('searchstr') <> nil) then
     AQuery.ParamByName('searchstr').AsString :=
-      '%' + Trim(edtName.Text) + '%';
-
-  //prm := AQuery.ParamByName('search'); // дом
-  //if prm <> nil then
-  //  prm.AsString := edtName.text;
+      '%' + sstr + '%';
 end;
 
 procedure TFrameItemKLADR.SetTransaction(AValue: TIBTransaction);

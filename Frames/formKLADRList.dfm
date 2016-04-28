@@ -41,6 +41,7 @@ inherited frmKLADRList: TfrmKLADRList
     TabOrder = 3
     object gridDBTableView1: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
+      OnCellDblClick = gridDBTableView1CellDblClick
       DataController.DataSource = DS
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>

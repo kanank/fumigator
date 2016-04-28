@@ -3,6 +3,7 @@ program fumigator;
 uses
   Vcl.Forms,
   System.UITypes,
+  Winapi.Windows,
   ClassFrmBase in 'classes\ClassFrmBase.pas' {BaseForm},
   ClassSprForm in 'classes\ClassSprForm.pas' {SprForm},
   DM_Main in 'DM_Main.pas' {DataModuleMain: TDataModule},
@@ -43,26 +44,34 @@ uses
   frPersonSmallFoto in 'Frames\frPersonSmallFoto.pas' {FramePersonSmallFoto: TFrame},
   frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame},
   frPersonFullFoto in 'Frames\frPersonFullFoto.pas' {FramePersonFullFoto: TFrame},
-  formWorkerShedule in 'formWorkerShedule.pas' {frmWorkerShedule};
+  formWorkerShedule in 'formWorkerShedule.pas' {frmWorkerShedule},
+  formLogo in 'formLogo.pas' {frmLogo};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.MainFormOnTaskbar := True;
-   Application.Title := 'Фумигатор';
+  Application.Title := 'Фумигатор';
 
   Application.CreateForm(TDataModuleMain, DM);
-  Application.CreateForm(TfrmLogin, frmLogin);
-  Application.CreateForm(TfrmWorkerShedule, frmWorkerShedule);
+
+  frmLogin := TfrmLogin.Create(nil);
   if frmLogin.ShowModal <> mrOk then
+  begin
     Application.Terminate;
+    Exit;
+  end;
+
+  frmLogo := TFrmLogo.Create(nil);
+  frmLogo.Show;
+  BringWindowToTop(frmLogo.Handle);
+  frmLogo.Repaint;
 
   DM.AfterLogin;
+  frmLogin.Free;
 
-  //Application.CreateForm(TfrmMain, formMain);
-  formMain := TfrmMain.Create(nil, ' ');
-  formMain.Show;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, formMain);
 
   Application.Run;
 end.

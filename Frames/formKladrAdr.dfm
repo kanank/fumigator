@@ -34,5 +34,18 @@ inherited frmKladrAdr: TfrmKladrAdr
     Width = 335
     Height = 158
     TabOrder = 3
+    inherited FrameStreet: TFrameItemKLADR
+      inherited QuerySearch: TIBQuery
+        SQL.Strings = (
+          'select * from KLADR_STREET'
+          'where '
+          'REGION_ID = :Region_id  and'
+          'Area_id = :Area_id  and'
+          'City_id = :City_id  and'
+          'Site_id = :Site_id  and'
+          'street_id >0 and'
+          'actual = 0')
+      end
+    end
   end
 end

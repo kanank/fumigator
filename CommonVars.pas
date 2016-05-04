@@ -49,6 +49,10 @@ type
   Client_id :Integer;
   TelNum :string;
   ClientName :string;
+  Format_Id: Integer;
+  Status_Id: Integer;
+  PERSON_ID: Integer;
+  FORMA_ID: Integer;
   INN :string;
   clientContact :string;
   Author :string;

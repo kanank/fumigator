@@ -10,7 +10,7 @@ uses
   IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, RzButton, cxGridLevel,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
   cxGridCustomView, cxGrid, Vcl.ExtCtrls, RzPanel, cxCheckBox,
-  cxDBLookupComboBox;
+  cxDBLookupComboBox, cxMaskEdit;
 
 type
   TFramePhones = class(TFrameListBase)

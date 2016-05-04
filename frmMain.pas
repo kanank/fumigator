@@ -42,7 +42,7 @@ implementation
 
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
-  formClientUr, CommonTypes;
+  formClientUr, CommonTypes, formLogo;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin

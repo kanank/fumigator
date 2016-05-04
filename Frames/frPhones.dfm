@@ -58,6 +58,9 @@ inherited FramePhones: TFramePhones
         end
         object grdPhoneDBTableView2Column2: TcxGridDBColumn
           DataBinding.FieldName = 'phone'
+          PropertiesClassName = 'TcxMaskEditProperties'
+          Properties.EditMask = '!\(999\)000\-00\-00;0;_'
+          Properties.ReadOnly = False
           Options.Editing = False
           Options.Moving = False
           Options.ShowCaption = False

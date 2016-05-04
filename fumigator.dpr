@@ -45,7 +45,9 @@ uses
   frFoto in 'Frames\frFoto.pas' {FrameFoto: TFrame},
   frPersonFullFoto in 'Frames\frPersonFullFoto.pas' {FramePersonFullFoto: TFrame},
   formWorkerShedule in 'formWorkerShedule.pas' {frmWorkerShedule},
-  formLogo in 'formLogo.pas' {frmLogo};
+  formLogo in 'formLogo.pas' {frmLogo},
+  formIncomeCalls in 'Calls\formIncomeCalls.pas' {frmIncomeCall},
+  formIncomeCallsUr in 'Calls\formIncomeCallsUr.pas' {frmIncomeCallUr};
 
 {$R *.res}
 
@@ -70,6 +72,7 @@ begin
   DM.AfterLogin;
   frmLogin.Free;
 
+  frmLogo.Free;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmMain, formMain);
 

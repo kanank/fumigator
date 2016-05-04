@@ -1132,6 +1132,7 @@ object DataModuleMain: TDataModuleMain
   end
   object Calls_Timer: TTimer
     Enabled = False
+    Interval = 0
     OnTimer = Calls_TimerTimer
     Left = 192
     Top = 104

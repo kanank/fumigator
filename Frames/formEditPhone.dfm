@@ -26,7 +26,9 @@ inherited frmEditPhone: TfrmEditPhone
   inherited edtData: TcxDBMaskEdit
     Top = 24
     DataBinding.DataField = 'PHONE'
-    Properties.EditMask = '!\(999\)000-0000;1;_'
+    Properties.BeepOnError = True
+    Properties.EditMask = '!\(999\)000\-00\-00;0;_'
+    Properties.ReadOnly = True
     ExplicitTop = 24
     ExplicitWidth = 150
     Width = 150

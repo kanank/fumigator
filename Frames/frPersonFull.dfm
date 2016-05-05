@@ -103,9 +103,9 @@ inherited FramePersonFull: TFramePersonFull
     end
     inherited Label8: TLabel
       Left = 2
-      Top = 77
+      Top = 78
       ExplicitLeft = 2
-      ExplicitTop = 77
+      ExplicitTop = 78
     end
     inherited Label2: TLabel
       Left = 2
@@ -114,8 +114,8 @@ inherited FramePersonFull: TFramePersonFull
       ExplicitTop = 122
     end
     inherited Label1: TLabel
-      Top = 77
-      ExplicitTop = 77
+      Top = 78
+      ExplicitTop = 78
     end
     inherited Label4: TLabel
       Left = 3
@@ -132,10 +132,12 @@ inherited FramePersonFull: TFramePersonFull
       Width = 162
     end
     inherited cmbDateBirth: TcxDBDateEdit
-      Top = 72
-      ExplicitTop = 72
-      ExplicitWidth = 94
-      Width = 94
+      Left = 87
+      Top = 73
+      ExplicitLeft = 87
+      ExplicitTop = 73
+      ExplicitWidth = 105
+      Width = 105
     end
     inherited edtSurName: TcxDBTextEdit
       Left = 72
@@ -293,8 +295,7 @@ inherited FramePersonFull: TFramePersonFull
       'CITIZEN,'
       'PROF_ID,'
       'EMAIL_PRIVATE,'
-      'EMAIL_WORK,'
-      'PASS_ID'
+      'EMAIL_WORK'
       ') '
       'values('
       ':ID,'
@@ -308,8 +309,7 @@ inherited FramePersonFull: TFramePersonFull
       ':CITIZEN,'
       ':PROF_ID,'
       ':EMAIL_PRIVATE,'
-      ':EMAIL_WORK,'
-      ':PASS_ID'
+      ':EMAIL_WORK'
       ')')
     Left = 240
     Top = 11

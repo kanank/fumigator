@@ -47,7 +47,8 @@ uses
   formWorkerShedule in 'formWorkerShedule.pas' {frmWorkerShedule},
   formLogo in 'formLogo.pas' {frmLogo},
   formIncomeCalls in 'Calls\formIncomeCalls.pas' {frmIncomeCall},
-  formIncomeCallsUr in 'Calls\formIncomeCallsUr.pas' {frmIncomeCallUr};
+  formIncomeCallsUr in 'Calls\formIncomeCallsUr.pas' {frmIncomeCallUr},
+  formCallUnknown in 'Calls\formCallUnknown.pas' {frmCallUnknown};
 
 {$R *.res}
 

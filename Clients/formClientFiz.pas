@@ -24,10 +24,10 @@ type
     FramePerson: TFramePersonFull;
     FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
-    Image1: TImage;
     FrameAddress: TFrameKladrAdrFull;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
+    procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,7 +41,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes, IBX.IBQuery;
+  DM_Main, CommonTypes, IBX.IBQuery, CommonVars;
 
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
@@ -112,6 +112,7 @@ begin
           DS.DataSet.FieldByName('TYPE_CLI').AsInteger := 0;
           DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
           DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
         end;
       end;
     asEdit:
@@ -139,6 +140,14 @@ begin
   FrameAddress.AddParam('ID', DS.DataSet.FindField('ADRES_ID'));
   FrameAddress.OpenData;
   FrameAddress.Visible := true;
+end;
+
+procedure TfrmClientFiz.FramePersoncmbDateBirthPropertiesInitPopup(
+  Sender: TObject);
+begin
+  inherited;
+  if TcxDateEdit(Sender).EditValue = null then
+    TcxDateEdit(Sender).EditValue := IncMonth(Now(), -(InitBirthYear*12));
 end;
 
 end.

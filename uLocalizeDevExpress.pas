@@ -147,7 +147,7 @@ begin
   cxSetResourceString(@cxSFilterOperatorLess , 'меньше');
   cxSetResourceString(@cxSFilterOperatorLessEqual , 'меньше или равно');
   cxSetResourceString(@cxSFilterOperatorGreater , 'больше');
-  cxSetResourceString(@cxSFilterOperatorGreaterEqual , 'больге или равно');
+  cxSetResourceString(@cxSFilterOperatorGreaterEqual , 'больше или равно');
   cxSetResourceString(@cxSFilterOperatorLike , 'like');
   cxSetResourceString(@cxSFilterOperatorNotLike , 'not like');
   cxSetResourceString(@cxSFilterOperatorBetween , 'between');

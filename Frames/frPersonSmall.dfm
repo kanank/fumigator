@@ -134,8 +134,15 @@ inherited FramePersonSmall: TFramePersonSmall
       Anchors = [akLeft, akTop, akRight]
       DataBinding.DataField = 'DATE_BIRTH'
       DataBinding.DataSource = DS
+      Properties.DateButtons = []
+      Properties.DisplayFormat = 'dd.mm.yyyy'
+      Properties.EditFormat = 'dd.mm.yyyy'
+      Properties.InputKind = ikStandard
+      Properties.ShowTime = False
+      Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+      Properties.OnInitPopup = cmbDateBirthPropertiesInitPopup
       TabOrder = 3
-      Width = 64
+      Width = 93
     end
     object edtSurName: TcxDBTextEdit
       Left = 66

@@ -14,13 +14,13 @@ type
   TFramePassport = class(TDbFrameBase)
     RzGroupBox1: TRzGroupBox;
     Label1: TLabel;
-    cxDBMaskEdit1: TcxDBMaskEdit;
+    edtNomer: TcxDBMaskEdit;
     Label2: TLabel;
-    cxDBDateEdit1: TcxDBDateEdit;
+    cmbDate: TcxDBDateEdit;
     Label3: TLabel;
-    cxDBTextEdit1: TcxDBTextEdit;
     Label4: TLabel;
-    cxDBMemo1: TcxDBMemo;
+    edtKem: TcxDBMemo;
+    edtCode: TcxDBMaskEdit;
   private
     { Private declarations }
   public

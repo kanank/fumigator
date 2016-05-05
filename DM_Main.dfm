@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -16,7 +15,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -880,7 +878,6 @@ object DataModuleMain: TDataModuleMain
   object Clients: TIBQuery
     Database = DB
     Transaction = Clients_tr
-    ForcedRefresh = True
     BufferChunks = 1000
     CachedUpdates = True
     ParamCheck = True
@@ -895,7 +892,7 @@ object DataModuleMain: TDataModuleMain
   end
   object Clients_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
-      'Select * from clientslist(:id, null)')
+      'select * from clientslist(:id, null)')
     ModifySQL.Strings = (
       'update clients'
       'set'
@@ -907,7 +904,8 @@ object DataModuleMain: TDataModuleMain
       'ADRES_ID'#9'= :ADRES_ID,'
       'EMAIL'#9#9'= :EMAIL,'
       'WORKER_ID'#9'= :WORKER_ID,'
-      'COMMENT'#9'= :COMMENT'
+      'COMMENT'#9'= :COMMENT,'
+      'ACT                      = :ACT'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
@@ -920,11 +918,12 @@ object DataModuleMain: TDataModuleMain
       'ADRES_ID,'
       'EMAIL,'
       'WORKER_ID,'
-      'COMMENT'
+      'COMMENT,'
+      '"ACTIVE"'
       ')'
       'values'
       '('
-      ':ID,'
+      ':id,'
       ':NAME,'
       ':TYPE_CLI,'
       ':STATUS_ID,'
@@ -933,20 +932,21 @@ object DataModuleMain: TDataModuleMain
       ':ADRES_ID,'
       ':EMAIL,'
       ':WORKER_ID,'
-      ':COMMENT'
+      ':COMMENT,'
+      ':"ACTIVE"'
       ')')
     DeleteSQL.Strings = (
-      'delete from clients where id = :id')
+      'update clients set act=0 where id=:id')
     Left = 216
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
       'rec_version'
       'nowait')
+    AutoStopAction = saCommitRetaining
     Left = 272
     Top = 24
   end
@@ -1092,7 +1092,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'wait')

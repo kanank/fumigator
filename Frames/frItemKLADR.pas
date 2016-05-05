@@ -73,6 +73,8 @@ type
     property Dom:    Integer read fDom;
     property ActiveKLADR: Integer read fActive;
 
+    property notSelected: boolean read fNotSelected;
+
     property TypeItem: TTypeItemKladr read fTypeItem write fTypeItem;
     property ChildFrame: TFrameItemKLADR read fChildFrame write fChildFrame;
 

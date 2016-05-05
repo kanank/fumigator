@@ -66,6 +66,10 @@ type
   private
     function SetReadedCall(id: integer): boolean;
     function getClientCallParams(TelNum: string): ClientCallParams;
+
+    function ShowUnknownCallForm(APhone: string): FormResult;
+    function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
@@ -104,7 +108,56 @@ implementation
 {$R *.dfm}
 
 uses
-  frmWorker, System.StrUtils;
+  frmWorker, System.StrUtils, formCallUnknown, formClientFiz, formClientUr;
+
+function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
+  AExtPrm: TClientParam): FormResult;
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
+  try
+    if frmClientFiz.ShowModal = mrOk then
+      DM.Clients.Refresh;
+    Result.ModalRes := frmClientFiz.ModalResult;
+  finally
+    FreeAndNil(frmClientFiz);
+  end;
+end;
+
+function TDataModuleMain.ShowClientUr(AAction: TActionStr;
+  AExtPrm: TClientParam): FormResult;
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  frmClientUr := TfrmClientUr.Create(nil, '', @prm);
+  try
+    if frmClientUr.ShowModal = mrOk then
+      DM.Clients.Refresh;
+    Result.ModalRes := frmClientUr.ModalResult;
+  finally
+    FreeAndNil(frmClientUr);
+  end;
+end;
+
+function TDataModuleMain.ShowUnknownCallForm(APhone: string): FormResult;
+begin
+  frmCallUnknown := TfrmCallUnknown.Create(nil);
+  try
+    frmCallUnknown.ShowModal;
+    Result.ModalRes := frmCallUnknown.ModalResult;
+  finally
+    FreeAndNil(frmCallUnknown);
+  end;
+end;
 
 function TDataModuleMain.ShowWorkerForm(DS: TDataSource; Worker_ID: integer;
   ActionStr: TActionStr; ParentForm: TForm; ShowModal: Boolean): FormResult;
@@ -292,6 +345,7 @@ var Q : TIBQuery;
     ClP :ClientCallParams;
     tel :string;
     id: integer;
+    extPrm: TClientParam;
 begin
 
   if Db.Connected = false then  Exit;
@@ -301,45 +355,49 @@ begin
     with CallS_Q do
     begin
          Close;
-         ParamByName('ATS_Num').AsString :=  CurrentUserSets.ATS_Phone_Num;
+         ParamByName('ATS_Num').AsString := CurrentUserSets.ATS_Phone_Num;
          Open;
 
          if FieldByName('ID').IsNull = false then
          begin //если звонок есть.
-            tel := FieldByName('CALL_NUM').AsString;
-            id  := FieldByName('ID').AsInteger;
-            //Delete;
-            if Transaction.InTransaction then
-               Transaction.CommitRetaining;
-            //берем звонок в обработку
-            if not SetReadedCall(id) then
-            begin
-              // ошибка
-              exit;
-            end;
+           tel := FieldByName('CALL_NUM').AsString;
+           id  := FieldByName('ID').AsInteger;
+           //Delete;
+           if Transaction.InTransaction then
+              Transaction.CommitRetaining;
 
-            CLP := getClientCallParams(tel);
-            CLP.id_call := id;
+           //получаем параметры звонка
+           CLP := getClientCallParams(tel);
+           CLP.id_call := id;
 
-           (*if clp.Client_Type = '' then
+           ExtPrm.CallParam := CLP;
+
+           //берем звонок в обработку
+           if not SetReadedCall(id) then
+           begin
+             // ошибка
+             exit;
+           end;
+
+           if clp.Client_Type = '' then
            begin  // ¬ызываем неизвестный звонок.
-             case dm.ShowUnknownCallForm(id, tel).ModalRes of
-               1: dm.ShowClientFForm(0, asCreate, MF, tel);
-               2: dm.ShowClientUrForm(0, asCreate, MF, tel);
+             case ShowUnknownCallForm(tel).ModalRes of
+               mrOk: ShowClientFiz(asCreate, ExtPrm);
+               mrYes: ShowClientUr(asCreate, ExtPrm);
              end;
            end
            else
            begin
              if ClP.Client_Type = 'F' then
              begin
-                 dm.ShowFizCallForm(clp);
+               //ShowFizCallForm(clp);
              end;
 
              if ClP.Client_Type = 'U' then
              begin
-               dm.ShowUrCallForm(clp);
+               //ShowUrCallForm(clp);
              end;
-           end;*)
+           end;
          end;
 
          if Transaction.Active then
@@ -555,9 +613,9 @@ function TDataModuleMain.getClientCallParams(TelNum: string): ClientCallParams;
 var Q :TIBQuery;
 begin
 
-    try
+  try
     Q := CreateRWQuery;
-    Q.SQL.Text := 'SELECT * FROM FINDCLINT_BYTEL('+ QuotedStr(TelNum) +')';
+    Q.SQL.Text := 'SELECT * FROM FINDCLIENT_BYTEL('+ QuotedStr(TelNum) +')';
     Q.open;
 
     if q.FieldByName('Client_ID').IsNull = false  then

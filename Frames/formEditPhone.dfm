@@ -28,7 +28,6 @@ inherited frmEditPhone: TfrmEditPhone
     DataBinding.DataField = 'PHONE'
     Properties.BeepOnError = True
     Properties.EditMask = '!\(999\)000\-00\-00;0;_'
-    Properties.ReadOnly = True
     ExplicitTop = 24
     ExplicitWidth = 150
     Width = 150

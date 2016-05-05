@@ -47,6 +47,7 @@ type
     procedure cxDBTextEdit1DblClick(Sender: TObject);
     procedure Cancel_btnClick(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
+    procedure _FramePersonFullcmbDateBirthPropertiesInitPopup(Sender: TObject);
   private
     { Private declarations }
   public
@@ -61,7 +62,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils, CommonTypes, IBX.IBQuery, frPersonFull;
+  System.StrUtils, CommonTypes, IBX.IBQuery, frPersonFull, CommonVars;
 
 
 procedure TfrmWorker.Cancel_btnClick(Sender: TObject);
@@ -233,6 +234,14 @@ begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
   end;
+end;
+
+procedure TfrmWorker._FramePersonFullcmbDateBirthPropertiesInitPopup(
+  Sender: TObject);
+begin
+  inherited;
+  if TcxDateEdit(Sender).EditValue = null then
+    TcxDateEdit(Sender).EditValue := IncMonth(Now(), -(InitBirthYear*12));
 end;
 
 end.

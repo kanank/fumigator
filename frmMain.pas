@@ -19,6 +19,7 @@ type
     Clients_PUM: TPopupMenu;
     UrClients_mi: TMenuItem;
     FizClients_mi: TMenuItem;
+    RzMenuButton2: TRzMenuButton;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -27,6 +28,7 @@ type
     procedure NewFizClnt_miClick(Sender: TObject);
     procedure NewURClnt_miClick(Sender: TObject);
     procedure btnClientsClick(Sender: TObject);
+    procedure RzMenuButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -96,6 +98,12 @@ begin
   if frmClientUr.ShowModal = mrOk then
     DM.Clients.Refresh;
   FreeAndNil(frmClientUr);
+end;
+
+procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
+begin
+  DM.Calls_TimerTimer(DM.Calls_Timer);
+
 end;
 
 procedure TfrmMain.btnClientsClick(Sender: TObject);

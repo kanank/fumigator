@@ -62,19 +62,18 @@ inherited FramePassport: TFramePassport
       Font.Style = []
       ParentFont = False
     end
-    object cxDBMaskEdit1: TcxDBMaskEdit
+    object edtNomer: TcxDBMaskEdit
       Left = 119
       Top = 16
       DataBinding.DataField = 'PASS_NUM'
       DataBinding.DataSource = DS
-      Properties.MaskKind = emkRegExprEx
-      Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d\d\d\d\d'
+      Properties.EditMask = '9999 999999;0;'#9618
       Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]
       TabOrder = 0
       Width = 90
     end
-    object cxDBDateEdit1: TcxDBDateEdit
+    object cmbDate: TcxDBDateEdit
       Left = 119
       Top = 41
       DataBinding.DataField = 'PASS_DATE'
@@ -82,37 +81,27 @@ inherited FramePassport: TFramePassport
       TabOrder = 1
       Width = 90
     end
-    object cxDBTextEdit1: TcxDBTextEdit
-      Left = 119
-      Top = 66
-      BeepOnEnter = False
-      DataBinding.DataField = 'PASS_CODE'
-      DataBinding.DataSource = DS
-      Properties.MaxLength = 16
-      Properties.ValidationOptions = [evoShowErrorIcon]
-      Style.HotTrack = False
-      Style.LookAndFeel.Kind = lfFlat
-      Style.LookAndFeel.NativeStyle = True
-      Style.TransparentBorder = True
-      StyleDisabled.LookAndFeel.Kind = lfFlat
-      StyleDisabled.LookAndFeel.NativeStyle = True
-      StyleFocused.LookAndFeel.Kind = lfFlat
-      StyleFocused.LookAndFeel.NativeStyle = True
-      StyleHot.LookAndFeel.Kind = lfFlat
-      StyleHot.LookAndFeel.NativeStyle = True
-      TabOrder = 2
-      Width = 90
-    end
-    object cxDBMemo1: TcxDBMemo
+    object edtKem: TcxDBMemo
       Left = 13
       Top = 106
       DataBinding.DataField = 'PASS_ORG'
       DataBinding.DataSource = DS
       Properties.MaxLength = 128
       Properties.ValidationOptions = [evoShowErrorIcon]
-      TabOrder = 3
+      TabOrder = 2
       Height = 28
       Width = 196
+    end
+    object edtCode: TcxDBMaskEdit
+      Left = 121
+      Top = 68
+      DataBinding.DataField = 'PASS_CODE'
+      DataBinding.DataSource = DS
+      Properties.EditMask = '999\-999;0;'#9618
+      Properties.MaxLength = 0
+      Properties.ValidationOptions = [evoShowErrorIcon]
+      TabOrder = 3
+      Width = 90
     end
   end
   inherited Query_upd: TIBUpdateSQL

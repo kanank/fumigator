@@ -22,6 +22,7 @@ inherited frmKladrAdr: TfrmKladrAdr
   end
   inherited btnOK: TRzButton
     Top = 165
+    OnClick = btnOKClick
     ExplicitTop = 165
   end
   inherited bntCancel: TRzButton

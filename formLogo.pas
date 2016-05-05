@@ -11,6 +11,7 @@ type
   TfrmLogo = class(TForm)
     img1: TImage;
     Info: TRzLabel;
+    RzLabel1: TRzLabel;
   private
     { Private declarations }
   public
@@ -23,5 +24,7 @@ var
 implementation
 
 {$R *.dfm}
+
+
 
 end.

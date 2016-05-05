@@ -34,7 +34,6 @@ type
     butOK: TRzButton;
     FrameUslugi: TFrameUslugi;
     DS: TDataSource;
-    Image1: TImage;
     FrameAddress: TFrameKladrAdrFull;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
@@ -133,6 +132,7 @@ begin
           DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 1;
           DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
           DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
         end;
       end;
     asEdit:

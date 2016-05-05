@@ -15,7 +15,6 @@ uses
 
 type
   TfrmWorkerShedule = class(TSimpleForm)
-    Image1: TImage;
     GridCli: TcxGrid;
     GridCliLevel1: TcxGridLevel;
     GridCliUrView: TcxGridDBTableView;

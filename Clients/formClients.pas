@@ -59,11 +59,22 @@ uses
 
 
 procedure TfrmClients.Add_btnClick(Sender: TObject);
+var
+  id: integer;
 begin
-  if FisUr = 1 then
-    formMain.NewURClnt_mi.Click
-  else
-    formMain.NewFizClnt_mi.Click;
+  try
+    DS.DataSet.Filtered := false;
+
+    if FisUr = 1 then
+      formMain.NewURClnt_mi.Click
+    else
+      formMain.NewFizClnt_mi.Click;
+   id := DS.DataSet.FieldByName('id').AsInteger;
+  finally
+    DS.DataSet.Filtered := True;
+    DS.DataSet.Locate('ID', id, []);
+    Grid.SetFocus;
+  end;
 end;
 
 procedure TfrmClients.btnCliClick(Sender: TObject);
@@ -89,14 +100,27 @@ begin
 end;
 
 procedure TfrmClients.Del_btnClick(Sender: TObject);
+var
+  id: integer;
 begin
-  if not (DS.DataSet.State in [dsInsert, dsEdit]) then
-    DS.DataSet.Edit;
+  try
+    id := DS.DataSet.FieldByName('id').AsInteger;
+    DS.DataSet.Filtered := false;
 
-  DS.DataSet.FieldByName('active').AsInteger := 0;
-  DS.DataSet.Post;
-  TIBQuery(DS.DataSet).ApplyUpdates;
-  TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+    if not DS.DataSet.Locate('ID', id, []) then
+      Exit;
+
+    if not (DS.DataSet.State in [dsInsert, dsEdit]) then
+      DS.DataSet.Edit;
+
+    DS.DataSet.FieldByName('act').AsInteger := 0;
+    DS.DataSet.Post;
+    //DS.Dataset.Delete;
+    TIBQuery(DS.DataSet).ApplyUpdates;
+    TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+  finally
+    DS.DataSet.Filtered := True;
+  end;
 
 end;
 
@@ -132,7 +156,7 @@ end;
 
 procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
 begin
-  Accept := (DataSet.FieldByName('active').AsInteger = 1) and
+  Accept := (DataSet.FieldByName('ACT').AsInteger = 1) and
             (DataSet.FieldByName('type_cli').AsInteger = isUr) and
             (DataSet.FieldByName('status_id').AsInteger = status);
 end;
@@ -161,6 +185,7 @@ begin
   DS.DataSet.Filtered := false;
   //DS.DataSet.Filter := Format('type_cli = %d', [isUr]);
   DS.DataSet.Filtered := True;
+  Grid.Refresh;
 end;
 
 procedure TfrmClients.SetIsUr(AValue: integer);

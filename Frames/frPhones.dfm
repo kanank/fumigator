@@ -35,7 +35,6 @@ inherited FramePhones: TFramePhones
         OptionsData.CancelOnExit = False
         OptionsData.Deleting = False
         OptionsData.DeletingConfirmation = False
-        OptionsData.Editing = False
         OptionsData.Inserting = False
         OptionsView.NoDataToDisplayInfoText = '<'#1053#1086#1084#1077#1088#1072' '#1085#1077' '#1076#1086#1073#1072#1074#1083#1077#1085#1099' >'
         OptionsView.ScrollBars = ssVertical
@@ -59,8 +58,11 @@ inherited FramePhones: TFramePhones
         object grdPhoneDBTableView2Column2: TcxGridDBColumn
           DataBinding.FieldName = 'phone'
           PropertiesClassName = 'TcxMaskEditProperties'
-          Properties.EditMask = '!\(999\)000\-00\-00;0;_'
-          Properties.ReadOnly = False
+          Properties.AlwaysShowBlanksAndLiterals = True
+          Properties.BeepOnError = True
+          Properties.EditMask = '\(999\)000\-00\-00;0;'#9618
+          Properties.ValidateOnEnter = False
+          Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
           Options.Editing = False
           Options.Moving = False
           Options.ShowCaption = False

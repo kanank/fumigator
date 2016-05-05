@@ -27,6 +27,7 @@ type
     cmbSex: TcxDBComboBox;
     Label4: TLabel;
     cmbProf: TcxDBLookupComboBox;
+    procedure cmbDateBirthPropertiesInitPopup(Sender: TObject);
   private
     function GetFullName: string;
     function GetShortName: string;
@@ -44,6 +45,13 @@ uses
   DM_Main, System.StrUtils;
 
 { TFramePersonSmall }
+
+
+procedure TFramePersonSmall.cmbDateBirthPropertiesInitPopup(Sender: TObject);
+begin
+  if TcxDateEdit(Sender).EditValue = null then
+    TcxDateEdit(Sender).EditValue := IncMonth(Now(), -360);
+end;
 
 procedure TFramePersonSmall.FillNameParts(var f, i, o: string);
 begin

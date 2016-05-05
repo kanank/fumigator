@@ -201,12 +201,20 @@ inherited frmWorker: TfrmWorker
           inherited RzPanel1: TRzPanel
             Top = 3
             ExplicitTop = 3
+            inherited Label8: TLabel
+              Left = 502
+              ExplicitLeft = 502
+            end
             inherited Label6: TLabel
               Top = 58
               ExplicitTop = 58
             end
             inherited FrameFoto: TFrameFoto
+              Left = 673
+              ExplicitLeft = 673
               inherited RzPanel4: TRzPanel
+                Left = 0
+                ExplicitLeft = 0
                 inherited btnLoad: TRzBitBtn
                   Top = 94
                   ExplicitTop = 94
@@ -216,6 +224,13 @@ inherited frmWorker: TfrmWorker
                   ExplicitTop = 113
                 end
               end
+            end
+            inherited cmbDateBirth: TcxDBDateEdit
+              Left = 585
+              Properties.OnInitPopup = _FramePersonFullcmbDateBirthPropertiesInitPopup
+              ExplicitLeft = 585
+              ExplicitWidth = 85
+              Width = 85
             end
             inherited FramePhones: TFramePhones
               inherited grpPhone: TRzGroupBox
@@ -265,7 +280,7 @@ inherited frmWorker: TfrmWorker
             ParentFont = False
           end
           object ATSNUM_edt: TcxDBTextEdit
-            Left = 133
+            Left = 136
             Top = -2
             Anchors = [akLeft, akTop, akRight]
             BeepOnEnter = False
@@ -283,7 +298,7 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
-            Width = 82
+            Width = 85
           end
         end
         object RzPanel6: TRzPanel
@@ -387,7 +402,7 @@ inherited frmWorker: TfrmWorker
             ParentFont = False
           end
           object cxDBTextEdit3: TcxDBTextEdit
-            Left = 133
+            Left = 136
             Top = -2
             Anchors = [akLeft, akTop, akRight]
             BeepOnEnter = False
@@ -405,7 +420,7 @@ inherited frmWorker: TfrmWorker
             StyleHot.LookAndFeel.Kind = lfFlat
             StyleHot.LookAndFeel.NativeStyle = True
             TabOrder = 0
-            Width = 82
+            Width = 85
           end
         end
       end

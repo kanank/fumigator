@@ -16,13 +16,10 @@ uses
 type
   TfrmIncomeCall = class(TSimpleForm)
     Label11: TLabel;
-    edtPhone: TcxDBMaskEdit;
     DS: TDataSource;
-    RzGroupBox1: TRzGroupBox;
+    grpBox: TRzGroupBox;
     FramePerson: TFramePersonSmall;
     Label1: TLabel;
-    cmbFormat: TcxDBLookupComboBox;
-    cmbStatus: TcxDBLookupComboBox;
     Label4: TLabel;
     Label2: TLabel;
     grdDog: TcxGrid;
@@ -33,8 +30,11 @@ type
     grdDogDBTableView1Column3: TcxGridDBColumn;
     grdDogDBTableView1Column4: TcxGridDBColumn;
     Label3: TLabel;
-    cxDBLabel2: TcxDBLabel;
     btnTransfer: TRzButton;
+    edtPhone: TcxMaskEdit;
+    cmbFormat: TcxLookupComboBox;
+    cmbStatus: TcxLookupComboBox;
+    lblWorker: TcxLabel;
   private
     { Private declarations }
   public

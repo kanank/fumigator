@@ -61,6 +61,7 @@ inherited frmClientFiz: TfrmClientFiz
   inherited RzPanel1: TRzPanel
     Top = 271
     Width = 734
+    TabOrder = 8
     ExplicitTop = 271
     ExplicitWidth = 734
     inherited Exit_bnt: TRzButton
@@ -387,6 +388,38 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitLeft = 75
       ExplicitWidth = 253
       Width = 253
+    end
+  end
+  inline FramePhones: TFramePhones
+    Left = 291
+    Top = 30
+    Width = 216
+    Height = 112
+    TabOrder = 0
+    ExplicitLeft = 291
+    ExplicitTop = 30
+    ExplicitWidth = 216
+    ExplicitHeight = 112
+    inherited grpPhone: TRzGroupBox
+      Height = 110
+      inherited grdPhone: TcxGrid
+        Left = 5
+        Top = 15
+        Height = 91
+        ExplicitLeft = 5
+        ExplicitTop = 15
+        ExplicitHeight = 91
+      end
+      inherited RzPanel2: TRzPanel
+        Height = 95
+        inherited btnEdit: TRzBitBtn
+          Top = 34
+          ExplicitTop = 34
+        end
+        inherited btnDel: TRzBitBtn
+          Top = 65
+        end
+      end
     end
   end
   object DS: TDataSource

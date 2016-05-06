@@ -93,7 +93,10 @@ begin
   Query.Close;
   try
     //Query.ParamByName('id').AsInteger := Aid;
-    QuerySetParams;
+    if Aid > 0 then
+      Query.Params[0].AsInteger := Aid
+    else
+      QuerySetParams;
     Query.Open;
     if (Query.RecordCount = 0) and fAutoAppend then
       Query.Append;

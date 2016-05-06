@@ -12,11 +12,11 @@ uses
 type
   TfrmCallUnknown = class(TSimpleForm)
     Label11: TLabel;
-    edtPhone: TcxDBMaskEdit;
     RzLabel1: TRzLabel;
     btnNewFizCli: TRzButton;
     btnNewUrCli: TRzButton;
     DS: TDataSource;
+    edtPhone: TcxMaskEdit;
   private
     { Private declarations }
   public
@@ -32,6 +32,5 @@ implementation
 
 uses
   DM_Main, formClientFiz, formClientUr, CommonTypes;
-
 
 end.

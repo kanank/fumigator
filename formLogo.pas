@@ -12,6 +12,7 @@ type
     img1: TImage;
     Info: TRzLabel;
     RzLabel1: TRzLabel;
+    Shape1: TShape;
   private
     { Private declarations }
   public

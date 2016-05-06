@@ -2,6 +2,7 @@ inherited frmIncomeCall: TfrmIncomeCall
   BorderIcons = [biSystemMenu]
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
   ClientHeight = 225
+  Position = poDesktopCenter
   ExplicitHeight = 263
   DesignSize = (
     641
@@ -15,6 +16,7 @@ inherited frmIncomeCall: TfrmIncomeCall
     Height = 25
     Visible = False
     ExplicitLeft = 568
+    ExplicitTop = -133
     ExplicitWidth = 73
     ExplicitHeight = 25
   end
@@ -33,6 +35,7 @@ inherited frmIncomeCall: TfrmIncomeCall
   end
   inherited RzPanel1: TRzPanel
     Top = 181
+    ExplicitTop = 181
     inherited Exit_bnt: TRzButton
       Left = 145
       Top = 6
@@ -63,20 +66,7 @@ inherited frmIncomeCall: TfrmIncomeCall
       ThemeAware = False
     end
   end
-  object edtPhone: TcxDBMaskEdit
-    Left = 504
-    Top = 6
-    DataBinding.DataField = 'PHONE'
-    DataBinding.DataSource = DS
-    Enabled = False
-    Properties.EditMask = '!\(999\)000-0000;1;_'
-    Properties.ValidationOptions = [evoRaiseException, evoShowErrorIcon]
-    StyleDisabled.BorderColor = clInfoText
-    StyleDisabled.TextColor = clMenuText
-    TabOrder = 1
-    Width = 129
-  end
-  object RzGroupBox1: TRzGroupBox
+  object grpBox: TRzGroupBox
     Left = 8
     Top = 27
     Width = 625
@@ -87,10 +77,10 @@ inherited frmIncomeCall: TfrmIncomeCall
     CaptionFont.Height = -11
     CaptionFont.Name = 'Tahoma'
     CaptionFont.Style = [fsBold]
-    TabOrder = 2
+    TabOrder = 1
     object Label1: TLabel
       Left = 10
-      Top = 98
+      Top = 100
       Width = 83
       Height = 13
       Caption = #1060#1086#1088#1084#1072#1090' '#1082#1083#1080#1077#1085#1090#1072
@@ -103,7 +93,7 @@ inherited frmIncomeCall: TfrmIncomeCall
     end
     object Label4: TLabel
       Left = 10
-      Top = 123
+      Top = 124
       Width = 81
       Height = 13
       Caption = #1057#1090#1072#1090#1091#1089' '#1082#1083#1080#1077#1085#1090#1072
@@ -183,48 +173,12 @@ inherited frmIncomeCall: TfrmIncomeCall
         end
       end
     end
-    object cmbFormat: TcxDBLookupComboBox
-      Left = 100
-      Top = 96
-      DataBinding.DataField = 'FORMAT_ID'
-      DataBinding.DataSource = DS
-      Properties.GridMode = True
-      Properties.KeyFieldNames = 'ID'
-      Properties.ListColumns = <
-        item
-          FieldName = 'NAME'
-        end>
-      Properties.ListOptions.GridLines = glNone
-      Properties.ListOptions.ShowHeader = False
-      Properties.ListSource = DataModuleMain.DsFormatsCli
-      Properties.ReadOnly = False
-      TabOrder = 1
-      Width = 129
-    end
-    object cmbStatus: TcxDBLookupComboBox
-      Left = 100
-      Top = 120
-      DataBinding.DataField = 'STATUS_ID'
-      DataBinding.DataSource = DS
-      Properties.GridMode = True
-      Properties.KeyFieldNames = 'ID'
-      Properties.ListColumns = <
-        item
-          FieldName = 'NAME'
-        end>
-      Properties.ListOptions.GridLines = glNone
-      Properties.ListOptions.ShowHeader = False
-      Properties.ListSource = DataModuleMain.DsDicStatusCli
-      Properties.ReadOnly = False
-      TabOrder = 2
-      Width = 128
-    end
     object grdDog: TcxGrid
       Left = 252
       Top = 22
       Width = 365
       Height = 95
-      TabOrder = 3
+      TabOrder = 1
       object grdDogDBTableView1: TcxGridDBTableView
         Navigator.Buttons.CustomButtons = <>
         DataController.Summary.DefaultGroupSummaryItems = <>
@@ -275,12 +229,58 @@ inherited frmIncomeCall: TfrmIncomeCall
         GridView = grdDogDBTableView1
       end
     end
-    object cxDBLabel2: TcxDBLabel
-      Left = 456
-      Top = 121
-      Height = 21
-      Width = 161
+    object cmbFormat: TcxLookupComboBox
+      Left = 100
+      Top = 97
+      Properties.KeyFieldNames = 'ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DsFormatsCli
+      TabOrder = 2
+      Width = 128
     end
+    object cmbStatus: TcxLookupComboBox
+      Left = 100
+      Top = 121
+      Properties.KeyFieldNames = 'ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DsDicStatusCli
+      TabOrder = 3
+      Width = 128
+    end
+    object lblWorker: TcxLabel
+      Left = 443
+      Top = 121
+      AutoSize = False
+      Caption = 'lblWorker'
+      Height = 17
+      Width = 174
+    end
+  end
+  object edtPhone: TcxMaskEdit
+    Left = 504
+    Top = 6
+    ParentFont = False
+    Properties.AlwaysShowBlanksAndLiterals = True
+    Properties.EditMask = '\(999\)000\-00\-00;0;'#9618
+    Properties.ReadOnly = True
+    Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
+    Style.Font.Charset = DEFAULT_CHARSET
+    Style.Font.Color = clWindowText
+    Style.Font.Height = -11
+    Style.Font.Name = 'Tahoma'
+    Style.Font.Style = [fsBold]
+    Style.IsFontAssigned = True
+    TabOrder = 2
+    Text = '          '
+    Width = 129
   end
   object DS: TDataSource
     Left = 392

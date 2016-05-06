@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -95,12 +97,12 @@ inherited frmMain: TfrmMain
     ShowArrow = False
   end
   object RzMenuButton2: TRzMenuButton
-    Left = 512
-    Top = 119
+    Left = 536
+    Top = 8
     Width = 87
     Height = 31
     Anchors = [akLeft, akRight, akBottom]
-    Caption = #1058#1077#1089#1090
+    Caption = #1058#1077#1089#1090' '#1079#1074#1086#1085#1082#1072
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -111,7 +113,6 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 4
     ThemeAware = False
-    Visible = False
     OnClick = RzMenuButton2Click
     ShowArrow = False
   end

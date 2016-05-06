@@ -50,7 +50,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, IBX.IBQuery, CommonTypes;
+  DM_Main, IBX.IBQuery, CommonTypes, System.StrUtils;
 
 procedure TfrmClientUr.butOKClick(Sender: TObject);
 var
@@ -132,6 +132,7 @@ begin
           DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 1;
           DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
           DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('ACT').AsInteger := 1;
           DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
         end;
       end;
@@ -157,7 +158,19 @@ begin
 
   FramePhones.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FramePhones.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FramePhones.typePhone := 0;
   FramePhones.OpenData;
+
+  if (fFrmParam.action = asCreate) and
+     (TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
+  begin
+    FramePhones.DS.DataSet.Append;
+    FramePhones.DS.DataSet.FieldByName('phone').AsString :=
+      RightStr(TClientParam(fFrmParam.ExtParam^).CallParam.TelNum, 10);
+    FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
+    FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
+    FramePhones.DS.DataSet.Post;
+  end;
 
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));

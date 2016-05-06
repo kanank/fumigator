@@ -25,6 +25,7 @@ type
     FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
     FrameAddress: TFrameKladrAdrFull;
+	FramePhones: TFramePhones;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
@@ -41,7 +42,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes, IBX.IBQuery, CommonVars;
+  DM_Main, CommonTypes, IBX.IBQuery, CommonVars, System.StrUtils;
 
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
@@ -77,6 +78,11 @@ begin
       DS.DataSet.Post;
       TIBQuery(DS.DataSet).ApplyUpdates;
 
+      //телефоны
+      res := FramePhones.SaveData;
+      if not res then
+        Exit;
+
       //услуги
       res := FrameUslugi.SaveData;
     except
@@ -109,9 +115,10 @@ begin
         if (DS.DataSet <> nil) and DS.DataSet.Active then
         begin
           DS.DataSet.Append;
-          DS.DataSet.FieldByName('TYPE_CLI').AsInteger := 0;
+          DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 0;
           DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
           DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('ACT').AsInteger := 1;
           DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
         end;
       end;
@@ -131,6 +138,21 @@ begin
   FramePerson.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FramePerson.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
   FramePerson.OpenData;
+
+  FramePhones.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FramePhones.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FramePhones.OpenData;
+
+  if (fFrmParam.action = asCreate) and
+     (TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
+  begin
+    FramePhones.DS.DataSet.Append;
+    FramePhones.DS.DataSet.FieldByName('phone').AsString :=
+      RightStr(TClientParam(fFrmParam.ExtParam^).CallParam.TelNum, 10);
+    FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
+    FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
+    FramePhones.DS.DataSet.Post;
+  end;
 
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FrameUslugi.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));

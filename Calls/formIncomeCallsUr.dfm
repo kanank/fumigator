@@ -16,11 +16,7 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     Top = 204
     ExplicitTop = 204
   end
-  inherited edtPhone: TcxDBMaskEdit
-    Left = 497
-    ExplicitLeft = 497
-  end
-  inherited RzGroupBox1: TRzGroupBox
+  inherited grpBox: TRzGroupBox
     Height = 176
     ExplicitHeight = 176
     inherited Label4: TLabel [0]
@@ -38,12 +34,12 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     inherited Label3: TLabel [2]
       Left = 6
       Top = 135
-      Width = 88
+      Width = 84
       Height = 26
       WordWrap = True
       ExplicitLeft = 6
       ExplicitTop = 135
-      ExplicitWidth = 88
+      ExplicitWidth = 84
       ExplicitHeight = 26
     end
     inherited Label1: TLabel [3]
@@ -121,16 +117,6 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
         end
       end
     end
-    inherited cmbFormat: TcxDBLookupComboBox
-      Top = 70
-      TabOrder = 0
-      ExplicitTop = 70
-    end
-    inherited cmbStatus: TcxDBLookupComboBox
-      Top = 98
-      TabOrder = 1
-      ExplicitTop = 98
-    end
     inherited grdDog: TcxGrid
       Left = 253
       Top = 77
@@ -138,7 +124,17 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
       ExplicitLeft = 253
       ExplicitTop = 77
     end
-    inherited cxDBLabel2: TcxDBLabel
+    inherited cmbFormat: TcxLookupComboBox
+      Top = 70
+      TabOrder = 0
+      ExplicitTop = 70
+    end
+    inherited cmbStatus: TcxLookupComboBox
+      Top = 98
+      TabOrder = 1
+      ExplicitTop = 98
+    end
+    inherited lblWorker: TcxLabel
       Left = 100
       Top = 133
       ExplicitLeft = 100
@@ -198,6 +194,11 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
       TabOrder = 7
       Width = 219
     end
+  end
+  inherited edtPhone: TcxMaskEdit
+    Left = 497
+    Style.IsFontAssigned = True
+    ExplicitLeft = 497
   end
   object cxDBTextEdit3: TcxDBTextEdit [5]
     Left = 407

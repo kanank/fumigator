@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -905,7 +907,7 @@ object DataModuleMain: TDataModuleMain
       'EMAIL'#9#9'= :EMAIL,'
       'WORKER_ID'#9'= :WORKER_ID,'
       'COMMENT'#9'= :COMMENT,'
-      'ACT                      = :ACT'
+      'ACT                         = :ACT'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
@@ -919,8 +921,7 @@ object DataModuleMain: TDataModuleMain
       'EMAIL,'
       'WORKER_ID,'
       'COMMENT,'
-      '"ACTIVE"'
-      ')'
+      'ACT)'
       'values'
       '('
       ':id,'
@@ -933,7 +934,7 @@ object DataModuleMain: TDataModuleMain
       ':EMAIL,'
       ':WORKER_ID,'
       ':COMMENT,'
-      ':"ACTIVE"'
+      ':ACT'
       ')')
     DeleteSQL.Strings = (
       'update clients set act=0 where id=:id')
@@ -941,6 +942,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1092,9 +1094,12 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
+    DefaultAction = TACommitRetaining
     Params.Strings = (
       'wait')
+    AutoStopAction = saCommitRetaining
     Left = 80
     Top = 104
   end

@@ -68,8 +68,11 @@ type
     function getClientCallParams(TelNum: string): ClientCallParams;
 
     function ShowUnknownCallForm(APhone: string): FormResult;
+    function ShowFizCallForm(CLP: ClientCallParams): FormResult;
+    function ShowUrCallForm(CLP: ClientCallParams): FormResult;
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
@@ -108,7 +111,8 @@ implementation
 {$R *.dfm}
 
 uses
-  frmWorker, System.StrUtils, formCallUnknown, formClientFiz, formClientUr;
+  frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
+  formClientUr, formIncomeCalls, formIncomeCallsUr;
 
 function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
   AExtPrm: TClientParam): FormResult;
@@ -148,14 +152,57 @@ begin
   end;
 end;
 
+function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
+var
+  prm: TClientParam;
+begin
+  frmIncomeCall := TfrmIncomeCall.Create(nil);
+  try
+    frmIncomeCall.edtPhone.Text := RightStr(CLP.TelNum, 10);
+    frmIncomeCall.FramePerson.OpenData(CLP.PERSON_ID);
+    frmIncomeCall.cmbFormat.EditValue := CLP.Format_Id;
+    frmIncomeCall.cmbStatus.EditValue := CLP.Status_Id;
+    frmIncomeCall.lblWorker.Caption   := CLP.Author;
+    frmIncomeCall.ShowModal;
+    if frmIncomeCall.ModalResult =mrOk then
+      ShowClientFiz(asEdit, prm);
+
+    Result.ModalRes := frmIncomeCall.ModalResult;
+  finally
+    FreeAndNil(frmIncomeCall);
+  end;
+end;
+
 function TDataModuleMain.ShowUnknownCallForm(APhone: string): FormResult;
 begin
   frmCallUnknown := TfrmCallUnknown.Create(nil);
   try
+    frmCallUnknown.edtPhone.Text := RightStr(APhone, 10);
     frmCallUnknown.ShowModal;
     Result.ModalRes := frmCallUnknown.ModalResult;
   finally
     FreeAndNil(frmCallUnknown);
+  end;
+end;
+
+function TDataModuleMain.ShowUrCallForm(CLP: ClientCallParams): FormResult;
+var
+  prm: TClientParam;
+begin
+  frmIncomeCallUr := TfrmIncomeCallUr.Create(nil);
+  try
+    frmIncomeCallUr.edtPhone.Text := RightStr(CLP.TelNum, 10);
+    frmIncomeCallUr.FramePerson.OpenData(CLP.PERSON_ID);
+    frmIncomeCallUr.cmbFormat.EditValue := CLP.Format_Id;
+    frmIncomeCallUr.cmbStatus.EditValue := CLP.Status_Id;
+    frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
+    frmIncomeCallUr.ShowModal;
+    if frmIncomeCallUr.ModalResult = mrOk then
+      ShowClientFiz(asEdit, prm);
+
+    Result.ModalRes := frmIncomeCallUr.ModalResult;
+  finally
+    FreeAndNil(frmIncomeCallUr);
   end;
 end;
 
@@ -355,6 +402,8 @@ begin
     with CallS_Q do
     begin
          Close;
+         if Transaction.InTransaction then
+           Transaction.CommitRetaining;
          ParamByName('ATS_Num').AsString := CurrentUserSets.ATS_Phone_Num;
          Open;
 
@@ -369,6 +418,7 @@ begin
            //получаем параметры звонка
            CLP := getClientCallParams(tel);
            CLP.id_call := id;
+           ClP.TelNum  := tel;
 
            ExtPrm.CallParam := CLP;
 
@@ -390,12 +440,12 @@ begin
            begin
              if ClP.Client_Type = 'F' then
              begin
-               //ShowFizCallForm(clp);
+               ShowFizCallForm(clp);
              end;
 
              if ClP.Client_Type = 'U' then
              begin
-               //ShowUrCallForm(clp);
+               ShowUrCallForm(clp);
              end;
            end;
          end;
@@ -422,7 +472,7 @@ begin
 
   finally
 
-    calls_timer.enabled := true;
+   ////// calls_timer.enabled := true;
   end;
 end;
 
@@ -618,6 +668,7 @@ begin
     Q.SQL.Text := 'SELECT * FROM FINDCLIENT_BYTEL('+ QuotedStr(TelNum) +')';
     Q.open;
 
+    Result.TelNum := TelNum;
     if q.FieldByName('Client_ID').IsNull = false  then
     begin
        Result.Client_Type   := q.FieldByName('CLIENT_TYPE').AsString;
@@ -628,9 +679,8 @@ begin
        Result.PERSON_ID     := q.FieldByName('PERSON_ID').Asinteger;
        Result.FORMA_ID      := q.FieldByName('FORMA_ID').Asinteger;
        Result.Author        := q.FieldByName('AUTHOR').AsString;
-       Result.TelNum        := TelNum;
        Result.INN           := q.FieldByName('INN').AsString;
-       Result.clientContact := q.FieldByName('CONTACT_FIO').AsString;
+       //Result.clientContact := q.FieldByName('CONTACT_FIO').AsString;
        Result.ClientInfoParams.ClientInfo := q.FieldByName('CLIENTINFO').AsString;
        Result.ClientInfoParams.ClientComms := q.FieldByName('CLIENTCOMMS').AsString;
     end

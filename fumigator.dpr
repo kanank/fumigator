@@ -57,6 +57,7 @@ begin
   Application.Title := 'Фумигатор';
 
   Application.CreateForm(TDataModuleMain, DM);
+  LoadOptions(CfgFileName);
 
   frmLogin := TfrmLogin.Create(nil);
   if frmLogin.ShowModal <> mrOk then

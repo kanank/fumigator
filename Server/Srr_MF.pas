@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask,
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
-  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs;
+  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp;
 
 type
   TMF = class(TForm)
@@ -42,12 +42,22 @@ type
     Label10: TLabel;
     Button3: TButton;
     CallEnent_Q: TIBQuery;
+    ServerSocket: TServerSocket;
+    Label9: TLabel;
+    edtSocketPort: TSpinEdit;
+    Edit1: TEdit;
+    Button4: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
     procedure TestDb_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ServerSocketClientConnect(Sender: TObject;
+      Socket: TCustomWinSocket);
+    procedure ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -195,6 +205,23 @@ end;
 
 end;
 
+procedure TMF.Button2Click(Sender: TObject);
+begin
+  ServerSocket.Close;
+  ServerSocket.Port := edtSocketPort.Value;
+  ServerSocket.Open;
+  Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
+end;
+
+procedure TMF.Button4Click(Sender: TObject);
+var
+  i: Integer;
+begin
+ for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
+   ServerSocket.Socket.Connections[i].SendText(Edit1.Text);
+
+end;
+
 function TMF.CreateRWQuery: TIBQuery;
 var TR :TIBTransaction;
 begin
@@ -256,6 +283,18 @@ begin
 
   end;
 
+end;
+
+procedure TMF.ServerSocketClientConnect(Sender: TObject;
+  Socket: TCustomWinSocket);
+begin
+   Log_memo.Lines.Add('Присоединение клиента');
+
+end;
+
+procedure TMF.ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
+begin
+  Log_memo.Lines.Add('Клиент прислал сообщение: ' +Socket.ReceiveText);
 end;
 
 procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;

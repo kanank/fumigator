@@ -34,16 +34,15 @@ object MF: TMF
       Align = alTop
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
       TabOrder = 0
-      Visible = False
       DesignSize = (
         621
         67)
       object Label2: TLabel
         Left = 11
         Top = 19
-        Width = 200
+        Width = 45
         Height = 13
-        Caption = #1057#1083#1091#1078#1073#1072' '#1091#1095#1077#1090#1072' '#1088#1072#1073#1086#1095#1077#1075#1086' '#1074#1088#1077#1084#1077#1085#1080': '
+        Caption = #1057#1086#1082#1077#1090#1099
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -51,14 +50,62 @@ object MF: TMF
         Font.Style = [fsBold]
         ParentFont = False
       end
+      object Label9: TLabel
+        Left = 10
+        Top = 41
+        Width = 29
+        Height = 13
+        Caption = #1055#1086#1088#1090':'
+      end
       object Button2: TButton
-        Left = 425
-        Top = 21
-        Width = 185
+        Left = 441
+        Top = 14
+        Width = 169
         Height = 25
         Anchors = [akTop, akRight]
-        Caption = #1057#1077#1088#1074#1077#1088' '#1091#1095#1077#1090#1072' '#1088#1072#1073#1086#1095#1077#1075#1086' '#1074#1088#1077#1084#1077#1085#1080
+        Caption = #1057#1077#1088#1074#1077#1088' '#1089#1086#1082#1077#1090#1086#1074
         TabOrder = 0
+        OnClick = Button2Click
+      end
+      object edtSocketPort: TSpinEdit
+        Left = 45
+        Top = 38
+        Width = 68
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxValue = 0
+        MinValue = 0
+        ParentFont = False
+        TabOrder = 1
+        Value = 1025
+      end
+      object Edit1: TEdit
+        Left = 154
+        Top = 38
+        Width = 159
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        Text = #1089#1077#1088#1074#1077#1088
+      end
+      object Button4: TButton
+        Left = 314
+        Top = 36
+        Width = 106
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+        TabOrder = 3
+        OnClick = Button4Click
       end
     end
     object GroupBox2: TGroupBox
@@ -181,8 +228,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 488
-      Top = 284
+      Left = 480
+      Top = 276
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -339,10 +386,12 @@ object MF: TMF
     Top = 185
   end
   object DefTr: TIBTransaction
+    Active = True
     Left = 272
     Top = 80
   end
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -421,5 +470,14 @@ object MF: TMF
         Name = 'CALLAPIID'
         ParamType = ptUnknown
       end>
+  end
+  object ServerSocket: TServerSocket
+    Active = False
+    Port = 1025
+    ServerType = stNonBlocking
+    OnClientConnect = ServerSocketClientConnect
+    OnClientRead = ServerSocketClientRead
+    Left = 425
+    Top = 257
   end
 end

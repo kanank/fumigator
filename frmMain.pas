@@ -5,7 +5,15 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
-  Vcl.ExtCtrls, RzButton, Vcl.Menus;
+  Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp;
+
+type
+  TAppOptions = class
+    DbServer: string;
+    DbName: string;
+    ServerHost: string;
+    ServerPort: integer;
+  end;
 
 type
   TfrmMain = class(TBaseForm)
@@ -20,6 +28,8 @@ type
     UrClients_mi: TMenuItem;
     FizClients_mi: TMenuItem;
     RzMenuButton2: TRzMenuButton;
+    ClientSocket: TClientSocket;
+    lblSocket: TLabel;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -29,14 +39,19 @@ type
     procedure NewURClnt_miClick(Sender: TObject);
     procedure btnClientsClick(Sender: TObject);
     procedure RzMenuButton2Click(Sender: TObject);
+    procedure ClientSocketConnecting(Sender: TObject; Socket: TCustomWinSocket);
+    procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
+procedure LoadOptions(AIniFile: string);
+
 var
   formMain: TfrmMain;
+  MainOptions: TAppOptions;
 
 implementation
 
@@ -60,6 +75,20 @@ begin
   FreeAndNil(formWorkers);
 end;
 
+procedure TfrmMain.ClientSocketConnecting(Sender: TObject;
+  Socket: TCustomWinSocket);
+begin
+  inherited;
+  lblSocket.Caption := 'Соединение с сервером установлено';
+end;
+
+procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
+  Socket: TCustomWinSocket);
+begin
+  inherited;
+  lblSocket.Caption := 'Соединение с сервером разорвано';
+end;
+
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   inherited;
@@ -71,6 +100,9 @@ begin
   inherited;
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')';
+  ClientSocket.Host := MainOptions.ServerHost;
+  ClientSocket.Port := MainOptions.ServerPort;
+  try ClientSocket.Open; except end;
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
@@ -122,6 +154,14 @@ begin
   formWorkers.ShowModal;
   FreeAndNil(formWorkers);
 
+end;
+
+procedure LoadOptions(AIniFile: string);
+begin
+  MainOptions := MainOptions.Create;
+
+  MainOptions.ServerHost := '81.177.48.139';
+  MainOptions.ServerPort := 1025;
 end;
 
 end.

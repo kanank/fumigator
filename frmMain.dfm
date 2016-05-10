@@ -18,6 +18,13 @@ inherited frmMain: TfrmMain
     ExplicitWidth = 249
     ExplicitHeight = 81
   end
+  object lblSocket: TLabel
+    Left = 360
+    Top = 0
+    Width = 42
+    Height = 13
+    Caption = 'lblSocket'
+  end
   object btnWorkers: TRzMenuButton
     Left = 8
     Top = 319
@@ -138,5 +145,14 @@ inherited frmMain: TfrmMain
     object FizClients_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
     end
+  end
+  object ClientSocket: TClientSocket
+    Active = False
+    ClientType = ctNonBlocking
+    Port = 0
+    OnConnecting = ClientSocketConnecting
+    OnDisconnect = ClientSocketDisconnect
+    Left = 608
+    Top = 48
   end
 end

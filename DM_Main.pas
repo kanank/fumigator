@@ -70,8 +70,6 @@ type
     function ShowUnknownCallForm(APhone: string): FormResult;
     function ShowFizCallForm(CLP: ClientCallParams): FormResult;
     function ShowUrCallForm(CLP: ClientCallParams): FormResult;
-    function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
-    function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
 
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
@@ -90,6 +88,10 @@ type
       ActionStr: TActionStr; ParentForm: TForm; ShowModal: Boolean=true): FormResult;
     function GetPersonShortName(f, i, o: string): string;
     function GetPersonFullName(f, i, o: string): string;
+
+    function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
   var

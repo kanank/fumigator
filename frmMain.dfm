@@ -2,8 +2,6 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  ExplicitWidth = 657
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -19,11 +17,19 @@ inherited frmMain: TfrmMain
     ExplicitHeight = 81
   end
   object lblSocket: TLabel
-    Left = 360
+    Left = 435
     Top = 0
-    Width = 42
-    Height = 13
-    Caption = 'lblSocket'
+    Width = 203
+    Height = 16
+    Alignment = taRightJustify
+    Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077' '#1089' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1085#1077' '#1091#1089#1090#1072#1085#1086#1074#1083#1077#1085#1086
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    Visible = False
   end
   object btnWorkers: TRzMenuButton
     Left = 8
@@ -104,8 +110,8 @@ inherited frmMain: TfrmMain
     ShowArrow = False
   end
   object RzMenuButton2: TRzMenuButton
-    Left = 536
-    Top = 8
+    Left = 528
+    Top = 19
     Width = 87
     Height = 31
     Anchors = [akLeft, akRight, akBottom]

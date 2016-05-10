@@ -103,10 +103,17 @@ begin
 end;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);
+var
+  status_id: Integer;
 begin
   inherited;
   if fFrmParam.Dataset <> nil then
     DS.DataSet := fFrmParam.Dataset;
+
+  status_id := 1;
+  if (fFrmParam.ExtParam <> nil) and
+  (TClientParam(fFrmParam.ExtParam^).CallParam.Status_Id <> 0) then
+    status_id := TClientParam(fFrmParam.ExtParam^).CallParam.Status_Id;
 
   case fFrmParam.action of
     asCreate:
@@ -116,7 +123,7 @@ begin
         begin
           DS.DataSet.Append;
           DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 0;
-          DS.DataSet.FieldByName('STATUS_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('STATUS_ID').AsInteger := status_id;
           DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
           DS.DataSet.FieldByName('ACT').AsInteger := 1;
           DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
@@ -144,6 +151,7 @@ begin
   FramePhones.OpenData;
 
   if (fFrmParam.action = asCreate) and
+     (fFrmParam.ExtParam <> nil) and
      (TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
   begin
     FramePhones.DS.DataSet.Append;

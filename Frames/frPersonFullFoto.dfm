@@ -288,31 +288,35 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         inherited Label3: TLabel
           Left = 231
           Top = 38
+          Width = 78
+          Height = 27
           WordWrap = True
           ExplicitLeft = 231
           ExplicitTop = 38
+          ExplicitWidth = 78
+          ExplicitHeight = 27
         end
         inherited Label4: TLabel
           Top = 38
           ExplicitTop = 38
         end
-        inherited cxDBDateEdit1: TcxDBDateEdit
+        inherited cmbDate: TcxDBDateEdit
           Left = 315
           Top = 16
           ExplicitLeft = 315
           ExplicitTop = 16
         end
-        inherited cxDBTextEdit1: TcxDBTextEdit
-          Left = 231
-          Top = 51
-          ExplicitLeft = 231
-          ExplicitTop = 51
-        end
-        inherited cxDBMemo1: TcxDBMemo
+        inherited edtKem: TcxDBMemo
           Top = 51
           ExplicitTop = 51
           ExplicitHeight = 38
           Height = 38
+        end
+        inherited edtCode: TcxDBMaskEdit
+          Left = 315
+          Top = 43
+          ExplicitLeft = 315
+          ExplicitTop = 43
         end
       end
       inherited Query_upd: TIBUpdateSQL

@@ -402,6 +402,7 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitHeight = 112
     inherited grpPhone: TRzGroupBox
       Height = 110
+      ExplicitHeight = 110
       inherited grdPhone: TcxGrid
         Left = 5
         Top = 15
@@ -412,12 +413,14 @@ inherited frmClientFiz: TfrmClientFiz
       end
       inherited RzPanel2: TRzPanel
         Height = 95
+        ExplicitHeight = 95
         inherited btnEdit: TRzBitBtn
           Top = 34
           ExplicitTop = 34
         end
         inherited btnDel: TRzBitBtn
           Top = 65
+          ExplicitTop = 65
         end
       end
     end

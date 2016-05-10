@@ -93,7 +93,7 @@ end;
 procedure TfrmWorkerShedule.FilterRecord(DataSet: TDataSet;
   var Accept: Boolean);
 begin
-  Accept := (DataSet.FieldByName('active').AsInteger = 1) and
+  Accept := (DataSet.FieldByName('act').AsInteger = 1) and
             (DataSet.FieldByName('type_cli').AsInteger = isUr);
 end;
 

@@ -102,7 +102,7 @@ begin
     ' (' + DM.CurrentUserSets.UserTypeName + ')';
   ClientSocket.Host := MainOptions.ServerHost;
   ClientSocket.Port := MainOptions.ServerPort;
-  try ClientSocket.Open; except end;
+  //try ClientSocket.Open; except end;
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
@@ -158,7 +158,7 @@ end;
 
 procedure LoadOptions(AIniFile: string);
 begin
-  MainOptions := MainOptions.Create;
+  MainOptions := TAppOptions.Create;
 
   MainOptions.ServerHost := '81.177.48.139';
   MainOptions.ServerPort := 1025;

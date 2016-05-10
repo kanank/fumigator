@@ -61,14 +61,20 @@ uses
 procedure TfrmClients.Add_btnClick(Sender: TObject);
 var
   id: integer;
+  extPrm: TClientParam;
 begin
   try
     DS.DataSet.Filtered := false;
 
+    extPrm.CallParam.Status_Id := status;
+
     if FisUr = 1 then
-      formMain.NewURClnt_mi.Click
+      //formMain.NewURClnt_mi.Click
+      DM.ShowClientUr(asCreate, extPrm)
     else
-      formMain.NewFizClnt_mi.Click;
+      //formMain.NewFizClnt_mi.Click;
+      DM.ShowClientFiz(asCreate, extPrm);
+
    id := DS.DataSet.FieldByName('id').AsInteger;
   finally
     DS.DataSet.Filtered := True;

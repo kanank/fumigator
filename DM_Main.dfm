@@ -907,7 +907,7 @@ object DataModuleMain: TDataModuleMain
       'EMAIL'#9#9'= :EMAIL,'
       'WORKER_ID'#9'= :WORKER_ID,'
       'COMMENT'#9'= :COMMENT,'
-      'ACT                         = :ACT'
+      'ACT                      = :ACT'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('

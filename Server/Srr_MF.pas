@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask,
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
-  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp;
+  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
+  TelpinAPI;
 
 type
   TMF = class(TForm)
@@ -69,6 +70,8 @@ type
   public
     CSection: TCriticalSection;
     CSectionProkado: TCriticalSection;
+
+    AccessToken: TTelphinToken;
   end;
 
   const
@@ -82,7 +85,6 @@ var
 implementation
 
 {$R *.dfm}
-
 
 function TMF.AddCallEvent(Params: TStrings): Boolean;
 var Q :TIBQuery;
@@ -211,6 +213,12 @@ begin
   ServerSocket.Port := edtSocketPort.Value;
   ServerSocket.Open;
   Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
+
+  AccessToken := TTelphinToken.Create;
+  AccessToken.BaseUrl := 'https://office.telphin.ru';
+  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
+  AccessToken.SecretKey := 'X-rv6G1QAp_QQXF15sd~4WNvthXI_M6G';
+  AccessToken.GetToken;
 end;
 
 procedure TMF.Button4Click(Sender: TObject);
@@ -358,35 +366,28 @@ procedure TMF.TestDb_btnClick(Sender: TObject);
 begin
 
   try
-         DB.Close;
-         DB.Params.Clear;
-         DB.DatabaseName := DBPath_edt.Text;
-         DB.Params.Add('USER_NAME='+DBUser_edt.Text );
-         DB.Params.Add('PASSWORD=' + DBPass_edt.Text);
-         DB.Open;
+    DB.Close;
+    DB.Params.Clear;
+    DB.DatabaseName := DBPath_edt.Text;
+    DB.Params.Add('USER_NAME='+DBUser_edt.Text );
+    DB.Params.Add('PASSWORD=' + DBPass_edt.Text);
+    DB.Open;
 
-except
+  except
     on E: Exception do begin
        AddLog('#Не удалось подключиться к БД. Проверьте настройки. Текст ошибки "'+E.Message+'"');
 
     DBStatus_lbl.Caption := 'Не установлено';
     DBStatus_lbl.Font.Color := clMaroon;
     end;
-end;
+  end;
 
-if Db.Connected then  begin
-
+  if Db.Connected then  begin
     AddLog('#Соединение с БД установлено.');
 
     DBStatus_lbl.Caption := 'Установлено';
     DBStatus_lbl.Font.Color := $00408000;
-
-
-end;
-
-
-
-
+  end;
 
 end;
 

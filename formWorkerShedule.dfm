@@ -293,7 +293,7 @@ inherited frmWorkerShedule: TfrmWorkerShedule
   end
   object DsCli: TDataSource
     AutoEdit = False
-    DataSet = DataModuleMain.Clients
+    DataSet = MemCli
     Left = 285
     Top = 364
   end
@@ -370,5 +370,11 @@ inherited frmWorkerShedule: TfrmWorkerShedule
       'delete from worker_shedule where id = :id')
     Left = 248
     Top = 288
+  end
+  object MemCli: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 96
+    Top = 240
   end
 end

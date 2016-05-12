@@ -76,7 +76,7 @@ inherited frmWorkers: TfrmWorkers
       end
       object GridViewColumn6: TcxGridDBColumn
         Caption = #1058#1077#1083#1077#1092#1086#1085
-        DataBinding.FieldName = 'PHONE_PRIV'
+        DataBinding.FieldName = 'PHONE'
         HeaderAlignmentHorz = taCenter
         Width = 78
       end

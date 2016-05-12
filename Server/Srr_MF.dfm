@@ -172,6 +172,13 @@ object MF: TMF
         Font.Style = [fsBold]
         ParentFont = False
       end
+      object Label11: TLabel
+        Left = 237
+        Top = 52
+        Width = 36
+        Height = 13
+        Caption = 'UserId:'
+      end
       object Button1: TButton
         Left = 441
         Top = 21
@@ -226,10 +233,24 @@ object MF: TMF
         TabOrder = 3
         Text = '/calls'
       end
+      object edtUserId: TEdit
+        Left = 279
+        Top = 49
+        Width = 130
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        Text = '11890'
+      end
     end
     object DebugMode_cb: TCheckBox
-      Left = 480
-      Top = 276
+      Left = 476
+      Top = 272
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -386,12 +407,10 @@ object MF: TMF
     Top = 185
   end
   object DefTr: TIBTransaction
-    Active = True
     Left = 272
     Top = 80
   end
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'

@@ -71,11 +71,14 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       
-        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
-        ','
+        'select w.*, ph.phone, p.family, p.name, p.surname, p.prof_id pro' +
+        'fession_id,'
       'is_deleted'
       'from workers w'
-      'left join persons p on p.id = w.person_id')
+      'left join persons p on p.id = w.person_id'
+      
+        'left join phones ph on w.person_id = ph.client_id and ph."TYPE"=' +
+        '1 and ph.ismain=1')
     UpdateObject = Worker_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_WORKERS_ID'
@@ -942,7 +945,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1094,7 +1096,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

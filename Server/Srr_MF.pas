@@ -48,6 +48,8 @@ type
     edtSocketPort: TSpinEdit;
     Edit1: TEdit;
     Button4: TButton;
+    Label11: TLabel;
+    edtUserId: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -90,9 +92,28 @@ function TMF.AddCallEvent(Params: TStrings): Boolean;
 var Q :TIBQuery;
     Cf :Byte;
     Fld :string;
+    userid: string;
+    p: Integer;
 begin
+   if Params.indexOfName('CALLFLOW') = -1 then
+   begin
+     Result := False;
+     Exit;
+   end;
 
-    try
+  if Params.Values['CALLFLOW'] = 'in' then
+    userid := Params.Values['CalledExtension']
+  else
+    userid := Params.Values['CallerExtension'];
+  p := Pos('*', userid);
+  if p > 0 then
+    userid := Copy(userid, 1, p - 1);
+
+  if userid = edtUserId.Text then //только нужную АТС отсекаем
+  try
+    if not DB.Connected then
+      Exit;
+
     Q := CreateRWQuery;
     Q.SQL.Text := CallEnent_Q.SQL.Text;
     Q.Prepare;
@@ -208,17 +229,16 @@ end;
 end;
 
 procedure TMF.Button2Click(Sender: TObject);
+var
+  Caller: TPhoneCalls;
 begin
   ServerSocket.Close;
   ServerSocket.Port := edtSocketPort.Value;
   ServerSocket.Open;
   Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
 
-  AccessToken := TTelphinToken.Create;
-  AccessToken.BaseUrl := 'https://office.telphin.ru';
-  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
-  AccessToken.SecretKey := 'X-rv6G1QAp_QQXF15sd~4WNvthXI_M6G';
-  AccessToken.GetToken;
+  Caller := TPhoneCalls.Create(AccessToken);
+  Caller.SimpleCall('104', '+79104579648');
 end;
 
 procedure TMF.Button4Click(Sender: TObject);
@@ -269,6 +289,12 @@ begin
   CSection        := TCriticalSection.Create;
   CSectionProkado := TCriticalSection.Create;
   FActiveUsers    := TStringList.Create;
+
+  AccessToken := TTelphinToken.Create;
+  //AccessToken.BaseUrl := 'https://office.telphin.ru';
+  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
+  AccessToken.SecretKey := 'K_1TmLDCmQ-5F5EjjP2-tscR29SV_4YW';
+  AccessToken.GetToken;
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -322,13 +348,15 @@ begin
 if ARequestInfo.URI = Trim(TelURI_edt.Text) then
   try
     CSection.Enter;
+
     Addlog('#Поступление события на службы Call_Events');
     Log_memo.Lines.Add(ARequestInfo.URI);
     Log_memo.Lines.Add(ARequestInfo.Params.Text);
 
-    if ARequestInfo.URI = Trim(TelURI_edt.Text) then begin
-      if AddCallEvent(ARequestInfo.Params) = true
-      then AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
+    if ARequestInfo.URI = Trim(TelURI_edt.Text) then
+    begin
+      if AddCallEvent(ARequestInfo.Params) = true then
+        AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
            + ARequestInfo.Params.Values['CallStatus']);
 
     //Входящий с мобильного

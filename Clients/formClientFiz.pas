@@ -72,6 +72,11 @@ begin
       if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePerson.Id then
         DS.DataSet.FieldByName('PERSON_ID').AsInteger := FramePerson.Id;
 
+      if DS.DataSet.FieldByName('EMAIL').AsString <>
+         FramePerson.DS.DataSet.FieldByName('EMAIL_WORK').AsString then
+        DS.DataSet.FieldByName('EMAIL').AsString :=
+         FramePerson.DS.DataSet.FieldByName('EMAIL_WORK').AsString;
+
       if DS.DataSet.FieldByName('ADRES_ID').AsInteger <> FrameAddress.Id then
         DS.DataSet.FieldByName('ADRES_ID').AsInteger := FrameAddress.Id;
 

@@ -45,6 +45,7 @@ type
     QWorkerShedule_upd: TIBUpdateSQL;
     memDataWORKER_ID: TIntegerField;
     memDataDATESHEDULE: TDateField;
+    MemCli: TdxMemData;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -79,14 +80,22 @@ uses
 
 procedure TfrmWorkerShedule.btnAddClick(Sender: TObject);
 begin
-  QWorkerShedule.Append;
-  QWorkerShedule.FieldByName('WORKER_ID').AsInteger :=
-    MemData.FieldByName('WORKER_ID').AsInteger;
-  QWorkerShedule.FieldByName('DATESHEDULE').AsDateTime :=
-    MemData.FieldByName('DATESHEDULE').AsDateTime;
-  QWorkerShedule.FieldByName('CLIENT_ID').AsInteger :=
-    DsCli.DataSet.FieldByName('ID').AsInteger;
-  QWorkerShedule.Post;
+  try
+    QWorkerShedule.Append;
+    QWorkerShedule.FieldByName('WORKER_ID').AsInteger :=
+      MemData.FieldByName('WORKER_ID').AsInteger;
+    QWorkerShedule.FieldByName('DATESHEDULE').AsDateTime :=
+      MemData.FieldByName('DATESHEDULE').AsDateTime;
+    QWorkerShedule.FieldByName('CLIENT_ID').AsInteger :=
+      DsCli.DataSet.FieldByName('ID').AsInteger;
+    QWorkerShedule.Post;
+
+    MemCli.Edit;
+    MemCli.FieldByName('spec').AsInteger :=1;
+    MemCli.Post;
+  except
+
+  end;
 end;
 
 
@@ -94,7 +103,8 @@ procedure TfrmWorkerShedule.FilterRecord(DataSet: TDataSet;
   var Accept: Boolean);
 begin
   Accept := (DataSet.FieldByName('act').AsInteger = 1) and
-            (DataSet.FieldByName('type_cli').AsInteger = isUr);
+            (DataSet.FieldByName('type_cli').AsInteger = isUr) and
+            (DataSet.FieldByName('spec').AsInteger = 0);
 end;
 
 procedure TfrmWorkerShedule.Fiz_btnClick(Sender: TObject);
@@ -107,6 +117,8 @@ procedure TfrmWorkerShedule.FormCreate(Sender: TObject);
 begin
   inherited;
    isUr := 0;
+   DM.GetDataset(DM.Clients);
+   MemCli.LoadFromDataSet(DM.Clients);
    DSCli.DataSet.OnFilterRecord := Self.FilterRecord;
    memData.Open;
    memData.Append;
@@ -144,8 +156,30 @@ begin
 end;
 
 procedure TfrmWorkerShedule.btnDelClick(Sender: TObject);
+var
+  id: Integer;
 begin
-  QWorkerShedule.Delete;
+  try
+    try
+      id := QWorkerShedule.FieldByName('CLIENT_ID').AsInteger;
+      QWorkerShedule.Delete;
+
+       MemCli.Filtered := False;
+       if MemCli.Locate('ID', id, []) then
+       begin
+         MemCli.Edit;
+         MemCli.FieldByName('spec').AsInteger :=0;
+         MemCli.Post;
+       end;
+
+    except
+      MemCli.Cancel;
+      QWorkerShedule.CancelUpdates;
+    end;
+  finally
+    MemCli.Filtered := True;
+    MemCli.Locate('ID', id, []);
+  end;
 end;
 
 procedure TfrmWorkerShedule.butOkClick(Sender: TObject);

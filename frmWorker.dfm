@@ -249,6 +249,10 @@ inherited frmWorker: TfrmWorker
                   ExplicitWidth = 137
                 end
               end
+              inherited Query: TIBQuery
+                SQL.Strings = (
+                  'select * from phones where client_id = :client_id and type=1')
+              end
             end
           end
           inherited edtEmailPrivate: TcxDBTextEdit

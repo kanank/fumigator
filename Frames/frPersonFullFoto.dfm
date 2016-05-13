@@ -256,6 +256,17 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
           ExplicitTop = 14
           ExplicitWidth = 138
           ExplicitHeight = 71
+          inherited grdPhoneDBTableView2: TcxGridDBTableView
+            inherited grdPhoneDBTableView2Column1: TcxGridDBColumn
+              Width = 20
+            end
+            inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
+              Width = 80
+            end
+            inherited grdPhoneDBTableView2Column3: TcxGridDBColumn
+              Width = 27
+            end
+          end
         end
       end
     end

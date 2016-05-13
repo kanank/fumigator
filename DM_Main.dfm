@@ -95,11 +95,15 @@ object DataModuleMain: TDataModuleMain
   object Worker_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
       
-        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
-        ' from workers w'
+        'select w.*, ph.phone, p.family, p.name, p.surname, p.prof_id pro' +
+        'fession_id,'
+      'is_deleted'
+      'from workers w'
       'left join persons p on p.id = w.person_id'
-      'where'
-      ' w. ID = :ID')
+      
+        'left join phones ph on w.person_id = ph.client_id and ph."TYPE"=' +
+        '1 and ph.ismain=1'
+      'where w. ID = :ID')
     ModifySQL.Strings = (
       'update WORKERS set'
       #9'PERSON_ID = :PERSON_ID,'

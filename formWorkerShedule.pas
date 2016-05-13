@@ -61,6 +61,7 @@ type
     procedure SetFilter;
     procedure SetIsUr(AValue: integer);
     procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
+    procedure FilterWorkers(DataSet: TDataSet; var Accept: Boolean);
   public
     property isUr: Integer read FisUr write SetIsUr;
 
@@ -107,6 +108,12 @@ begin
             (DataSet.FieldByName('spec').AsInteger = 0);
 end;
 
+procedure TfrmWorkerShedule.FilterWorkers(DataSet: TDataSet;
+  var Accept: Boolean);
+begin
+  Accept := (DataSet.FieldByName('is_deleted').AsInteger = 0);
+end;
+
 procedure TfrmWorkerShedule.Fiz_btnClick(Sender: TObject);
 begin
   inherited;
@@ -118,6 +125,8 @@ begin
   inherited;
    isUr := 0;
    DM.GetDataset(DM.Clients);
+   DM.Workers.OnFilterRecord := FilterWorkers;
+   DM.Workers.Filtered := True;
    MemCli.LoadFromDataSet(DM.Clients);
    DSCli.DataSet.OnFilterRecord := Self.FilterRecord;
    memData.Open;
@@ -132,6 +141,8 @@ procedure TfrmWorkerShedule.FormDestroy(Sender: TObject);
 begin
   DsCli.DataSet.OnFilterRecord := nil;
   DsCli.DataSet.Filtered := False;
+  DM.Workers.OnFilterRecord := nil;
+  DM.Workers.Filtered := false;
   inherited;
 end;
 

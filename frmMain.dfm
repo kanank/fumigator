@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -20,7 +22,7 @@ inherited frmMain: TfrmMain
     Left = 435
     Top = 0
     Width = 203
-    Height = 16
+    Height = 13
     Alignment = taRightJustify
     Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077' '#1089' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1085#1077' '#1091#1089#1090#1072#1085#1086#1074#1083#1077#1085#1086
     Font.Charset = DEFAULT_CHARSET
@@ -29,7 +31,6 @@ inherited frmMain: TfrmMain
     Font.Name = 'Tahoma'
     Font.Style = [fsItalic]
     ParentFont = False
-    Visible = False
   end
   object btnWorkers: TRzMenuButton
     Left = 8
@@ -156,8 +157,10 @@ inherited frmMain: TfrmMain
     Active = False
     ClientType = ctNonBlocking
     Port = 0
-    OnConnecting = ClientSocketConnecting
+    OnConnect = ClientSocketConnect
     OnDisconnect = ClientSocketDisconnect
+    OnRead = ClientSocketRead
+    OnError = ClientSocketError
     Left = 608
     Top = 48
   end

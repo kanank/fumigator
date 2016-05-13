@@ -247,10 +247,20 @@ object MF: TMF
         TabOrder = 4
         Text = '11890'
       end
+      object btnPhone: TButton
+        Left = 441
+        Top = 52
+        Width = 169
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1042#1082#1083#1102#1095#1080#1090#1100' '#1090#1077#1083#1077#1092#1086#1085#1080#1102
+        TabOrder = 5
+        OnClick = btnPhoneClick
+      end
     end
     object DebugMode_cb: TCheckBox
-      Left = 476
-      Top = 272
+      Left = 472
+      Top = 268
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -407,10 +417,12 @@ object MF: TMF
     Top = 185
   end
   object DefTr: TIBTransaction
+    Active = True
     Left = 272
     Top = 80
   end
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'

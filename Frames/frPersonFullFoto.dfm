@@ -231,9 +231,11 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
             ExplicitTop = 51
           end
           inherited btnAdd: TRzBitBtn
+            Left = 0
             Top = 0
             Height = 25
             Visible = True
+            ExplicitLeft = 0
             ExplicitTop = 0
             ExplicitHeight = 25
           end
@@ -288,13 +290,13 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         inherited Label3: TLabel
           Left = 231
           Top = 38
-          Width = 78
-          Height = 27
+          Width = 79
+          Height = 26
           WordWrap = True
           ExplicitLeft = 231
           ExplicitTop = 38
-          ExplicitWidth = 78
-          ExplicitHeight = 27
+          ExplicitWidth = 79
+          ExplicitHeight = 26
         end
         inherited Label4: TLabel
           Top = 38

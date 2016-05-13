@@ -61,8 +61,10 @@ type
     Calls_Tr: TIBTransaction;
     Calls_UpdQ: TIBUpdateSQL;
     Calls_Timer: TTimer;
+    SocketTimer: TTimer;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
+    procedure SocketTimerTimer(Sender: TObject);
   private
     function SetReadedCall(id: integer): boolean;
     function getClientCallParams(TelNum: string): ClientCallParams;
@@ -92,6 +94,7 @@ type
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
 
+    procedure Calling(ATSnumber, Aphone: string);
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
   var
@@ -100,6 +103,7 @@ type
     //TrayView: TTrayView;
     MissCount: integer;
     DBFileName :string;
+    inCalling: Boolean;
   end;
 
 var
@@ -114,7 +118,8 @@ implementation
 
 uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
-  formClientUr, formIncomeCalls, formIncomeCallsUr;
+  formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
+  frmMain;
 
 function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
   AExtPrm: TClientParam): FormResult;
@@ -268,6 +273,11 @@ begin
   end;
 end;
 
+procedure TDataModuleMain.SocketTimerTimer(Sender: TObject);
+begin
+  formMain.DoSocketConnect;
+end;
+
 function TDataModuleMain.LoadSpr: boolean;
 begin
   Result := false;
@@ -387,6 +397,21 @@ begin
         Exit;
       end;
     end;}
+end;
+
+procedure TDataModuleMain.Calling(ATSnumber, Aphone: string);
+begin
+  try
+    inCalling := True;
+    formMain.ClientSocket.Socket.SendText('#call:' + ATSnumber + ',' + Aphone);
+
+    (*frmCalling := TfrmCalling.Create(nil);
+    frmCalling.edtPhone.Text := Aphone;
+    if frmCalling.ShowModal := mrCancel then *)
+
+  finally
+    inCalling := False;
+  end;
 end;
 
 procedure TDataModuleMain.Calls_TimerTimer(Sender: TObject);
@@ -697,5 +722,6 @@ begin
   end;
 
 end;
+
 
 end.

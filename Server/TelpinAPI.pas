@@ -10,7 +10,7 @@ type
   TTelphinToken = class;
 
   TTelphinApiBaseElement = class
-  private
+  protected
     fBaseUrl: string;
     fHttp: TIdHTTP;
     fSSL: TIdSSLIOHandlerSocketOpenSSL;
@@ -58,6 +58,7 @@ type
   TPhoneCalls = class (TTelphinAPIElement)
   public
     function SimpleCall(ANumberSrc, ANumberDest: string): boolean;
+    //class function DoCall(AtsNum, phone): Boolean;
   end;
 
 implementation

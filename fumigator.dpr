@@ -48,7 +48,8 @@ uses
   formLogo in 'formLogo.pas' {frmLogo},
   formIncomeCalls in 'Calls\formIncomeCalls.pas' {frmIncomeCall},
   formIncomeCallsUr in 'Calls\formIncomeCallsUr.pas' {frmIncomeCallUr},
-  formCallUnknown in 'Calls\formCallUnknown.pas' {frmCallUnknown};
+  formCallUnknown in 'Calls\formCallUnknown.pas' {frmCallUnknown},
+  formCalling in 'Calls\formCalling.pas' {frmCalling};
 
 {$R *.res}
 

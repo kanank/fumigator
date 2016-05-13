@@ -97,9 +97,9 @@ inherited FramePhones: TFramePhones
         31
         128)
       inherited btnAdd: TRzBitBtn
-        Left = 0
+        Left = 5
         Top = 1
-        ExplicitLeft = 0
+        ExplicitLeft = 5
         ExplicitTop = 1
       end
       inherited btnEdit: TRzBitBtn

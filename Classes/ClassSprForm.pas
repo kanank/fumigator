@@ -19,10 +19,10 @@ type
     Edit_btn: TRzButton;
     Del_btn: TRzButton;
     Add_btn: TRzButton;
-    Image1: TImage;
     GridView: TcxGridDBTableView;
     GridLevel1: TcxGridLevel;
     Grid: TcxGrid;
+    Image1: TImage;
     procedure GridViewCellDblClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);

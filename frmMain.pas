@@ -7,6 +7,9 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp;
 
+const
+  WM_SHOWMSG = WM_USER + 100;
+
 type
   TAppOptions = class
     DbServer: string;
@@ -39,12 +42,15 @@ type
     procedure NewURClnt_miClick(Sender: TObject);
     procedure btnClientsClick(Sender: TObject);
     procedure RzMenuButton2Click(Sender: TObject);
-    procedure ClientSocketConnecting(Sender: TObject; Socket: TCustomWinSocket);
     procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
+    procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
+    procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
+      ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+    procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
   private
-    { Private declarations }
+    procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
   public
-    { Public declarations }
+    procedure DoSocketConnect;
   end;
 
 procedure LoadOptions(AIniFile: string);
@@ -52,6 +58,7 @@ procedure LoadOptions(AIniFile: string);
 var
   formMain: TfrmMain;
   MainOptions: TAppOptions;
+  msgText: string;
 
 implementation
 
@@ -75,11 +82,12 @@ begin
   FreeAndNil(formWorkers);
 end;
 
-procedure TfrmMain.ClientSocketConnecting(Sender: TObject;
+procedure TfrmMain.ClientSocketConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
   inherited;
   lblSocket.Caption := 'Соединение с сервером установлено';
+  DM.SocketTimer.Interval := 0;
 end;
 
 procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
@@ -87,6 +95,28 @@ procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
 begin
   inherited;
   lblSocket.Caption := 'Соединение с сервером разорвано';
+  DM.SocketTimer.Interval := 20000;
+end;
+
+procedure TfrmMain.ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
+  ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+begin
+  inherited;
+   DM.SocketTimer.Interval := 20000;
+end;
+
+procedure TfrmMain.ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
+var
+  s: string;
+begin
+  inherited;
+  s := Socket.ReceiveText;
+  if Copy(s, 1, 5) = '#msg:' then
+  begin
+    msgText := Copy(s,6, Length(s));
+    PostMessage(Self.Handle, WM_SHOWMSG, 0,0);
+  end;
+
 end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -100,9 +130,7 @@ begin
   inherited;
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')';
-  ClientSocket.Host := MainOptions.ServerHost;
-  ClientSocket.Port := MainOptions.ServerPort;
-  //try ClientSocket.Open; except end;
+  DoSocketConnect;
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);
@@ -138,6 +166,17 @@ begin
 
 end;
 
+procedure TfrmMain.DoSocketConnect;
+begin
+  ClientSocket.Host := MainOptions.ServerHost;
+  ClientSocket.Port := MainOptions.ServerPort;
+  try
+    ClientSocket.Open;
+  except
+
+  end;
+end;
+
 procedure TfrmMain.btnClientsClick(Sender: TObject);
 begin
   if not DM.Clients.Active then
@@ -156,11 +195,16 @@ begin
 
 end;
 
+procedure TfrmMain.WmShowMsg(var Msg: TMessage);
+begin
+  MessageBox(Handle, PChar(msgText), 'Сообщение от сервера', MB_ICONINFORMATION);
+end;
+
 procedure LoadOptions(AIniFile: string);
 begin
   MainOptions := TAppOptions.Create;
 
-  MainOptions.ServerHost := '81.177.48.139';
+  MainOptions.ServerHost := '81.177.48.139'; //;'localhost'
   MainOptions.ServerPort := 1025;
 end;
 

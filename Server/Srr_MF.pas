@@ -50,6 +50,7 @@ type
     Button4: TButton;
     Label11: TLabel;
     edtUserId: TEdit;
+    btnPhone: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -61,24 +62,28 @@ type
     procedure ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button2Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure btnPhoneClick(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
     Function AddCallEvent(Params :TStrings) :Boolean;
     Function ProkadoCommand(Params :TStrings) :Boolean; //выполнение комманд от клиентов прокадо
+    function SocketCommand(cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
+
  //  function CreateRWProc :TIBStoredProc;
 
   public
     CSection: TCriticalSection;
     CSectionProkado: TCriticalSection;
+    CSectionSocket: TCriticalSection;
 
     AccessToken: TTelphinToken;
+    Caller: TPhoneCalls;
   end;
 
   const
        LogFile = 'Srv_Log.txt';
-
 
 var
   MF: TMF;
@@ -194,6 +199,16 @@ end;
 
 
 
+procedure TMF.btnPhoneClick(Sender: TObject);
+begin
+  AccessToken := TTelphinToken.Create;
+  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
+  AccessToken.SecretKey := 'K_1TmLDCmQ-5F5EjjP2-tscR29SV_4YW';
+  AccessToken.GetToken;
+
+  Caller := TPhoneCalls.Create(AccessToken);
+end;
+
 procedure TMF.Button1Click(Sender: TObject);
 begin
 Tel_SRV.Active := false;
@@ -237,8 +252,8 @@ begin
   ServerSocket.Open;
   Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
 
-  Caller := TPhoneCalls.Create(AccessToken);
-  Caller.SimpleCall('104', '+79104579648');
+  //Caller := TPhoneCalls.Create(AccessToken);
+  //Caller.SimpleCall('104', '+79104579648');
 end;
 
 procedure TMF.Button4Click(Sender: TObject);
@@ -246,8 +261,7 @@ var
   i: Integer;
 begin
  for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
-   ServerSocket.Socket.Connections[i].SendText(Edit1.Text);
-
+   ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -288,13 +302,8 @@ procedure TMF.FormCreate(Sender: TObject);
 begin
   CSection        := TCriticalSection.Create;
   CSectionProkado := TCriticalSection.Create;
+  CSectionSocket  := TCriticalSection.Create;
   FActiveUsers    := TStringList.Create;
-
-  AccessToken := TTelphinToken.Create;
-  //AccessToken.BaseUrl := 'https://office.telphin.ru';
-  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
-  AccessToken.SecretKey := 'K_1TmLDCmQ-5F5EjjP2-tscR29SV_4YW';
-  AccessToken.GetToken;
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -302,6 +311,10 @@ begin
   FreeAndNil(FActiveUsers);
   CSection.Release;
   CSectionProkado.Release;
+  CSectionSocket.Release;
+
+  FreeAndNil(AccessToken);
+  FreeAndNil(Caller);
 end;
 
 function TMF.ProkadoCommand(Params: TStrings): Boolean;
@@ -327,8 +340,44 @@ begin
 end;
 
 procedure TMF.ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
+var
+  p: Integer;
+  s, cmd, arg: string;
 begin
-  Log_memo.Lines.Add('Клиент прислал сообщение: ' +Socket.ReceiveText);
+  try
+    CSectionSocket.Enter;
+
+    s := Socket.ReceiveText;
+    Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
+    if Copy(s, 1, 1) = '#' then
+    begin
+      p := Pos(':', s);
+      cmd := Copy(s, 2, p - 2);
+      arg := Copy(s, p + 1, Length(s));
+
+      SocketCommand(cmd, arg);
+
+    end;
+  finally
+    CSectionSocket.Leave;
+  end;
+end;
+
+function TMF.SocketCommand(cmd, arg: string): Boolean;
+var
+  p: Integer;
+  argList: TStringList;
+begin
+  argList := TStringList.Create;
+  try
+     argList.DelimitedText := arg;
+    if cmd = 'call' then
+    begin
+      Caller.SimpleCall(argList[0], argList[1]);
+    end;
+  finally
+    argList.Free;
+  end;
 end;
 
 procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;

@@ -34,6 +34,9 @@ type
     procedure btnLidClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Del_btnClick(Sender: TObject);
+    procedure GridViewCellClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -184,6 +187,20 @@ procedure TfrmClients.FormShow(Sender: TObject);
 begin
   inherited;
   SetFilter;
+end;
+
+procedure TfrmClients.GridViewCellClick(Sender: TcxCustomGridTableView;
+  ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+  AShift: TShiftState; var AHandled: Boolean);
+var
+  i: Integer;
+begin
+  inherited;
+  i := TcxGridDBTableView(Sender).GetColumnByFieldName('phone').Index;
+
+  if ACellViewInfo.Item.Index = i then
+    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString);
+  //ACellViewInfo.GridRecord.Values[TcxGridDBTableView(Sender).GetColumnByFieldName('record-id').Index]
 end;
 
 procedure TfrmClients.SetFilter;

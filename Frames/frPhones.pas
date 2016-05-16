@@ -18,7 +18,12 @@ type
     grdPhoneDBTableView2Column1: TcxGridDBColumn;
 	grdPhoneDBTableView2Column2: TcxGridDBColumn;
     grdPhoneDBTableView2Column3: TcxGridDBColumn;
+    grdPhoneDBTableView2Column4: TcxGridDBColumn;
     procedure QueryAfterPost(DataSet: TDataSet);
+    procedure grdPhoneDBTableView2CellClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
+    procedure QueryNewRecord(DataSet: TDataSet);
   private
     procedure SetMainPhone(id: integer);
   public
@@ -35,6 +40,7 @@ uses
 
 { TFramePhones }
 
+
 constructor TFramePhones.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -42,10 +48,35 @@ begin
   typePhone := 0;
 end;
 
+procedure TFramePhones.grdPhoneDBTableView2CellClick(
+  Sender: TcxCustomGridTableView; ACellViewInfo: TcxGridTableDataCellViewInfo;
+  AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
+var
+  i: Integer;
+  nom: string;
+begin
+  inherited;
+  i := TcxGridDBTableView(Sender).GetColumnByFieldName('phone').Index;
+
+  if ACellViewInfo.Item.Index = i then
+  begin
+    nom := TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.DataSet.FieldByName('CODE').AsString +
+      TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString;
+    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, nom);
+  end;
+
+end;
+
 procedure TFramePhones.QueryAfterPost(DataSet: TDataSet);
 begin
   if Query.FieldByName('ismain').AsInteger = 1 then
     SetMainPhone(Query.FieldByName('id').AsInteger);
+end;
+
+procedure TFramePhones.QueryNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  DataSet.FieldByName('CODE').AsString := '+7';
 end;
 
 function TFramePhones.SaveData: Boolean;

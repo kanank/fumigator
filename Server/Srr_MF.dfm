@@ -257,10 +257,20 @@ object MF: TMF
         TabOrder = 5
         OnClick = btnPhoneClick
       end
+      object Button5: TButton
+        Left = 279
+        Top = 71
+        Width = 130
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1047#1074#1086#1085#1086#1082
+        TabOrder = 6
+        OnClick = Button5Click
+      end
     end
     object DebugMode_cb: TCheckBox
-      Left = 472
-      Top = 268
+      Left = 468
+      Top = 264
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -413,8 +423,8 @@ object MF: TMF
     Bindings = <>
     AutoStartSession = True
     OnCommandGet = Tel_SRVCommandGet
-    Left = 289
-    Top = 185
+    Left = 345
+    Top = 145
   end
   object DefTr: TIBTransaction
     Active = True
@@ -448,8 +458,8 @@ object MF: TMF
       ' VALUES (:CALLFLOW, :CALLID, :CALLERIDNUM, :CALLERIDNAME,'
       ' :CALLEDDID, :CALLEDEXTENSION, :CALLSTATUS, :CALLEREXTENSION,'
       ' :CALLEDNUMBER, :CALLAPIID);')
-    Left = 345
-    Top = 183
+    Left = 385
+    Top = 143
     ParamData = <
       item
         DataType = ftUnknown

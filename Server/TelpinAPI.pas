@@ -24,8 +24,9 @@ type
   private
     FTokenObject: TTelphinToken;
     fUserId: string;
+    function GetTokenObject: TTelphinToken;
   public
-    property TokenObject: TTelphinToken read FTokenObject write FTokenObject;
+    property TokenObject: TTelphinToken read GetTokenObject write FTokenObject;
 
     constructor Create(ATokenObject: TTelphinToken=nil); overload;
   end;
@@ -42,10 +43,11 @@ type
     procedure SetAutoReGet(AValue: boolean);
     procedure GetTokenProc(Sender: TObject);
     function CheckToken: Boolean;
+    function GetActiveToken: string;
   public
     property ClientKey: string read fClientKey write fClientKey;
     property SecretKey: string read fSecretKey write fSecretKey;
-    property Token: string read fToken;
+    property Token: string read GetActiveToken;
     property AutoReGet: Boolean read fAutoReGet write SetAutoReGet;
     property TimeExpires: TDateTime read fTimeExpires;
     property TokenIsActive: Boolean read CheckToken;
@@ -67,7 +69,7 @@ implementation
 
 function TTelphinToken.CheckToken: Boolean;
 begin
-  Result := (Now < TimeExpires);
+  Result := Assigned(Self) and (Now < TimeExpires);
 end;
 
 constructor TTelphinToken.Create;
@@ -89,6 +91,13 @@ end;
 function TTelphinToken.GetToken: Boolean;
 begin
   GetTokenProc(nil);
+end;
+
+function TTelphinToken.GetActiveToken: string;
+begin
+  if not CheckToken then
+    GetToken;
+  Result := fToken;
 end;
 
 procedure TTelphinToken.GetTokenProc(Sender: TObject);
@@ -156,6 +165,13 @@ begin
 end;
 
 
+function TTelphinAPIElement.GetTokenObject: TTelphinToken;
+begin
+  if not Assigned(FTokenObject) then
+    FTokenObject := TTelphinToken.Create;
+  Result := FTokenObject;
+end;
+
 { TPhoneCalls }
 
 function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest: string): boolean;
@@ -171,25 +187,20 @@ begin
   sStream := TStringStream.Create('');
   try
     sStream.WriteString('{' + #13#10);
-    //sStream.WriteString('"extension": "11890*' + ANumberSrc + '",'+ #13#10);
+    sStream.WriteString('"extension": "' + ANumberSrc + '",'+ #13#10);
     sStream.WriteString('"phoneCallView": ['+ #13#10);
     sStream.WriteString('{'+ #13#10);
-    sStream.WriteString(' "source":  [ "11890*' + ANumberSrc + '" ],'+ #13#10);
-    sStream.WriteString(' "destination": [ "' + ANumberDest + '" ],'+ #13#10);
-    sStream.WriteString('     "callerId": "Fumigator <000>"'+ #13#10);
+    sStream.WriteString(' "source":  ["' + ANumberSrc + '" ],'+ #13#10);
+    sStream.WriteString(' "destination": "' + ANumberDest + '",'+ #13#10);
+    sStream.WriteString('     "callerId": "Fumigator <' + ANumberSrc + '>"'+ #13#10);
     sStream.WriteString('  }'+ #13#10);
     sStream.WriteString(']'+ #13#10);
     sStream.WriteString('}');
 
     fHttp.Request.Method := 'POST';
     fHttp.Request.ContentType := 'application/json';
-    fhttp.Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-    fhttp.Request.AcceptCharSet := 'windows-1251,utf-8;q=0.7,*;q=0.3';
-    fhttp.Request.AcceptLanguage := 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
-    fhttp.Request.Connection := 'keep-alive';
-    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ FTokenObject.Token);
-    //fhttp.Request.Host    := fBaseUrl;
-    fhttp.Request.Referer := fBaseUrl;
+    fhttp.Request.CustomHeaders.Clear;
+    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
     url := fBaseUrl + '/uapi/phoneCalls/@owner/simple?allowPublicTransfer=true' ; //&accessRequestToken=' + FTokenObject.Token;
     sResponse := fHttp.Post(url, sStream);

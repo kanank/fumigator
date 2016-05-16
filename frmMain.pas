@@ -86,8 +86,8 @@ procedure TfrmMain.ClientSocketConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
   inherited;
-  lblSocket.Caption := 'Соединение с сервером установлено';
   DM.SocketTimer.Interval := 0;
+  lblSocket.Caption := 'Соединение с сервером установлено';
 end;
 
 procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
@@ -173,7 +173,7 @@ begin
   try
     ClientSocket.Open;
   except
-
+    DM.SocketTimer.Interval := 20000;
   end;
 end;
 
@@ -204,7 +204,7 @@ procedure LoadOptions(AIniFile: string);
 begin
   MainOptions := TAppOptions.Create;
 
-  MainOptions.ServerHost := '81.177.48.139'; //;'localhost'
+  MainOptions.ServerHost := 'localhost';//'81.177.48.139'; //
   MainOptions.ServerPort := 1025;
 end;
 

@@ -196,10 +196,11 @@ var
   i: Integer;
 begin
   inherited;
-  i := TcxGridDBTableView(Sender).GetColumnByFieldName('phone').Index;
+ // i := TcxGridDBTableView(Sender).GetColumnByFieldName('phone').Index;
 
-  if ACellViewInfo.Item.Index = i then
-    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString);
+ // if ACellViewInfo.Item.Index = i then
+ //  DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString);
+
   //ACellViewInfo.GridRecord.Values[TcxGridDBTableView(Sender).GetColumnByFieldName('record-id').Index]
 end;
 

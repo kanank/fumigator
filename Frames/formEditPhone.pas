@@ -14,6 +14,8 @@ type
     chbkIsMain: TcxDBCheckBox;
     Label2: TLabel;
     cmbPhoneType: TcxDBLookupComboBox;
+    Label1: TLabel;
+    cxDBMaskEdit1: TcxDBMaskEdit;
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }

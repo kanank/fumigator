@@ -24,6 +24,7 @@ inherited FramePhones: TFramePhones
       ExplicitHeight = 125
       object grdPhoneDBTableView2: TcxGridDBTableView [0]
         Navigator.Buttons.CustomButtons = <>
+        OnCellClick = grdPhoneDBTableView2CellClick
         DataController.DataSource = DS
         DataController.KeyFieldNames = 'ID'
         DataController.MasterKeyFieldNames = 'ID'
@@ -36,6 +37,7 @@ inherited FramePhones: TFramePhones
         OptionsData.Deleting = False
         OptionsData.DeletingConfirmation = False
         OptionsData.Inserting = False
+        OptionsView.CellEndEllipsis = True
         OptionsView.NoDataToDisplayInfoText = '<'#1053#1086#1084#1077#1088#1072' '#1085#1077' '#1076#1086#1073#1072#1074#1083#1077#1085#1099' >'
         OptionsView.ScrollBars = ssVertical
         OptionsView.GridLines = glNone
@@ -53,7 +55,11 @@ inherited FramePhones: TFramePhones
           Options.AutoWidthSizable = False
           Options.Moving = False
           Options.ShowCaption = False
-          Width = 30
+          Width = 20
+        end
+        object grdPhoneDBTableView2Column4: TcxGridDBColumn
+          DataBinding.FieldName = 'CODE'
+          Width = 20
         end
         object grdPhoneDBTableView2Column2: TcxGridDBColumn
           DataBinding.FieldName = 'phone'
@@ -66,7 +72,7 @@ inherited FramePhones: TFramePhones
           Options.Editing = False
           Options.Moving = False
           Options.ShowCaption = False
-          Width = 95
+          Width = 92
         end
         object grdPhoneDBTableView2Column3: TcxGridDBColumn
           DataBinding.FieldName = 'PHONE_TYPE_ID'
@@ -97,9 +103,9 @@ inherited FramePhones: TFramePhones
         31
         128)
       inherited btnAdd: TRzBitBtn
-        Left = 5
+        Left = 0
         Top = 1
-        ExplicitLeft = 5
+        ExplicitLeft = 0
         ExplicitTop = 1
       end
       inherited btnEdit: TRzBitBtn
@@ -123,7 +129,8 @@ inherited FramePhones: TFramePhones
       'CLIENT_ID = :CLIENT_ID,'
       'ISMAIN = :ISMAIN,'
       '"TYPE" = :TYPE,'
-      'PHONE_TYPE_ID = :PHONE_TYPE_ID'
+      'PHONE_TYPE_ID = :PHONE_TYPE_ID,'
+      'CODE = :CODE'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into phones('
@@ -132,7 +139,8 @@ inherited FramePhones: TFramePhones
       'CLIENT_ID,'
       'ISMAIN,'
       '"TYPE",'
-      'PHONE_TYPE_ID'
+      'PHONE_TYPE_ID,'
+      'CODE'
       ')'
       'values('
       ':ID,'
@@ -140,13 +148,15 @@ inherited FramePhones: TFramePhones
       ':CLIENT_ID,'
       ':ISMAIN,'
       ':TYPE,'
-      ':PHONE_TYPE_ID'
+      ':PHONE_TYPE_ID,'
+      ':CODE'
       ')')
     DeleteSQL.Strings = (
       'delete from phones where id = :ID')
   end
   inherited Query: TIBQuery
     AfterPost = QueryAfterPost
+    OnNewRecord = QueryNewRecord
     SQL.Strings = (
       'select * from phones where client_id = :client_id and type=0')
     GeneratorField.Generator = 'GEN_PHONES_ID'

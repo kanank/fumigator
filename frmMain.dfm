@@ -155,13 +155,13 @@ inherited frmMain: TfrmMain
   end
   object ClientSocket: TClientSocket
     Active = False
-    ClientType = ctNonBlocking
+    ClientType = ctBlocking
     Port = 0
     OnConnect = ClientSocketConnect
     OnDisconnect = ClientSocketDisconnect
     OnRead = ClientSocketRead
     OnError = ClientSocketError
-    Left = 608
-    Top = 48
+    Left = 576
+    Top = 64
   end
 end

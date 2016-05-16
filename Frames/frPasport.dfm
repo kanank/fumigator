@@ -93,7 +93,7 @@ inherited FramePassport: TFramePassport
       Width = 196
     end
     object edtCode: TcxDBMaskEdit
-      Left = 121
+      Left = 119
       Top = 68
       DataBinding.DataField = 'PASS_CODE'
       DataBinding.DataSource = DS

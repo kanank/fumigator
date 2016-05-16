@@ -51,6 +51,7 @@ type
     Label11: TLabel;
     edtUserId: TEdit;
     btnPhone: TButton;
+    Button5: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -63,6 +64,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure btnPhoneClick(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -202,18 +204,15 @@ end;
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
   AccessToken := TTelphinToken.Create;
-  AccessToken.ClientKey := 'G-hT2WCXE3.gk1VdYUK~0Mh56TKV_W0d';
-  AccessToken.SecretKey := 'K_1TmLDCmQ-5F5EjjP2-tscR29SV_4YW';
+  AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
+  AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
   AccessToken.GetToken;
-
-  Caller := TPhoneCalls.Create(AccessToken);
 end;
 
 procedure TMF.Button1Click(Sender: TObject);
 begin
 Tel_SRV.Active := false;
 Tel_srv.Bindings.Clear;
-
 
 try
   Tel_SRV.Bindings.Add.IP                                  := TelIP_edt.Text;
@@ -262,6 +261,13 @@ var
 begin
  for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
    ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
+end;
+
+procedure TMF.Button5Click(Sender: TObject);
+begin
+  if not Assigned(Caller) then
+    Caller := TPhoneCalls.Create(AccessToken);
+  Caller.SimpleCall('755', '+79104579648');
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -373,6 +379,8 @@ begin
      argList.DelimitedText := arg;
     if cmd = 'call' then
     begin
+      if not Assigned(Caller) then
+        Caller := TPhoneCalls.Create(AccessToken);
       Caller.SimpleCall(argList[0], argList[1]);
     end;
   finally

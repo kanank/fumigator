@@ -71,14 +71,13 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       
-        'select w.*, ph.phone, p.family, p.name, p.surname, p.prof_id pro' +
-        'fession_id,'
-      'is_deleted'
+        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
+        ','
+      'is_deleted, '
+      '(select first 1 phone from phones '
+      'where w.person_id = client_id and "TYPE"=1 and ismain=1) phone'
       'from workers w'
-      'left join persons p on p.id = w.person_id'
-      
-        'left join phones ph on w.person_id = ph.client_id and ph."TYPE"=' +
-        '1 and ph.ismain=1')
+      'left join persons p on p.id = w.person_id')
     UpdateObject = Worker_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_WORKERS_ID'
@@ -95,14 +94,13 @@ object DataModuleMain: TDataModuleMain
   object Worker_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
       
-        'select w.*, ph.phone, p.family, p.name, p.surname, p.prof_id pro' +
-        'fession_id,'
-      'is_deleted'
+        'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
+        ','
+      'is_deleted, '
+      '(select first 1 phone from phones '
+      'where w.person_id = client_id and "TYPE"=1 and ismain=1) phone'
       'from workers w'
       'left join persons p on p.id = w.person_id'
-      
-        'left join phones ph on w.person_id = ph.client_id and ph."TYPE"=' +
-        '1 and ph.ismain=1'
       'where w. ID = :ID')
     ModifySQL.Strings = (
       'update WORKERS set'

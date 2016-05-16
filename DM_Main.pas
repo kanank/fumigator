@@ -402,6 +402,13 @@ end;
 procedure TDataModuleMain.Calling(ATSnumber, Aphone: string);
 begin
   try
+    if not formMain.ClientSocket.Active then
+    begin
+      MessageBox(nil, 'Нет соединения с сервером. Вызовы не возможны',
+        'Исходящие вызовы', MB_ICONWARNING);
+      exit;
+    end;
+
     inCalling := True;
     formMain.ClientSocket.Socket.SendText('#call:' + ATSnumber + ',' + Aphone);
 

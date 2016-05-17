@@ -1,31 +1,32 @@
 inherited frmCalling: TfrmCalling
-  BorderStyle = bsDialog
+  Left = 537
+  Top = 329
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = #1048#1089#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082
-  ClientHeight = 99
-  ClientWidth = 320
+  ClientHeight = 200
+  ClientWidth = 380
   Position = poDesktopCenter
-  ExplicitWidth = 326
-  ExplicitHeight = 127
+  ExplicitWidth = 386
+  ExplicitHeight = 228
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     AlignWithMargins = True
-    Left = 310
-    Top = -33
-    Width = 194
-    Height = 62
-    AutoSize = True
+    Left = 253
+    Top = 137
+    Width = 124
+    Height = 64
     Center = True
     Proportional = True
-    Visible = False
-    ExplicitLeft = 372
-    ExplicitTop = 43
-    ExplicitWidth = 194
-    ExplicitHeight = 62
+    ExplicitLeft = 253
+    ExplicitTop = 137
+    ExplicitWidth = 124
+    ExplicitHeight = 64
   end
   object Image1: TImage
-    Left = 145
-    Top = 58
+    Left = 271
+    Top = 8
     Width = 33
     Height = 33
     Picture.Data = {
@@ -88,9 +89,136 @@ inherited frmCalling: TfrmCalling
       2EFD93B09058F2A9BBD7111737589FBA728F20F8B190550D397BFB2E90FF323F
       975FA2E9C0671CB93E62B8D47B45A5EE3DD7AAF9B27BC864B93F6B5FE7CAAFD3
       BF3176FBFF002000E06EF048541E0000000049454E44AE426082}
+    Visible = False
+  end
+  object Label3: TLabel
+    Left = 73
+    Top = 16
+    Width = 84
+    Height = 13
+    Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object pnlFiz: TRzPanel
+    Left = -13
+    Top = 40
+    Width = 385
+    Height = 63
+    BorderOuter = fsNone
+    TabOrder = 1
+    DesignSize = (
+      385
+      63)
+    object Label11: TLabel
+      Left = 19
+      Top = 18
+      Width = 23
+      Height = 13
+      Caption = #1060#1048#1054
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object edtFamily: TcxDBTextEdit
+      Left = 72
+      Top = 15
+      Anchors = [akLeft, akTop, akRight]
+      BeepOnEnter = False
+      DataBinding.DataField = 'PERSON_NAME'
+      DataBinding.DataSource = DS
+      Style.HotTrack = False
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.Color = clBtnFace
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 0
+      Width = 297
+    end
+  end
+  object pnlUr: TRzPanel
+    Left = -5
+    Top = 36
+    Width = 367
+    Height = 65
+    BorderOuter = fsNone
+    TabOrder = 2
+    DesignSize = (
+      367
+      65)
+    object Label1: TLabel
+      Left = 9
+      Top = 8
+      Width = 123
+      Height = 27
+      Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      WordWrap = True
+    end
+    object Label2: TLabel
+      Left = 9
+      Top = 42
+      Width = 88
+      Height = 13
+      Caption = #1050#1086#1085#1090#1072#1082#1090#1085#1086#1077' '#1083#1080#1094#1086
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object edtNameOrg: TcxDBTextEdit
+      Left = 103
+      Top = 11
+      Anchors = [akLeft, akTop, akRight]
+      BeepOnEnter = False
+      DataBinding.DataField = 'NAME'
+      DataBinding.DataSource = DS
+      Style.HotTrack = False
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.Color = clBtnFace
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 0
+      Width = 258
+    end
+    object cxDBTextEdit2: TcxDBTextEdit
+      Left = 103
+      Top = 39
+      Anchors = [akLeft, akTop, akRight]
+      BeepOnEnter = False
+      DataBinding.DataField = 'PERSON_NAME'
+      DataBinding.DataSource = DS
+      Style.HotTrack = False
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.Color = clBtnFace
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 1
+      Width = 258
+    end
   end
   object edtPhone: TcxMaskEdit
-    Left = 80
+    Left = 171
     Top = 8
     ParentFont = False
     Style.Edges = []
@@ -101,6 +229,89 @@ inherited frmCalling: TfrmCalling
     Style.Font.Style = []
     Style.IsFontAssigned = True
     TabOrder = 0
+    OnClick = edtPhoneClick
+    OnMouseEnter = edtPhoneMouseEnter
+    OnMouseLeave = edtPhoneMouseLeave
     Width = 185
+  end
+  object Exit_bnt: TRzButton
+    Left = 3
+    Top = 113
+    Width = 124
+    Height = 33
+    ModalResult = 1
+    Anchors = [akTop, akRight]
+    Caption = #1054#1090#1082#1088#1099#1090#1100' '#1082#1072#1088#1090#1086#1095#1082#1091' '#1082#1083#1080#1077#1085#1090#1072
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 2960640
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 3
+    ThemeAware = False
+  end
+  object RzButton1: TRzButton
+    Left = 141
+    Top = 113
+    Width = 105
+    Height = 26
+    ModalResult = 1
+    Anchors = [akTop, akRight]
+    Caption = #1055#1077#1088#1077#1074#1077#1089#1090#1080' '#1074#1099#1079#1086#1074
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 2960640
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 4
+    ThemeAware = False
+  end
+  object RzButton2: TRzButton
+    Left = 141
+    Top = 140
+    Width = 105
+    Height = 26
+    ModalResult = 1
+    Anchors = [akTop, akRight]
+    Caption = #1055#1086#1079#1074#1086#1085#1080#1090#1100' '#1087#1086#1079#1078#1077
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 2960640
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 5
+    ThemeAware = False
+  end
+  object RzButton3: TRzButton
+    Left = 141
+    Top = 167
+    Width = 105
+    Height = 26
+    ModalResult = 1
+    Anchors = [akTop, akRight]
+    Caption = #1047#1072#1082#1086#1085#1095#1080#1090#1100' '#1089#1077#1089#1089#1080#1102
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 2960640
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 6
+    ThemeAware = False
+  end
+  object DS: TDataSource
+    Left = 384
+    Top = 16
   end
 end

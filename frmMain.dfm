@@ -155,7 +155,7 @@ inherited frmMain: TfrmMain
   end
   object ClientSocket: TClientSocket
     Active = False
-    ClientType = ctBlocking
+    ClientType = ctNonBlocking
     Port = 0
     OnConnect = ClientSocketConnect
     OnDisconnect = ClientSocketDisconnect

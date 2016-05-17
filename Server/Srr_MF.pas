@@ -8,7 +8,7 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI;
+  TelpinAPI, IBX.IBEvents;
 
 type
   TMF = class(TForm)
@@ -52,6 +52,7 @@ type
     edtUserId: TEdit;
     btnPhone: TButton;
     Button5: TButton;
+    IBEvents: TIBEvents;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -65,6 +66,10 @@ type
     procedure Button4Click(Sender: TObject);
     procedure btnPhoneClick(Sender: TObject);
     procedure Button5Click(Sender: TObject);
+    procedure ServerSocketClientDisconnect(Sender: TObject;
+      Socket: TCustomWinSocket);
+    procedure IBEventsEventAlert(Sender: TObject; EventName: string;
+      EventCount: Integer; var CancelAlerts: Boolean);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -72,6 +77,9 @@ type
     Function ProkadoCommand(Params :TStrings) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
+
+    procedure AfterOutcomCall(Sender: TObject);
+    function SendCommandToUser(atsnum, command: string): Boolean;
 
  //  function CreateRWProc :TIBStoredProc;
 
@@ -200,6 +208,10 @@ begin
 end;
 
 
+procedure TMF.AfterOutcomCall(Sender: TObject);
+begin
+  SendCommandToUser(Caller.Extension, '#callid:' + Caller.CallId);
+end;
 
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
@@ -323,6 +335,14 @@ begin
   FreeAndNil(Caller);
 end;
 
+procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
+  EventCount: Integer; var CancelAlerts: Boolean);
+begin
+  if Copy(EventName,1,11) = 'INCOME_CALL' then
+    SendCommandToUser('*', '#checkcall:');
+
+end;
+
 function TMF.ProkadoCommand(Params: TStrings): Boolean;
 begin
   //об€зательный параметр action
@@ -338,11 +358,48 @@ begin
 
 end;
 
+function TMF.SendCommandToUser(atsnum, command: string): Boolean;
+var
+  i: Integer;
+begin
+  try
+    //CSectionSocket.Enter;
+    if atsnum <> '*' then
+    begin
+      i := FActiveUsers.IndexOf(atsnum);
+      if i > -1 then
+        TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
+    end
+    else
+    begin
+      for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
+        ServerSocket.Socket.Connections[i].SendText(command);
+    end;
+  finally
+    //CSectionSocket.Leave;
+  end;
+end;
+
 procedure TMF.ServerSocketClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
    Log_memo.Lines.Add('ѕрисоединение клиента');
 
+end;
+
+procedure TMF.ServerSocketClientDisconnect(Sender: TObject;
+  Socket: TCustomWinSocket);
+var
+  i: Integer;
+begin
+  try
+    CSectionSocket.Enter;
+    i := FActiveUsers.IndexOfObject(Socket);
+    if i > -1 then
+      FActiveUsers.Delete(i);
+  finally
+    CSectionSocket.Leave;
+  end;
 end;
 
 procedure TMF.ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
@@ -361,6 +418,9 @@ begin
       cmd := Copy(s, 2, p - 2);
       arg := Copy(s, p + 1, Length(s));
 
+      if cmd = 'setphone' then
+        FActiveUsers.AddObject(arg, Socket)
+      else
       SocketCommand(cmd, arg);
 
     end;
@@ -380,7 +440,10 @@ begin
     if cmd = 'call' then
     begin
       if not Assigned(Caller) then
+      begin
         Caller := TPhoneCalls.Create(AccessToken);
+        Caller.OnAfterCall := AfterOutcomCall;
+      end;
       Caller.SimpleCall(argList[0], argList[1]);
     end;
   finally

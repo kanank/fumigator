@@ -245,7 +245,7 @@ object MF: TMF
         Font.Style = []
         ParentFont = False
         TabOrder = 4
-        Text = '11890'
+        Text = '9738'
       end
       object btnPhone: TButton
         Left = 441
@@ -269,8 +269,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 468
-      Top = 264
+      Left = 442
+      Top = 266
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -517,8 +517,19 @@ object MF: TMF
     Port = 1025
     ServerType = stNonBlocking
     OnClientConnect = ServerSocketClientConnect
+    OnClientDisconnect = ServerSocketClientDisconnect
     OnClientRead = ServerSocketClientRead
-    Left = 425
-    Top = 257
+    Left = 585
+    Top = 265
+  end
+  object IBEvents: TIBEvents
+    AutoRegister = True
+    Database = DB
+    Events.Strings = (
+      'INCOME_CALL')
+    Registered = False
+    OnEventAlert = IBEventsEventAlert
+    Left = 377
+    Top = 73
   end
 end

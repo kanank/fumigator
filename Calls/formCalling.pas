@@ -6,16 +6,37 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit,
-  cxMaskEdit, dxGDIPlusClasses, Vcl.ExtCtrls;
+  cxMaskEdit, dxGDIPlusClasses, Vcl.ExtCtrls, cxDBEdit, Vcl.StdCtrls, RzPanel,
+  Data.DB, RzButton;
 
 type
   TfrmCalling = class(TBaseForm)
     Image1: TImage;
     edtPhone: TcxMaskEdit;
+    pnlFiz: TRzPanel;
+    Label11: TLabel;
+    edtFamily: TcxDBTextEdit;
+    pnlUr: TRzPanel;
+    Label1: TLabel;
+    edtNameOrg: TcxDBTextEdit;
+    Label2: TLabel;
+    cxDBTextEdit2: TcxDBTextEdit;
+    DS: TDataSource;
+    Label3: TLabel;
+    Exit_bnt: TRzButton;
+    RzButton1: TRzButton;
+    RzButton2: TRzButton;
+    RzButton3: TRzButton;
+    procedure edtPhoneMouseEnter(Sender: TObject);
+    procedure edtPhoneMouseLeave(Sender: TObject);
+    procedure edtPhoneClick(Sender: TObject);
   private
-    { Private declarations }
+    fCallId: string;
+    procedure SetCallId(AValue: string);
   public
-    { Public declarations }
+    AtsPhone: string;
+    Phone: string;
+    property CallId: string read fCallId write SetCallId;
   end;
 
 var
@@ -24,5 +45,42 @@ var
 implementation
 
 {$R *.dfm}
+
+uses
+  DM_Main, frmMain;
+
+
+procedure TfrmCalling.edtPhoneClick(Sender: TObject);
+begin
+  try
+    DM.inCalling := True;
+    formMain.ClientSocket.Socket.SendText('#call:' + AtsPhone + ',' + Phone);
+
+  finally
+    DM.inCalling := False;
+  end;
+end;
+
+procedure TfrmCalling.edtPhoneMouseEnter(Sender: TObject);
+begin
+  inherited;
+  edtPhone.Style.Font.Style := [fsBold, fsUnderline];
+end;
+
+procedure TfrmCalling.edtPhoneMouseLeave(Sender: TObject);
+begin
+  inherited;
+  edtPhone.Style.Font.Style := [];
+end;
+
+procedure TfrmCalling.SetCallId(AValue: string);
+begin
+  if AValue <> fCallId then
+  begin
+    fCallId := AValue;
+
+  end;
+
+end;
 
 end.

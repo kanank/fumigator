@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
   IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
-  CommonVars, CommonTypes, Vcl.ExtCtrls;
+  CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset;
 
 
 type
@@ -62,6 +62,7 @@ type
     Calls_UpdQ: TIBUpdateSQL;
     Calls_Timer: TTimer;
     SocketTimer: TTimer;
+    dxMemData1: TdxMemData;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -94,7 +95,8 @@ type
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
 
-    procedure Calling(ATSnumber, Aphone: string);
+    procedure Calling(ATSnumber, Aphone: string; client_id: integer);
+    function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
   var
@@ -171,7 +173,7 @@ begin
     frmIncomeCall.cmbStatus.EditValue := CLP.Status_Id;
     frmIncomeCall.lblWorker.Caption   := CLP.Author;
     frmIncomeCall.ShowModal;
-    if frmIncomeCall.ModalResult =mrOk then
+    if frmIncomeCall.ModalResult = mrOk then
       ShowClientFiz(asEdit, prm);
 
     Result.ModalRes := frmIncomeCall.ModalResult;
@@ -399,25 +401,37 @@ begin
     end;}
 end;
 
-procedure TDataModuleMain.Calling(ATSnumber, Aphone: string);
+procedure TDataModuleMain.Calling(ATSnumber, Aphone: string; client_id: integer);
+var
+  CliInfo: TDataSet;
 begin
   try
     if not formMain.ClientSocket.Active then
     begin
-      MessageBox(nil, 'Нет соединения с сервером. Вызовы не возможны',
+      MessageBox(0, 'Нет соединения с сервером. Вызовы невозможны',
         'Исходящие вызовы', MB_ICONWARNING);
       exit;
     end;
 
-    inCalling := True;
-    formMain.ClientSocket.Socket.SendText('#call:' + ATSnumber + ',' + Aphone);
+    CliInfo := GetClientInfoForCall(client_id);
 
-    (*frmCalling := TfrmCalling.Create(nil);
-    frmCalling.edtPhone.Text := Aphone;
-    if frmCalling.ShowModal := mrCancel then *)
+    //inCalling := True;
+    //formMain.ClientSocket.Socket.SendText('#call:' + ATSnumber + ',' + Aphone);
+
+    frmCalling := TfrmCalling.Create(nil);
+    with frmCalling do
+    begin
+      DS.DataSet     := CliInfo;
+      AtsPhone       := ATSnumber;
+      Phone          := Aphone;
+      edtPhone.Text  := Aphone;
+      pnlFiz.Visible := (CliInfo.FieldByName('tip').AsInteger = 0);
+      pnlUr.Visible  := not frmCalling.pnlFiz.Visible;
+      ShowModal;
+    end;
 
   finally
-    inCalling := False;
+    CliInfo.Free;
   end;
 end;
 
@@ -577,6 +591,26 @@ begin
       ds.FieldByName('SHORT_NAME').AsString := sfio;
     end;
   end
+end;
+
+function TDataModuleMain.GetClientInfoForCall(Aid: integer): TdxMemData;
+var
+  Q :TIBQuery;
+begin
+  try
+    Q := CreateRWQuery;
+    Q.SQL.Text := 'SELECT * FROM get_clientinfo_for_call('+ intToStr(AID) +')';
+    Q.Open;
+
+    Result := TdxMemData.Create(nil);
+    Result.LoadFromDataSet(Q);
+
+    if Q.Transaction.Active then
+      Q.Transaction.Commit;
+  finally
+    Q.Transaction.Free;
+    FreeAndNil(Q);
+  end;
 end;
 
 function TDataModuleMain.GetCurrentUser(id: integer): CurrentUserRec;

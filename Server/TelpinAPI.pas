@@ -24,10 +24,11 @@ type
   private
     FTokenObject: TTelphinToken;
     fUserId: string;
+    fResponse: string;
     function GetTokenObject: TTelphinToken;
   public
     property TokenObject: TTelphinToken read GetTokenObject write FTokenObject;
-
+    property HttpResponse: string read fResponse;
     constructor Create(ATokenObject: TTelphinToken=nil); overload;
   end;
 
@@ -58,7 +59,14 @@ type
   end;
 
   TPhoneCalls = class (TTelphinAPIElement)
+  private
+    fOnAfterCall: TNotifyEvent;
+    fCallId: string;
+    fExtension: string;
   public
+    property OnAfterCall: TNotifyEvent read fOnAfterCall write fOnAfterCall;
+    property CallId: string read fCallId;
+    property Extension: string read fExtension;
     function SimpleCall(ANumberSrc, ANumberDest: string): boolean;
     //class function DoCall(AtsNum, phone): Boolean;
   end;
@@ -179,6 +187,7 @@ var
   sStream: TStringStream;
   sResponse: string;
   url: string;
+  json: TJSONObject;
 begin
   Result := False;
   //if FTokenObject = nil then
@@ -203,7 +212,22 @@ begin
     fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
     url := fBaseUrl + '/uapi/phoneCalls/@owner/simple?allowPublicTransfer=true' ; //&accessRequestToken=' + FTokenObject.Token;
-    sResponse := fHttp.Post(url, sStream);
+    fResponse := fHttp.Post(url, sStream);
+
+    if (fHttp.ResponseCode < 400) then
+    begin
+      if Copy(fResponse, 1, 1) = '[' then
+      begin
+        fResponse := Copy(fResponse, 2, Length(fResponse) - 2);
+      end;
+      json := TJSONObject.Create;
+      json.Parse(BytesOf(fResponse), 0);
+      fCallId    := AnsiDequotedStr(json.Values['id'].ToString, '"');
+      fExtension := AnsiDequotedStr(json.Values['extension'].ToString, '"');
+
+      if Assigned(fOnAfterCall) then
+        fOnAfterCall(Self);
+    end;
 
   finally
     sStream.Free;

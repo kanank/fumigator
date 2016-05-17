@@ -52,7 +52,7 @@ procedure TFramePhones.grdPhoneDBTableView2CellClick(
   Sender: TcxCustomGridTableView; ACellViewInfo: TcxGridTableDataCellViewInfo;
   AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
 var
-  i: Integer;
+  i, ind, client_id: Integer;
   nom: string;
 begin
   inherited;
@@ -62,7 +62,12 @@ begin
   begin
     nom := TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.DataSet.FieldByName('CODE').AsString +
       TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString;
-    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, nom);
+
+    ind := QueryParams.IndexOf('CLIENT_ID');
+    if ind > -1 then
+      client_id := TField(QueryParams.Objects[ind]).AsInteger;
+
+    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, nom, client_id);
   end;
 
 end;

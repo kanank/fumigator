@@ -66,7 +66,7 @@ implementation
 
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
-  formClientUr, CommonTypes, formLogo;
+  formClientUr, CommonTypes, formLogo, formCalling;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -88,6 +88,7 @@ begin
   inherited;
   DM.SocketTimer.Interval := 0;
   lblSocket.Caption := 'Соединение с сервером установлено';
+  ClientSocket.Socket.SendText('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
 end;
 
 procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
@@ -108,14 +109,37 @@ end;
 procedure TfrmMain.ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
 var
   s: string;
+  p: Integer;
+  cmd, arg: string;
 begin
-  inherited;
   s := Socket.ReceiveText;
-  if Copy(s, 1, 5) = '#msg:' then
+
+  if Copy(s, 1, 1) = '#' then
   begin
-    msgText := Copy(s,6, Length(s));
-    PostMessage(Self.Handle, WM_SHOWMSG, 0,0);
+    p := Pos(':', s);
+    cmd := Copy(s, 2, p - 2);
+    arg := Copy(s, p + 1, Length(s));
   end;
+
+  if cmd = 'msg' then
+  begin
+    msgText := arg;
+    PostMessage(Self.Handle, WM_SHOWMSG, 0,0);
+  end
+  else
+
+  if cmd = 'callid' then
+  begin
+    if DM.inCalling then
+      frmCalling.CallId := arg;
+  end
+  else
+
+  if cmd = 'checkcall' then
+  begin
+    DM.Calls_TimerTimer(DM.Calls_Timer);
+  end
+
 
 end;
 
@@ -204,7 +228,7 @@ procedure LoadOptions(AIniFile: string);
 begin
   MainOptions := TAppOptions.Create;
 
-  MainOptions.ServerHost := 'localhost';//'81.177.48.139'; //
+  MainOptions.ServerHost := '81.177.48.139'; //'localhost';//
   MainOptions.ServerPort := 1025;
 end;
 

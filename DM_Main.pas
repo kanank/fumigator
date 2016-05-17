@@ -62,7 +62,6 @@ type
     Calls_UpdQ: TIBUpdateSQL;
     Calls_Timer: TTimer;
     SocketTimer: TTimer;
-    dxMemData1: TdxMemData;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);

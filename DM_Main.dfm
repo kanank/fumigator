@@ -947,6 +947,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1098,6 +1099,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1149,11 +1151,5 @@ object DataModuleMain: TDataModuleMain
     OnTimer = SocketTimerTimer
     Left = 272
     Top = 104
-  end
-  object dxMemData1: TdxMemData
-    Indexes = <>
-    SortOptions = []
-    Left = 376
-    Top = 208
   end
 end

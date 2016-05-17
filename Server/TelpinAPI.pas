@@ -77,7 +77,7 @@ implementation
 
 function TTelphinToken.CheckToken: Boolean;
 begin
-  Result := Assigned(Self) and (Now < TimeExpires);
+  Result := Assigned(Self) and ((fToken = '') or (Now < fTimeExpires));
 end;
 
 constructor TTelphinToken.Create;

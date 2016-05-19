@@ -93,11 +93,13 @@ type
 
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientsForCall: FormResult;
 
     procedure Calling(ATSnumber, Aphone: string; client_id: integer);
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
+
   var
     CurrentUserSets: CurrentUserRec;
     //FtpProp: FtpProps;
@@ -106,6 +108,8 @@ type
     DBFileName :string;
     inCalling: Boolean;
   end;
+
+  function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 
 var
   DM: TDataModuleMain;
@@ -120,7 +124,26 @@ implementation
 uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
-  frmMain;
+  frmMain, formClientsForCall;
+
+function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
+var
+  ds: TDataSet;
+begin
+  Result := False;
+  try
+    ds := AField.DataSet;
+    if not(ds.State in [dsEdit, dsInsert]) then
+      ds.Edit;
+    AField.Value := AValue;
+    if DoPost then
+      ds.Post;
+    Result := True;
+  except
+    ds.Cancel;
+    Result := False;
+  end;
+end;
 
 function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
   AExtPrm: TClientParam): FormResult;
@@ -138,6 +161,18 @@ begin
     Result.ModalRes := frmClientFiz.ModalResult;
   finally
     FreeAndNil(frmClientFiz);
+  end;
+end;
+
+function TDataModuleMain.ShowClientsForCall: FormResult;
+begin
+  frmClientsForCall := TfrmClientsForCall.Create(nil);
+  try
+    frmClientsForCall.QWorkerShedule.ParamByName('worker_id').AsInteger := CurrentUserSets.ID;
+    frmClientsForCall.QWorkerShedule.Open;
+    frmClientsForCall.ShowModal;
+  finally
+    FreeAndNil(frmClientsForCall);
   end;
 end;
 

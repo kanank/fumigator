@@ -49,7 +49,9 @@ uses
   formIncomeCalls in 'Calls\formIncomeCalls.pas' {frmIncomeCall},
   formIncomeCallsUr in 'Calls\formIncomeCallsUr.pas' {frmIncomeCallUr},
   formCallUnknown in 'Calls\formCallUnknown.pas' {frmCallUnknown},
-  formCalling in 'Calls\formCalling.pas' {frmCalling};
+  formCalling in 'Calls\formCalling.pas' {frmCalling},
+  formClientsForCall in 'Calls\formClientsForCall.pas' {frmClientsForCall},
+  formEndCalling in 'Calls\formEndCalling.pas' {frmEndCalling};
 
 {$R *.res}
 
@@ -58,6 +60,7 @@ begin
   Application.Title := 'Фумигатор';
 
   Application.CreateForm(TDataModuleMain, DM);
+
   LoadOptions(CfgFileName);
 
   frmLogin := TfrmLogin.Create(nil);

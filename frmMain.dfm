@@ -2,8 +2,6 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  ExplicitWidth = 657
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -128,6 +126,25 @@ inherited frmMain: TfrmMain
     TabOrder = 4
     ThemeAware = False
     OnClick = RzMenuButton2Click
+    ShowArrow = False
+  end
+  object RzMenuButton3: TRzMenuButton
+    Left = 205
+    Top = 8
+    Width = 170
+    Height = 31
+    Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1085#1072' '#1076#1072#1090#1091
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 5
+    ThemeAware = False
+    OnClick = RzMenuButton3Click
     ShowArrow = False
   end
   object NewClientBtn_PUM: TPopupMenu

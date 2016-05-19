@@ -33,6 +33,7 @@ type
     RzMenuButton2: TRzMenuButton;
     ClientSocket: TClientSocket;
     lblSocket: TLabel;
+    RzMenuButton3: TRzMenuButton;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -47,6 +48,7 @@ type
     procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
+    procedure RzMenuButton3Click(Sender: TObject);
   private
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
   public
@@ -188,6 +190,12 @@ procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 begin
   DM.Calls_TimerTimer(DM.Calls_Timer);
 
+end;
+
+procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
+begin
+  inherited;
+  DM.ShowClientsForCall;
 end;
 
 procedure TfrmMain.DoSocketConnect;

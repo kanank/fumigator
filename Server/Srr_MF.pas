@@ -288,8 +288,8 @@ end;
 
 procedure TMF.CallFinished(Sender: TObject);
 begin
-  UpdateSession(TCallListener(Sender).CallId);
-  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
+  //UpdateSession(TCallListener(Sender).CallId);
+  //SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -355,10 +355,10 @@ begin
   if Copy(EventName,1,11) = 'INCOME_CALL' then
     SendCommandToUser('*', '#checkcall:');
 
-  (*else
+  else
 
   if Copy(EventName,1,11) = 'SESSION_CLOSE' then
-    SendCommandToUser('*', '#checkcall:') *)
+    SendCommandToUser('*', '#checksession:');
 
 
 end;

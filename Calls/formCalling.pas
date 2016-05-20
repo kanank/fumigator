@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit,
   cxMaskEdit, dxGDIPlusClasses, Vcl.ExtCtrls, cxDBEdit, Vcl.StdCtrls, RzPanel,
-  Data.DB, RzButton;
+  Data.DB, RzButton, IBX.IBCustomDataSet, IBX.IBQuery;
 
 type
   TfrmCalling = class(TBaseForm)
@@ -27,6 +27,7 @@ type
     RzButton1: TRzButton;
     RzButton2: TRzButton;
     RzButton3: TRzButton;
+    Q: TIBQuery;
     procedure edtPhoneMouseEnter(Sender: TObject);
     procedure edtPhoneMouseLeave(Sender: TObject);
     procedure edtPhoneClick(Sender: TObject);
@@ -38,6 +39,7 @@ type
     Phone: string;
     property CallId: string read fCallId write SetCallId;
     procedure CallFinish;
+    procedure CheckSession;
   end;
 
 var
@@ -63,14 +65,37 @@ begin
     frmSessionResult.Q.Edit;
     frmSessionResult.ShowModal;
     if frmSessionResult.Q.Modified then
-    begin
+    try
       frmSessionResult.Q.Post;
-      frmSessionResult.Q.ApplyUpdates;
+      if frmSessionResult.Q.Transaction.Active then
+         frmSessionResult.Q.Transaction.CommitRetaining;
+    except
+       if frmSessionResult.Q.Transaction.Active then
+         frmSessionResult.Q.Transaction.RollbackRetaining;
     end;
 
   finally
     FreeAndNil(frmSessionResult);
   end;
+end;
+
+procedure TfrmCalling.CheckSession;
+begin
+  Q.Close;
+  Q.ParamByName('callid').AsString := CallId;
+  if Q.Transaction.Active then
+    Q.Transaction.CommitRetaining;
+  try
+    Q.Open;
+    if Q.Transaction.Active then
+      Q.Transaction.CommitRetaining;
+    if Q.RecordCount > 0  then
+      CallFinish;
+  except
+    if Q.Transaction.Active then
+     Q.Transaction.RollbackRetaining;
+  end;
+
 end;
 
 procedure TfrmCalling.edtPhoneClick(Sender: TObject);

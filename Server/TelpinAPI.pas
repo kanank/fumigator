@@ -267,7 +267,7 @@ begin
       fCallId    := AnsiDequotedStr(json.Values['id'].ToString, '"');
       fExtension := AnsiDequotedStr(json.Values['extension'].ToString, '"');
 
-      TCallListener.Create(fTokenObject, fCallId, fExtension, fOnCallFinish);
+     // TCallListener.Create(fTokenObject, fCallId, fExtension, fOnCallFinish);
 
       if Assigned(fOnAfterCall) then
         fOnAfterCall(Self);

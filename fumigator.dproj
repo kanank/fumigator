@@ -5,7 +5,7 @@
         <FrameworkType>VCL</FrameworkType>
         <MainSource>fumigator.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -254,6 +254,14 @@
         </DCCReference>
         <DCCReference Include="Calls\formEndCalling.pas">
             <Form>frmEndCalling</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Calls\formSessionResult.pas">
+            <Form>frmSessionResult</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Calls\formSessions.pas">
+            <Form>frmSessions</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

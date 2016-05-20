@@ -51,7 +51,9 @@ uses
   formCallUnknown in 'Calls\formCallUnknown.pas' {frmCallUnknown},
   formCalling in 'Calls\formCalling.pas' {frmCalling},
   formClientsForCall in 'Calls\formClientsForCall.pas' {frmClientsForCall},
-  formEndCalling in 'Calls\formEndCalling.pas' {frmEndCalling};
+  formEndCalling in 'Calls\formEndCalling.pas' {frmEndCalling},
+  formSessionResult in 'Calls\formSessionResult.pas' {frmSessionResult},
+  formSessions in 'Calls\formSessions.pas' {frmSessions};
 
 {$R *.res}
 

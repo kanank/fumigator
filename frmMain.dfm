@@ -147,6 +147,25 @@ inherited frmMain: TfrmMain
     OnClick = RzMenuButton3Click
     ShowArrow = False
   end
+  object RzMenuButton4: TRzMenuButton
+    Left = 8
+    Top = 82
+    Width = 170
+    Height = 31
+    Caption = #1057#1077#1089#1089#1080#1080
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 6
+    ThemeAware = False
+    OnClick = RzMenuButton4Click
+    ShowArrow = False
+  end
   object NewClientBtn_PUM: TPopupMenu
     Left = 208
     Top = 16

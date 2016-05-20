@@ -79,7 +79,9 @@ type
     function CreateRWQuery :TIBQuery;
 
     procedure AfterOutcomCall(Sender: TObject);
+    procedure CallFinished(Sender: TObject);
     function SendCommandToUser(atsnum, command: string): Boolean;
+    function UpdateSession(ACallId: string): Boolean;
 
  //  function CreateRWProc :TIBStoredProc;
 
@@ -215,10 +217,8 @@ end;
 
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
-  AccessToken := TTelphinToken.Create;
-  AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
-  AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
   AccessToken.GetToken;
+
 end;
 
 procedure TMF.Button1Click(Sender: TObject);
@@ -276,38 +276,48 @@ begin
 end;
 
 procedure TMF.Button5Click(Sender: TObject);
+var
+  i: Integer;
 begin
   if not Assigned(Caller) then
-    Caller := TPhoneCalls.Create(AccessToken);
-  Caller.SimpleCall('755', '+79104579648');
+    Exit;
+  i:= Caller.StatusCall;
+  //  Caller := TPhoneCalls.Create(AccessToken);
+  //Caller.SimpleCall('755', '+79104579648');
+end;
+
+procedure TMF.CallFinished(Sender: TObject);
+begin
+  UpdateSession(TCallListener(Sender).CallId);
+  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
 var TR :TIBTransaction;
 begin
-TR := TIBTransaction.Create(self);
-TR.DefaultDatabase := DB;
-TR.DefaultAction := TACommit;
-TR.AutoStopAction := saCommit;
+  TR := TIBTransaction.Create(self);
+  TR.DefaultDatabase := DB;
+  TR.DefaultAction := TACommit;
+  TR.AutoStopAction := saCommit;
 
-TR.Params.Add('isc_tpb_read_committed');
-TR.Params.Add('isc_tpb_no_rec_version');
-TR.Params.Add('isc_tpb_wait');
+  TR.Params.Add('isc_tpb_read_committed');
+  TR.Params.Add('isc_tpb_no_rec_version');
+  TR.Params.Add('isc_tpb_wait');
 
-// Только для чтения
-//TR.Params.Add('read');
-//TR.Params.Add('nowait');
-//TR.Params.Add('rec_version');
-//TR.Params.Add('read_committed');
+  // Только для чтения
+  //TR.Params.Add('read');
+  //TR.Params.Add('nowait');
+  //TR.Params.Add('rec_version');
+  //TR.Params.Add('read_committed');
 
-// Для записи
-//TR.AllowAutoStart := False;
-//TR.DefaultDatabase := DB;
-//TR.DefaultAction := TACommit;
-//TR.Params.Add('write');
-//TR.Params.Add('nowait');
-//TR.Params.Add('read_committed');
-//TR.Params.Add('rec_version');
+  // Для записи
+  //TR.AllowAutoStart := False;
+  //TR.DefaultDatabase := DB;
+  //TR.DefaultAction := TACommit;
+  //TR.Params.Add('write');
+  //TR.Params.Add('nowait');
+  //TR.Params.Add('read_committed');
+  //TR.Params.Add('rec_version');
 
   result := TIBQuery.Create(self);
   result.Database := DB;
@@ -322,6 +332,10 @@ begin
   CSectionProkado := TCriticalSection.Create;
   CSectionSocket  := TCriticalSection.Create;
   FActiveUsers    := TStringList.Create;
+
+  AccessToken := TTelphinToken.Create;
+  AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
+  AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -340,6 +354,12 @@ procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
 begin
   if Copy(EventName,1,11) = 'INCOME_CALL' then
     SendCommandToUser('*', '#checkcall:');
+
+  (*else
+
+  if Copy(EventName,1,11) = 'SESSION_CLOSE' then
+    SendCommandToUser('*', '#checkcall:') *)
+
 
 end;
 
@@ -360,12 +380,15 @@ end;
 
 function TMF.SendCommandToUser(atsnum, command: string): Boolean;
 var
-  i: Integer;
+  i, p: Integer;
 begin
   try
-    //CSectionSocket.Enter;
+    CSectionSocket.Enter;
     if atsnum <> '*' then
     begin
+      p := Pos('*', atsnum);
+      if p > 0 then
+        atsnum := Copy(atsnum, p + 1, Length(atsnum));
       i := FActiveUsers.IndexOf(atsnum);
       if i > -1 then
         TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
@@ -376,7 +399,7 @@ begin
         ServerSocket.Socket.Connections[i].SendText(command);
     end;
   finally
-    //CSectionSocket.Leave;
+    CSectionSocket.Leave;
   end;
 end;
 
@@ -442,7 +465,8 @@ begin
       if not Assigned(Caller) then
       begin
         Caller := TPhoneCalls.Create(AccessToken);
-        Caller.OnAfterCall := AfterOutcomCall;
+        Caller.OnAfterCall  := AfterOutcomCall;
+        Caller.OnCallFinish := CallFinished;
       end;
       Caller.SimpleCall(argList[0], argList[1]);
     end;
@@ -537,6 +561,37 @@ begin
     DBStatus_lbl.Font.Color := $00408000;
   end;
 
+end;
+
+function TMF.UpdateSession(ACallId: string): Boolean;
+var Q :TIBQuery;
+begin
+  try
+    if not DB.Connected then
+      Exit;
+
+    Q := CreateRWQuery;
+    Q.SQL.Text := Format('update sessions set endtime=current_timestamp(3) where callid=''%s''', [ACallId]);
+
+    Try
+      Q.ExecSQL;
+      Result := true;
+    Except
+    on E : Exception
+        do begin
+        AddLog('#Ошибка обновления сессии: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
+        Result := false;
+        end;
+
+    End;
+
+    if Q.Transaction.Active then
+      Q.Transaction.Commit;
+
+  finally
+    Q.Transaction.Free;
+    FreeAndNil(Q);
+  end;
 end;
 
 end.

@@ -37,6 +37,7 @@ type
     AtsPhone: string;
     Phone: string;
     property CallId: string read fCallId write SetCallId;
+    procedure CallFinish;
   end;
 
 var
@@ -47,8 +48,30 @@ implementation
 {$R *.dfm}
 
 uses
-  DM_Main, frmMain;
+  DM_Main, frmMain, formSessionResult;
 
+
+procedure TfrmCalling.CallFinish;
+begin
+  frmSessionResult := TfrmSessionResult.Create(nil);
+  try
+    if frmSessionResult.Q.Transaction.Active then
+      frmSessionResult.Q.Transaction.CommitRetaining;
+
+    frmSessionResult.Q.ParamByName('callid').AsString := Callid;
+    frmSessionResult.Q.Open;
+    frmSessionResult.Q.Edit;
+    frmSessionResult.ShowModal;
+    if frmSessionResult.Q.Modified then
+    begin
+      frmSessionResult.Q.Post;
+      frmSessionResult.Q.ApplyUpdates;
+    end;
+
+  finally
+    FreeAndNil(frmSessionResult);
+  end;
+end;
 
 procedure TfrmCalling.edtPhoneClick(Sender: TObject);
 begin

@@ -61,14 +61,38 @@ type
   TPhoneCalls = class (TTelphinAPIElement)
   private
     fOnAfterCall: TNotifyEvent;
+    fOnCallFinish: TNotifyEvent;
     fCallId: string;
     fExtension: string;
+    function GetStatusCall: Integer;
   public
     property OnAfterCall: TNotifyEvent read fOnAfterCall write fOnAfterCall;
+    property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
     property CallId: string read fCallId;
+    property StatusCall: Integer read GetStatusCall;
     property Extension: string read fExtension;
     function SimpleCall(ANumberSrc, ANumberDest: string): boolean;
     //class function DoCall(AtsNum, phone): Boolean;
+  end;
+
+  TCallListener = class (TTelphinAPIElement)
+  private
+    fOnCallFinish: TNotifyEvent; // событие после окончания звонка
+    fCallId: string;
+    fExtension: string;
+    fStatusCall: Integer;
+    fTimer: TTimer;
+    fTimerInterval: Integer;
+    function GetStatusCall: Integer;
+    procedure TimerProc(Sender: TObject);
+  public
+    property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
+    property CallId: string read fCallId write fCallId;
+    property TimerInterval: Integer read fTimerInterval write fTimerInterval;
+
+    property Extension: string read fExtension write fExtension;
+    constructor Create(ATokenObject: TTelphinToken; ACallId, AExtension: string; AOnCallFinish: TNotifyEvent); overload;
+    destructor Destroy; overload;
   end;
 
 implementation
@@ -182,6 +206,24 @@ end;
 
 { TPhoneCalls }
 
+function TPhoneCalls.GetStatusCall: Integer;
+var
+  sStream: TStringStream;
+  url: string;
+begin
+  sStream := TStringStream.Create;
+  fHttp.Request.Method := 'GET';
+  //fHttp.Request.ContentType := 'application/json';
+  fhttp.Request.CustomHeaders.Clear;
+  fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+  url := fBaseUrl + '/uapi/phoneCalls/@owner/9738*755/' + CallId; //&accessRequestToken=' + FTokenObject.Token;
+  fHttp.Get(url, sStream);
+
+  sStream.Free;
+
+end;
+
 function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest: string): boolean;
 var
   sStream: TStringStream;
@@ -225,6 +267,8 @@ begin
       fCallId    := AnsiDequotedStr(json.Values['id'].ToString, '"');
       fExtension := AnsiDequotedStr(json.Values['extension'].ToString, '"');
 
+      TCallListener.Create(fTokenObject, fCallId, fExtension, fOnCallFinish);
+
       if Assigned(fOnAfterCall) then
         fOnAfterCall(Self);
     end;
@@ -250,6 +294,68 @@ begin
     fHttp.Free;
   if Assigned(fSSL) then
     fSSL.Free;
+end;
+
+{ TCallListener }
+
+constructor TCallListener.Create(ATokenObject: TTelphinToken; ACallId,
+  AExtension: string; AOnCallFinish: TNotifyEvent);
+begin
+  inherited Create(ATokenObject);
+  fCallId         := ACallId;
+  fExtension      := AExtension;
+  fOnCallFinish   := AOnCallFinish;
+  fTimer          := TTimer.Create(nil);
+  fTimer.OnTimer  := TimerProc;
+  fTimerInterval  := 1000;
+  fTimer.Interval := fTimerInterval;
+end;
+
+destructor TCallListener.Destroy;
+begin
+  FreeAndNil(fTimer);
+  inherited;
+end;
+
+function TCallListener.GetStatusCall: Integer;
+var
+  sStream: TStringStream;
+  url: string;
+  json: TJSONObject;
+  cnt: Integer;
+begin
+  sStream := TStringStream.Create;
+  try
+    fTimer.Interval := 0;
+    fHttp.Request.Method := 'GET';
+    //fHttp.Request.ContentType := 'application/json';
+    fhttp.Request.CustomHeaders.Clear;
+    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+    url := fBaseUrl + '/uapi/phoneCalls/@owner/' + fExtension +'/' + fCallId;
+    fHttp.Get(url, sStream);
+    json := TJSONObject.Create;
+    json.Parse(BytesOf(sStream.DataString), 0);
+    cnt := StrToInt(AnsiDequotedStr(json.Values['totalResults'].ToString, '"'));
+
+  finally
+    sStream.Free;
+    json.Free;
+
+    if cnt = 0 then
+    begin
+      if Assigned(fOnCallFinish) then
+        fOnCallFinish(self);
+      Destroy;
+    end
+    else
+      fTimer.Interval := fTimerInterval;
+  end;
+end;
+
+procedure TCallListener.TimerProc(Sender: TObject);
+begin
+  GetStatusCall;
 end;
 
 end.

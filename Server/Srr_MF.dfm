@@ -269,8 +269,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 442
-      Top = 266
+      Left = 438
+      Top = 262
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -526,7 +526,9 @@ object MF: TMF
     AutoRegister = True
     Database = DB
     Events.Strings = (
-      'INCOME_CALL')
+      'INCOME_CALL'
+      'SESSION_CLOSE'
+      'SESSION_OPEN')
     Registered = False
     OnEventAlert = IBEventsEventAlert
     Left = 377

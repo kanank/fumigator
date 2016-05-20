@@ -34,6 +34,7 @@ type
     ClientSocket: TClientSocket;
     lblSocket: TLabel;
     RzMenuButton3: TRzMenuButton;
+    RzMenuButton4: TRzMenuButton;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -49,6 +50,7 @@ type
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
+    procedure RzMenuButton4Click(Sender: TObject);
   private
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
   public
@@ -68,7 +70,7 @@ implementation
 
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
-  formClientUr, CommonTypes, formLogo, formCalling;
+  formClientUr, CommonTypes, formLogo, formCalling, formSessions;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -132,9 +134,16 @@ begin
 
   if cmd = 'callid' then
   begin
-    if DM.inCalling then
+    if Assigned(frmCalling) then
       frmCalling.CallId := arg;
   end
+  else
+  if cmd = 'callfinish' then
+  begin
+    if frmCalling.CallId = arg then
+      frmCalling.CallFinish;
+  end
+
   else
 
   if cmd = 'checkcall' then
@@ -196,6 +205,13 @@ procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
 begin
   inherited;
   DM.ShowClientsForCall;
+end;
+
+procedure TfrmMain.RzMenuButton4Click(Sender: TObject);
+begin
+  frmSessions := TfrmSessions.Create(self);
+  frmSessions.ShowModal;
+  FreeAndNil(frmSessions);
 end;
 
 procedure TfrmMain.DoSocketConnect;

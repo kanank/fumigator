@@ -131,8 +131,8 @@ inherited frmClientsForCall: TfrmClientsForCall
         'select s.id, finished, s.client_id, c.name, p.shortname as rukov' +
         'oditel,'
       
-        '(select '#39'+7'#39'||phone from get_client_phones(s.client_id, 1)) phon' +
-        'e, p.email_work email,'
+        '(select phone from get_client_phones(s.client_id, 1, 1)) phone, ' +
+        'p.email_work email,'
       'c.status_id, c.format_id, 0 cnt_dog'
       'from worker_shedule s join clients c on c.id = s.client_id'
       'left join persons p on p.id = c.person_id'
@@ -159,6 +159,8 @@ inherited frmClientsForCall: TfrmClientsForCall
     Top = 160
   end
   object cxStyleRepository1: TcxStyleRepository
+    Left = 8
+    Top = 280
     PixelsPerInch = 96
     object cxStyle1: TcxStyle
       AssignedValues = [svFont]

@@ -353,11 +353,11 @@ procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
   if Copy(EventName,1,11) = 'INCOME_CALL' then
-    SendCommandToUser('*', '#checkcall:');
+    SendCommandToUser('*', '#checkcall:')
 
   else
 
-  if Copy(EventName,1,11) = 'SESSION_CLOSE' then
+  if Copy(EventName,1,13) = 'SESSION_CLOSE' then
     SendCommandToUser('*', '#checksession:');
 
 

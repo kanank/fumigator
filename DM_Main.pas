@@ -62,6 +62,10 @@ type
     Calls_UpdQ: TIBUpdateSQL;
     Calls_Timer: TTimer;
     SocketTimer: TTimer;
+    DicCallTypes: TdxMemData;
+    DicCallTypesID: TIntegerField;
+    DicCallTypesNAME: TStringField;
+    DSDicCallTypes: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -338,6 +342,21 @@ begin
     DicPhoneType.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
+
+    with DicCallTypes do
+    begin
+      Open;
+      Append;
+      FieldByName('ID').AsInteger := 0;
+      FieldByName('NAME').AsString := 'Входящий';
+      Post;
+      Append;
+      FieldByName('ID').AsInteger := 1;
+      FieldByName('NAME').AsString := 'Исходящий';
+      Post;
+    end;
+
+
     Result := True;
   except
   end;

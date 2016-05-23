@@ -56,22 +56,25 @@ uses
 procedure TfrmCalling.CallFinish;
 begin
   frmSessionResult := TfrmSessionResult.Create(nil);
+  with frmSessionResult do
   try
-    if frmSessionResult.Q.Transaction.Active then
-      frmSessionResult.Q.Transaction.CommitRetaining;
+    if Q.Transaction.Active then
+      Q.Transaction.CommitRetaining;
 
-    frmSessionResult.Q.ParamByName('callid').AsString := Callid;
-    frmSessionResult.Q.Open;
-    frmSessionResult.Q.Edit;
-    frmSessionResult.ShowModal;
-    if frmSessionResult.Q.Modified then
+    Q.ParamByName('callid').AsString := Callid;
+    Q.Open;
+    Q.Edit;
+    Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+    Q.FieldByName('client_id').AsInteger := Self.DS.Dataset.FieldByName('ID').AsInteger;
+    ShowModal;
+    if Q.Modified then
     try
-      frmSessionResult.Q.Post;
-      if frmSessionResult.Q.Transaction.Active then
-         frmSessionResult.Q.Transaction.CommitRetaining;
+      Q.Post;
+      if Q.Transaction.Active then
+         Q.Transaction.CommitRetaining;
     except
-       if frmSessionResult.Q.Transaction.Active then
-         frmSessionResult.Q.Transaction.RollbackRetaining;
+       if Q.Transaction.Active then
+         Q.Transaction.RollbackRetaining;
     end;
 
   finally

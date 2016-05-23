@@ -132,6 +132,9 @@ inherited frmEndCalling: TfrmEndCalling
     Top = 56
     Enabled = False
     Properties.DisplayFormat = 'hh:nn:ss'
+    StyleDisabled.BorderColor = clBtnText
+    StyleDisabled.Color = clWindow
+    StyleDisabled.TextColor = clBtnText
     TabOrder = 1
     Width = 78
   end
@@ -140,6 +143,9 @@ inherited frmEndCalling: TfrmEndCalling
     Top = 56
     Enabled = False
     Properties.DisplayFormat = 'hh:nn:ss'
+    StyleDisabled.BorderColor = clInfoText
+    StyleDisabled.Color = clWindow
+    StyleDisabled.TextColor = clInfoText
     TabOrder = 2
     Width = 72
   end
@@ -148,6 +154,9 @@ inherited frmEndCalling: TfrmEndCalling
     Top = 56
     Enabled = False
     Properties.DisplayFormat = 'hh:nn:ss'
+    StyleDisabled.BorderColor = clInfoText
+    StyleDisabled.Color = clWindow
+    StyleDisabled.TextColor = clInfoText
     TabOrder = 3
     Width = 73
   end
@@ -155,6 +164,9 @@ inherited frmEndCalling: TfrmEndCalling
     Left = 285
     Top = 56
     Enabled = False
+    StyleDisabled.BorderColor = clInfoText
+    StyleDisabled.Color = clWindow
+    StyleDisabled.TextColor = clInfoText
     TabOrder = 4
     Width = 96
   end
@@ -162,6 +174,9 @@ inherited frmEndCalling: TfrmEndCalling
     Left = 398
     Top = 56
     Enabled = False
+    StyleDisabled.BorderColor = clInfoText
+    StyleDisabled.Color = clWindow
+    StyleDisabled.TextColor = clInfoText
     TabOrder = 5
     Width = 150
   end

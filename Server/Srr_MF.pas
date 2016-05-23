@@ -289,7 +289,7 @@ end;
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
-  //SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
+  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -352,6 +352,7 @@ end;
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
+  Log_memo.Lines.Add('IBEvent: ' + EventName);
   if Copy(EventName,1,11) = 'INCOME_CALL' then
     SendCommandToUser('*', '#checkcall:')
 
@@ -391,7 +392,10 @@ begin
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
       i := FActiveUsers.IndexOf(atsnum);
       if i > -1 then
+      begin
+        Log_memo.Lines.Add('Посылаем сообщение: ' + command);
         TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
+      end;
     end
     else
     begin

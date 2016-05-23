@@ -132,13 +132,13 @@ begin
   end
   else
 
-  if cmd = 'callid' then
+  if cmd = 'callid' then //создан исходящий звонок с CallId
   begin
     if Assigned(frmCalling) then
       frmCalling.CallId := arg;
   end
   else
-  if cmd = 'callfinish' then
+  if cmd = 'callfinish' then  //d dfhbfynt c CallListener
   begin
     if frmCalling.CallId = arg then
       frmCalling.CallFinish;
@@ -146,11 +146,17 @@ begin
 
   else
 
-  if cmd = 'checkcall' then
+  if cmd = 'checkcall' then //поступил новый звонок
   begin
     DM.Calls_TimerTimer(DM.Calls_Timer);
   end
 
+  else
+  if cmd = 'checksession' then //завершен звонок
+  begin
+    if Assigned(frmCalling) then
+      frmCalling.CheckSession;
+  end
 
 end;
 

@@ -1,4 +1,5 @@
 inherited frmSessionResult: TfrmSessionResult
+  BorderIcons = [biSystemMenu]
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
   ClientHeight = 131
   ClientWidth = 517
@@ -100,7 +101,7 @@ inherited frmSessionResult: TfrmSessionResult
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select id,callid, ishod, result'
+      'select id,worker_id, client_id, callid, ishod, result'
       'from sessions'
       'where callid = :callid')
     UpdateObject = Q_upd
@@ -116,7 +117,10 @@ inherited frmSessionResult: TfrmSessionResult
   object Q_upd: TIBUpdateSQL
     ModifySQL.Strings = (
       'update sessions'
-      'set ishod = :ishod,'
+      'set '
+      'worker_id = :worker_id,'
+      'client_id = :client_id,'
+      'ishod = :ishod,'
       'result = :result'
       'where id=:id')
     Left = 136

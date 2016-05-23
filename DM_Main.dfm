@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 454
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -1147,5 +1149,23 @@ object DataModuleMain: TDataModuleMain
     OnTimer = SocketTimerTimer
     Left = 272
     Top = 104
+  end
+  object DicCallTypes: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 104
+    Top = 336
+    object DicCallTypesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DicCallTypesNAME: TStringField
+      FieldName = 'NAME'
+    end
+  end
+  object DSDicCallTypes: TDataSource
+    AutoEdit = False
+    DataSet = DicCallTypes
+    Left = 101
+    Top = 384
   end
 end

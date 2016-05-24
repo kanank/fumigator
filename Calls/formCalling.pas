@@ -37,6 +37,7 @@ type
   public
     AtsPhone: string;
     Phone: string;
+    CallResult: string;
     property CallId: string read fCallId write SetCallId;
     procedure CallFinish;
     procedure CheckSession;
@@ -66,6 +67,7 @@ begin
     Q.Edit;
     Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
     Q.FieldByName('client_id').AsInteger := Self.DS.Dataset.FieldByName('ID').AsInteger;
+    Self.CallResult := Q.FieldByName('callresult').AsString;
     ShowModal;
     if Q.Modified then
     try
@@ -105,8 +107,7 @@ procedure TfrmCalling.edtPhoneClick(Sender: TObject);
 begin
   try
     DM.inCalling := True;
-    formMain.ClientSocket.Socket.SendText('#call:' + AtsPhone + ',' + Phone);
-
+    formMain.ClientSocket.Socket.SendText('#call:' + AtsPhone + ',' + Phone + ',' + AtsPhone);
   finally
     DM.inCalling := False;
   end;

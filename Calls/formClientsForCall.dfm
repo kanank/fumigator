@@ -1,6 +1,8 @@
 inherited frmClientsForCall: TfrmClientsForCall
   Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1076#1083#1103' '#1086#1073#1079#1074#1086#1085#1072
   Position = poDesktopCenter
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited RzPanel1: TRzPanel

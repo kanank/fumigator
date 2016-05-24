@@ -71,7 +71,7 @@ type
     property CallId: string read fCallId;
     property StatusCall: Integer read GetStatusCall;
     property Extension: string read fExtension;
-    function SimpleCall(ANumberSrc, ANumberDest: string): boolean;
+    function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
     //class function DoCall(AtsNum, phone): Boolean;
   end;
 
@@ -224,7 +224,7 @@ begin
 
 end;
 
-function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest: string): boolean;
+function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
 var
   sStream: TStringStream;
   sResponse: string;
@@ -232,13 +232,11 @@ var
   json: TJSONObject;
 begin
   Result := False;
-  //if FTokenObject = nil then
-  //  Exit;
 
   sStream := TStringStream.Create('');
   try
     sStream.WriteString('{' + #13#10);
-    sStream.WriteString('"extension": "' + ANumberSrc + '",'+ #13#10);
+    sStream.WriteString('"extension": "' + AExtNumber + '",'+ #13#10);
     sStream.WriteString('"phoneCallView": ['+ #13#10);
     sStream.WriteString('{'+ #13#10);
     sStream.WriteString(' "source":  ["' + ANumberSrc + '" ],'+ #13#10);

@@ -44,12 +44,15 @@ inherited frmSimpleSpr: TfrmSimpleSpr
     DesignSize = (
       448
       44)
+    inherited Image2: TImage
+      Visible = False
+    end
     inherited Exit_bnt: TRzButton
       Left = 66
       Top = 7
       ModalResult = 1
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
-      ExplicitLeft = 56
+      ExplicitLeft = 66
       ExplicitTop = 7
     end
     object btnCancel: TRzButton
@@ -70,7 +73,6 @@ inherited frmSimpleSpr: TfrmSimpleSpr
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
-      ExplicitLeft = 253
     end
   end
   object txtName: TcxDBTextEdit

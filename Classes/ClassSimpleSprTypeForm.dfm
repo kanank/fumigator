@@ -1,7 +1,5 @@
 inherited frmSimpleSprType: TfrmSimpleSprType
   Caption = 'frmSimpleSprType'
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel [2]
@@ -18,6 +16,9 @@ inherited frmSimpleSprType: TfrmSimpleSprType
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
+    inherited Image2: TImage
+      Visible = False
+    end
     inherited Exit_bnt: TRzButton
       Caption = 'OK'
       ExplicitLeft = 66

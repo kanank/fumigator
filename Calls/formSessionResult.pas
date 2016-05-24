@@ -22,7 +22,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    CallResult: string;
   end;
 
 var

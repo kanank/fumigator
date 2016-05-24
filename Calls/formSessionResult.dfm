@@ -101,7 +101,9 @@ inherited frmSessionResult: TfrmSessionResult
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select id,worker_id, client_id, callid, ishod, result'
+      
+        'select id,worker_id, client_id, callid, ishod, result, callresul' +
+        't'
       'from sessions'
       'where callid = :callid')
     UpdateObject = Q_upd

@@ -106,8 +106,8 @@ end;
 procedure TfrmMain.ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
   ErrorEvent: TErrorEvent; var ErrorCode: Integer);
 begin
-  inherited;
-   DM.SocketTimer.Interval := 20000;
+  if not ClientSocket.Active then
+    DM.SocketTimer.Interval := 20000;
 end;
 
 procedure TfrmMain.ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
@@ -138,7 +138,7 @@ begin
       frmCalling.CallId := arg;
   end
   else
-  if cmd = 'callfinish' then  //d dfhbfynt c CallListener
+  if cmd = 'callfinish' then  //в варианте c CallListener
   begin
     if frmCalling.CallId = arg then
       frmCalling.CallFinish;
@@ -202,9 +202,11 @@ begin
 end;
 
 procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
+var
+  n: string;
 begin
-  DM.Calls_TimerTimer(DM.Calls_Timer);
-
+  n := InputBox('Входящий звонок', 'Номер вызывающего', '+79104579648');
+  ClientSocket.Socket.SendText('#call:' + n + ',755,755');
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);

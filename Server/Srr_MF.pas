@@ -472,7 +472,7 @@ begin
         Caller.OnAfterCall  := AfterOutcomCall;
         Caller.OnCallFinish := CallFinished;
       end;
-      Caller.SimpleCall(argList[0], argList[1]);
+      Caller.SimpleCall(argList[0], argList[1], argList[2]);
     end;
   finally
     argList.Free;

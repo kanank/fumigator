@@ -99,7 +99,7 @@ type
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientsForCall: FormResult;
 
-    procedure Calling(ATSnumber, Aphone: string; client_id: integer);
+    function Calling(ATSnumber, Aphone: string; client_id: integer): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
@@ -454,7 +454,7 @@ begin
     end;}
 end;
 
-procedure TDataModuleMain.Calling(ATSnumber, Aphone: string; client_id: integer);
+function TDataModuleMain.Calling(ATSnumber, Aphone: string; client_id: integer): string;
 var
   CliInfo: TDataSet;
 begin
@@ -481,6 +481,7 @@ begin
       pnlFiz.Visible := (CliInfo.FieldByName('tip').AsInteger = 0);
       pnlUr.Visible  := not frmCalling.pnlFiz.Visible;
       ShowModal;
+      Result := frmCalling.CallResult;
     end;
 
   finally

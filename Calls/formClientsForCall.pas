@@ -55,12 +55,13 @@ begin
   while not QWorkerShedule.Eof do
   begin
     Inc(fSessionCount);
-    DM.Calling(DM.CurrentUserSets.ATS_Phone_Num,
+    if DM.Calling(DM.CurrentUserSets.ATS_Phone_Num,
                QWorkerShedule.FieldByName('phone').AsString,
-               QWorkerShedule.FieldByName('client_id').AsInteger) ;
-    Inc(fGoodSessionCount);
+               QWorkerShedule.FieldByName('client_id').AsInteger) = 'ANSWER' then
+      Inc(fGoodSessionCount);
     QWorkerShedule.Next;
   end;
+  fTimeEnd := Now;
 
   frmEndCalling := TfrmEndCalling.Create(self);
   try

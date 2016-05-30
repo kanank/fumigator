@@ -66,6 +66,9 @@ type
     DicCallTypesID: TIntegerField;
     DicCallTypesNAME: TStringField;
     DSDicCallTypes: TDataSource;
+    WorkerTypeByDate: TIBQuery;
+    DSWorkerTypeByDate: TDataSource;
+    WorkerTypeByDate_upd: TIBUpdateSQL;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -134,6 +137,7 @@ function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): B
 var
   ds: TDataSet;
 begin
+  ds := nil;
   Result := False;
   try
     ds := AField.DataSet;
@@ -458,6 +462,7 @@ function TDataModuleMain.Calling(ATSnumber, Aphone: string; client_id: integer):
 var
   CliInfo: TDataSet;
 begin
+  CliInfo := nil;
   try
     if not formMain.ClientSocket.Active then
     begin
@@ -588,7 +593,8 @@ begin
   TR.AutoStopAction := saCommit;
 
   TR.Params.Add('isc_tpb_read_committed');
-  TR.Params.Add('isc_tpb_no_rec_version');
+  //TR.Params.Add('isc_tpb_no_rec_version');
+  TR.Params.Add('isc_tpb_rec_version');
   TR.Params.Add('isc_tpb_wait');
 
   // Только для чтения
@@ -703,8 +709,6 @@ begin
 end;
 
 function TDataModuleMain.GetPersonFullName(f, i, o: string): string;
-var
-  fio: string;
 begin
   Result := f;
 

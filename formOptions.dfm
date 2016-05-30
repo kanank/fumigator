@@ -1,20 +1,20 @@
 inherited frmOptions: TfrmOptions
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 430
+  ClientHeight = 408
   ClientWidth = 891
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnShow = FormShow
   ExplicitWidth = 907
-  ExplicitHeight = 468
+  ExplicitHeight = 446
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 698
-    Top = 299
+    Left = 696
+    Top = 277
     Visible = False
-    ExplicitLeft = 698
-    ExplicitTop = 299
+    ExplicitLeft = 696
+    ExplicitTop = 277
   end
   object Label22: TLabel [1]
     Left = 4
@@ -69,10 +69,13 @@ inherited frmOptions: TfrmOptions
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 386
+    Top = 364
     Width = 891
     ExplicitTop = 386
     ExplicitWidth = 891
+    inherited Image2: TImage
+      Visible = False
+    end
     inherited Exit_bnt: TRzButton
       Left = 757
       Font.Color = clWindowText
@@ -138,20 +141,12 @@ inherited frmOptions: TfrmOptions
     TabOrder = 3
     Width = 321
   end
-  object cxDBListBox1: TcxDBListBox
-    Left = 8
-    Top = 147
-    Width = 321
-    Height = 209
-    ItemHeight = 13
-    TabOrder = 4
-  end
   object GridRights: TcxGrid
     Left = 552
     Top = 19
     Width = 331
     Height = 254
-    TabOrder = 5
+    TabOrder = 4
     object GridRightsView: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       Navigator.InfoPanel.Visible = True
@@ -227,7 +222,7 @@ inherited frmOptions: TfrmOptions
     Top = 19
     Width = 208
     Height = 254
-    TabOrder = 6
+    TabOrder = 5
     object cxGridDBTableView1: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       Navigator.InfoPanel.Visible = True
@@ -291,7 +286,7 @@ inherited frmOptions: TfrmOptions
     HotTrack = True
     HotTrackColor = 16625984
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 6
     ThemeAware = False
     OnClick = btnTuneDictionariesClick
   end
@@ -309,9 +304,109 @@ inherited frmOptions: TfrmOptions
     HotTrack = True
     HotTrackColor = 16625984
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 7
     ThemeAware = False
     OnClick = btnTuneOPClentListClick
+  end
+  object RzPanel2: TRzPanel
+    Left = 8
+    Top = 152
+    Width = 321
+    Height = 204
+    BorderInner = fsGroove
+    BorderOuter = fsNone
+    Ctl3D = False
+    ParentCtl3D = False
+    TabOrder = 8
+    object Label4: TLabel
+      Left = 4
+      Top = 8
+      Width = 165
+      Height = 14
+      Caption = #1058#1080#1087#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1077#1081' '#1085#1072' '#1076#1072#1090#1091
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object cxGrid1: TcxGrid
+      Left = 0
+      Top = 33
+      Width = 320
+      Height = 170
+      TabOrder = 0
+      object cxGridDBTableView2: TcxGridDBTableView
+        Navigator.Buttons.CustomButtons = <>
+        Navigator.InfoPanel.Visible = True
+        DataController.DataSource = DataModuleMain.DSWorkerTypeByDate
+        DataController.Options = [dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText]
+        DataController.Summary.DefaultGroupSummaryItems = <>
+        DataController.Summary.FooterSummaryItems = <>
+        DataController.Summary.SummaryGroups = <>
+        OptionsCustomize.ColumnFiltering = False
+        OptionsCustomize.ColumnGrouping = False
+        OptionsData.CancelOnExit = False
+        OptionsData.Deleting = False
+        OptionsData.DeletingConfirmation = False
+        OptionsData.Inserting = False
+        OptionsView.FocusRect = False
+        OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
+        OptionsView.ScrollBars = ssVertical
+        OptionsView.GridLines = glVertical
+        OptionsView.GroupByBox = False
+        OptionsView.HeaderHeight = 22
+        object cxGridDBTableView2Column2: TcxGridDBColumn
+          Caption = #1058#1080#1087
+          DataBinding.FieldName = 'TYPE_ID'
+          PropertiesClassName = 'TcxLookupComboBoxProperties'
+          Properties.DropDownAutoSize = True
+          Properties.KeyFieldNames = 'ID'
+          Properties.ListColumns = <
+            item
+              FieldName = 'NAME'
+            end>
+          Properties.ListOptions.GridLines = glNone
+          Properties.ListOptions.ShowHeader = False
+          Properties.ListOptions.SyncMode = True
+          Properties.ListSource = DataModuleMain.DSDicUserTypes
+          Properties.PostPopupValueOnTab = True
+          Properties.OnCloseUp = cxGridDBTableView2Column2PropertiesCloseUp
+          HeaderAlignmentHorz = taCenter
+          Styles.Header = cxStyle1
+          Width = 150
+        end
+        object cxGridDBTableView2Column1: TcxGridDBColumn
+          Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082
+          DataBinding.FieldName = 'WORKER_ID'
+          PropertiesClassName = 'TcxLookupComboBoxProperties'
+          Properties.GridMode = True
+          Properties.KeyFieldNames = 'ID'
+          Properties.ListColumns = <
+            item
+              FieldName = 'SHORT_NAME'
+            end>
+          Properties.ListOptions.GridLines = glNone
+          Properties.ListOptions.ShowHeader = False
+          Properties.ListSource = DataModuleMain.DSWorkers
+          HeaderAlignmentHorz = taCenter
+          Options.Editing = False
+          Styles.Header = cxStyle1
+          Width = 148
+        end
+      end
+      object cxGridLevel2: TcxGridLevel
+        GridView = cxGridDBTableView2
+      end
+    end
+    object edtWorkerDate: TcxDateEdit
+      Left = 195
+      Top = 6
+      Properties.OnCloseUp = edtWorkerDatePropertiesCloseUp
+      TabOrder = 1
+      Width = 121
+    end
   end
   object rights_list: TIBQuery
     Database = DataModuleMain.DB

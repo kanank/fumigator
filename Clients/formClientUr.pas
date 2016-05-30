@@ -9,7 +9,8 @@ uses
   frListBase, frPhones, cxTextEdit,
   cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
   Vcl.StdCtrls, frPersonSmall, RzPanel, frameBase, frClientExtUr, RzButton,
-  Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB, frKladrAll, FrKladrAdrFull;
+  Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB, frKladrAll, FrKladrAdrFull,
+  IBX.IBCustomDataSet, IBX.IBQuery;
 
 type
   TfrmClientUr = class(TSimpleForm)
@@ -35,8 +36,10 @@ type
     FrameUslugi: TFrameUslugi;
     DS: TDataSource;
     FrameAddress: TFrameKladrAdrFull;
+    QCheck: TIBQuery;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
+    procedure DSDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
   public
@@ -50,12 +53,24 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, IBX.IBQuery, CommonTypes, System.StrUtils;
+  DM_Main, CommonTypes, System.StrUtils;
 
 procedure TfrmClientUr.butOKClick(Sender: TObject);
 var
   res: Boolean;
 begin
+  //проверка
+  res := False;
+  if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson)) then
+  begin
+    Application.MessageBox('Не заполнены все необходимые поля!',
+     'Внимание', MB_ICONWARNING + MB_OK);
+   self.ModalResult := mrNone;
+    Exit;
+  end
+  else
+    self.ModalResult := mrOk;
+
   res := False;
   try
     try
@@ -113,6 +128,25 @@ begin
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
       TIBQuery(DS.DataSet).CancelUpdates;
     end
+  end;
+end;
+
+procedure TfrmClientUr.DSDataChange(Sender: TObject; Field: TField);
+begin
+ if Field = nil then
+   Exit;
+
+  if (Field.FieldName = 'NAME') then
+  begin
+    QCheck.Close;
+    QCheck.ParamByName('name').AsString := Field.AsString;
+    QCheck.Open;
+    if QCheck.RecordCount > 0 then
+    begin
+      Application.MessageBox('Клиент с таким именем уже существует', 'Проверка',
+        MB_ICONWARNING);
+      txtName.SetFocus;
+    end;
   end;
 end;
 
@@ -189,5 +223,6 @@ begin
   FrameAddress.OpenData;
   FrameAddress.Visible := true;
 end;
+
 
 end.

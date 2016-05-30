@@ -12,7 +12,8 @@ uses
   cxFilter, cxData, cxDataStorage, cxNavigator, cxDBData, cxClasses,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGridLevel,
   cxGridCustomView, cxGrid, cxCheckBox, IBX.IBUpdateSQL, IBX.IBDatabase,
-  Datasnap.DBClient, dxmdaset;
+  Datasnap.DBClient, dxmdaset, Vcl.ComCtrls, dxCore, cxDateUtils, cxMaskEdit,
+  cxDropDownEdit, cxCalendar, cxDBLookupComboBox;
 
 type
   TfrmOptions = class(TSimpleForm)
@@ -22,7 +23,6 @@ type
     txtSMTP: TcxTextEdit;
     Label2: TLabel;
     txtTemp: TcxTextEdit;
-    cxDBListBox1: TcxDBListBox;
     rights_list: TIBQuery;
     DS_rights_list: TDataSource;
     GridRights: TcxGrid;
@@ -45,6 +45,14 @@ type
     btnTuneOPClentList: TRzButton;
     btnAccept: TRzButton;
     memRights_list: TdxMemData;
+    RzPanel2: TRzPanel;
+    cxGrid1: TcxGrid;
+    cxGridDBTableView2: TcxGridDBTableView;
+    cxGridLevel2: TcxGridLevel;
+    Label4: TLabel;
+    edtWorkerDate: TcxDateEdit;
+    cxGridDBTableView2Column1: TcxGridDBColumn;
+    cxGridDBTableView2Column2: TcxGridDBColumn;
     procedure FormCreate(Sender: TObject);
     procedure cxGridDBTableView1CellClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
@@ -58,6 +66,8 @@ type
     procedure btnAcceptClick(Sender: TObject);
     procedure btnTuneDictionariesClick(Sender: TObject);
     procedure btnTuneOPClentListClick(Sender: TObject);
+    procedure edtWorkerDatePropertiesCloseUp(Sender: TObject);
+    procedure cxGridDBTableView2Column2PropertiesCloseUp(Sender: TObject);
   private
     procedure FilterRights;
   public
@@ -158,10 +168,52 @@ begin
    FilterRights;
 end;
 
+
+procedure TfrmOptions.cxGridDBTableView2Column2PropertiesCloseUp(
+  Sender: TObject);
+var
+  Q: TIBQuery;
+begin
+  try
+    Q := DM.CreateRWQuery;
+    Q.SQL.Text := 'execute procedure INS_UP_WORKER_TYPE_BY_DATE(:worker_id, :type_id, :date_)';
+    Q.ParamByName('worker_id').AsInteger :=
+      DM.WorkerTypeByDate.FieldByName('worker_id').AsInteger;
+    Q.ParamByName('type_id').AsInteger :=
+      TcxLookupComboBoxProperties(cxGridDBTableView2Column2.Properties).ListSource.DataSet.FieldByName('id').AsInteger;
+    Q.ParamByName('date_').AsDateTime := edtWorkerDate.Date;
+    Q.ExecSQL;
+    if DM.WorkerTypeByDate.Transaction.Active then
+      DM.WorkerTypeByDate.Transaction.CommitRetaining;
+  finally
+    Q.Free;
+  end;
+  (*with DM.WorkerTypeByDate do
+  begin
+    Edit;
+    FieldByName('date_').AsDateTime := edtWorkerDate.Date;
+    FieldByName('type_id').AsInteger := TcxLookupComboBoxProperties(cxGridDBTableView2Column2.Properties).ListSource.DataSet.FieldByName('id').AsInteger;
+
+    Post;
+    ApplyUpdates;
+  end;*)
+end;
+
+
 procedure TfrmOptions.DS_rights_listDataChange(Sender: TObject; Field: TField);
 begin
   if Field <> nil then
     btnAccept.Visible := Field.DataSet.Modified;
+end;
+
+procedure TfrmOptions.edtWorkerDatePropertiesCloseUp(Sender: TObject);
+begin
+  with DM.WorkerTypeByDate do
+  begin
+    Close;
+    ParamByName('date_').AsDate := edtWorkerDate.Date;
+    Open;
+  end;
 end;
 
 procedure TfrmOptions.FilterRights;
@@ -181,6 +233,10 @@ begin
   memRights_list.CopyFromDataSet(rights_list);
   memRights_list.Open;
   memRights_list.Filtered := True;
+
+  //типы пользователей по датам
+  edtWorkerDate.Date := Date;
+  edtWorkerDatePropertiesCloseUp(edtWorkerDate);
 
 end;
 

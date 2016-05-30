@@ -7,6 +7,7 @@ inherited frmCalling: TfrmCalling
   ClientHeight = 200
   ClientWidth = 380
   Position = poDesktopCenter
+  OnCloseQuery = FormCloseQuery
   ExplicitWidth = 386
   ExplicitHeight = 228
   PixelsPerInch = 96
@@ -240,7 +241,6 @@ inherited frmCalling: TfrmCalling
     Top = 113
     Width = 124
     Height = 33
-    ModalResult = 1
     Anchors = [akTop, akRight]
     Caption = #1054#1090#1082#1088#1099#1090#1100' '#1082#1072#1088#1090#1086#1095#1082#1091' '#1082#1083#1080#1077#1085#1090#1072
     Font.Charset = DEFAULT_CHARSET
@@ -253,15 +253,16 @@ inherited frmCalling: TfrmCalling
     ParentFont = False
     TabOrder = 3
     ThemeAware = False
+    OnClick = Exit_bntClick
   end
-  object RzButton1: TRzButton
+  object btnTransferCall: TRzButton
     Left = 141
     Top = 113
     Width = 105
     Height = 26
-    ModalResult = 1
     Anchors = [akTop, akRight]
     Caption = #1055#1077#1088#1077#1074#1077#1089#1090#1080' '#1074#1099#1079#1086#1074
+    Enabled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 2960640
     Font.Height = -11
@@ -292,14 +293,14 @@ inherited frmCalling: TfrmCalling
     TabOrder = 5
     ThemeAware = False
   end
-  object RzButton3: TRzButton
+  object btnDeleteCall: TRzButton
     Left = 141
     Top = 167
     Width = 105
     Height = 26
-    ModalResult = 1
     Anchors = [akTop, akRight]
     Caption = #1047#1072#1082#1086#1085#1095#1080#1090#1100' '#1089#1077#1089#1089#1080#1102
+    Enabled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 2960640
     Font.Height = -11
@@ -310,6 +311,7 @@ inherited frmCalling: TfrmCalling
     ParentFont = False
     TabOrder = 6
     ThemeAware = False
+    OnClick = btnDeleteCallClick
   end
   object DS: TDataSource
     Left = 384

@@ -123,13 +123,14 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
         inherited btnLoad: TRzBitBtn
           Top = 95
           Visible = False
-          OnClick = nil
+          OnClick = FrameFotobtnLoadClick
           ExplicitTop = 95
         end
         inherited btnClear: TRzBitBtn
           Left = 10
           Top = 95
           Visible = False
+          OnClick = FrameFotobtnClearClick
           ExplicitLeft = 10
           ExplicitTop = 95
         end

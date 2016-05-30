@@ -20,11 +20,20 @@ type
     GridViewColumn4: TcxGridDBColumn;
     GridViewColumn5: TcxGridDBColumn;
     GridViewColumn6: TcxGridDBColumn;
+    GridViewUrColumn1: TcxGridDBColumn;
+    GridViewUrColumn2: TcxGridDBColumn;
+    GridViewUrColumn3: TcxGridDBColumn;
+    GridViewUrColumn4: TcxGridDBColumn;
+    GridViewUrColumn5: TcxGridDBColumn;
+    GridViewUrColumn6: TcxGridDBColumn;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
     DS: TDataSource;
     btnCli: TRzButton;
     btnLid: TRzButton;
+    GridViewUr: TcxGridDBTableView;
+    GridViewUrColumn7: TcxGridDBColumn;
+    GridViewUrColumn8: TcxGridDBColumn;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -45,7 +54,7 @@ type
     procedure SetStatus(AValue: integer);
     procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
   public
-    constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0);
+    constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0); overload;
     property isUr: Integer read FisUr write SetIsUr;
     property status: Integer read fStatus write setStatus;
   end;
@@ -72,10 +81,8 @@ begin
     extPrm.CallParam.Status_Id := status;
 
     if FisUr = 1 then
-      //formMain.NewURClnt_mi.Click
       DM.ShowClientUr(asCreate, extPrm)
     else
-      //formMain.NewFizClnt_mi.Click;
       DM.ShowClientFiz(asCreate, extPrm);
 
    id := DS.DataSet.FieldByName('id').AsInteger;
@@ -104,6 +111,7 @@ begin
   if ADataSet = nil then
     DS.DataSet := DM.Clients;
   isUr := AisUr;
+
   status := 1;
   DS.DataSet.OnFilterRecord := Self.FilterRecord;
 end;
@@ -209,6 +217,12 @@ begin
   DS.DataSet.Filtered := false;
   //DS.DataSet.Filter := Format('type_cli = %d', [isUr]);
   DS.DataSet.Filtered := True;
+
+  if isUr = 0 then
+    GridLevel1.GridView := GridView
+  else
+    GridLevel1.GridView := GridViewUr;
+
   Grid.Refresh;
 end;
 

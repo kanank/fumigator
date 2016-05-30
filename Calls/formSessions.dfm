@@ -1,18 +1,27 @@
 inherited frmSessions: TfrmSessions
   Caption = #1057#1077#1089#1089#1080#1080
-  ClientWidth = 787
+  ClientHeight = 407
+  ClientWidth = 924
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitWidth = 803
+  ExplicitWidth = 940
+  ExplicitHeight = 445
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 594
+    Left = 731
+    Top = 303
+    ExplicitLeft = 594
   end
   inherited RzPanel2: TRzPanel
-    Width = 787
+    Width = 924
+    ExplicitWidth = 787
+    DesignSize = (
+      924
+      33)
     inherited Image1: TImage
-      Left = 690
+      Left = 827
+      ExplicitLeft = 690
     end
     object Label11: TLabel
       Left = 9
@@ -71,9 +80,12 @@ inherited frmSessions: TfrmSessions
     end
   end
   inherited RzPanel1: TRzPanel
-    Width = 787
+    Top = 358
+    Width = 924
+    ExplicitWidth = 787
     inherited Cancel_btn: TRzButton
-      Left = 651
+      Left = 788
+      ExplicitLeft = 651
     end
     inherited Edit_btn: TRzButton
       Visible = False
@@ -86,11 +98,12 @@ inherited frmSessions: TfrmSessions
     end
   end
   inherited Grid: TcxGrid
-    Top = 33
-    Width = 787
-    Height = 276
+    Top = 93
+    Width = 924
+    Height = 265
     Align = alClient
     ExplicitWidth = 787
+    ExplicitHeight = 276
     inherited GridView: TcxGridDBTableView
       DataController.DataSource = DS
       OptionsData.CancelOnExit = False
@@ -122,34 +135,32 @@ inherited frmSessions: TfrmSessions
         DataBinding.FieldName = 'CALLERNUM'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 70
+        Width = 93
       end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #8470' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1103
         DataBinding.FieldName = 'CALLEDNUM'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 75
+        Width = 86
       end
       object GridViewColumn4: TcxGridDBColumn
         Caption = #1053#1072#1095#1072#1083#1086
         DataBinding.FieldName = 'STARTTIME'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 59
+        Width = 106
       end
       object GridViewColumn5: TcxGridDBColumn
         Caption = #1050#1086#1085#1077#1094
         DataBinding.FieldName = 'ENDTIME'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 60
+        Width = 114
       end
       object GridViewColumn6: TcxGridDBColumn
-        Caption = #1044#1083#1080#1090#1077#1083#1100'-'#1085#1086#1089#1090#1100
-        DataBinding.FieldName = 'DURATION'
-        PropertiesClassName = 'TcxDateEditProperties'
-        Properties.DisplayFormat = 'hh:nn:ss.ms'
+        Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
+        DataBinding.FieldName = 'DATESTRING'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
         Width = 66
@@ -207,6 +218,91 @@ inherited frmSessions: TfrmSessions
     TabOrder = 3
     Width = 88
   end
+  object RzPanel3: TRzPanel
+    Left = 0
+    Top = 33
+    Width = 924
+    Height = 60
+    Align = alTop
+    BorderSides = []
+    TabOrder = 4
+    ExplicitWidth = 787
+    object cxGrid1: TcxGrid
+      Left = 0
+      Top = 0
+      Width = 924
+      Height = 56
+      Align = alTop
+      TabOrder = 0
+      ExplicitWidth = 787
+      object cxGridDBTableView1: TcxGridDBTableView
+        Navigator.Buttons.CustomButtons = <>
+        Navigator.InfoPanel.Visible = True
+        OnCellDblClick = GridViewCellDblClick
+        DataController.DataModeController.GridMode = True
+        DataController.DataModeController.SyncMode = False
+        DataController.DataSource = DsHeader
+        DataController.Summary.DefaultGroupSummaryItems = <>
+        DataController.Summary.FooterSummaryItems = <>
+        DataController.Summary.SummaryGroups = <>
+        OptionsCustomize.ColumnGrouping = False
+        OptionsData.CancelOnExit = False
+        OptionsData.Deleting = False
+        OptionsData.DeletingConfirmation = False
+        OptionsData.Editing = False
+        OptionsData.Inserting = False
+        OptionsSelection.CellSelect = False
+        OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
+        OptionsView.ScrollBars = ssNone
+        OptionsView.GridLines = glVertical
+        OptionsView.GroupByBox = False
+        OptionsView.HeaderHeight = 35
+        object cxGridDBColumn1: TcxGridDBColumn
+          Caption = #1054#1073#1097#1072#1103' '#1076#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
+          DataBinding.FieldName = 'SUM_DURATION'
+          PropertiesClassName = 'TcxDateEditProperties'
+          Properties.DisplayFormat = 'hh:nn:ss.zzz'
+          HeaderAlignmentHorz = taCenter
+          Width = 143
+        end
+        object cxGridDBColumn2: TcxGridDBColumn
+          Caption = #1057#1088#1077#1076#1085#1103#1103' '#1087#1088#1086#1076#1086#1083#1078#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
+          DataBinding.FieldName = 'AVG_DURATION'
+          PropertiesClassName = 'TcxDateEditProperties'
+          Properties.DisplayFormat = 'hh:nn:ss.zzz'
+          HeaderAlignmentHorz = taCenter
+          Width = 141
+        end
+        object cxGridDBColumn3: TcxGridDBColumn
+          Caption = #1050#1086#1083'-'#1074#1086' '#1089#1077#1089#1089#1080#1081
+          DataBinding.FieldName = 'CNT_SESSION'
+          HeaderAlignmentHorz = taCenter
+          Width = 114
+        end
+        object cxGridDBColumn4: TcxGridDBColumn
+          Caption = #1050#1086#1083'-'#1074#1086' '#1091#1089#1087#1077#1096#1085#1099#1093' '#1089#1077#1089#1089#1080#1081
+          DataBinding.FieldName = 'CNT_GOOD_SESSION'
+          HeaderAlignmentHorz = taCenter
+          Width = 124
+        end
+        object cxGridDBColumn5: TcxGridDBColumn
+          Caption = #1047#1072#1082#1086#1085#1095#1080#1083' '#1082#1083#1080#1077#1085#1090
+          DataBinding.FieldName = 'END_BY_CLIENT'
+          HeaderAlignmentHorz = taCenter
+          Width = 105
+        end
+        object cxGridDBColumn6: TcxGridDBColumn
+          Caption = #1047#1072#1082#1086#1085#1095#1080#1083' '#1086#1087#1077#1088#1072#1090#1086#1088
+          DataBinding.FieldName = 'END_BY_USER'
+          HeaderAlignmentHorz = taCenter
+          Width = 157
+        end
+      end
+      object cxGridLevel1: TcxGridLevel
+        GridView = cxGridDBTableView1
+      end
+    end
+  end
   object Q: TIBQuery
     Database = DataModuleMain.DB
     Transaction = DataModuleMain.DefTr
@@ -215,7 +311,8 @@ inherited frmSessions: TfrmSessions
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select *'
+      'select sessions.*,'
+      ' (select datestring from diffdatestr(starttime, endtime)) '
       'from sessions'
       'where starttime >=:date1 and  starttime <:date2')
     Left = 72
@@ -239,6 +336,8 @@ inherited frmSessions: TfrmSessions
     Top = 88
   end
   object cxStyleRepository1: TcxStyleRepository
+    Left = 40
+    Top = 184
     PixelsPerInch = 96
     object cxStyle1: TcxStyle
       AssignedValues = [svFont]
@@ -248,5 +347,34 @@ inherited frmSessions: TfrmSessions
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
     end
+  end
+  object MemHeader: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 560
+    Top = 304
+    object MemHeaderSUM_DURATION: TDateTimeField
+      FieldName = 'SUM_DURATION'
+    end
+    object MemHeaderAVG_DURATION: TDateTimeField
+      FieldName = 'AVG_DURATION'
+    end
+    object MemHeaderCNT_SESSION: TIntegerField
+      FieldName = 'CNT_SESSION'
+    end
+    object MemHeaderCNT_GOOD_SESSION: TIntegerField
+      FieldName = 'CNT_GOOD_SESSION'
+    end
+    object MemHeaderEND_BY_CLIENT: TIntegerField
+      FieldName = 'END_BY_CLIENT'
+    end
+    object MemHeaderEND_BY_USER: TIntegerField
+      FieldName = 'END_BY_USER'
+    end
+  end
+  object DsHeader: TDataSource
+    DataSet = MemHeader
+    Left = 496
+    Top = 304
   end
 end

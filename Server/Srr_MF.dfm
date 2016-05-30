@@ -269,8 +269,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 445
-      Top = 272
+      Left = 441
+      Top = 268
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -523,7 +523,7 @@ object MF: TMF
     Top = 265
   end
   object IBEvents: TIBEvents
-    AutoRegister = True
+    AutoRegister = False
     Database = DB
     Events.Strings = (
       'INCOME_CALL'

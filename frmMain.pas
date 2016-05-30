@@ -51,6 +51,7 @@ type
     procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
     procedure RzMenuButton4Click(Sender: TObject);
+    procedure FizClients_miClick(Sender: TObject);
   private
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
   public
@@ -160,6 +161,19 @@ begin
 
 end;
 
+procedure TfrmMain.FizClients_miClick(Sender: TObject);
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  frmClients := TfrmClients.Create(self, nil, 0);
+  try
+    frmClients.ShowModal;
+  finally
+    FreeAndNil(frmClients);
+  end;
+end;
+
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   inherited;
@@ -245,10 +259,15 @@ end;
 
 procedure TfrmMain.UrClients_miClick(Sender: TObject);
 begin
-  formWorkers := TfrmWorkers.Create(self);
-  formWorkers.ShowModal;
-  FreeAndNil(formWorkers);
+  if not DM.Clients.Active then
+    DM.Clients.Open;
 
+  frmClients := TfrmClients.Create(self, nil, 1);
+  try
+    frmClients.ShowModal;
+  finally
+    FreeAndNil(frmClients);
+  end;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);

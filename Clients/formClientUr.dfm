@@ -299,7 +299,7 @@ inherited frmClientUr: TfrmClientUr
       WordWrap = True
     end
     object txtName: TcxDBTextEdit
-      Left = 82
+      Left = 87
       Top = 7
       BeepOnEnter = False
       DataBinding.DataField = 'NAME'
@@ -549,7 +549,25 @@ inherited frmClientUr: TfrmClientUr
     end
   end
   object DS: TDataSource
+    OnDataChange = DSDataChange
     Left = 200
     Top = 326
+  end
+  object QCheck: TIBQuery
+    Database = DataModuleMain.DB
+    Transaction = DataModuleMain.DefTr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id, name from clients where name = :name')
+    Left = 272
+    Top = 304
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'name'
+        ParamType = ptUnknown
+      end>
   end
 end

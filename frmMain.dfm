@@ -105,7 +105,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 3
     ThemeAware = False
-    OnClick = btnClientsClick
+    DropDownMenu = Clients_PUM
     ShowArrow = False
   end
   object RzMenuButton2: TRzMenuButton
@@ -125,6 +125,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 4
     ThemeAware = False
+    Visible = False
     OnClick = RzMenuButton2Click
     ShowArrow = False
   end
@@ -187,6 +188,7 @@ inherited frmMain: TfrmMain
     end
     object FizClients_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
+      OnClick = FizClients_miClick
     end
   end
   object ClientSocket: TClientSocket

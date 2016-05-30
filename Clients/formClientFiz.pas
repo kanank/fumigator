@@ -9,7 +9,8 @@ uses
   cxDropDownEdit, cxMemo, cxCalendar, cxTextEdit, cxMaskEdit, Vcl.StdCtrls,
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
   frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
-  frPasport, frListBase, frPersonFull, frUslugi, frKladrAll, FrKladrAdrFull;
+  frPasport, frListBase, frPersonFull, frUslugi, frKladrAll, FrKladrAdrFull,
+  IBX.IBCustomDataSet, IBX.IBQuery;
 
 type
   TfrmClientFiz = class(TSimpleForm)
@@ -26,9 +27,11 @@ type
     butOK: TRzButton;
     FrameAddress: TFrameKladrAdrFull;
 	FramePhones: TFramePhones;
+    QCheck: TIBQuery;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
+    procedure FramePersonDSDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
   public
@@ -42,12 +45,24 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes, IBX.IBQuery, CommonVars, System.StrUtils;
+  DM_Main, CommonTypes, CommonVars, System.StrUtils;
 
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
   res: Boolean;
 begin
+  //проверка
+  res := False;
+  if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson)) then
+  begin
+    Application.MessageBox('Не заполнены все необходимые поля!',
+     'Внимание', MB_ICONWARNING + MB_OK);
+    self.ModalResult := mrNone;
+    Exit;
+  end
+  else
+    self.ModalResult := mrOk;
+
   res := False;
   try
     try
@@ -90,6 +105,7 @@ begin
 
       //услуги
       res := FrameUslugi.SaveData;
+
     except
       res := False;
       ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
@@ -183,6 +199,34 @@ begin
   inherited;
   if TcxDateEdit(Sender).EditValue = null then
     TcxDateEdit(Sender).EditValue := IncMonth(Now(), -(InitBirthYear*12));
+end;
+
+procedure TfrmClientFiz.FramePersonDSDataChange(Sender: TObject; Field: TField);
+begin
+  if Field = nil then
+    Exit;
+
+  if (Field.FieldName = 'FAMILY') or
+     (Field.FieldName = 'NAME') or
+     (Field.FieldName = 'SURNAME') then
+  begin
+    if (Field.DataSet.FieldByName('FAMILY').AsString = '') or
+       (Field.DataSet.FieldByName('NAME').AsString = '') or
+       (Field.DataSet.FieldByName('SURNAME').AsString = '') then
+      Exit;
+
+    QCheck.Close;
+    QCheck.ParamByName('name').AsString := DM.GetPersonFullName(FramePerson.Query.FieldByName('FAMILY').AsString,
+          FramePerson.Query.FieldByName('NAME').AsString,
+          FramePerson.Query.FieldByName('SURNAME').AsString);
+    QCheck.Open;
+    if QCheck.RecordCount > 0 then
+    begin
+      Application.MessageBox('Клиент с таким именем уже существует', 'Проверка',
+        MB_ICONWARNING);
+      FramePerson.edtFamily.SetFocus;
+    end;
+  end;
 end;
 
 end.

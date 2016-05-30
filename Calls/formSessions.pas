@@ -11,7 +11,7 @@ uses
   cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses,
   cxContainer, Vcl.ComCtrls, dxCore, cxDateUtils, cxTextEdit, cxMaskEdit,
   cxDropDownEdit, cxCalendar, Vcl.StdCtrls, IBX.IBCustomDataSet, IBX.IBQuery,
-  cxDBLookupComboBox;
+  cxDBLookupComboBox, dxmdaset;
 
 type
   TfrmSessions = class(TSprForm)
@@ -34,10 +34,29 @@ type
     RzButton1: TRzButton;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
+    RzPanel3: TRzPanel;
+    cxGrid1: TcxGrid;
+    cxGridDBTableView1: TcxGridDBTableView;
+    cxGridDBColumn1: TcxGridDBColumn;
+    cxGridDBColumn2: TcxGridDBColumn;
+    cxGridDBColumn3: TcxGridDBColumn;
+    cxGridDBColumn4: TcxGridDBColumn;
+    cxGridDBColumn5: TcxGridDBColumn;
+    cxGridDBColumn6: TcxGridDBColumn;
+    cxGridLevel1: TcxGridLevel;
+    MemHeader: TdxMemData;
+    DsHeader: TDataSource;
+    MemHeaderCNT_SESSION: TIntegerField;
+    MemHeaderCNT_GOOD_SESSION: TIntegerField;
+    MemHeaderEND_BY_CLIENT: TIntegerField;
+    MemHeaderEND_BY_USER: TIntegerField;
+    MemHeaderSUM_DURATION: TDateTimeField;
+    MemHeaderAVG_DURATION: TDateTimeField;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
   private
-    { Private declarations }
+    procedure CalcHeader;
+    function MillesecondToDateTime(ms: int64): TDateTime;
   public
     { Public declarations }
   end;
@@ -51,10 +70,70 @@ implementation
 uses
   DM_Main;
 
+procedure TfrmSessions.CalcHeader;
+var
+  SUM_DURATION, AVG_DURATION: integer;
+  cnt_good, cnt, endByClient, endByUser: Integer;
+
+begin
+  SUM_DURATION := 0; AVG_DURATION := 0;
+  cnt_good := 0; cnt := 0; endByClient := 0; endByUser := 0;
+  cnt := Q.RecordCount;
+  Q.First;
+  while not Q.Eof do
+  begin
+    SUM_DURATION := SUM_DURATION + q.FieldByName('duration').AsInteger;
+    if Q.FieldByName('callresult').AsString = 'ANSWER' then
+      inc(cnt_good);
+    Q.Next;
+  end;
+
+
+  with MemHeader do
+  begin
+    Edit;
+    if cnt > 0 then
+    begin
+      AVG_DURATION := Trunc(SUM_DURATION/cnt);
+      FieldByName('sum_duration').AsDateTime    := MillesecondToDateTime(SUM_DURATION);
+      FieldByName('avg_duration').AsDateTime    := MillesecondToDateTime(AVG_DURATION);
+      FieldByName('cnt_session').AsInteger      := cnt;
+      FieldByName('cnt_good_session').AsInteger := cnt_good;
+      FieldByName('END_BY_USER').AsInteger      := cnt;
+      FieldByName('END_BY_CLIENT').AsInteger    := 0;
+    end
+    else
+    begin
+      FieldByName('sum_duration').Clear;
+      FieldByName('avg_duration').Clear;
+      FieldByName('cnt_session').Clear;
+      FieldByName('cnt_good_session').Clear;
+      FieldByName('END_BY_USER').Clear;
+      FieldByName('END_BY_CLIENT').Clear;
+    end;
+
+    Post;
+  end;
+
+end;
+
 procedure TfrmSessions.FormCreate(Sender: TObject);
 begin
   edtTimeStart.Date := Date;
   edtTimeEnd.Date   := edtTimeStart.Date;
+
+  MemHeader.Open;
+  MemHeader.Append;
+  MemHeader.Post;
+end;
+
+function TfrmSessions.MillesecondToDateTime(ms: int64): TDateTime;
+const
+  //Значение 1 миллисекунды в формате TDateTime.
+  MsTime : TDateTime = 1 / (24 * 60 * 60 * 1000);
+begin
+  //Время в формате TDateTime.
+  Result := Ms * MsTime;
 end;
 
 procedure TfrmSessions.RzButton1Click(Sender: TObject);
@@ -68,7 +147,7 @@ begin
   Q.ParamByName('date1').AsDateTime := edtTimeStart.Date;
   Q.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
   Q.Open;
-
+  CalcHeader;
 end;
 
 end.

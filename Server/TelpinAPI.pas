@@ -72,7 +72,8 @@ type
     property StatusCall: Integer read GetStatusCall;
     property Extension: string read fExtension;
     function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
-    //class function DoCall(AtsNum, phone): Boolean;
+    function TransferCall(Callid, APhone: string): Boolean;
+    function DeleteCall(Callid: string): Boolean;
   end;
 
   TCallListener = class (TTelphinAPIElement)
@@ -206,6 +207,30 @@ end;
 
 { TPhoneCalls }
 
+function TPhoneCalls.DeleteCall(Callid: string): Boolean;
+var
+  sStream: TStringStream;
+  sResponse: string;
+  url: string;
+begin
+  Result := False;
+
+  sStream := TStringStream.Create('');
+  try
+    fHttp.Request.Method := 'DELETE';
+    fHttp.Request.ContentType := 'application/json';
+    fhttp.Request.CustomHeaders.Clear;
+    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+    url := fBaseUrl + '/uapi/phoneCalls/@me/@self/' + CallId;
+    fHttp.Delete(url, sStream);
+
+    Result := (fHttp.ResponseCode = 200);
+  finally
+    sStream.Free;
+  end;
+end;
+
 function TPhoneCalls.GetStatusCall: Integer;
 var
   sStream: TStringStream;
@@ -217,7 +242,7 @@ begin
   fhttp.Request.CustomHeaders.Clear;
   fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
-  url := fBaseUrl + '/uapi/phoneCalls/@owner/9738*755/' + CallId; //&accessRequestToken=' + FTokenObject.Token;
+  url := fBaseUrl + '/uapi/phoneCalls/@owner/@self/' + CallId; //&accessRequestToken=' + FTokenObject.Token;
   fHttp.Get(url, sStream);
 
   sStream.Free;
@@ -274,6 +299,11 @@ begin
   finally
     sStream.Free;
   end;
+end;
+
+function TPhoneCalls.TransferCall(Callid, APhone: string): Boolean;
+begin
+
 end;
 
 { TTelphinApiBaseElement }

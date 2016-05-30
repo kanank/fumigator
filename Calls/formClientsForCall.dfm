@@ -1,8 +1,6 @@
 inherited frmClientsForCall: TfrmClientsForCall
   Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1076#1083#1103' '#1086#1073#1079#1074#1086#1085#1072
   Position = poDesktopCenter
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited RzPanel1: TRzPanel
@@ -13,6 +11,7 @@ inherited frmClientsForCall: TfrmClientsForCall
       Left = 210
       Width = 152
       Caption = #1047#1072#1087#1083#1072#1085#1080#1088#1086#1074#1072#1090#1100' '#1087#1077#1088#1077#1088#1099#1074
+      OnClick = Edit_btnClick
       ExplicitLeft = 210
       ExplicitWidth = 152
     end
@@ -121,6 +120,34 @@ inherited frmClientsForCall: TfrmClientsForCall
       end
     end
   end
+  object pnlPause: TRzPanel
+    Left = 178
+    Top = 152
+    Width = 295
+    Height = 41
+    BorderOuter = fsFlatRounded
+    TabOrder = 3
+    Visible = False
+    object lblPause: TRzLabel
+      Left = 2
+      Top = 8
+      Width = 289
+      Height = 23
+      Align = alCustom
+      Alignment = taCenter
+      AutoSize = False
+      Caption = #1055#1077#1088#1077#1088#1099#1074
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = True
+      BlinkIntervalOff = 1000
+      BlinkIntervalOn = 1000
+    end
+  end
   object QWorkerShedule: TIBQuery
     Database = DataModuleMain.DB
     Transaction = DataModuleMain.DefTr
@@ -157,8 +184,8 @@ inherited frmClientsForCall: TfrmClientsForCall
   end
   object DS: TDataSource
     DataSet = QWorkerShedule
-    Left = 320
-    Top = 160
+    Left = 360
+    Top = 200
   end
   object cxStyleRepository1: TcxStyleRepository
     Left = 8
@@ -172,5 +199,11 @@ inherited frmClientsForCall: TfrmClientsForCall
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
     end
+  end
+  object TimerPause: TTimer
+    Enabled = False
+    OnTimer = TimerPauseTimer
+    Left = 176
+    Top = 200
   end
 end

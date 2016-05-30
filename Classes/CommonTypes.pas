@@ -74,6 +74,7 @@ end;
 
 type TClientParam = record
   Status: Integer;
+  ClientType: Integer;
   CallParam: ClientCallParams;
 end;
 

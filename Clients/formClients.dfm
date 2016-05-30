@@ -1,24 +1,28 @@
 inherited frmClients: TfrmClients
   Caption = #1050#1083#1080#1077#1085#1090#1099
+  ClientWidth = 834
   Position = poDesktopCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
+  ExplicitWidth = 850
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
+    Left = 641
     Visible = False
   end
   inherited RzPanel2: TRzPanel
+    Width = 834
     Height = 30
     ExplicitHeight = 30
     inherited Image1: TImage
-      Left = 7
+      Left = 3
       Top = 1
-      ExplicitLeft = 7
+      ExplicitLeft = 3
       ExplicitTop = 1
     end
     object Fiz_btn: TRzButton
-      Left = 368
+      Left = 561
       Top = 1
       Width = 130
       Height = 27
@@ -39,9 +43,10 @@ inherited frmClients: TfrmClients
       TabOrder = 0
       ThemeAware = False
       OnClick = Fiz_btnClick
+      ExplicitLeft = 368
     end
     object Ur_btn: TRzButton
-      Left = 504
+      Left = 697
       Top = 1
       Width = 130
       Height = 27
@@ -65,31 +70,33 @@ inherited frmClients: TfrmClients
       TabOrder = 1
       ThemeAware = False
       OnClick = Ur_btnClick
+      ExplicitLeft = 504
     end
   end
   inherited RzPanel1: TRzPanel
+    Width = 834
     inherited Cancel_btn: TRzButton
-      Left = 504
+      Left = 697
       Caption = #1042#1099#1093#1086#1076
       ExplicitLeft = 504
     end
     inherited Edit_btn: TRzButton
-      Font.Color = clBlack
       OnClick = Edit_btnClick
     end
     inherited Del_btn: TRzButton
-      Font.Color = clBlack
       OnClick = Del_btnClick
     end
     inherited Add_btn: TRzButton
-      Font.Color = clBlack
       OnClick = Add_btnClick
     end
   end
   inherited Grid: TcxGrid
     Top = 48
+    Width = 834
     Height = 260
+    Anchors = [akLeft, akTop, akRight]
     ExplicitTop = 48
+    ExplicitWidth = 794
     ExplicitHeight = 260
     inherited GridView: TcxGridDBTableView
       OnCellClick = GridViewCellClick
@@ -106,18 +113,20 @@ inherited frmClients: TfrmClients
         Caption = #1050#1083#1080#1077#1085#1090
         DataBinding.FieldName = 'NAME'
         HeaderAlignmentHorz = taCenter
-        Width = 155
+        Options.Editing = False
+        Width = 204
       end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #1058#1077#1083#1077#1092#1086#1085
         DataBinding.FieldName = 'PHONE'
         HeaderAlignmentHorz = taCenter
-        Width = 106
+        Width = 126
       end
       object GridViewColumn4: TcxGridDBColumn
         DataBinding.FieldName = 'Email'
         HeaderAlignmentHorz = taCenter
         MinWidth = 112
+        Options.Editing = False
         Options.AutoWidthSizable = False
         Options.GroupFooters = False
         Options.Grouping = False
@@ -131,13 +140,83 @@ inherited frmClients: TfrmClients
         HeaderAlignmentHorz = taCenter
         Options.GroupFooters = False
         Options.Grouping = False
-        Width = 136
+        Width = 223
       end
       object GridViewColumn6: TcxGridDBColumn
         Caption = #1050#1086#1083'-'#1074#1086' '#1076#1086#1075'.'
         DataBinding.FieldName = 'CNT_DOG'
         HeaderAlignmentHorz = taCenter
       end
+    end
+    object GridViewUr: TcxGridDBTableView [1]
+      Navigator.Buttons.CustomButtons = <>
+      OnCellClick = GridViewCellClick
+      DataController.DataSource = DS
+      DataController.Summary.DefaultGroupSummaryItems = <>
+      DataController.Summary.FooterSummaryItems = <>
+      DataController.Summary.SummaryGroups = <>
+      OptionsView.GridLines = glVertical
+      OptionsView.GroupByBox = False
+      OptionsView.HeaderAutoHeight = True
+      Styles.Header = cxStyle1
+      object GridViewUrColumn1: TcxGridDBColumn
+        DataBinding.FieldName = 'ID'
+        HeaderAlignmentHorz = taCenter
+        Width = 48
+      end
+      object GridViewUrColumn2: TcxGridDBColumn
+        Caption = #1050#1083#1080#1077#1085#1090
+        DataBinding.FieldName = 'NAME'
+        HeaderAlignmentHorz = taCenter
+        Options.Editing = False
+        Width = 138
+      end
+      object GridViewUrColumn7: TcxGridDBColumn
+        Caption = #1048#1053#1053
+        DataBinding.FieldName = 'INN'
+        HeaderAlignmentHorz = taCenter
+        Width = 99
+      end
+      object GridViewUrColumn8: TcxGridDBColumn
+        Caption = #1056#1091#1082#1086#1074#1086#1076#1080#1090#1077#1083#1100
+        DataBinding.FieldName = 'PERSON_NAME'
+        HeaderAlignmentHorz = taCenter
+        Width = 124
+      end
+      object GridViewUrColumn3: TcxGridDBColumn
+        Caption = #1058#1077#1083#1077#1092#1086#1085
+        DataBinding.FieldName = 'PHONE'
+        HeaderAlignmentHorz = taCenter
+        Width = 106
+      end
+      object GridViewUrColumn4: TcxGridDBColumn
+        DataBinding.FieldName = 'Email'
+        HeaderAlignmentHorz = taCenter
+        MinWidth = 112
+        Options.Editing = False
+        Options.AutoWidthSizable = False
+        Options.GroupFooters = False
+        Options.Grouping = False
+        Options.HorzSizing = False
+        Options.Moving = False
+        Width = 112
+      end
+      object GridViewUrColumn5: TcxGridDBColumn
+        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+        DataBinding.FieldName = 'WORKER_NAME'
+        HeaderAlignmentHorz = taCenter
+        Options.GroupFooters = False
+        Options.Grouping = False
+        Width = 123
+      end
+      object GridViewUrColumn6: TcxGridDBColumn
+        Caption = #1050#1086#1083'-'#1074#1086' '#1076#1086#1075'.'
+        DataBinding.FieldName = 'CNT_DOG'
+        HeaderAlignmentHorz = taCenter
+      end
+    end
+    inherited GridLevel1: TcxGridLevel
+      GridView = GridViewUr
     end
   end
   object btnCli: TRzButton

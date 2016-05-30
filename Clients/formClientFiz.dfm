@@ -73,7 +73,6 @@ inherited frmClientFiz: TfrmClientFiz
       Top = 8
       Width = 124
       Height = 29
-      ModalResult = 1
       Anchors = [akTop, akRight]
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
       Font.Charset = DEFAULT_CHARSET
@@ -244,6 +243,9 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitTop = 148
       ExplicitWidth = 114
       Width = 114
+    end
+    inherited DS: TDataSource
+      OnDataChange = FramePersonDSDataChange
     end
   end
   object cmbFormat: TcxDBLookupComboBox
@@ -428,5 +430,22 @@ inherited frmClientFiz: TfrmClientFiz
   object DS: TDataSource
     Left = 352
     Top = 319
+  end
+  object QCheck: TIBQuery
+    Database = DataModuleMain.DB
+    Transaction = DataModuleMain.DefTr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id, name from clients where name = :name')
+    Left = 248
+    Top = 271
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'name'
+        ParamType = ptUnknown
+      end>
   end
 end

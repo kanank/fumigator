@@ -17,6 +17,8 @@ type
     FramePhones: TFramePhones;
     Label5: TLabel;
     edtEmailWork: TcxDBTextEdit;
+    procedure FrameFotobtnLoadClick(Sender: TObject);
+    procedure FrameFotobtnClearClick(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -31,6 +33,18 @@ implementation
 {$R *.dfm}
 
 
+
+procedure TFramePersonSmallFoto.FrameFotobtnClearClick(Sender: TObject);
+begin
+  inherited;
+  FrameFoto.btnClearClick(Sender);
+end;
+
+procedure TFramePersonSmallFoto.FrameFotobtnLoadClick(Sender: TObject);
+begin
+  inherited;
+  FrameFoto.btnLoadClick(Sender);
+end;
 
 function TFramePersonSmallFoto.OpenData(Aid: integer): Boolean;
 begin

@@ -1,8 +1,9 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
-  Height = 454
+  Height = 487
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,12 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
+    DefaultAction = TACommitRetaining
+    Params.Strings = (
+      'isc_tpb_read_committed'
+      'isc_tpb_rec_version'
+      'isc_tpb_wait')
     AutoStopAction = saCommitRetaining
     Left = 80
     Top = 24
@@ -1096,6 +1103,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1165,5 +1173,49 @@ object DataModuleMain: TDataModuleMain
     DataSet = DicCallTypes
     Left = 101
     Top = 384
+  end
+  object WorkerTypeByDate: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select t.id, w.id worker_id, t.type_id, t.date_'
+      'from workers w'
+      'left join worker_types_by_date t on t.worker_id = w.id and '
+      'date_ = :date_'
+      'where is_deleted = 0'
+      'order by w.short_name'
+      '')
+    UpdateObject = WorkerTypeByDate_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_WORKER_TYPES_BY_DATE_ID'
+    GeneratorField.ApplyEvent = gamOnServer
+    Left = 173
+    Top = 314
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'date_'
+        ParamType = ptUnknown
+      end>
+  end
+  object DSWorkerTypeByDate: TDataSource
+    DataSet = WorkerTypeByDate
+    Left = 173
+    Top = 362
+  end
+  object WorkerTypeByDate_upd: TIBUpdateSQL
+    ModifySQL.Strings = (
+      '')
+    InsertSQL.Strings = (
+      '')
+    DeleteSQL.Strings = (
+      'delete from DIC_MATERIAL_TYPES'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 174
+    Top = 408
   end
 end

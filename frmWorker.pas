@@ -44,7 +44,6 @@ type
     procedure FullForm_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Save_btnClick(Sender: TObject);
-    procedure cxDBTextEdit1DblClick(Sender: TObject);
     procedure Cancel_btnClick(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
     procedure _FramePersonFullcmbDateBirthPropertiesInitPopup(Sender: TObject);
@@ -74,12 +73,6 @@ begin
     TIBQuery(DS.DataSet).RevertRecord;
   end;
   _FramePersonFull.Cancel;
-end;
-
-procedure TfrmWorker.cxDBTextEdit1DblClick(Sender: TObject);
-begin
-  inherited;
-   ValidateData(self.DS, self);
 end;
 
 procedure TfrmWorker.Exit_bntClick(Sender: TObject);
@@ -177,6 +170,8 @@ procedure TfrmWorker.Save_btnClick(Sender: TObject);
 var
   res: Boolean;
 begin
+
+
   //сохраняем полное имя
   DS.DataSet.FieldByName('full_name').AsString :=
     _FramePersonFull.FullName;
@@ -187,14 +182,14 @@ begin
 
   //проверка
   res := False;
-//  if not ValidateData(DS, self) then
-//  begin
-//    Application.MessageBox('Не заполнены все необходимые поля!',
-//     'Внимание', MB_ICONWARNING + MB_OK);
-//    TRzButton(Sender).ModalResult := mrNone;
-//    Exit;
-//  end
-//  else
+  if not ValidateData(DS, self) then
+  begin
+    Application.MessageBox('Не заполнены все необходимые поля!',
+     'Внимание', MB_ICONWARNING + MB_OK);
+    TRzButton(Sender).ModalResult := mrNone;
+    Exit;
+  end
+  else
     TButton(Sender).ModalResult := mrOk;
 
   //прошли проверку

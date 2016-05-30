@@ -473,6 +473,18 @@ begin
         Caller.OnCallFinish := CallFinished;
       end;
       Caller.SimpleCall(argList[0], argList[1], argList[2]);
+    end
+
+    else
+    if cmd = 'calldelete' then
+    begin
+      if not Assigned(Caller) then
+      begin
+        Caller := TPhoneCalls.Create(AccessToken);
+        Caller.OnAfterCall  := AfterOutcomCall;
+        Caller.OnCallFinish := CallFinished;
+      end;
+      Caller.DeleteCall(argList[0]);
     end;
   finally
     argList.Free;
@@ -548,7 +560,6 @@ begin
     DB.Params.Add('USER_NAME='+DBUser_edt.Text );
     DB.Params.Add('PASSWORD=' + DBPass_edt.Text);
     DB.Open;
-
   except
     on E: Exception do begin
        AddLog('#Не удалось подключиться к БД. Проверьте настройки. Текст ошибки "'+E.Message+'"');
@@ -563,6 +574,8 @@ begin
 
     DBStatus_lbl.Caption := 'Установлено';
     DBStatus_lbl.Font.Color := $00408000;
+
+    IBEvents.RegisterEvents;
   end;
 
 end;

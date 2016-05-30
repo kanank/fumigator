@@ -66,8 +66,10 @@ inherited FramePersonFull: TFramePersonFull
           ExplicitTop = 2
         end
         inherited btnEdit: TRzBitBtn
-          Top = 33
-          ExplicitTop = 33
+          Left = 5
+          Top = 36
+          ExplicitLeft = 5
+          ExplicitTop = 36
         end
         inherited btnDel: TRzBitBtn
           Top = 93

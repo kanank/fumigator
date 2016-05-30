@@ -24,21 +24,26 @@ type
     DS: TDataSource;
     Label3: TLabel;
     Exit_bnt: TRzButton;
-    RzButton1: TRzButton;
+    btnTransferCall: TRzButton;
     RzButton2: TRzButton;
-    RzButton3: TRzButton;
+    btnDeleteCall: TRzButton;
     Q: TIBQuery;
     procedure edtPhoneMouseEnter(Sender: TObject);
     procedure edtPhoneMouseLeave(Sender: TObject);
     procedure edtPhoneClick(Sender: TObject);
+    procedure Exit_bntClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnDeleteCallClick(Sender: TObject);
   private
     fCallId: string;
     procedure SetCallId(AValue: string);
+    function GetCallFinished: boolean;
   public
     AtsPhone: string;
     Phone: string;
     CallResult: string;
     property CallId: string read fCallId write SetCallId;
+    property CallFinished: boolean read GetCallFinished;
     procedure CallFinish;
     procedure CheckSession;
   end;
@@ -51,7 +56,7 @@ implementation
 {$R *.dfm}
 
 uses
-  DM_Main, frmMain, formSessionResult;
+  DM_Main, frmMain, formSessionResult, CommonTypes, formClientCard;
 
 
 procedure TfrmCalling.CallFinish;
@@ -92,8 +97,6 @@ begin
     Q.Transaction.CommitRetaining;
   try
     Q.Open;
-    if Q.Transaction.Active then
-      Q.Transaction.CommitRetaining;
     if Q.RecordCount > 0  then
       CallFinish;
   except
@@ -117,6 +120,7 @@ procedure TfrmCalling.edtPhoneMouseEnter(Sender: TObject);
 begin
   inherited;
   edtPhone.Style.Font.Style := [fsBold, fsUnderline];
+  edtPhone.Cursor := crHandPoint;
 end;
 
 procedure TfrmCalling.edtPhoneMouseLeave(Sender: TObject);
@@ -125,12 +129,38 @@ begin
   edtPhone.Style.Font.Style := [];
 end;
 
+procedure TfrmCalling.Exit_bntClick(Sender: TObject);
+begin
+  TfrmClientCard.ShowClientCard(DS.DataSet.FieldByName('id').AsInteger);
+end;
+
+procedure TfrmCalling.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if DM.inCalling and not CallFinished then
+    CanClose := False;
+end;
+
+function TfrmCalling.GetCallFinished: boolean;
+begin
+  Result := (CallResult <> '');
+end;
+
+procedure TfrmCalling.btnDeleteCallClick(Sender: TObject);
+begin
+  try
+    formMain.ClientSocket.Socket.SendText('#calldelete:' + Self.CallId);
+  finally
+    DM.inCalling := False;
+  end;
+end;
+
 procedure TfrmCalling.SetCallId(AValue: string);
 begin
   if AValue <> fCallId then
   begin
     fCallId := AValue;
-
+    btnDeleteCall.Enabled   := (fCallId <> '');
+    btnTransferCall.Enabled := (fCallId <> '');
   end;
 
 end;

@@ -12,7 +12,7 @@ Coordinates=10,10,52,51
 Visible=True
 
 []
-Coordinates=21,130,55,87
+Coordinates=648,417,84,33
 Visible=True
 
 [Label1]
@@ -86,7 +86,4 @@ Coordinates=75,796,148,537
 
 [cxStyleRepository1]
 Coordinates=663,365,109,33
-
-[cxDBListBox1]
-Coordinates=648,417,84,33
 

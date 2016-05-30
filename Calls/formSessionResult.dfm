@@ -3,7 +3,7 @@ inherited frmSessionResult: TfrmSessionResult
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
   ClientHeight = 131
   ClientWidth = 517
-  Position = poOwnerFormCenter
+  Position = poDesktopCenter
   ExplicitWidth = 533
   ExplicitHeight = 169
   PixelsPerInch = 96

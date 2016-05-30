@@ -53,7 +53,9 @@ uses
   formClientsForCall in 'Calls\formClientsForCall.pas' {frmClientsForCall},
   formEndCalling in 'Calls\formEndCalling.pas' {frmEndCalling},
   formSessionResult in 'Calls\formSessionResult.pas' {frmSessionResult},
-  formSessions in 'Calls\formSessions.pas' {frmSessions};
+  formSessions in 'Calls\formSessions.pas' {frmSessions},
+  formClientCard in 'Clients\formClientCard.pas' {frmClientCard},
+  formCallPause in 'Calls\formCallPause.pas' {frmCallPause};
 
 {$R *.res}
 
@@ -62,7 +64,6 @@ begin
   Application.Title := 'Фумигатор';
 
   Application.CreateForm(TDataModuleMain, DM);
-
   LoadOptions(CfgFileName);
 
   frmLogin := TfrmLogin.Create(nil);

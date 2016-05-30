@@ -91,7 +91,10 @@ end;
 
 procedure TfrmCalling.CheckSession;
 begin
-  Q.Close;
+  self.CallResult := DM.CheckCloseSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
+  Exit;
+
+  (*Q.Close;
   Q.ParamByName('callid').AsString := CallId;
   if Q.Transaction.Active then
     Q.Transaction.CommitRetaining;
@@ -102,7 +105,7 @@ begin
   except
     if Q.Transaction.Active then
      Q.Transaction.RollbackRetaining;
-  end;
+  end;*)
 
 end;
 

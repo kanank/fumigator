@@ -69,6 +69,7 @@ type
     WorkerTypeByDate: TIBQuery;
     DSWorkerTypeByDate: TDataSource;
     WorkerTypeByDate_upd: TIBUpdateSQL;
+    QSession_Check: TIBQuery;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -105,6 +106,8 @@ type
     function Calling(ATSnumber, Aphone: string; client_id: integer): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
+    function CheckCloseSession(callid: string; client_id: integer): string; //проверка закрытия сессии
+
     function GetDataset(AQuery: TIBQuery): TIBQuery;
 
   var
@@ -114,6 +117,9 @@ type
     MissCount: integer;
     DBFileName :string;
     inCalling: Boolean;
+    incomeCalling: Boolean;
+    incomeCallId: string;
+    DateStart: TDateTime; //время запуска программы
   end;
 
   function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
@@ -131,7 +137,7 @@ implementation
 uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
-  frmMain, formClientsForCall;
+  frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -249,7 +255,7 @@ begin
     frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
     frmIncomeCallUr.ShowModal;
     if frmIncomeCallUr.ModalResult = mrOk then
-      ShowClientFiz(asEdit, prm);
+      ShowClientUr(asEdit, prm);
 
     Result.ModalRes := frmIncomeCallUr.ModalResult;
   finally
@@ -370,6 +376,8 @@ function TDataModuleMain.AfterLogin: boolean;
 begin
   Result := False;
   //TrayView := TrayNormal;
+  DateStart := Now;
+  CallS_Q.ParamByName('date_start').AsDateTime := DateStart;
 
   if not LoadSpr then //загрузка справочников
   begin
@@ -536,6 +544,12 @@ begin
              exit;
            end;
 
+           frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
+           frmIncomeCallRoot.Show;
+
+           incomeCalling := True;
+           incomeCallId := FieldByName('CALLAPIID').AsString;
+
            if clp.Client_Type = '' then
            begin  // Вызываем неизвестный звонок.
              case ShowUnknownCallForm(tel).ModalRes of
@@ -578,8 +592,52 @@ begin
   //  end;
 
   finally
-
+    incomeCalling := False;
    ////// calls_timer.enabled := true;
+  end;
+end;
+
+function TDataModuleMain.CheckCloseSession(callid: string; client_id: integer): string;
+begin
+  Result := '';
+  QSession_Check.Close;
+  QSession_Check.ParamByName('callid').AsString := CallId;
+  if QSession_Check.Transaction.Active then
+    QSession_Check.Transaction.CommitRetaining;
+  try
+    QSession_Check.Open;
+    if QSession_Check.RecordCount > 0 then
+    begin
+      frmSessionResult := TfrmSessionResult.Create(nil);
+      with frmSessionResult do
+      try
+        if Q.Transaction.Active then
+          Q.Transaction.CommitRetaining;
+
+        Q.ParamByName('callid').AsString := Callid;
+        Q.Open;
+        Q.Edit;
+        Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+        Q.FieldByName('client_id').AsInteger := client_id;
+        Result := Q.FieldByName('callresult').AsString;
+        ShowModal;
+        if Q.Modified then
+        try
+          Q.Post;
+          if Q.Transaction.Active then
+             Q.Transaction.CommitRetaining;
+        except
+           if Q.Transaction.Active then
+             Q.Transaction.RollbackRetaining;
+        end;
+
+      finally
+        FreeAndNil(frmSessionResult);
+      end;
+    end;
+  except
+    if QSession_Check.Transaction.Active then
+     QSession_Check.Transaction.RollbackRetaining;
   end;
 end;
 

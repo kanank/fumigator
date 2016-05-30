@@ -560,7 +560,7 @@ inherited frmClientUr: TfrmClientUr
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select id, name from clients where name = :name')
+      'select id, name from clients where name = :name and act=1')
     Left = 272
     Top = 304
     ParamData = <

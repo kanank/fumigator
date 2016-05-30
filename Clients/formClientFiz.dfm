@@ -438,7 +438,7 @@ inherited frmClientFiz: TfrmClientFiz
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select id, name from clients where name = :name')
+      'select id, name from clients where name = :name and act=1')
     Left = 248
     Top = 271
     ParamData = <

@@ -46,7 +46,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     Top = 149
     Width = 470
     ExplicitTop = 149
-    ExplicitWidth = 440
+    ExplicitWidth = 470
     inherited Image2: TImage
       Left = 36
       ExplicitLeft = 4
@@ -54,7 +54,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     inherited Exit_bnt: TRzButton
       Left = 188
       Caption = #1054#1090#1084#1077#1085#1072
-      ExplicitLeft = 158
+      ExplicitLeft = 188
     end
   end
   object btnNewFizCli: TRzButton

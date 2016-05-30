@@ -952,6 +952,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1091,7 +1092,7 @@ object DataModuleMain: TDataModuleMain
       ' from current_calls c'
       ' where right(c.calledextension,4) ='#39'*'#39'|| :ATS_Num'
       '   and char_length(call_Num) >2  and readed=0'
-      '  and missed=0'
+      '  and missed=0 and create_date > :date_start'
       'order by id desc')
     Left = 24
     Top = 104
@@ -1099,6 +1100,11 @@ object DataModuleMain: TDataModuleMain
       item
         DataType = ftUnknown
         Name = 'ATS_Num'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_start'
         ParamType = ptUnknown
       end>
   end
@@ -1217,5 +1223,24 @@ object DataModuleMain: TDataModuleMain
       '  ID = :OLD_ID')
     Left = 174
     Top = 408
+  end
+  object QSession_Check: TIBQuery
+    Database = DB
+    Transaction = Calls_Tr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id'
+      'from sessions'
+      'where callid = :callid and endtime > starttime')
+    Left = 24
+    Top = 152
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'callid'
+        ParamType = ptUnknown
+      end>
   end
 end

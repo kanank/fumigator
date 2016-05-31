@@ -9,6 +9,7 @@ uses
 
 const
   WM_SHOWMSG = WM_USER + 100;
+  WM_SHOWINCOMECALL = WM_USER + 101;
 
 type
   TAppOptions = class
@@ -54,6 +55,7 @@ type
     procedure FizClients_miClick(Sender: TObject);
   private
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
+    procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
   public
     procedure DoSocketConnect;
   end;
@@ -71,7 +73,8 @@ implementation
 
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
-  formClientUr, CommonTypes, formLogo, formCalling, formSessions;
+  formClientUr, CommonTypes, formLogo, formCalling, formSessions,
+  formIncomeCallRoot;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -149,7 +152,8 @@ begin
 
   if cmd = 'checkcall' then //поступил новый звонок
   begin
-    DM.Calls_TimerTimer(DM.Calls_Timer);
+    PostMessage(Self.Handle, WM_SHOWINCOMECALL, 0,0);
+    //DM.Calls_TimerTimer(DM.Calls_Timer);
   end
 
   else
@@ -157,6 +161,8 @@ begin
   begin
     if Assigned(frmCalling) then
       frmCalling.CheckSession;
+    if Assigned(frmIncomeCallRoot) then
+      frmIncomeCallRoot.CheckSession;
   end
 
 end;
@@ -268,6 +274,11 @@ begin
   finally
     FreeAndNil(frmClients);
   end;
+end;
+
+procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
+begin
+  TfrmIncomeCallRoot.ShowIncomeCall;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);

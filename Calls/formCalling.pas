@@ -61,7 +61,9 @@ uses
 
 procedure TfrmCalling.CallFinish;
 begin
-  frmSessionResult := TfrmSessionResult.Create(nil);
+  Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
+  ModalResult := mrOk;
+  (*frmSessionResult := TfrmSessionResult.Create(nil);
   with frmSessionResult do
   try
     if Q.Transaction.Active then
@@ -86,13 +88,13 @@ begin
 
   finally
     FreeAndNil(frmSessionResult);
-  end;
+  end; *)
 end;
 
 procedure TfrmCalling.CheckSession;
 begin
-  self.CallResult := DM.CheckCloseSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
-  Exit;
+  if DM.CheckCloseSession(CallId) then
+    CallFinish;
 
   (*Q.Close;
   Q.ParamByName('callid').AsString := CallId;

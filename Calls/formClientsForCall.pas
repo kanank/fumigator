@@ -62,14 +62,20 @@ begin
   fTimeStart := Now();
   fSessionCount     := 0;
   fGoodSessionCount := 0;
+  Add_btn.Enabled := False;
 
+  try
   while not QWorkerShedule.Eof do
   begin
+    while inPause do
+      Sleep(2000);
+
     Inc(fSessionCount);
     if DM.Calling(DM.CurrentUserSets.ATS_Phone_Num,
                QWorkerShedule.FieldByName('phone').AsString,
                QWorkerShedule.FieldByName('client_id').AsInteger) = 'ANSWER' then
       Inc(fGoodSessionCount);
+
     QWorkerShedule.Next;
   end;
   fTimeEnd := Now;
@@ -86,6 +92,9 @@ begin
     FreeAndNil(frmEndCalling);
   end;
 
+  finally
+    Add_btn.Enabled := True;
+  end;
 end;
 
 procedure TfrmClientsForCall.Edit_btnClick(Sender: TObject);
@@ -120,7 +129,7 @@ begin
   begin
     if Time >= fPauseTime1 then
     begin
-      InPause := true;
+      InPause := True;
       pnlPause.Visible := True;
       Self.Enabled := False;
       TimerPause.Interval := MilliSecondsBetween(Time, fPauseTime2);

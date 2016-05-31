@@ -218,7 +218,7 @@ end;
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
   AccessToken.GetToken;
-
+  Log_memo.Lines.Add('Получен токен доступа');
 end;
 
 procedure TMF.Button1Click(Sender: TObject);
@@ -360,8 +360,6 @@ begin
 
   if Copy(EventName,1,13) = 'SESSION_CLOSE' then
     SendCommandToUser('*', '#checksession:');
-
-
 end;
 
 function TMF.ProkadoCommand(Params: TStrings): Boolean;

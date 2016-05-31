@@ -269,8 +269,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 441
-      Top = 268
+      Left = 438
+      Top = 264
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]

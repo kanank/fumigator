@@ -74,12 +74,6 @@ type
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
   private
-    function SetReadedCall(id: integer): boolean;
-    function getClientCallParams(TelNum: string): ClientCallParams;
-
-    function ShowUnknownCallForm(APhone: string): FormResult;
-    function ShowFizCallForm(CLP: ClientCallParams): FormResult;
-    function ShowUrCallForm(CLP: ClientCallParams): FormResult;
 
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
@@ -102,13 +96,19 @@ type
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientsForCall: FormResult;
+    function SetReadedCall(id: integer): boolean;
+    function ShowUnknownCallForm(APhone: string): FormResult;
+    function ShowFizCallForm(CLP: ClientCallParams): FormResult;
+    function ShowUrCallForm(CLP: ClientCallParams): FormResult;
 
     function Calling(ATSnumber, Aphone: string; client_id: integer): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
-    function CheckCloseSession(callid: string; client_id: integer): string; //проверка закрытия сессии
+    function CheckCloseSession(callid: string): boolean; //проверка закрытия сессии
+    function FinishSession(callid: string; client_id: integer): string;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
+    function GetClientCallParams(TelNum: string): ClientCallParams;
 
   var
     CurrentUserSets: CurrentUserRec;
@@ -597,47 +597,48 @@ begin
   end;
 end;
 
-function TDataModuleMain.CheckCloseSession(callid: string; client_id: integer): string;
+function TDataModuleMain.CheckCloseSession(callid: string): boolean;
 begin
-  Result := '';
+  Result := false;
   QSession_Check.Close;
   QSession_Check.ParamByName('callid').AsString := CallId;
   if QSession_Check.Transaction.Active then
     QSession_Check.Transaction.CommitRetaining;
   try
     QSession_Check.Open;
-    if QSession_Check.RecordCount > 0 then
-    begin
-      frmSessionResult := TfrmSessionResult.Create(nil);
-      with frmSessionResult do
-      try
-        if Q.Transaction.Active then
-          Q.Transaction.CommitRetaining;
-
-        Q.ParamByName('callid').AsString := Callid;
-        Q.Open;
-        Q.Edit;
-        Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-        Q.FieldByName('client_id').AsInteger := client_id;
-        Result := Q.FieldByName('callresult').AsString;
-        ShowModal;
-        if Q.Modified then
-        try
-          Q.Post;
-          if Q.Transaction.Active then
-             Q.Transaction.CommitRetaining;
-        except
-           if Q.Transaction.Active then
-             Q.Transaction.RollbackRetaining;
-        end;
-
-      finally
-        FreeAndNil(frmSessionResult);
-      end;
-    end;
+    Result := (QSession_Check.RecordCount > 0);
   except
     if QSession_Check.Transaction.Active then
      QSession_Check.Transaction.RollbackRetaining;
+  end;
+end;
+
+function TDataModuleMain.FinishSession(callid: string; client_id: integer): string;
+begin
+  frmSessionResult := TfrmSessionResult.Create(nil);
+  with frmSessionResult do
+  try
+    if Q.Transaction.Active then
+      Q.Transaction.CommitRetaining;
+
+    Q.ParamByName('callid').AsString := Callid;
+    Q.Open;
+    Q.Edit;
+    Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+    Q.FieldByName('client_id').AsInteger := client_id;
+    Result := Q.FieldByName('callresult').AsString;
+    ShowModal;
+    if Q.Modified then
+    try
+      Q.Post;
+      if Q.Transaction.Active then
+         Q.Transaction.CommitRetaining;
+    except
+       if Q.Transaction.Active then
+         Q.Transaction.RollbackRetaining;
+    end;
+  finally
+    FreeAndNil(frmSessionResult);
   end;
 end;
 

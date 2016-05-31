@@ -45,7 +45,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes, CommonVars, System.StrUtils;
+  DM_Main, CommonTypes, CommonVars, System.StrUtils, formIncomeCallRoot;
 
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
@@ -116,7 +116,9 @@ begin
     begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.CommitRetaining;
-    end
+      if Assigned(frmIncomeCallRoot) then
+        frmIncomeCallRoot.ClientId := DS.DataSet.FieldByName('ID').AsInteger;
+     end
     else
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;

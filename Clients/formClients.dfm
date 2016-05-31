@@ -10,10 +10,12 @@ inherited frmClients: TfrmClients
   inherited img1: TImage
     Left = 641
     Visible = False
+    ExplicitLeft = 641
   end
   inherited RzPanel2: TRzPanel
     Width = 834
     Height = 30
+    ExplicitWidth = 834
     ExplicitHeight = 30
     inherited Image1: TImage
       Left = 3
@@ -43,7 +45,6 @@ inherited frmClients: TfrmClients
       TabOrder = 0
       ThemeAware = False
       OnClick = Fiz_btnClick
-      ExplicitLeft = 368
     end
     object Ur_btn: TRzButton
       Left = 697
@@ -70,15 +71,15 @@ inherited frmClients: TfrmClients
       TabOrder = 1
       ThemeAware = False
       OnClick = Ur_btnClick
-      ExplicitLeft = 504
     end
   end
   inherited RzPanel1: TRzPanel
     Width = 834
+    ExplicitWidth = 834
     inherited Cancel_btn: TRzButton
       Left = 697
       Caption = #1042#1099#1093#1086#1076
-      ExplicitLeft = 504
+      ExplicitLeft = 697
     end
     inherited Edit_btn: TRzButton
       OnClick = Edit_btnClick
@@ -96,11 +97,15 @@ inherited frmClients: TfrmClients
     Height = 260
     Anchors = [akLeft, akTop, akRight]
     ExplicitTop = 48
-    ExplicitWidth = 794
+    ExplicitWidth = 834
     ExplicitHeight = 260
     inherited GridView: TcxGridDBTableView
-      OnCellClick = GridViewCellClick
+      OnCellDblClick = GridViewUrCellDblClick
+      DataController.DataModeController.GridMode = True
+      DataController.DataModeController.SmartRefresh = True
       DataController.DataSource = DS
+      OptionsBehavior.IncSearch = True
+      OptionsBehavior.IncSearchItem = GridViewColumn2
       OptionsView.GridLines = glVertical
       OptionsView.HeaderAutoHeight = True
       Styles.Header = cxStyle1
@@ -151,10 +156,17 @@ inherited frmClients: TfrmClients
     object GridViewUr: TcxGridDBTableView [1]
       Navigator.Buttons.CustomButtons = <>
       OnCellClick = GridViewCellClick
+      OnCellDblClick = GridViewUrCellDblClick
       DataController.DataSource = DS
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      OptionsBehavior.IncSearch = True
+      OptionsBehavior.IncSearchItem = GridViewUrColumn2
+      OptionsData.Editing = False
+      OptionsData.Inserting = False
+      OptionsSelection.CellSelect = False
+      OptionsSelection.UnselectFocusedRecordOnExit = False
       OptionsView.GridLines = glVertical
       OptionsView.GroupByBox = False
       OptionsView.HeaderAutoHeight = True

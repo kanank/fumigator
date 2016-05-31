@@ -46,6 +46,9 @@ type
     procedure GridViewCellClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
+    procedure GridViewUrCellDblClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -210,6 +213,13 @@ begin
  //  DM.Calling(DM.CurrentUserSets.ATS_Phone_Num, TcxGridDBTableView(Sender).Columns[i].DataBinding.Field.AsString);
 
   //ACellViewInfo.GridRecord.Values[TcxGridDBTableView(Sender).GetColumnByFieldName('record-id').Index]
+end;
+
+procedure TfrmClients.GridViewUrCellDblClick(Sender: TcxCustomGridTableView;
+  ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+  AShift: TShiftState; var AHandled: Boolean);
+begin
+  Edit_btn.Click;
 end;
 
 procedure TfrmClients.SetFilter;

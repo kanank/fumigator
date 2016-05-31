@@ -70,6 +70,8 @@ type
       Socket: TCustomWinSocket);
     procedure IBEventsEventAlert(Sender: TObject; EventName: string;
       EventCount: Integer; var CancelAlerts: Boolean);
+    procedure ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
+      ErrorEvent: TErrorEvent; var ErrorCode: Integer);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -272,7 +274,11 @@ var
   i: Integer;
 begin
  for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
-   ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
+   try
+     ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
+   except
+
+   end;
 end;
 
 procedure TMF.Button5Click(Sender: TObject);
@@ -392,13 +398,21 @@ begin
       if i > -1 then
       begin
         Log_memo.Lines.Add('Посылаем сообщение: ' + command);
-        TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
+        try
+          TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
+        except
+
+        end;
       end;
     end
     else
     begin
       for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
-        ServerSocket.Socket.Connections[i].SendText(command);
+        try
+          ServerSocket.Socket.Connections[i].SendText(command);
+        except
+
+        end;
     end;
   finally
     CSectionSocket.Leave;
@@ -427,11 +441,18 @@ begin
   end;
 end;
 
+procedure TMF.ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
+  ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+begin
+  ErrorCode := 0;
+end;
+
 procedure TMF.ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
 var
   p: Integer;
   s, cmd, arg: string;
 begin
+  try
   try
     CSectionSocket.Enter;
 
@@ -449,6 +470,9 @@ begin
       SocketCommand(cmd, arg);
 
     end;
+  except
+
+  end;
   finally
     CSectionSocket.Leave;
   end;

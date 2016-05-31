@@ -223,7 +223,11 @@ begin
     fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
     url := fBaseUrl + '/uapi/phoneCalls/@me/@self/' + CallId;
-    fHttp.Delete(url, sStream);
+    try
+      fHttp.Delete(url, sStream);
+    except
+
+    end;
 
     Result := (fHttp.ResponseCode = 200);
   finally
@@ -243,7 +247,11 @@ begin
   fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
   url := fBaseUrl + '/uapi/phoneCalls/@owner/@self/' + CallId; //&accessRequestToken=' + FTokenObject.Token;
-  fHttp.Get(url, sStream);
+  try
+    fHttp.Get(url, sStream);
+  except
+
+  end;
 
   sStream.Free;
 
@@ -277,7 +285,11 @@ begin
     fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
     url := fBaseUrl + '/uapi/phoneCalls/@owner/simple?allowPublicTransfer=true' ; //&accessRequestToken=' + FTokenObject.Token;
-    fResponse := fHttp.Post(url, sStream);
+    try
+      fResponse := fHttp.Post(url, sStream);
+    except
+
+    end;
 
     if (fHttp.ResponseCode < 400) then
     begin

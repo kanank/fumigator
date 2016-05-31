@@ -269,8 +269,8 @@ object MF: TMF
       end
     end
     object DebugMode_cb: TCheckBox
-      Left = 438
-      Top = 264
+      Left = 442
+      Top = 268
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]
@@ -519,6 +519,7 @@ object MF: TMF
     OnClientConnect = ServerSocketClientConnect
     OnClientDisconnect = ServerSocketClientDisconnect
     OnClientRead = ServerSocketClientRead
+    OnClientError = ServerSocketClientError
     Left = 585
     Top = 265
   end

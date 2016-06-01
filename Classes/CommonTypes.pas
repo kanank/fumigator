@@ -55,6 +55,8 @@ type
   clientContact :string;
   Author :string;
   ClientInfoParams :ClientInfoParams;
+  public
+    procedure Assign(ASource: ClientCallParams);
 end;
 
  type
@@ -87,6 +89,27 @@ begin
   Result.action := AAction;
   Result.Dataset := ADataSet;
   Result.ExtParam := AExtParam;
+end;
+
+{ ClientCallParams }
+
+procedure ClientCallParams.Assign(ASource: ClientCallParams);
+begin
+  self.id_call       := ASource.id_call;
+  self.Client_Type   := ASource.Client_Type;
+  self.Client_id     := ASource.Client_id;
+  self.TelNum        := ASource.TelNum;
+  self.ClientName    := ASource.ClientName;
+  self.Format_Id     := ASource.Format_Id;
+  self.Status_Id     := ASource.Status_Id;
+  self.PERSON_ID     := ASource.PERSON_ID;
+  self.FORMA_ID      := ASource.FORMA_ID;
+  self.Author        := ASource.Author;
+  self.INN           := ASource.INN;
+  self.clientContact := ASource.clientContact;
+  self.ClientInfoParams.ClientInfo  := ASource.ClientInfoParams.ClientInfo;
+  self.ClientInfoParams.ClientComms := ASource.ClientInfoParams.ClientComms;
+
 end;
 
 end.

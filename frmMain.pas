@@ -66,6 +66,7 @@ var
   formMain: TfrmMain;
   MainOptions: TAppOptions;
   msgText: string;
+  TimeShift: Integer; //смещение с сервером в секундах
 
 implementation
 
@@ -74,7 +75,7 @@ implementation
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, CommonTypes, formLogo, formCalling, formSessions,
-  formIncomeCallRoot;
+  formIncomeCallRoot, System.DateUtils;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -96,6 +97,7 @@ begin
   inherited;
   DM.SocketTimer.Interval := 0;
   lblSocket.Caption := '—оединение с сервером установлено';
+  DM.DateStart := Now;
   ClientSocket.Socket.SendText('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
 end;
 
@@ -164,6 +166,14 @@ begin
     if Assigned(frmIncomeCallRoot) then
       frmIncomeCallRoot.CheckSession;
   end
+
+  else
+  if cmd = 'servertime' then
+  begin
+    TimeShift := StrToInt(arg) - SecondOfTheDay(DM.DateStart);
+    DM.DateStart := IncSecond(DM.DateStart, TimeShift);
+    DM.CallS_Q.ParamByName('date_start').AsDateTime := DM.DateStart;
+  end;
 
 end;
 

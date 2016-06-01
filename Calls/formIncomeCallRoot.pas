@@ -23,6 +23,7 @@ type
     function GetCallFinished: boolean;
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
+    procedure SetClientCallPrm(AValue: ClientCallParams);
   public
     property CallResult: string read fCallResult write SetCallResult;
     property CallId: string read fCallId write fCallId;
@@ -30,7 +31,7 @@ type
     property ClientClose: boolean read fClientClose write SetClientClose;
     property ClientId: Integer read fClientId write fClientId;
     property SessionClose: Boolean read fSessionClose write fSessionClose;
-    property ClientCallPrm: ClientCallParams read fClientCallPrm write fClientCallPrm;
+    property ClientCallPrm: ClientCallParams read fClientCallPrm write SetClientCallPrm;
 
     procedure CallFinish;
     procedure CheckSession;
@@ -45,7 +46,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, IBX.IBQuery;
+  DM_Main, IBX.IBQuery, formClientFiz, formClientUr;
 
 { TfrmIncomeCallRoot }
 
@@ -79,6 +80,11 @@ begin
   if AValue <> fCallResult then
     fCallResult := AValue;
   //CallFinish;
+end;
+
+procedure TfrmIncomeCallRoot.SetClientCallPrm(AValue: ClientCallParams);
+begin
+  fClientCallPrm.Assign(AValue);
 end;
 
 procedure TfrmIncomeCallRoot.SetClientClose(AValue: boolean);
@@ -186,15 +192,15 @@ begin
   end
   else
   begin
-   if fClientCallPrm.Client_Type = 'F' then
-   begin
-     DM.ShowFizCallForm(fClientCallPrm);
-   end;
+    if fClientCallPrm.Client_Type = 'F' then
+    begin
+      DM.ShowFizCallForm(fClientCallPrm);
+    end;
 
-   if fClientCallPrm.Client_Type = 'U' then
-   begin
-     DM.ShowUrCallForm(fClientCallPrm);
-   end;
+    if fClientCallPrm.Client_Type = 'U' then
+    begin
+      DM.ShowUrCallForm(fClientCallPrm);
+    end;
   end;
  finally
    ClientClose := True;

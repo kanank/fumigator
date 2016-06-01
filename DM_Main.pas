@@ -109,7 +109,7 @@ type
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
     function GetClientCallParams(TelNum: string): ClientCallParams;
-
+    //function CopyClientCallParams(ASource: ClientCallParams): ClientCallParams;
   var
     CurrentUserSets: CurrentUserRec;
     //FtpProp: FtpProps;
@@ -222,7 +222,11 @@ begin
     frmIncomeCall.lblWorker.Caption   := CLP.Author;
     frmIncomeCall.ShowModal;
     if frmIncomeCall.ModalResult = mrOk then
+    begin
+      DM.GetDataset(DM.Clients);
+      DM.Clients.Locate('ID', CLP.Client_id, []);
       ShowClientFiz(asEdit, prm);
+    end;
 
     Result.ModalRes := frmIncomeCall.ModalResult;
   finally
@@ -255,7 +259,12 @@ begin
     frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
     frmIncomeCallUr.ShowModal;
     if frmIncomeCallUr.ModalResult = mrOk then
+    begin
+      //prm.CallParam := CLP;
+      DM.GetDataset(DM.Clients);
+      DM.Clients.Locate('ID', CLP.Client_id, []);
       ShowClientUr(asEdit, prm);
+    end;
 
     Result.ModalRes := frmIncomeCallUr.ModalResult;
   finally
@@ -376,8 +385,6 @@ function TDataModuleMain.AfterLogin: boolean;
 begin
   Result := False;
   //TrayView := TrayNormal;
-  DateStart := Now;
-  CallS_Q.ParamByName('date_start').AsDateTime := DateStart;
 
   if not LoadSpr then //загрузка справочников
   begin

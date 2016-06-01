@@ -65,6 +65,8 @@ procedure TfrmClientCard.RzButton1Click(Sender: TObject);
 var
   ExtPrm: TClientParam;
 begin
+  DM.GetDataset(DM.Clients);
+  DM.Clients.Locate('id', Q.ParamByName('client_id').AsInteger, []);
   if Q.FieldByName('cltype').AsString = 'FIZ' then
     DM.ShowClientFiz(asEdit, ExtPrm)
   else

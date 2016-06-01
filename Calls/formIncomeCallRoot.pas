@@ -180,7 +180,7 @@ var
   extPrm: TClientParam;
 begin
   Timer1.Enabled := False;
-
+ DM.GetDataset(DM.Clients);
  try
   if fClientCallPrm.Client_Type = '' then
   begin  // Вызываем неизвестный звонок.

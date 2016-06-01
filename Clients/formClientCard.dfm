@@ -12,6 +12,8 @@ inherited frmClientCard: TfrmClientCard
     Left = 441
     Top = -116
     Visible = False
+    ExplicitLeft = 441
+    ExplicitTop = -116
   end
   object Label3: TLabel [1]
     Left = 8
@@ -68,14 +70,18 @@ inherited frmClientCard: TfrmClientCard
   inherited RzPanel1: TRzPanel
     Top = 198
     Width = 626
+    ExplicitTop = 198
+    ExplicitWidth = 626
     inherited Image2: TImage
       Left = -9
       Visible = False
+      ExplicitLeft = -9
     end
     inherited Exit_bnt: TRzButton
       Left = 492
       ModalResult = 0
       Caption = #1053#1086#1074#1099#1081' '#1076#1086#1075#1086#1074#1086#1088
+      ExplicitLeft = 492
     end
     object RzButton1: TRzButton
       Left = 8

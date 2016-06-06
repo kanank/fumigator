@@ -34,6 +34,7 @@ type
     GridViewUr: TcxGridDBTableView;
     GridViewUrColumn7: TcxGridDBColumn;
     GridViewUrColumn8: TcxGridDBColumn;
+    RzButton1: TRzButton;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -49,6 +50,7 @@ type
     procedure GridViewUrCellDblClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
+    procedure RzButton1Click(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -70,7 +72,8 @@ implementation
 {$R *.dfm}
 uses
   IBX.IBQuery,
-  DM_Main, frmMain, formClientFiz, formClientUr, CommonTypes;
+  DM_Main, frmMain, formClientFiz, formClientUr, CommonTypes,
+  formClientResult;
 
 
 procedure TfrmClients.Add_btnClick(Sender: TObject);
@@ -149,8 +152,6 @@ var
   prm: TFrmCreateParam;
   mres: TModalResult;
 begin
-  //if not DM.Clients.Active then
-  //  DM.Clients.Open;
   DM.GetDataset(DM.Clients);
 
   prm := NewFrmCreateParam(asEdit, DM.Clients);
@@ -220,6 +221,49 @@ procedure TfrmClients.GridViewUrCellDblClick(Sender: TcxCustomGridTableView;
   AShift: TShiftState; var AHandled: Boolean);
 begin
   Edit_btn.Click;
+end;
+
+procedure TfrmClients.RzButton1Click(Sender: TObject);
+var
+  prm: TFrmCreateParam;
+  mres: TModalResult;
+begin
+  DM.GetDataset(DM.Clients);
+  frmClientResult := TfrmClientResult.Create(self);
+
+  prm := NewFrmCreateParam(asEdit, DM.Clients);
+  if fIsUr = 0 then
+  begin
+    frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+    frmClientFiz.BorderIcons := [];
+    frmClientFiz.BorderStyle := bsNone;
+    frmClientFiz.Parent := frmClientResult.pnlForm;
+    frmClientFiz.Show;
+
+    //mres := frmClientFiz.ShowModal;
+    //FreeAndNil(frmClientFiz);
+  end
+  else
+  begin
+    frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+    frmClientUr.BorderIcons := [];
+    frmClientUr.BorderStyle := bsNone;
+    frmClientUr.Parent := frmClientResult.pnlForm;
+    frmClientUr.Show;
+    //mres := frmClientUr.ShowModal;
+    //FreeAndNil(frmClientUr);
+  end;
+
+  frmClientResult.pnlForm.Repaint;
+
+  frmClientResult.ShowModal;
+  frmClientResult.Free;
+
+  if mres <> mrCancel then
+  begin
+    //DM.Clients.Transaction.CommitRetaining;
+    DM.Clients.Refresh;
+  end;
 end;
 
 procedure TfrmClients.SetFilter;

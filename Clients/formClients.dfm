@@ -90,6 +90,24 @@ inherited frmClients: TfrmClients
     inherited Add_btn: TRzButton
       OnClick = Add_btnClick
     end
+    object RzButton1: TRzButton
+      Left = 537
+      Top = 8
+      Width = 121
+      Height = 29
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 4
+      ThemeAware = False
+      OnClick = RzButton1Click
+    end
   end
   inherited Grid: TcxGrid
     Top = 48

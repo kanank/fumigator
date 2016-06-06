@@ -56,7 +56,8 @@ uses
   formSessions in 'Calls\formSessions.pas' {frmSessions},
   formClientCard in 'Clients\formClientCard.pas' {frmClientCard},
   formCallPause in 'Calls\formCallPause.pas' {frmCallPause},
-  formIncomeCallRoot in 'Calls\formIncomeCallRoot.pas' {frmIncomeCallRoot};
+  formIncomeCallRoot in 'Calls\formIncomeCallRoot.pas' {frmIncomeCallRoot},
+  formClientResult in 'Clients\formClientResult.pas' {frmClientResult};
 
 {$R *.res}
 
@@ -64,8 +65,7 @@ begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
 
-  Application.CreateForm(TDatamoduleMain, DM);
-
+  Application.CreateForm(TDataModuleMain, DM);
   LoadOptions(CfgFileName);
 
   frmLogin := TfrmLogin.Create(nil);

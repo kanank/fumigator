@@ -5,7 +5,7 @@
         <FrameworkType>VCL</FrameworkType>
         <MainSource>fumigator.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -274,6 +274,10 @@
         </DCCReference>
         <DCCReference Include="Calls\formIncomeCallRoot.pas">
             <Form>frmIncomeCallRoot</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Clients\formClientResult.pas">
+            <Form>frmClientResult</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

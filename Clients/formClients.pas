@@ -227,6 +227,7 @@ procedure TfrmClients.RzButton1Click(Sender: TObject);
 var
   prm: TFrmCreateParam;
   mres: TModalResult;
+  frm: TForm;
 begin
   DM.GetDataset(DM.Clients);
   frmClientResult := TfrmClientResult.Create(self);
@@ -235,35 +236,30 @@ begin
   if fIsUr = 0 then
   begin
     frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
-    frmClientFiz.BorderIcons := [];
-    frmClientFiz.BorderStyle := bsNone;
-    frmClientFiz.Parent := frmClientResult.pnlForm;
-    frmClientFiz.Show;
-
-    //mres := frmClientFiz.ShowModal;
-    //FreeAndNil(frmClientFiz);
+    frmClientFiz.RzPanel1.Visible := False;
+    frm := frmClientFiz;
   end
   else
   begin
     frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
-    frmClientUr.BorderIcons := [];
-    frmClientUr.BorderStyle := bsNone;
-    frmClientUr.Parent := frmClientResult.pnlForm;
-    frmClientUr.Show;
-    //mres := frmClientUr.ShowModal;
-    //FreeAndNil(frmClientUr);
+    frmClientUr.RzPanel1.Visible := False;
+    frm := frmClientUr;
   end;
 
-  frmClientResult.pnlForm.Repaint;
+  frm.BorderIcons := [];
+  frm.BorderStyle := bsNone;
+  frm.Parent      := frmClientResult.pnlForm;
+  frmClientResult.pnlForm.Height := frm.Height + 10;
+  frmClientResult.pnlForm.Width  := frm.Width;
+  frmClientResult.Height := frmClientResult.pnlForm.Height +
+    frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+  frm.Position := poDefault;
+  frm.Show;
 
   frmClientResult.ShowModal;
   frmClientResult.Free;
 
-  if mres <> mrCancel then
-  begin
-    //DM.Clients.Transaction.CommitRetaining;
-    DM.Clients.Refresh;
-  end;
 end;
 
 procedure TfrmClients.SetFilter;

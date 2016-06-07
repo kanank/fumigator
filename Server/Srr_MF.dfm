@@ -107,6 +107,16 @@ object MF: TMF
         TabOrder = 3
         OnClick = Button4Click
       end
+      object Button6: TButton
+        Left = 279
+        Top = 7
+        Width = 141
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1089#1087#1080#1089#1086#1082
+        TabOrder = 4
+        OnClick = Button6Click
+      end
     end
     object GroupBox2: TGroupBox
       Left = 1
@@ -270,7 +280,7 @@ object MF: TMF
     end
     object DebugMode_cb: TCheckBox
       Left = 442
-      Top = 268
+      Top = 269
       Width = 121
       Height = 17
       Anchors = [akRight, akBottom]

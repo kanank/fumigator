@@ -71,7 +71,7 @@ begin
       Sleep(2000);
 
     Inc(fSessionCount);
-    if DM.Calling(DM.CurrentUserSets.ATS_Phone_Num,
+    if DM.CallingWithResult(DM.CurrentUserSets.ATS_Phone_Num,
                QWorkerShedule.FieldByName('phone').AsString,
                QWorkerShedule.FieldByName('client_id').AsInteger) = 'ANSWER' then
       Inc(fGoodSessionCount);

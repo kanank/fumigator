@@ -106,6 +106,7 @@ inherited frmClients: TfrmClients
       ParentFont = False
       TabOrder = 4
       ThemeAware = False
+      Visible = False
       OnClick = RzButton1Click
     end
   end

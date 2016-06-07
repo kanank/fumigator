@@ -53,6 +53,7 @@ type
     btnPhone: TButton;
     Button5: TButton;
     IBEvents: TIBEvents;
+    Button6: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -72,6 +73,7 @@ type
       EventCount: Integer; var CancelAlerts: Boolean);
     procedure ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+    procedure Button6Click(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -292,6 +294,11 @@ begin
   //Caller.SimpleCall('755', '+79104579648');
 end;
 
+procedure TMF.Button6Click(Sender: TObject);
+begin
+  FActiveUsers.Clear;
+end;
+
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
@@ -401,7 +408,7 @@ begin
         try
           TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
         except
-
+          Log_memo.Lines.Add('ќшибка сообщени€ы: ' + command);
         end;
       end;
     end

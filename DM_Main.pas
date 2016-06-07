@@ -102,6 +102,7 @@ type
     function ShowUrCallForm(CLP: ClientCallParams): FormResult;
 
     function Calling(ATSnumber, Aphone: string; client_id: integer): string;
+    function CallingWithResult(ATSnumber, Aphone: string; client_id: integer): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function CheckCloseSession(callid: string): boolean; //проверка закрытия сессии
@@ -137,7 +138,8 @@ implementation
 uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
-  frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult;
+  frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult,
+  formClientResult;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -509,6 +511,66 @@ begin
   end;
 end;
 
+function TDataModuleMain.CallingWithResult(ATSnumber, Aphone: string; client_id: integer): string;
+var
+  prm: TFrmCreateParam;
+  mres: TModalResult;
+  frm: TForm;
+begin
+  try
+    if not formMain.ClientSocket.Active then
+    begin
+      MessageBox(0, 'Нет соединения с сервером. Вызовы невозможны',
+        'Исходящие вызовы', MB_ICONWARNING);
+      exit;
+    end;
+
+    DM.GetDataset(DM.Clients);
+
+    if not DM.Clients.Locate('id', client_id, []) then
+      Exit;
+
+    inCalling := True;
+    formMain.ClientSocket.Socket.SendText('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
+
+    frmClientResult := TfrmClientResult.Create(self);
+
+    prm := NewFrmCreateParam(asEdit, DM.Clients);
+    if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+    begin
+      frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+      frmClientFiz.RzPanel1.Visible := False;
+      frm := frmClientFiz;
+    end
+    else
+    begin
+      frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+      frmClientUr.RzPanel1.Visible := False;
+      frm := frmClientUr;
+    end;
+
+    frm.BorderIcons := [];
+    frm.BorderStyle := bsNone;
+    frm.Parent      := frmClientResult.pnlForm;
+    frmClientResult.pnlForm.Height := frm.Height + 10;
+    frmClientResult.pnlForm.Width  := frm.Width;
+    frmClientResult.Height := frmClientResult.pnlForm.Height +
+      frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+    frm.Position := poDefault;
+    frm.Show;
+
+    frmClientResult.frmCli := frm;
+    frmClientResult.TypeCli := DM.Clients.FieldByName('type_cli').AsInteger;
+    frmClientResult.ClientId := client_id;
+    frmClientResult.ShowModal;
+    Result := frmClientResult.CallResult;
+    frmClientResult.Free;
+  finally
+    inCalling := False;
+  end;
+end;
+
 procedure TDataModuleMain.Calls_TimerTimer(Sender: TObject);
 var Q : TIBQuery;
     ClP :ClientCallParams;
@@ -614,6 +676,8 @@ begin
   try
     QSession_Check.Open;
     Result := (QSession_Check.RecordCount > 0);
+    if QSession_Check.Transaction.Active then
+      QSession_Check.Transaction.CommitRetaining;
   except
     if QSession_Check.Transaction.Active then
      QSession_Check.Transaction.RollbackRetaining;

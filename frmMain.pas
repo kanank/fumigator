@@ -75,7 +75,7 @@ implementation
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, CommonTypes, formLogo, formCalling, formSessions,
-  formIncomeCallRoot, System.DateUtils;
+  formIncomeCallRoot, System.DateUtils, formClientResult;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -142,12 +142,16 @@ begin
   begin
     if Assigned(frmCalling) then
       frmCalling.CallId := arg;
+    if Assigned(frmClientResult) then
+      frmClientResult.CallId := arg;
   end
   else
   if cmd = 'callfinish' then  //в варианте c CallListener
   begin
-    if frmCalling.CallId = arg then
+    if Assigned(frmCalling) and (frmCalling.CallId = arg) then
       frmCalling.CallFinish;
+    if Assigned(frmClientResult) and (frmClientResult.CallId = arg) then
+      frmClientResult.CallFinish;
   end
 
   else
@@ -163,6 +167,8 @@ begin
   begin
     if Assigned(frmCalling) then
       frmCalling.CheckSession;
+    if Assigned(frmClientResult) then
+      frmClientResult.CheckSession;
     if Assigned(frmIncomeCallRoot) then
       frmIncomeCallRoot.CheckSession;
   end

@@ -367,8 +367,10 @@ procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
 begin
   Log_memo.Lines.Add('IBEvent: ' + EventName);
   if Copy(EventName,1,11) = 'INCOME_CALL' then
-    SendCommandToUser('*', '#checkcall:')
+  begin
 
+    SendCommandToUser('*', '#checkcall:')
+  end
   else
 
   if Copy(EventName,1,13) = 'SESSION_CLOSE' then
@@ -401,6 +403,7 @@ begin
       p := Pos('*', atsnum);
       if p > 0 then
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
+      Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
       i := FActiveUsers.IndexOf(atsnum);
       if i > -1 then
       begin
@@ -408,7 +411,7 @@ begin
         try
           TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
         except
-          Log_memo.Lines.Add('Ошибка сообщенияы: ' + command);
+          Log_memo.Lines.Add('Ошибка сообщения: ' + command);
         end;
       end;
     end
@@ -416,7 +419,12 @@ begin
     begin
       for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
         try
-          ServerSocket.Socket.Connections[i].SendText(command);
+          Log_memo.Lines.Add('Посылаем сообщение: ' + command);
+          try
+            ServerSocket.Socket.Connections[i].SendText(command);
+          except
+            Log_memo.Lines.Add('Ошибка сообщения: ' + command);
+          end;
         except
 
         end;

@@ -168,4 +168,38 @@ inherited FramePhones: TFramePhones
         ParamType = ptUnknown
       end>
   end
+  object Q_Check: TIBQuery
+    Database = DataModuleMain.DB
+    Transaction = DataModuleMain.DefTr
+    AfterPost = QueryAfterPost
+    OnNewRecord = QueryNewRecord
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select c.name from phones p, clients c'
+      'where c.id=p.client_id and c.act = 1 and type=:typecli and'
+      ' code=:code and phone=:phone')
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PHONES_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 136
+    Top = 27
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'typecli'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'code'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'phone'
+        ParamType = ptUnknown
+      end>
+  end
 end

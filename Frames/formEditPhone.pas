@@ -17,6 +17,7 @@ type
     Label1: TLabel;
     cxDBMaskEdit1: TcxDBMaskEdit;
     procedure FormShow(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,7 +31,34 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, frPhones, IBX.IBQuery;
+
+procedure TfrmEditPhone.btnOKClick(Sender: TObject);
+var
+  Q: TIBQuery;
+begin
+  Q := TFramePhones(Self.Owner).Q_Check;
+  Q.Close;
+  Q.ParamByName('typecli').AsInteger := TFramePhones(Self.owner).typePhone;
+  Q.ParamByName('code').AsString := DS.DataSet.FieldByName('code').AsString;
+  Q.ParamByName('phone').AsString := DS.DataSet.FieldByName('phone').AsString;
+  try
+    Q.Open;
+    if Q.RecordCount > 0  then
+    begin
+      Application.MessageBox(PWideChar('Такой номер уже есть в БД у клиента: ' +
+      Q.FieldByName('name').AsString), 'Телефон', MB_ICONSTOP);
+      Exit;
+    end;
+
+  except
+
+  end;
+
+  ModalResult := mrOk;
+  inherited;
+
+end;
 
 procedure TfrmEditPhone.FormShow(Sender: TObject);
 var

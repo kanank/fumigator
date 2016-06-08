@@ -1109,6 +1109,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

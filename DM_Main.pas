@@ -540,12 +540,14 @@ begin
     begin
       frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
       frmClientFiz.RzPanel1.Visible := False;
+      frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
       frm := frmClientFiz;
     end
     else
     begin
       frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
       frmClientUr.RzPanel1.Visible := False;
+      frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
       frm := frmClientUr;
     end;
 

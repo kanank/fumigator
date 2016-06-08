@@ -28,7 +28,6 @@ type
     TelURI_edt: TEdit;
     TelStatus_lbl: TLabel;
     Tel_SRV: TIdHTTPServer;
-    DebugMode_cb: TCheckBox;
     DefTr: TIBTransaction;
     DB: TIBDatabase;
     GroupBox3: TGroupBox;
@@ -54,6 +53,7 @@ type
     Button5: TButton;
     IBEvents: TIBEvents;
     Button6: TButton;
+    DebugMode_cb: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -87,6 +87,7 @@ type
     function SendCommandToUser(atsnum, command: string): Boolean;
     function UpdateSession(ACallId: string): Boolean;
 
+    function GetUserSocket(ATelNum: string): TCustomWinSocket;
  //  function CreateRWProc :TIBStoredProc;
 
   public
@@ -108,6 +109,8 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  System.DateUtils;
 
 function TMF.AddCallEvent(Params: TStrings): Boolean;
 var Q :TIBQuery;
@@ -143,16 +146,16 @@ begin
     else
       cf := 1;
 
-    Q.ParamByName('CALLFLOW').AsInteger :=  cf;
-    Q.ParamByName('CALLID').AsString :=  Params.Values['CallID'];
-    Q.ParamByName('CALLERIDNUM').AsString :=  Params.Values['CallerIDNum'];
-    Q.ParamByName('CALLERIDNAME').AsString :=  Params.Values['CallerIDName'];
-    Q.ParamByName('CALLEDDID').AsString :=  Params.Values['CalledDID'];
+    Q.ParamByName('CALLFLOW').AsInteger       :=  cf;
+    Q.ParamByName('CALLID').AsString          :=  Params.Values['CallID'];
+    Q.ParamByName('CALLERIDNUM').AsString     :=  Params.Values['CallerIDNum'];
+    Q.ParamByName('CALLERIDNAME').AsString    :=  Params.Values['CallerIDName'];
+    Q.ParamByName('CALLEDDID').AsString       :=  Params.Values['CalledDID'];
     Q.ParamByName('CALLEREXTENSION').AsString :=  Params.Values['CallerExtension'];
-    Q.ParamByName('CALLSTATUS').AsString :=  Params.Values['CallStatus'];
+    Q.ParamByName('CALLSTATUS').AsString      :=  Params.Values['CallStatus'];
     Q.ParamByName('CALLEDEXTENSION').AsString :=  Params.Values['CalledExtension'];
-    Q.ParamByName('CALLEDNUMBER').AsString :=  Params.Values['CalledNumber'];
-    Q.ParamByName('CALLAPIID').AsString :=  Params.Values['CallAPIID'];
+    Q.ParamByName('CALLEDNUMBER').AsString    :=  Params.Values['CalledNumber'];
+    Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
 
     Try
     Q.ExecSQL;
@@ -227,35 +230,33 @@ end;
 
 procedure TMF.Button1Click(Sender: TObject);
 begin
-Tel_SRV.Active := false;
-Tel_srv.Bindings.Clear;
+  Tel_SRV.Active := false;
+  Tel_srv.Bindings.Clear;
 
-try
-  Tel_SRV.Bindings.Add.IP                                  := TelIP_edt.Text;
-  Tel_SRV.Bindings[Tel_SRV.Bindings.Count - 1].Port        := TelPort_spin.Value ;
-  Tel_SRV.Bindings.DefaultPort := TelPort_spin.Value;
-  Tel_SRV.Active := true;
+  try
+    Tel_SRV.Bindings.Add.IP                                  := TelIP_edt.Text;
+    Tel_SRV.Bindings[Tel_SRV.Bindings.Count - 1].Port        := TelPort_spin.Value ;
+    Tel_SRV.Bindings.DefaultPort := TelPort_spin.Value;
+    Tel_SRV.Active := true;
 
-Except
-   on  E: Exception do begin
-      AddLog('Ошибка запуска службы Call_Events : "' +e.Message+'"');
+  Except
+     on  E: Exception do begin
+        AddLog('Ошибка запуска службы Call_Events : "' +e.Message+'"');
 
-        TelStatus_lbl.Caption := 'Не активен!';
-        TelStatus_lbl.Font.Color := clMaroon;
-   end;
+          TelStatus_lbl.Caption := 'Не активен!';
+          TelStatus_lbl.Font.Color := clMaroon;
+     end;
 
-end;
+  end;
 
-if Tel_SRV.Active = true then
-begin
-AddLog('#Служба Call_Events запущена на интерфейсе '
-        + TelIP_edt.Text+':' + IntToStr(TelPort_spin.Value)+ TelURI_edt.Text);
+  if Tel_SRV.Active = true then
+  begin
+  AddLog('#Служба Call_Events запущена на интерфейсе '
+          + TelIP_edt.Text+':' + IntToStr(TelPort_spin.Value)+ TelURI_edt.Text);
 
-        TelStatus_lbl.Caption := 'Работает';
-        TelStatus_lbl.Font.Color := $00408000;
-end;
-
-
+          TelStatus_lbl.Caption := 'Работает';
+          TelStatus_lbl.Font.Color := $00408000;
+  end;
 end;
 
 procedure TMF.Button2Click(Sender: TObject);
@@ -297,6 +298,7 @@ end;
 procedure TMF.Button6Click(Sender: TObject);
 begin
   FActiveUsers.Clear;
+  //GetUserSocket('755');
 end;
 
 procedure TMF.CallFinished(Sender: TObject);
@@ -314,7 +316,7 @@ begin
   TR.AutoStopAction := saCommit;
 
   TR.Params.Add('isc_tpb_read_committed');
-  TR.Params.Add('isc_tpb_no_rec_version');
+  TR.Params.Add('isc_tpb_rec_version');
   TR.Params.Add('isc_tpb_wait');
 
   // Только для чтения
@@ -362,6 +364,35 @@ begin
   FreeAndNil(Caller);
 end;
 
+function TMF.GetUserSocket(ATelNum: string): TCustomWinSocket;
+var
+  i: Integer;
+  f: Boolean;
+begin
+  i := -2;
+
+  while i <> -1 do
+  begin
+    Result := nil;
+    i := FActiveUsers.IndexOf(ATelNum);
+    if i = -1 then
+      Break;
+
+    Result := TCustomWinSocket(FActiveUsers.Objects[i]);
+    try
+      f := Result.Connected;
+    except
+       f := False;
+    end;
+    if f then
+      break
+    else
+      FActiveUsers.Delete(i);
+  end;
+
+
+end;
+
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
@@ -395,6 +426,7 @@ end;
 function TMF.SendCommandToUser(atsnum, command: string): Boolean;
 var
   i, p: Integer;
+  socket: TCustomWinSocket;
 begin
   try
     CSectionSocket.Enter;
@@ -404,12 +436,13 @@ begin
       if p > 0 then
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
       Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
-      i := FActiveUsers.IndexOf(atsnum);
-      if i > -1 then
+      //i := FActiveUsers.IndexOf(atsnum);
+      socket := GetUserSocket(atsnum);
+      if socket <> nil then
       begin
         Log_memo.Lines.Add('Посылаем сообщение: ' + command);
         try
-          TCustomWinSocket(FActiveUsers.Objects[i]).SendText(command);
+          socket.SendText(command);
         except
           Log_memo.Lines.Add('Ошибка сообщения: ' + command);
         end;
@@ -438,7 +471,6 @@ procedure TMF.ServerSocketClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
    Log_memo.Lines.Add('Присоединение клиента');
-
 end;
 
 procedure TMF.ServerSocketClientDisconnect(Sender: TObject;
@@ -480,9 +512,12 @@ begin
       arg := Copy(s, p + 1, Length(s));
 
       if cmd = 'setphone' then
-        FActiveUsers.AddObject(arg, Socket)
+      begin
+        FActiveUsers.AddObject(arg, Socket);
+        Socket.SendText('#servertime:' + IntToStr(SecondOfTheDay(Now)));
+      end
       else
-      SocketCommand(cmd, arg);
+        SocketCommand(cmd, arg);
 
     end;
   except

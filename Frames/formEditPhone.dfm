@@ -49,7 +49,9 @@ inherited frmEditPhone: TfrmEditPhone
   inherited btnOK: TRzButton
     Left = 7
     Top = 100
+    ModalResult = 0
     Anchors = [akTop]
+    OnClick = btnOKClick
     ExplicitLeft = 7
     ExplicitTop = 100
   end

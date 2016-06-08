@@ -38,7 +38,7 @@ inherited frmClientResult: TfrmClientResult
     BorderOuter = fsFlat
     BorderSides = [sdTop]
     TabOrder = 1
-    ExplicitTop = 282
+    ExplicitTop = 285
     DesignSize = (
       729
       87)
@@ -47,7 +47,7 @@ inherited frmClientResult: TfrmClientResult
       Top = 0
       Width = 108
       Height = 87
-      Anchors = [akRight, akBottom]
+      Anchors = [akTop, akRight]
       BorderOuter = fsNone
       TabOrder = 0
       Transparent = True
@@ -73,7 +73,7 @@ inherited frmClientResult: TfrmClientResult
         TabOrder = 0
         ThemeAware = False
       end
-      object RzButton2: TRzButton
+      object btnCallLater: TRzButton
         Left = 1
         Top = 4
         Width = 105
@@ -91,7 +91,7 @@ inherited frmClientResult: TfrmClientResult
         ParentFont = False
         TabOrder = 1
         ThemeAware = False
-        OnClick = RzButton2Click
+        OnClick = btnCallLaterClick
       end
       object btnDeleteCall: TRzButton
         Left = 1
@@ -124,8 +124,6 @@ inherited frmClientResult: TfrmClientResult
     BorderOuter = fsBump
     BorderSides = [sdTop, sdBottom]
     TabOrder = 2
-    ExplicitLeft = -8
-    ExplicitTop = 368
     DesignSize = (
       729
       44)
@@ -283,7 +281,6 @@ inherited frmClientResult: TfrmClientResult
       TabOrder = 0
       ThemeAware = False
       Visible = False
-      ExplicitLeft = 595
     end
     object butOK: TRzButton
       Left = 600

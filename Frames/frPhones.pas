@@ -19,6 +19,7 @@ type
 	grdPhoneDBTableView2Column2: TcxGridDBColumn;
     grdPhoneDBTableView2Column3: TcxGridDBColumn;
     grdPhoneDBTableView2Column4: TcxGridDBColumn;
+    Q_Check: TIBQuery;
     procedure QueryAfterPost(DataSet: TDataSet);
     procedure grdPhoneDBTableView2CellClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;

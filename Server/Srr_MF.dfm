@@ -23,9 +23,6 @@ object MF: TMF
     Align = alTop
     BevelKind = bkFlat
     TabOrder = 0
-    DesignSize = (
-      623
-      317)
     object GroupBox1: TGroupBox
       Left = 1
       Top = 223
@@ -108,14 +105,31 @@ object MF: TMF
         OnClick = Button4Click
       end
       object Button6: TButton
-        Left = 279
+        Left = 314
         Top = 7
-        Width = 141
+        Width = 106
         Height = 25
         Anchors = [akTop, akRight]
         Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1089#1087#1080#1089#1086#1082
         TabOrder = 4
         OnClick = Button6Click
+      end
+      object DebugMode_cb: TCheckBox
+        Left = 441
+        Top = 46
+        Width = 121
+        Height = 17
+        Anchors = [akRight, akBottom]
+        Caption = #1056#1077#1078#1080#1084' '#1086#1090#1083#1072#1076#1082#1080
+        Checked = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 5
       end
     end
     object GroupBox2: TGroupBox
@@ -278,23 +292,6 @@ object MF: TMF
         OnClick = Button5Click
       end
     end
-    object DebugMode_cb: TCheckBox
-      Left = 442
-      Top = 269
-      Width = 121
-      Height = 17
-      Anchors = [akRight, akBottom]
-      Caption = #1056#1077#1078#1080#1084' '#1086#1090#1083#1072#1076#1082#1080
-      Checked = True
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      State = cbChecked
-      TabOrder = 2
-    end
     object GroupBox3: TGroupBox
       Left = 1
       Top = 1
@@ -302,7 +299,7 @@ object MF: TMF
       Height = 126
       Align = alTop
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
-      TabOrder = 3
+      TabOrder = 2
       DesignSize = (
         621
         126)
@@ -437,7 +434,11 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
-    Active = True
+    Params.Strings = (
+      'isc_tpb_read_committed'
+      'isc_tpb_rec_version'
+      'isc_tpb_wait')
+    AutoStopAction = saCommitRetaining
     Left = 272
     Top = 80
   end
@@ -530,7 +531,7 @@ object MF: TMF
     OnClientDisconnect = ServerSocketClientDisconnect
     OnClientRead = ServerSocketClientRead
     OnClientError = ServerSocketClientError
-    Left = 585
+    Left = 577
     Top = 265
   end
   object IBEvents: TIBEvents

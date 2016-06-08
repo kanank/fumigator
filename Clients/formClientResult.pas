@@ -17,14 +17,14 @@ type
     butOK: TRzButton;
     pnlCall: TRzPanel;
     btnTransferCall: TRzButton;
-    RzButton2: TRzButton;
+    btnCallLater: TRzButton;
     btnDeleteCall: TRzButton;
     Q: TIBQuery;
     procedure btnDeleteCallClick(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
-    procedure RzButton2Click(Sender: TObject);
+    procedure btnCallLaterClick(Sender: TObject);
   private
     fCallId: string;
     fClientSaved: Boolean;
@@ -92,6 +92,7 @@ begin
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
   frmSessionResult.Position := poDefault;
+  frmSessionResult.Top := 3;
   frmSessionResult.Parent   := frmClientResult.pnlResult;
 
   Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
@@ -136,7 +137,7 @@ begin
   Result := (CallResult <> '');
 end;
 
-procedure TfrmClientResult.RzButton2Click(Sender: TObject);
+procedure TfrmClientResult.btnCallLaterClick(Sender: TObject);
 begin
   fClientSaved := True;
   fResultSaved := True;
@@ -201,6 +202,7 @@ begin
     fCallId := AValue;
     btnDeleteCall.Enabled   := (fCallId <> '');
     btnTransferCall.Enabled := (fCallId <> '');
+    btnCallLater.Enabled    := (fCallId = '');
   end;
 
 end;

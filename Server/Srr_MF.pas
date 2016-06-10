@@ -202,13 +202,12 @@ begin
   else
     Rewrite(F);
 
- if LogStr[1] = '#'
- then  WriteLn(F,  ' ');
+ if LogStr[1] = '#' then
+   WriteLn(F,  ' ');
 
- WriteLn(F,  LogStr2);
+  WriteLn(F,  LogStr2);
 
- CloseFile(F);
-
+  CloseFile(F);
 
   if DebugMode_cb.Checked then begin
      if LogStr[1] = '#' then Log_memo.Lines.Add('');
@@ -368,6 +367,7 @@ function TMF.GetUserSocket(ATelNum: string): TCustomWinSocket;
 var
   i: Integer;
   f: Boolean;
+  o: TObject;
 begin
   i := -2;
 
@@ -378,16 +378,20 @@ begin
     if i = -1 then
       Break;
 
-    Result := TCustomWinSocket(FActiveUsers.Objects[i]);
-    try
-      f := Result.Connected;
-    except
-       f := False;
+    o := FActiveUsers.Objects[i];
+    if Assigned(o) then
+    begin
+      try
+        Result := TCustomWinSocket(o);
+        f := Result.Connected;
+      except
+        f := False;
+      end;
+      if f then
+        break
+      else
+        try FActiveUsers.Delete(i); except end;
     end;
-    if f then
-      break
-    else
-      FActiveUsers.Delete(i);
   end;
 
 
@@ -438,13 +442,14 @@ begin
       Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
       //i := FActiveUsers.IndexOf(atsnum);
       socket := GetUserSocket(atsnum);
-      if socket <> nil then
+      if Assigned(socket) then
       begin
         Log_memo.Lines.Add('Посылаем сообщение: ' + command);
         try
           socket.SendText(command);
         except
-          Log_memo.Lines.Add('Ошибка сообщения: ' + command);
+          Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
+          Exception(ExceptObject).Message);
         end;
       end;
     end

@@ -20,7 +20,7 @@ type
     fFrmParam: TFrmCreateParam;
   public
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
-    class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil): Boolean; //проверка заполненности необходимых полей
+    class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
   published
     property Title: string read fTitle write SetCaption;
   end;
@@ -49,7 +49,7 @@ begin
   Caption := AppCaption + '. ' + AValue;
 end;
 
-class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil): Boolean;
+class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean;
 
   function SetRequiredBorder(AComponent: TComponent; AField: TField): boolean;
   var
@@ -99,7 +99,9 @@ begin
     for i  := 0 to ADataSource.DataSet.FieldCount - 1 do
       if ADataSource.DataSet.Fields[i].Required and
         (TIBQuery(ADataSource.DataSet).GeneratorField.Field <>
-          ADataSource.DataSet.Fields[i].FieldName) then //поля генератора исключаем из проверки
+          ADataSource.DataSet.Fields[i].FieldName) and
+          (not Assigned(ANonValidList) or (Assigned(ANonValidList) and
+          (ANonValidList.IndexOf(ADataSource.DataSet.Fields[i].FieldName)=-1))) then //поля генератора исключаем из проверки
       begin
         res := SetRequiredBorder(AComponent, ADataSource.DataSet.Fields[i]);
         if not res then

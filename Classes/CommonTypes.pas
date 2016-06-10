@@ -57,6 +57,7 @@ type
   ClientInfoParams :ClientInfoParams;
   public
     procedure Assign(ASource: ClientCallParams);
+    constructor Create(AId_call:Integer); overload;
 end;
 
  type
@@ -110,6 +111,23 @@ begin
   self.ClientInfoParams.ClientInfo  := ASource.ClientInfoParams.ClientInfo;
   self.ClientInfoParams.ClientComms := ASource.ClientInfoParams.ClientComms;
 
+end;
+
+constructor ClientCallParams.Create(AId_call:integer);
+begin
+  inherited;
+  id_call := 0;
+  Client_Type := '';
+  Client_id := 0;
+  TelNum := '';
+  ClientName := '';
+  Format_Id := 0;
+  Status_Id := 0;
+  PERSON_ID := 0;
+  FORMA_ID := 0;
+  INN := '';
+  clientContact := '';
+  Author := '';
 end;
 
 end.

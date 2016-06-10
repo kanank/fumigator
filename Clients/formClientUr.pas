@@ -61,7 +61,9 @@ var
 begin
   //проверка
   res := False;
-  if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson)) then
+  if not (ValidateData(DS, self) and
+  ValidateData(FramePerson.DS, FramePerson) and
+  FrameClientExtUr.ValidateData) then
   begin
     Application.MessageBox('Не заполнены все необходимые поля!',
      'Внимание', MB_ICONWARNING + MB_OK);

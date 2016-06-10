@@ -384,10 +384,11 @@ inherited frmClientUr: TfrmClientUr
     object cxDBTextEdit2: TcxDBTextEdit
       Left = 27
       Top = 4
+      AutoSize = False
       BeepOnEnter = False
       DataBinding.DataField = 'EMAIL'
       DataBinding.DataSource = DS
-      Properties.MaxLength = 16
+      Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]
       Style.HotTrack = False
       Style.LookAndFeel.Kind = lfFlat
@@ -400,6 +401,7 @@ inherited frmClientUr: TfrmClientUr
       StyleHot.LookAndFeel.Kind = lfFlat
       StyleHot.LookAndFeel.NativeStyle = True
       TabOrder = 0
+      Height = 21
       Width = 161
     end
   end

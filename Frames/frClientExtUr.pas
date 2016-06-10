@@ -54,6 +54,7 @@ begin
     FrameRekvizits.AddParam('REKVIZIT_ID', Query.FieldByName('REKVIZIT_ID'));
     FrameRekvizits.OpenData;
     Result := True;
+    SetNonValidate('CLIENT_ID');
   except
     Result := False;
   end;

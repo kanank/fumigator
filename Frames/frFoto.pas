@@ -20,7 +20,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    function SaveData: Boolean;  override;
   end;
 
 var
@@ -39,6 +39,11 @@ end;
 procedure TFrameFoto.btnLoadClick(Sender: TObject);
 begin
   imgFoto.LoadFromFile;
+end;
+
+function TFrameFoto.SaveData: Boolean;
+begin
+  inherited;
 end;
 
 end.

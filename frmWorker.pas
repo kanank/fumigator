@@ -171,7 +171,6 @@ var
   res: Boolean;
 begin
 
-
   //сохраняем полное имя
   DS.DataSet.FieldByName('full_name').AsString :=
     _FramePersonFull.FullName;

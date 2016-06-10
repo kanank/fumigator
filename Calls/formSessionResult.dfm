@@ -52,16 +52,16 @@ inherited frmSessionResult: TfrmSessionResult
     ParentColor = False
     ParentFont = False
   end
-  object cxDBMemo1: TcxDBMemo
+  object edtIshod: TcxDBMemo
     Left = 8
-    Top = 23
+    Top = 24
     DataBinding.DataField = 'ISHOD'
     DataBinding.DataSource = DS
     TabOrder = 0
-    Height = 54
+    Height = 53
     Width = 185
   end
-  object cxDBMemo2: TcxDBMemo
+  object edtResult: TcxDBMemo
     Left = 224
     Top = 23
     DataBinding.DataField = 'RESULT'
@@ -97,6 +97,7 @@ inherited frmSessionResult: TfrmSessionResult
   object Q: TIBQuery
     Database = DataModuleMain.DB
     Transaction = DataModuleMain.Calls_Tr
+    BeforeOpen = QBeforeOpen
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True

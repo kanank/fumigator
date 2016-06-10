@@ -89,9 +89,6 @@ end;
 procedure TfrmWorker.FormCreate(Sender: TObject);
 begin
   inherited;
-
-begin
-  inherited;
   if fFrmParam.Dataset <> nil then
     DS.DataSet := fFrmParam.Dataset;
 
@@ -106,6 +103,7 @@ begin
           DS.DataSet.Append;
           DS.DataSet.FieldByName('USER_BLOCKED').AsInteger := 0;
           DS.DataSet.FieldByName('IS_DELETED').AsInteger := 0;
+          fNonValidateList.Add('PERSON_ID');
         end;
       end;
     asEdit:
@@ -141,8 +139,6 @@ begin
   _FramePersonFull.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   _FramePersonFull.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
   _FramePersonFull.OpenData;
-end;
-
 
 end;
 
@@ -181,15 +177,15 @@ begin
 
   //проверка
   res := False;
-  if not ValidateData(DS, self) then
+  if not ValidateData(DS, self, fNonValidateList) then
   begin
     Application.MessageBox('Не заполнены все необходимые поля!',
      'Внимание', MB_ICONWARNING + MB_OK);
-    TRzButton(Sender).ModalResult := mrNone;
+    ModalResult := mrNone;
     Exit;
   end
   else
-    TButton(Sender).ModalResult := mrOk;
+    ModalResult := mrOk;
 
   //прошли проверку
   try
@@ -215,6 +211,7 @@ begin
       //res := FrameUslugi.SaveData;
     except
       res := False;
+      ModalResult := mrNone;
       ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
       Exception(ExceptObject).Message);
     end;

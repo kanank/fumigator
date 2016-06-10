@@ -134,9 +134,9 @@ begin
     DS.DataSet := fFrmParam.Dataset;
 
   status_id := 1;
-  if (fFrmParam.ExtParam <> nil) and
-  (TClientParam(fFrmParam.ExtParam^).CallParam.Status_Id <> 0) then
-    status_id := TClientParam(fFrmParam.ExtParam^).CallParam.Status_Id;
+  if (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
+  (TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id <> 0) then
+    status_id := TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id;
 
   case fFrmParam.action of
     asCreate:
@@ -174,7 +174,7 @@ begin
   FramePhones.OpenData;
 
   if (fFrmParam.action = asCreate) and
-     (fFrmParam.ExtParam <> nil) and
+     (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
      (TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
   begin
     FramePhones.DS.DataSet.Append;

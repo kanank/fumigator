@@ -57,6 +57,7 @@ inherited frmSessionResult: TfrmSessionResult
     Top = 24
     DataBinding.DataField = 'ISHOD'
     DataBinding.DataSource = DS
+    Properties.HideSelection = False
     TabOrder = 0
     Height = 53
     Width = 185

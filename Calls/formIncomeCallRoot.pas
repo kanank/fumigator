@@ -186,7 +186,7 @@ begin
  try
   if fClientCallPrm.Client_Type = '' then
   begin  // Вызываем неизвестный звонок.
-   ExtPrm.CallParam := fClientCallPrm;
+   ExtPrm.CallParam := @fClientCallPrm;
    case DM.ShowUnknownCallForm(fClientCallPrm.TelNum).ModalRes of
      mrOk: DM.ShowClientFiz(asCreate, ExtPrm);
      mrYes: DM.ShowClientUr(asCreate, ExtPrm);

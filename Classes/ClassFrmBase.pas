@@ -18,9 +18,12 @@ type
   protected
     fTitle: string;
     fFrmParam: TFrmCreateParam;
+    fNonValidateList: TStringList;
+    procedure SetNonValidate(Alist: string);
   public
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
     class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
+    destructor Destroy; overload;
   published
     property Title: string read fTitle write SetCaption;
   end;
@@ -41,12 +44,23 @@ begin
     fFrmParam := AParam^;
 
   Title := ATitle;
+  fNonValidateList := TStringList.Create;
+end;
+
+destructor TBaseForm.Destroy;
+begin
+  fNonValidateList.Free;
 end;
 
 procedure TBaseForm.SetCaption(AValue: string);
 begin
   fTitle := AValue;
   Caption := AppCaption + '. ' + AValue;
+end;
+
+procedure TBaseForm.SetNonValidate(Alist: string);
+begin
+  fNonValidateList.DelimitedText := Alist;
 end;
 
 class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean;

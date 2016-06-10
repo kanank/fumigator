@@ -41,6 +41,7 @@ end;
 end;
 
 type
+  PClientCallParams = ^ClientCallParams;
   ClientCallParams = record
   id_call: integer;
   Client_Type :string;
@@ -57,16 +58,8 @@ type
   ClientInfoParams :ClientInfoParams;
   public
     procedure Assign(ASource: ClientCallParams);
-    constructor Create(AId_call:Integer); overload;
+    constructor Init(AId_call:Integer); overload;
 end;
-
- type
- PFrmCreateParam = ^TFrmCreateParam;
- TFrmCreateParam = record
-   action: TActionstr;
-   Dataset: TDataset;
-   ExtParam: Pointer;
- end;
 
 type
   FormResult = record
@@ -75,17 +68,31 @@ type
   Comments: string;
 end;
 
-type TClientParam = record
+type
+  PClientParam = ^TClientParam;
+  TClientParam = record
   Status: Integer;
   ClientType: Integer;
-  CallParam: ClientCallParams;
+  CallParam: PClientCallParams;
+  public
+    constructor Init(Astatus: integer; AClientType: Integer; ACallParam: PClientCallParams);
 end;
 
-function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: Pointer=nil): TFrmCreateParam;
+ type
+ PFrmCreateParam = ^TFrmCreateParam;
+ TFrmCreateParam = record
+   action: TActionstr;
+   Dataset: TDataset;
+   ExtParam: PClientParam;
+ public
+   constructor Init(Aaction: TActionstr; ADataset: TDataset; AExtParam: PClientParam);
+ end;
+
+function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: PClientParam=nil): TFrmCreateParam;
 
  implementation
 
-function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: Pointer=nil): TFrmCreateParam;
+function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: PClientParam=nil): TFrmCreateParam;
 begin
   Result.action := AAction;
   Result.Dataset := ADataSet;
@@ -113,7 +120,7 @@ begin
 
 end;
 
-constructor ClientCallParams.Create(AId_call:integer);
+constructor ClientCallParams.Init(AId_call:integer);
 begin
   inherited;
   id_call := 0;
@@ -121,13 +128,32 @@ begin
   Client_id := 0;
   TelNum := '';
   ClientName := '';
-  Format_Id := 0;
-  Status_Id := 0;
+  Format_Id := 1;
+  Status_Id := 1;
   PERSON_ID := 0;
-  FORMA_ID := 0;
+  FORMA_ID := 1;
   INN := '';
   clientContact := '';
   Author := '';
+end;
+
+{ TClientParam }
+
+constructor TClientParam.Init(AStatus: integer; AClientType: Integer; ACallParam: PClientCallParams);
+begin
+  Self.Status     := AStatus;
+  Self.ClientType := AClientType;
+  CallParam       := ACallParam;
+end;
+
+{ TFrmCreateParam }
+
+constructor TFrmCreateParam.Init(Aaction: TActionstr; ADataset: TDataset;
+  AExtParam: PClientParam);
+begin
+  Self.action   := Aaction;
+  Self.Dataset  := ADataset;
+  Self.ExtParam := AExtParam;
 end;
 
 end.

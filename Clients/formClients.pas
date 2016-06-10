@@ -84,7 +84,8 @@ begin
   try
     DS.DataSet.Filtered := false;
 
-    extPrm.CallParam.Status_Id := status;
+    extPrm := TClientParam.Init(status, 0, nil);
+    //extPrm.CallParam.Status_Id := status;
 
     if FisUr = 1 then
       DM.ShowClientUr(asCreate, extPrm)

@@ -5,6 +5,7 @@ inherited frmClients: TfrmClients
   OnDestroy = FormDestroy
   OnShow = FormShow
   ExplicitWidth = 850
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage

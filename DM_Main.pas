@@ -169,7 +169,7 @@ begin
   if not DM.Clients.Active then
     DM.Clients.Open;
 
-  prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  prm :=  TFrmCreateParam.Init(AACtion, DM.Clients, @AExtPrm);  //NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
   frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
   try
     if frmClientFiz.ShowModal = mrOk then
@@ -606,7 +606,7 @@ begin
            CLP.id_call := id;
            ClP.TelNum  := tel;
 
-           ExtPrm.CallParam := CLP;
+           ExtPrm.CallParam := @CLP;
 
            //берем звонок в обработку
            if not SetReadedCall(id) then

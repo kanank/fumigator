@@ -104,6 +104,8 @@ begin
   if DM.Db.Connected = false then
     Exit;
 
+  CLP.Setup; //установка
+
   try
     with DM.CallS_Q do
     begin
@@ -180,7 +182,11 @@ end;
 procedure TfrmIncomeCallRoot.Timer1Timer(Sender: TObject);
 var
   extPrm: TClientParam;
+  formRes: FormResult;
+  newCli: Boolean;
 begin
+  extPrm.Setup;
+
   Timer1.Enabled := False;
  DM.GetDataset(DM.Clients);
  try
@@ -188,8 +194,8 @@ begin
   begin  // Вызываем неизвестный звонок.
    ExtPrm.CallParam := @fClientCallPrm;
    case DM.ShowUnknownCallForm(fClientCallPrm.TelNum).ModalRes of
-     mrOk: DM.ShowClientFiz(asCreate, ExtPrm);
-     mrYes: DM.ShowClientUr(asCreate, ExtPrm);
+     mrOk:  formRes := DM.ShowClientFiz(asCreate, ExtPrm);
+     mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
    end;
   end
   else

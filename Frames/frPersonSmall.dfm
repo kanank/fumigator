@@ -259,7 +259,9 @@ inherited FramePersonSmall: TFramePersonSmall
   end
   inherited Query: TIBQuery
     SQL.Strings = (
-      'select id, name, surname, family, date_birth, sex, prof_id '
+      
+        'select id, name, surname, family, date_birth, sex, prof_id, shor' +
+        'tname '
       'from persons where id = :person_id')
     GeneratorField.ApplyEvent = gamOnPost
     Left = 232

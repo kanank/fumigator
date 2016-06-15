@@ -112,7 +112,7 @@ inherited frmClientFiz: TfrmClientFiz
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfFlat
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 1
+    TabOrder = 2
     Visible = False
     Width = 21
   end
@@ -123,7 +123,7 @@ inherited frmClientFiz: TfrmClientFiz
     DataBinding.DataSource = DS
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
-    TabOrder = 2
+    TabOrder = 3
     Height = 31
     Width = 431
   end
@@ -132,7 +132,7 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 0
     Width = 733
     Height = 172
-    TabOrder = 5
+    TabOrder = 0
     inherited Label3: TLabel
       Visible = False
     end
@@ -223,12 +223,38 @@ inherited frmClientFiz: TfrmClientFiz
       end
     end
     inherited FrameAddress: TFrameKladrAdrFull
-      Height = 26
+      Left = 2
+      Top = 145
+      Width = 359
+      Height = 28
       Visible = True
-      ExplicitHeight = 26
+      ExplicitLeft = 2
+      ExplicitTop = 145
+      ExplicitWidth = 359
+      ExplicitHeight = 28
       inherited Label2: TLabel
-        Left = 0
-        ExplicitLeft = 0
+        Top = -1
+        Width = 66
+        Height = 28
+        AutoSize = False
+        Caption = #1040#1076#1088#1077#1089' '#1088#1077#1075#1080#1089#1090#1088#1072#1094#1080#1080
+        WordWrap = True
+        ExplicitTop = -1
+        ExplicitWidth = 66
+        ExplicitHeight = 28
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 328
+        Top = 1
+        ExplicitTop = 1
+      end
+      inherited edtAddress: TcxTextEdit
+        Left = 72
+        Top = 2
+        ExplicitLeft = 72
+        ExplicitTop = 2
+        ExplicitWidth = 252
+        Width = 252
       end
     end
     inherited edtEmailPrivate: TcxDBTextEdit
@@ -262,7 +288,7 @@ inherited frmClientFiz: TfrmClientFiz
     Properties.ListOptions.GridLines = glNone
     Properties.ListOptions.ShowHeader = False
     Properties.ListSource = DataModuleMain.DsFormatsCli
-    TabOrder = 3
+    TabOrder = 4
     Width = 68
   end
   object cmbStatus: TcxDBLookupComboBox
@@ -279,7 +305,7 @@ inherited frmClientFiz: TfrmClientFiz
     Properties.ListOptions.GridLines = glNone
     Properties.ListOptions.ShowHeader = False
     Properties.ListSource = DataModuleMain.DsDicStatusCli
-    TabOrder = 4
+    TabOrder = 5
     Width = 62
   end
   inline FrameUslugi: TFrameUslugi
@@ -397,7 +423,7 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 30
     Width = 216
     Height = 112
-    TabOrder = 0
+    TabOrder = 1
     ExplicitLeft = 291
     ExplicitTop = 30
     ExplicitWidth = 216

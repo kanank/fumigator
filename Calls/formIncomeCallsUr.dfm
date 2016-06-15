@@ -145,7 +145,7 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     object cmbForma: TcxDBLookupComboBox
       Left = 100
       Top = 15
-      DataBinding.DataField = 'STATUS_ID'
+      DataBinding.DataField = 'FORMA_ID'
       DataBinding.DataSource = DS
       Properties.GridMode = True
       Properties.KeyFieldNames = 'ID'
@@ -162,11 +162,11 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     end
     object cxDBTextEdit1: TcxDBTextEdit
       Left = 100
-      Top = 42
+      Top = 43
       Anchors = [akLeft, akTop, akRight]
       BeepOnEnter = False
-      DataBinding.DataField = 'FAMILY'
-      DataBinding.DataSource = FramePerson.DS
+      DataBinding.DataField = 'INN'
+      DataBinding.DataSource = DS
       Style.HotTrack = False
       Style.LookAndFeel.NativeStyle = True
       Style.TransparentBorder = True
@@ -182,8 +182,8 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
       Top = 15
       Anchors = [akLeft, akTop, akRight]
       BeepOnEnter = False
-      DataBinding.DataField = 'FAMILY'
-      DataBinding.DataSource = FramePerson.DS
+      DataBinding.DataField = 'NAME'
+      DataBinding.DataSource = DS
       Style.HotTrack = False
       Style.LookAndFeel.NativeStyle = True
       Style.TransparentBorder = True
@@ -205,7 +205,7 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     Top = 68
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
-    DataBinding.DataField = 'FAMILY'
+    DataBinding.DataField = 'SHORTNAME'
     DataBinding.DataSource = FramePerson.DS
     Style.HotTrack = False
     Style.LookAndFeel.NativeStyle = True

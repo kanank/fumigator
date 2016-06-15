@@ -76,7 +76,6 @@ inherited frmSessionResult: TfrmSessionResult
     Top = 92
     Width = 124
     Height = 29
-    ModalResult = 1
     Anchors = [akTop, akRight]
     Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
     Font.Charset = DEFAULT_CHARSET
@@ -89,6 +88,7 @@ inherited frmSessionResult: TfrmSessionResult
     ParentFont = False
     TabOrder = 2
     ThemeAware = False
+    OnClick = Cancel_btnClick
   end
   object DS: TDataSource
     DataSet = Q

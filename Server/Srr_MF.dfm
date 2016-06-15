@@ -434,6 +434,7 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
+    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'

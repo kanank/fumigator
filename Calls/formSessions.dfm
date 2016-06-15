@@ -4,6 +4,7 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 924
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -136
   ExplicitWidth = 940
   ExplicitHeight = 445
   PixelsPerInch = 96
@@ -12,10 +13,11 @@ inherited frmSessions: TfrmSessions
     Left = 731
     Top = 303
     ExplicitLeft = 594
+    ExplicitTop = 303
   end
   inherited RzPanel2: TRzPanel
     Width = 924
-    ExplicitWidth = 787
+    ExplicitWidth = 924
     DesignSize = (
       924
       33)
@@ -82,10 +84,11 @@ inherited frmSessions: TfrmSessions
   inherited RzPanel1: TRzPanel
     Top = 358
     Width = 924
-    ExplicitWidth = 787
+    ExplicitTop = 358
+    ExplicitWidth = 924
     inherited Cancel_btn: TRzButton
       Left = 788
-      ExplicitLeft = 651
+      ExplicitLeft = 788
     end
     inherited Edit_btn: TRzButton
       Visible = False
@@ -102,15 +105,19 @@ inherited frmSessions: TfrmSessions
     Width = 924
     Height = 265
     Align = alClient
-    ExplicitWidth = 787
-    ExplicitHeight = 276
+    ExplicitTop = 93
+    ExplicitWidth = 924
+    ExplicitHeight = 265
     inherited GridView: TcxGridDBTableView
+      OnCustomDrawCell = GridViewCustomDrawCell
       DataController.DataSource = DS
       OptionsData.CancelOnExit = False
       OptionsData.Deleting = False
       OptionsData.DeletingConfirmation = False
       OptionsData.Editing = False
       OptionsData.Inserting = False
+      OptionsSelection.HideSelection = True
+      OptionsSelection.InvertSelect = False
       OptionsView.GridLines = glVertical
       OptionsView.HeaderHeight = 40
       object GridViewColumn1: TcxGridDBColumn
@@ -209,6 +216,13 @@ inherited frmSessions: TfrmSessions
         Styles.Header = cxStyle1
         Width = 130
       end
+      object GridViewColumn11: TcxGridDBColumn
+        DataBinding.FieldName = 'DURATION'
+        Visible = False
+        Options.AutoWidthSizable = False
+        Width = 20
+        IsCaptionAssigned = True
+      end
     end
   end
   object edtTimeEnd: TcxDateEdit
@@ -226,7 +240,6 @@ inherited frmSessions: TfrmSessions
     Align = alTop
     BorderSides = []
     TabOrder = 4
-    ExplicitWidth = 787
     object cxGrid1: TcxGrid
       Left = 0
       Top = 0
@@ -234,7 +247,6 @@ inherited frmSessions: TfrmSessions
       Height = 56
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 787
       object cxGridDBTableView1: TcxGridDBTableView
         Navigator.Buttons.CustomButtons = <>
         Navigator.InfoPanel.Visible = True

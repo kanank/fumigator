@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -182,13 +184,13 @@ inherited frmMain: TfrmMain
   object Clients_PUM: TPopupMenu
     Left = 208
     Top = 64
-    object UrClients_mi: TMenuItem
-      Caption = #1070#1088#1080#1076#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
-      OnClick = UrClients_miClick
-    end
     object FizClients_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
       OnClick = FizClients_miClick
+    end
+    object UrClients_mi: TMenuItem
+      Caption = #1070#1088#1080#1076#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
+      OnClick = UrClients_miClick
     end
   end
   object ClientSocket: TClientSocket

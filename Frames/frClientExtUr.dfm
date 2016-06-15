@@ -187,6 +187,7 @@ inherited FrameClientExtUr: TFrameClientExtUr
     SQL.Strings = (
       'select * from CLIENTS_EXT_UR where client_id = :client_id')
     GeneratorField.Generator = 'GEN_CLIENTS_EXT_UR_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     Top = 32
     ParamData = <
       item

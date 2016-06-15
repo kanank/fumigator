@@ -58,7 +58,7 @@ type
   ClientInfoParams :ClientInfoParams;
   public
     procedure Assign(ASource: ClientCallParams);
-    constructor Init(AId_call:Integer); overload;
+    procedure Setup;
 end;
 
 type
@@ -76,6 +76,7 @@ type
   CallParam: PClientCallParams;
   public
     constructor Init(Astatus: integer; AClientType: Integer; ACallParam: PClientCallParams);
+    procedure Setup;
 end;
 
  type
@@ -120,9 +121,8 @@ begin
 
 end;
 
-constructor ClientCallParams.Init(AId_call:integer);
+procedure ClientCallParams.Setup;
 begin
-  inherited;
   id_call := 0;
   Client_Type := '';
   Client_id := 0;
@@ -144,6 +144,13 @@ begin
   Self.Status     := AStatus;
   Self.ClientType := AClientType;
   CallParam       := ACallParam;
+end;
+
+procedure TClientParam.Setup;
+begin
+  Status := 1;
+  ClientType := 0;
+  CallParam := nil;
 end;
 
 { TFrmCreateParam }

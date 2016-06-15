@@ -52,8 +52,12 @@ type
     MemHeaderEND_BY_USER: TIntegerField;
     MemHeaderSUM_DURATION: TDateTimeField;
     MemHeaderAVG_DURATION: TDateTimeField;
+    GridViewColumn11: TcxGridDBColumn;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
+    procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
+      ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
+      var ADone: Boolean);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -125,6 +129,22 @@ begin
   MemHeader.Open;
   MemHeader.Append;
   MemHeader.Post;
+end;
+
+
+procedure TfrmSessions.GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
+  ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
+  var ADone: Boolean);
+ var
+  ColumnID: integer;
+  Cellvalue : variant;
+begin
+ ColumnID := TcxGridDBTableView(Sender).GetColumnByFieldName('DURATION').Index;
+ Cellvalue := AViewInfo.GridRecord.Values[ColumnID];
+ if (Cellvalue < 60000) then
+  begin
+    ACanvas.Canvas.Brush.Color := $0097F0F2; //$00F1A283;
+  end;
 end;
 
 function TfrmSessions.MillesecondToDateTime(ms: int64): TDateTime;

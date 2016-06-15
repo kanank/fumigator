@@ -55,7 +55,7 @@ inherited frmClientUr: TfrmClientUr
     Top = -2
     Width = 773
     Height = 310
-    TabOrder = 1
+    TabOrder = 2
     ExplicitTop = -2
     ExplicitWidth = 773
     ExplicitHeight = 310
@@ -91,6 +91,7 @@ inherited frmClientUr: TfrmClientUr
       Left = 533
       Top = 155
       Properties.EditMask = '\d\d\d\d '#39' '#39' \d\d '#39' '#39' \d\d\d'
+      TabOrder = 3
       ExplicitLeft = 533
       ExplicitTop = 155
     end
@@ -98,12 +99,14 @@ inherited frmClientUr: TfrmClientUr
       Left = 533
       Top = 178
       Properties.EditMask = '\d '#39' '#39' \d\d '#39' '#39' \d\d '#39' '#39' \d\d\d\d\d '#39' '#39' \d'
+      TabOrder = 4
       ExplicitLeft = 533
       ExplicitTop = 178
     end
     inherited cmbForma: TcxDBLookupComboBox [7]
       Left = 100
       Top = 9
+      TabOrder = 0
       ExplicitLeft = 100
       ExplicitTop = 9
       ExplicitWidth = 100
@@ -112,6 +115,7 @@ inherited frmClientUr: TfrmClientUr
     inherited cmbSfera: TcxDBLookupComboBox [8]
       Left = 402
       Top = 35
+      TabOrder = 2
       ExplicitLeft = 402
       ExplicitTop = 35
       ExplicitWidth = 90
@@ -131,6 +135,7 @@ inherited frmClientUr: TfrmClientUr
       Left = 533
       Top = 133
       Properties.EditMask = '\d\d '#39' '#39' \d\d '#39' '#39' \d\d\d\d\d '#39' '#39' \d'
+      TabOrder = 1
       ExplicitLeft = 533
       ExplicitTop = 133
     end
@@ -153,7 +158,7 @@ inherited frmClientUr: TfrmClientUr
     Width = 293
     Height = 145
     Caption = #1056#1091#1082#1086#1074#1086#1076#1080#1090#1077#1083#1100
-    TabOrder = 2
+    TabOrder = 3
     inline FramePerson: TFramePersonSmall
       Left = 0
       Top = 12
@@ -213,7 +218,7 @@ inherited frmClientUr: TfrmClientUr
     Width = 268
     Height = 28
     BorderSides = []
-    TabOrder = 3
+    TabOrder = 1
     object Label2: TLabel
       Left = 133
       Top = 10

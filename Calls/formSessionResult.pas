@@ -20,7 +20,7 @@ type
     Q_upd: TIBUpdateSQL;
     Cancel_btn: TRzButton;
     procedure QBeforeOpen(DataSet: TDataSet);
-
+    procedure Cancel_btnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,6 +36,17 @@ implementation
 uses
   DM_Main;
 
+
+procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
+begin
+  if (edtIshod.Text = '') or (edtResult.Text = '')  then
+  begin
+    Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
+    Exit;
+  end
+  else
+    ModalResult := mrOk;
+end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);
 begin

@@ -370,6 +370,9 @@ var
   o: TObject;
 begin
   i := -2;
+  Result := nil;
+  if not Assigned(FActiveUsers) then
+    Exit;
 
   while i <> -1 do
   begin
@@ -383,18 +386,22 @@ begin
     begin
       try
         Result := TCustomWinSocket(o);
-        f := Result.Connected;
+        f := Assigned(Result) and Result.Connected;
       except
         f := False;
       end;
+
       if f then
         break
       else
-        try FActiveUsers.Delete(i); except end;
+        try
+          Result := nil;
+          FActiveUsers.Delete(i);
+        except
+          Result := nil;
+        end;
     end;
   end;
-
-
 end;
 
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
@@ -440,8 +447,15 @@ begin
       if p > 0 then
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
       Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
-      //i := FActiveUsers.IndexOf(atsnum);
-      socket := GetUserSocket(atsnum);
+
+      try
+        socket := GetUserSocket(atsnum);
+      except
+        Result := False;
+        Log_memo.Lines.Add('Ошибка поиска сокета: ' + command + #13#10 +
+        Exception(ExceptObject).Message);
+      end;
+
       if Assigned(socket) then
       begin
         Log_memo.Lines.Add('Посылаем сообщение: ' + command);
@@ -459,12 +473,15 @@ begin
         try
           Log_memo.Lines.Add('Посылаем сообщение: ' + command);
           try
-            ServerSocket.Socket.Connections[i].SendText(command);
+            if ServerSocket.Socket.Connections[i].Connected then
+              ServerSocket.Socket.Connections[i].SendText(command);
           except
-            Log_memo.Lines.Add('Ошибка сообщения: ' + command);
+            Log_memo.Lines.Add('Ошибка сообщения: ' + command+ #13#10 +
+              Exception(ExceptObject).Message);
+
           end;
         except
-
+          Continue;
         end;
     end;
   finally
@@ -505,29 +522,29 @@ var
   s, cmd, arg: string;
 begin
   try
-  try
-    CSectionSocket.Enter;
+    try
+      CSectionSocket.Enter;
 
-    s := Socket.ReceiveText;
-    Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
-    if Copy(s, 1, 1) = '#' then
-    begin
-      p := Pos(':', s);
-      cmd := Copy(s, 2, p - 2);
-      arg := Copy(s, p + 1, Length(s));
-
-      if cmd = 'setphone' then
+      s := Socket.ReceiveText;
+      Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
+      if Copy(s, 1, 1) = '#' then
       begin
-        FActiveUsers.AddObject(arg, Socket);
-        Socket.SendText('#servertime:' + IntToStr(SecondOfTheDay(Now)));
-      end
-      else
-        SocketCommand(cmd, arg);
+        p := Pos(':', s);
+        cmd := Copy(s, 2, p - 2);
+        arg := Copy(s, p + 1, Length(s));
+
+        if cmd = 'setphone' then
+        begin
+          FActiveUsers.AddObject(arg, Socket);
+          Socket.SendText('#servertime:' + IntToStr(SecondOfTheDay(Now)));
+        end
+        else
+          SocketCommand(cmd, arg);
+
+      end;
+    except
 
     end;
-  except
-
-  end;
   finally
     CSectionSocket.Leave;
   end;
@@ -590,11 +607,12 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
     Log_memo.Lines.Add(ARequestInfo.URI);
     Log_memo.Lines.Add(ARequestInfo.Params.Text);
 
-    if ARequestInfo.URI = Trim(TelURI_edt.Text) then
+    if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
     begin
-      if AddCallEvent(ARequestInfo.Params) = true then
-        AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
-           + ARequestInfo.Params.Values['CallStatus']);
+      if (ServerSocket.Socket.ActiveConnections > 0) then
+        if AddCallEvent(ARequestInfo.Params) = true then
+          AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
+             + ARequestInfo.Params.Values['CallStatus']);
 
     //Входящий с мобильного
     //CallID=1429413884.1298580
@@ -671,11 +689,11 @@ begin
       Q.ExecSQL;
       Result := true;
     Except
-    on E : Exception
-        do begin
+      on E : Exception do
+      begin
         AddLog('#Ошибка обновления сессии: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
         Result := false;
-        end;
+      end;
 
     End;
 

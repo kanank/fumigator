@@ -256,6 +256,7 @@ begin
   try
     frmIncomeCallUr.edtPhone.Text := RightStr(CLP.TelNum, 10);
     frmIncomeCallUr.FramePerson.OpenData(CLP.PERSON_ID);
+    frmIncomeCallUr.cmbForma.EditValue  := CLP.FORMA_ID;
     frmIncomeCallUr.cmbFormat.EditValue := CLP.Format_Id;
     frmIncomeCallUr.cmbStatus.EditValue := CLP.Status_Id;
     frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
@@ -699,6 +700,9 @@ begin
     Q.Edit;
     Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
     Q.FieldByName('client_id').AsInteger := client_id;
+    if client_id = 0 then //клиент не был создан
+      Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
+
     Result := Q.FieldByName('callresult').AsString;
     ShowModal;
     if Q.Modified then
@@ -920,6 +924,7 @@ end;
 function TDataModuleMain.getClientCallParams(TelNum: string): ClientCallParams;
 var Q :TIBQuery;
 begin
+  Result.Setup;
 
   try
     Q := CreateRWQuery;

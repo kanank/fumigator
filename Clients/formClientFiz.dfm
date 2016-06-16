@@ -21,7 +21,7 @@ inherited frmClientFiz: TfrmClientFiz
   end
   object Label14: TLabel [1]
     Left = 3
-    Top = 238
+    Top = 248
     Width = 67
     Height = 13
     Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
@@ -118,13 +118,13 @@ inherited frmClientFiz: TfrmClientFiz
   end
   object Comments_memo: TcxDBMemo
     Left = 77
-    Top = 234
+    Top = 244
     DataBinding.DataField = 'COMMENT'
     DataBinding.DataSource = DS
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 3
-    Height = 31
+    Height = 26
     Width = 431
   end
   inline FramePerson: TFramePersonFull
@@ -246,6 +246,7 @@ inherited frmClientFiz: TfrmClientFiz
       inherited btnEdit: TRzBitBtn
         Left = 328
         Top = 1
+        ExplicitLeft = 328
         ExplicitTop = 1
       end
       inherited edtAddress: TcxTextEdit
@@ -354,19 +355,18 @@ inherited frmClientFiz: TfrmClientFiz
     Left = -1
     Top = 171
     Width = 509
-    Height = 47
+    Height = 71
     TabOrder = 7
     Visible = False
     ExplicitLeft = -1
     ExplicitTop = 171
     ExplicitWidth = 509
-    ExplicitHeight = 47
+    ExplicitHeight = 71
     inherited Label2: TLabel [0]
-      Left = 1
-      Top = 4
-      Visible = False
-      ExplicitLeft = 1
-      ExplicitTop = 4
+      Left = 5
+      Top = 50
+      ExplicitLeft = 5
+      ExplicitTop = 50
     end
     inherited Label8: TLabel [1]
       Left = 5
@@ -376,14 +376,15 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited Label1: TLabel [2]
       Left = 5
+      Top = 27
       ExplicitLeft = 5
+      ExplicitTop = 27
     end
     inherited edtAddress: TcxTextEdit [4]
-      Left = 75
-      Top = 2
-      Visible = False
-      ExplicitLeft = 75
-      ExplicitTop = 2
+      Left = 76
+      Top = 47
+      ExplicitLeft = 76
+      ExplicitTop = 47
       ExplicitWidth = 432
       Width = 432
     end
@@ -401,7 +402,14 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited btnEdit: TRzBitBtn [11]
       Left = 331
+      Top = 9
+      Width = 41
+      Height = 31
+      Layout = blGlyphTop
       ExplicitLeft = 331
+      ExplicitTop = 9
+      ExplicitWidth = 41
+      ExplicitHeight = 31
     end
     inherited edtRegion: TcxTextEdit [12]
       Left = 75
@@ -413,7 +421,9 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited edtSite: TcxTextEdit [13]
       Left = 75
+      Top = 24
       ExplicitLeft = 75
+      ExplicitTop = 24
       ExplicitWidth = 253
       Width = 253
     end

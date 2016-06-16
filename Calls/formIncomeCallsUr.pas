@@ -16,13 +16,13 @@ uses
 type
   TfrmIncomeCallUr = class(TfrmIncomeCall)
     Label5: TLabel;
-    cmbForma: TcxDBLookupComboBox;
-    cxDBTextEdit1: TcxDBTextEdit;
     Label6: TLabel;
     Label7: TLabel;
-    cxDBTextEdit2: TcxDBTextEdit;
-    cxDBTextEdit3: TcxDBTextEdit;
+    edtPersonName: TcxDBTextEdit;
     Label8: TLabel;
+    cmbForma: TcxLookupComboBox;
+    edtINN: TcxTextEdit;
+    edtName: TcxTextEdit;
   private
     { Private declarations }
   public
@@ -35,5 +35,7 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  DM_Main;
 
 end.

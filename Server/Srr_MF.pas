@@ -93,7 +93,8 @@ type
   public
     CSection: TCriticalSection;
     CSectionProkado: TCriticalSection;
-    CSectionSocket: TCriticalSection;
+    CSectionSocket:  TCriticalSection;
+    CSectionCommand: TCriticalSection;
 
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
@@ -278,6 +279,7 @@ begin
  for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
    try
      ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
+
    except
 
    end;
@@ -345,6 +347,7 @@ begin
   CSection        := TCriticalSection.Create;
   CSectionProkado := TCriticalSection.Create;
   CSectionSocket  := TCriticalSection.Create;
+  CSectionCommand := TCriticalSection.Create;
   FActiveUsers    := TStringList.Create;
 
   AccessToken := TTelphinToken.Create;
@@ -358,6 +361,7 @@ begin
   CSection.Release;
   CSectionProkado.Release;
   CSectionSocket.Release;
+  CSectionCommand.Release;
 
   FreeAndNil(AccessToken);
   FreeAndNil(Caller);
@@ -440,7 +444,7 @@ var
   socket: TCustomWinSocket;
 begin
   try
-    CSectionSocket.Enter;
+    CSectionCommand.Enter;
     if atsnum <> '*' then
     begin
       p := Pos('*', atsnum);
@@ -454,6 +458,7 @@ begin
         Result := False;
         Log_memo.Lines.Add('Ошибка поиска сокета: ' + command + #13#10 +
         Exception(ExceptObject).Message);
+        socket := nil;
       end;
 
       if Assigned(socket) then
@@ -461,6 +466,7 @@ begin
         Log_memo.Lines.Add('Посылаем сообщение: ' + command);
         try
           socket.SendText(command);
+          Application.ProcessMessages;
         except
           Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
           Exception(ExceptObject).Message);
@@ -475,6 +481,7 @@ begin
           try
             if ServerSocket.Socket.Connections[i].Connected then
               ServerSocket.Socket.Connections[i].SendText(command);
+            Application.ProcessMessages;
           except
             Log_memo.Lines.Add('Ошибка сообщения: ' + command+ #13#10 +
               Exception(ExceptObject).Message);
@@ -485,7 +492,7 @@ begin
         end;
     end;
   finally
-    CSectionSocket.Leave;
+    CSectionCommand.Leave;
   end;
 end;
 
@@ -504,7 +511,10 @@ begin
     CSectionSocket.Enter;
     i := FActiveUsers.IndexOfObject(Socket);
     if i > -1 then
+    begin
       FActiveUsers.Delete(i);
+      Log_memo.Lines.Add('Отсоединение клиента');
+    end;
   finally
     CSectionSocket.Leave;
   end;
@@ -537,6 +547,7 @@ begin
         begin
           FActiveUsers.AddObject(arg, Socket);
           Socket.SendText('#servertime:' + IntToStr(SecondOfTheDay(Now)));
+          Application.ProcessMessages;
         end
         else
           SocketCommand(cmd, arg);
@@ -564,7 +575,7 @@ begin
       begin
         Caller := TPhoneCalls.Create(AccessToken);
         Caller.OnAfterCall  := AfterOutcomCall;
-        Caller.OnCallFinish := CallFinished;
+        //Caller.OnCallFinish := CallFinished;
       end;
       Caller.SimpleCall(argList[0], argList[1], argList[2]);
     end
@@ -576,7 +587,7 @@ begin
       begin
         Caller := TPhoneCalls.Create(AccessToken);
         Caller.OnAfterCall  := AfterOutcomCall;
-        Caller.OnCallFinish := CallFinished;
+       // Caller.OnCallFinish := CallFinished;
       end;
       Caller.DeleteCall(argList[0]);
     end;

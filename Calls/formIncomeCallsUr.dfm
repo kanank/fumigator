@@ -142,56 +142,16 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
       ExplicitWidth = 128
       Width = 128
     end
-    object cmbForma: TcxDBLookupComboBox
+    object edtINN: TcxTextEdit
       Left = 100
-      Top = 15
-      DataBinding.DataField = 'FORMA_ID'
-      DataBinding.DataSource = DS
-      Properties.GridMode = True
-      Properties.KeyFieldNames = 'ID'
-      Properties.ListColumns = <
-        item
-          FieldName = 'NAME'
-        end>
-      Properties.ListOptions.GridLines = glNone
-      Properties.ListOptions.ShowHeader = False
-      Properties.ListSource = DataModuleMain.DsDicStatusCli
-      Properties.ReadOnly = False
+      Top = 42
       TabOrder = 5
       Width = 128
     end
-    object cxDBTextEdit1: TcxDBTextEdit
-      Left = 100
-      Top = 43
-      Anchors = [akLeft, akTop, akRight]
-      BeepOnEnter = False
-      DataBinding.DataField = 'INN'
-      DataBinding.DataSource = DS
-      Style.HotTrack = False
-      Style.LookAndFeel.NativeStyle = True
-      Style.TransparentBorder = True
-      StyleDisabled.Color = clBtnFace
-      StyleDisabled.LookAndFeel.NativeStyle = True
-      StyleFocused.LookAndFeel.NativeStyle = True
-      StyleHot.LookAndFeel.NativeStyle = True
-      TabOrder = 6
-      Width = 128
-    end
-    object cxDBTextEdit2: TcxDBTextEdit
+    object edtName: TcxTextEdit
       Left = 399
-      Top = 15
-      Anchors = [akLeft, akTop, akRight]
-      BeepOnEnter = False
-      DataBinding.DataField = 'NAME'
-      DataBinding.DataSource = DS
-      Style.HotTrack = False
-      Style.LookAndFeel.NativeStyle = True
-      Style.TransparentBorder = True
-      StyleDisabled.Color = clBtnFace
-      StyleDisabled.LookAndFeel.NativeStyle = True
-      StyleFocused.LookAndFeel.NativeStyle = True
-      StyleHot.LookAndFeel.NativeStyle = True
-      TabOrder = 7
+      Top = 14
+      TabOrder = 6
       Width = 219
     end
   end
@@ -200,7 +160,7 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     Style.IsFontAssigned = True
     ExplicitLeft = 497
   end
-  object cxDBTextEdit3: TcxDBTextEdit [5]
+  object edtPersonName: TcxDBTextEdit [5]
     Left = 407
     Top = 68
     Anchors = [akLeft, akTop, akRight]
@@ -216,5 +176,18 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 3
     Width = 219
+  end
+  object cmbForma: TcxLookupComboBox [6]
+    Left = 108
+    Top = 42
+    Properties.KeyFieldNames = 'ID'
+    Properties.ListColumns = <
+      item
+        FieldName = 'NAME'
+      end>
+    Properties.ListOptions.ShowHeader = False
+    Properties.ListSource = DataModuleMain.DsDicUrForm
+    TabOrder = 4
+    Width = 128
   end
 end

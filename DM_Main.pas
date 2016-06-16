@@ -260,7 +260,10 @@ begin
     frmIncomeCallUr.cmbFormat.EditValue := CLP.Format_Id;
     frmIncomeCallUr.cmbStatus.EditValue := CLP.Status_Id;
     frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
+    frmIncomeCallUr.edtINN.Text         := CLP.INN;
+    frmIncomeCallUr.edtName.Text        := CLP.ClientName;
     frmIncomeCallUr.ShowModal;
+
     if frmIncomeCallUr.ModalResult = mrOk then
     begin
       //prm.CallParam := CLP;

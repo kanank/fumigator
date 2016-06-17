@@ -57,7 +57,8 @@ uses
   formClientCard in 'Clients\formClientCard.pas' {frmClientCard},
   formCallPause in 'Calls\formCallPause.pas' {frmCallPause},
   formIncomeCallRoot in 'Calls\formIncomeCallRoot.pas' {frmIncomeCallRoot},
-  formClientResult in 'Clients\formClientResult.pas' {frmClientResult};
+  formClientResult in 'Clients\formClientResult.pas' {frmClientResult},
+  formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent};
 
 {$R *.res}
 

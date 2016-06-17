@@ -62,21 +62,17 @@ type
   private
     fOnAfterCall: TNotifyEvent;
     fOnCallFinish: TNotifyEvent;
-    fOnAfterChange: TNotifyEvent; // после изменения звонка
     fCallId: string;
     fExtension: string;
     function GetStatusCall: Integer;
   public
     property OnAfterCall: TNotifyEvent read fOnAfterCall write fOnAfterCall;
-    property OnAfterChange: TNotifyEvent read fOnAfterChange write fOnAfterChange;
     property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
-
     property CallId: string read fCallId;
     property StatusCall: Integer read GetStatusCall;
     property Extension: string read fExtension;
     function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
     function TransferCall(Callid, APhone: string): Boolean;
-    function PickUpCall(Callid, APhone: string): Boolean;
     function DeleteCall(Callid: string): Boolean;
   end;
 
@@ -259,40 +255,6 @@ begin
 
   sStream.Free;
 
-end;
-
-function TPhoneCalls.PickUpCall(Callid, APhone: string): Boolean;
-var
-  sStream: TStringStream;
-  url: string;
-begin
-  Result := False;
-
-  sStream := TStringStream.Create;
-  sStream.WriteString('{' + #13#10);
-  sStream.WriteString('"action":"PickUp",' + #13#10);
-  sStream.WriteString('"sendCallTo":"' + APhone + '",' + #13#10);
-  sStream.WriteString('"callerId:"Fumigator <' + APhone + '>",' + #13#10);
-  sStream.WriteString('"waitForPickup":"20" ,' + #13#10);
-  sStream.WriteString('"phoneCallViewId":"01"' + #13#10);
-  sStream.WriteString('}' + #13#10);
-
-  fHttp.Request.Method := 'PUT';
-  fHttp.Request.ContentType := 'application/json';
-  fhttp.Request.CustomHeaders.Clear;
-  fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
-
-  url := fBaseUrl + '/uapi/phoneCalls/@owner/@self/' + CallId; //&accessRequestToken=' + FTokenObject.Token;
-  try
-    fHttp.Put(url, sStream);
-    Result := (fHttp.ResponseCode = 200);
-
-    if Assigned(fOnAfterChange) then
-      fOnAfterChange(Self);
-  except
-
-  end;
-  sStream.Free;
 end;
 
 function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;

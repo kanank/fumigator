@@ -26,4 +26,11 @@ inherited frmIncomeCallRoot: TfrmIncomeCallRoot
     Left = 120
     Top = 24
   end
+  object Timer2: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = Timer2Timer
+    Left = 168
+    Top = 24
+  end
 end

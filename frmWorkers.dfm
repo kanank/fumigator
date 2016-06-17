@@ -3,14 +3,11 @@ inherited frmWorkers: TfrmWorkers
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  ExplicitWidth = 657
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited RzPanel1: TRzPanel
     inherited Cancel_btn: TRzButton
       Font.Color = clWindowText
-      ExplicitLeft = 505
     end
     inherited Edit_btn: TRzButton
       Font.Color = clWindowText
@@ -32,6 +29,8 @@ inherited frmWorkers: TfrmWorkers
       DataController.DetailKeyFieldNames = 'ID'
       Filtering.ColumnFilteredItemsList = True
       FilterRow.InfoText = #1065#1077#1083#1082#1085#1080#1090#1077' '#1089#1102#1076#1072' '#1076#1083#1103' '#1091#1090#1072#1085#1086#1074#1082#1080' '#1092#1080#1083#1100#1090#1088#1072
+      OptionsBehavior.IncSearch = True
+      OptionsBehavior.IncSearchItem = GridViewColumn2
       OptionsData.Deleting = False
       OptionsData.Inserting = False
       Styles.Header = StyleHeader

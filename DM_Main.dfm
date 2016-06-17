@@ -952,7 +952,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1083,25 +1082,20 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      '  select first 1  ID,'
+      'select first 1  ID,'
       'CALLID,'
       'CALLEDEXTENSION,'
       'CALL_NUM,'
       'CALLAPIID,'
       'CALL_TIME'
       ' from current_calls c'
-      ' where right(c.calledextension,4) ='#39'*'#39'|| :ATS_Num'
-      '   and char_length(call_Num) >2  and readed=0'
-      '  and missed=0 and create_date > :date_start'
+      ' where char_length(call_Num) >2  and readed=0'
+      '  and missed=0 and create_date > :date_start and '
+      '  call_time_end is null'
       'order by id desc')
     Left = 24
     Top = 104
     ParamData = <
-      item
-        DataType = ftUnknown
-        Name = 'ATS_Num'
-        ParamType = ptUnknown
-      end
       item
         DataType = ftUnknown
         Name = 'date_start'
@@ -1242,6 +1236,49 @@ object DataModuleMain: TDataModuleMain
       item
         DataType = ftUnknown
         Name = 'callid'
+        ParamType = ptUnknown
+      end>
+  end
+  object QCall_Check: TIBQuery
+    Database = DB
+    Transaction = Calls_Tr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id'
+      'from current_calls'
+      'where callapiid = :callid and call_time_end is not null')
+    Left = 96
+    Top = 152
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'callid'
+        ParamType = ptUnknown
+      end>
+  end
+  object QCallAcceptCheck: TIBQuery
+    Database = DB
+    Transaction = Calls_Tr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id'
+      'from current_calls'
+      'where callapiid = :callid and accept_phone = :phone')
+    Left = 152
+    Top = 152
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'callid'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'phone'
         ParamType = ptUnknown
       end>
   end

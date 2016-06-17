@@ -166,11 +166,21 @@ begin
   if cmd = 'checksession' then //завершен звонок
   begin
     if Assigned(frmCalling) then
-      frmCalling.CheckSession;
+      frmCalling.CheckSession
+    else
+    if Assigned(frmIncomeCallRoot) then
+      frmIncomeCallRoot.CheckSession
+    else
     if Assigned(frmClientResult) then
       frmClientResult.CheckSession;
+
+  end
+
+  else
+  if cmd = 'checkacceptcall' then //звонок принят
+  begin
     if Assigned(frmIncomeCallRoot) then
-      frmIncomeCallRoot.CheckSession;
+      frmIncomeCallRoot.CheckAccept;
   end
 
   else
@@ -294,7 +304,8 @@ end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  TfrmIncomeCallRoot.ShowIncomeCall;
+  if not DM.incomeCalling then
+    TfrmIncomeCallRoot.ShowIncomeCall;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);

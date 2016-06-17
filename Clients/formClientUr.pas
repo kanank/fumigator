@@ -40,6 +40,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure DSDataChange(Sender: TObject; Field: TField);
+    procedure Exit_bntClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -152,6 +153,16 @@ begin
       txtName.SetFocus;
     end;
   end;
+end;
+
+procedure TfrmClientUr.Exit_bntClick(Sender: TObject);
+begin
+  DS.DataSet.Cancel;
+  FrameClientExtUr.Cancel;
+  FramePerson.Cancel;
+  FramePhones.Cancel;
+  FrameUslugi.Cancel;
+  FrameAddress.Cancel;
 end;
 
 procedure TfrmClientUr.FormCreate(Sender: TObject);

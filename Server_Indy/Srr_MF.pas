@@ -8,7 +8,7 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents;
+  TelpinAPI, IBX.IBEvents, IdTCPServer, IdCmdTCPServer, IdCommandHandlers;
 
 type
   TMF = class(TForm)
@@ -42,7 +42,7 @@ type
     Label10: TLabel;
     Button3: TButton;
     CallEnent_Q: TIBQuery;
-    ServerSocket: TServerSocket;
+    ServerSocket0: TServerSocket;
     Label9: TLabel;
     edtSocketPort: TSpinEdit;
     Edit1: TEdit;
@@ -54,26 +54,28 @@ type
     IBEvents: TIBEvents;
     Button6: TButton;
     DebugMode_cb: TCheckBox;
+    ServerSocket: TIdCmdTCPServer;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
     procedure TestDb_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure ServerSocketClientConnect(Sender: TObject;
+    procedure ServerSocket0ClientConnect(Sender: TObject;
       Socket: TCustomWinSocket);
-    procedure ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
+    procedure ServerSocket0ClientRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button2Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure btnPhoneClick(Sender: TObject);
     procedure Button5Click(Sender: TObject);
-    procedure ServerSocketClientDisconnect(Sender: TObject;
+    procedure ServerSocket0ClientDisconnect(Sender: TObject;
       Socket: TCustomWinSocket);
     procedure IBEventsEventAlert(Sender: TObject; EventName: string;
       EventCount: Integer; var CancelAlerts: Boolean);
-    procedure ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
+    procedure ServerSocket0ClientError(Sender: TObject; Socket: TCustomWinSocket;
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     procedure Button6Click(Sender: TObject);
+    procedure ServerSocketCommandHandlers0Command(ASender: TIdCommand);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -86,7 +88,6 @@ type
     procedure CallFinished(Sender: TObject);
     function SendCommandToUser(atsnum, command: string): Boolean;
     function UpdateSession(ACallId: string): Boolean;
-    function AcceptCall(ACallId, APhone: string): boolean;
 
     function GetUserSocket(ATelNum: string): TCustomWinSocket;
  //  function CreateRWProc :TIBStoredProc;
@@ -113,37 +114,6 @@ implementation
 {$R *.dfm}
 uses
   System.DateUtils;
-
-function TMF.AcceptCall(ACallId, APhone: string): boolean;
-var Q :TIBQuery;
-begin
-  try
-    if not DB.Connected then
-      Exit;
-
-    Q := CreateRWQuery;
-    Q.SQL.Text := Format('update current_calls set accept_phone=''%s'' where callapiid=''%s'' and accept_phone is null', [APhone, ACallId]);
-    Log_memo.Lines.Add(Q.SQL.Text);
-    Try
-      Q.ExecSQL;
-      Result := true;
-    Except
-      on E : Exception do
-      begin
-        AddLog('#Ошибка захвата звонка: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
-        Result := false;
-      end;
-
-    End;
-
-    if Q.Transaction.Active then
-      Q.Transaction.Commit;
-
-  finally
-    Q.Transaction.Free;
-    FreeAndNil(Q);
-  end;
-end;
 
 function TMF.AddCallEvent(Params: TStrings): Boolean;
 var Q :TIBQuery;
@@ -452,11 +422,7 @@ begin
   else
 
   if Copy(EventName,1,13) = 'SESSION_CLOSE' then
-    SendCommandToUser('*', '#checksession:')
-
-  else
-  if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
-    SendCommandToUser('*', '#checkacceptcall:')
+    SendCommandToUser('*', '#checksession:');
 end;
 
 function TMF.ProkadoCommand(Params: TStrings): Boolean;
@@ -532,13 +498,13 @@ begin
   end;
 end;
 
-procedure TMF.ServerSocketClientConnect(Sender: TObject;
+procedure TMF.ServerSocket0ClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
    Log_memo.Lines.Add('Присоединение клиента');
 end;
 
-procedure TMF.ServerSocketClientDisconnect(Sender: TObject;
+procedure TMF.ServerSocket0ClientDisconnect(Sender: TObject;
   Socket: TCustomWinSocket);
 var
   i: Integer;
@@ -556,13 +522,13 @@ begin
   end;
 end;
 
-procedure TMF.ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
+procedure TMF.ServerSocket0ClientError(Sender: TObject; Socket: TCustomWinSocket;
   ErrorEvent: TErrorEvent; var ErrorCode: Integer);
 begin
   ErrorCode := 0;
 end;
 
-procedure TMF.ServerSocketClientRead(Sender: TObject; Socket: TCustomWinSocket);
+procedure TMF.ServerSocket0ClientRead(Sender: TObject; Socket: TCustomWinSocket);
 var
   p: Integer;
   s, cmd, arg: string;
@@ -597,6 +563,13 @@ begin
   end;
 end;
 
+procedure TMF.ServerSocketCommandHandlers0Command(ASender: TIdCommand);
+begin
+  FActiveUsers.AddObject(A, Socket);
+  Socket.SendText('#servertime:' + IntToStr(SecondOfTheDay(Now)));
+  Application.ProcessMessages;
+end;
+
 function TMF.SocketCommand(cmd, arg: string): Boolean;
 var
   p: Integer;
@@ -626,22 +599,7 @@ begin
        // Caller.OnCallFinish := CallFinished;
       end;
       Caller.DeleteCall(argList[0]);
-    end
-
-    else
-    if cmd = 'callaccept' then  // взяли звонок
-    begin
-      Log_memo.Lines.Add('callaccept');
-      AcceptCall(argList[0], argList[1]);
-
-      if not Assigned(Caller) then
-      begin
-        Caller := TPhoneCalls.Create(AccessToken);
-        //Caller.OnAfterCall  := AfterOutcomCall;
-       // Caller.OnCallFinish := CallFinished;
-      end;
-      Caller.PickUpCall(argList[0], argList[1]);
-    end
+    end;
   finally
     argList.Free;
   end;

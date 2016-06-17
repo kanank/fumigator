@@ -11,8 +11,10 @@ uses
 type
   TfrmIncomeCallRoot = class(TBaseForm)
     Timer1: TTimer;
+    Timer2: TTimer;
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure Timer2Timer(Sender: TObject);
   private
     fCallId: string;
     fClientClose: boolean;
@@ -20,6 +22,9 @@ type
     fCallResult: string;
     fClientId: Integer;
     fClientCallPrm: ClientCallParams;
+    fClientForm: TForm;
+    fCallCancel: Boolean;
+    fCallAccepted: Boolean;
     function GetCallFinished: boolean;
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
@@ -32,9 +37,13 @@ type
     property ClientId: Integer read fClientId write fClientId;
     property SessionClose: Boolean read fSessionClose write fSessionClose;
     property ClientCallPrm: ClientCallParams read fClientCallPrm write SetClientCallPrm;
+    property ClientForm: TForm read fClientForm write fClientForm;
+    property CallCancel: Boolean read fCallCancel write fCallCancel;
 
     procedure CallFinish;
     procedure CheckSession;
+    procedure CheckAccept;
+    procedure DoCallCancel;
 
     class function ShowIncomeCall: Boolean;
   end;
@@ -46,21 +55,92 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, IBX.IBQuery, formClientFiz, formClientUr;
+  DM_Main, IBX.IBQuery, formClientFiz, formClientUr,
+  formIncomeCalls, formIncomeCallsUr, formCallUnknown,
+  formCallEvent, frmMain;
 
 { TfrmIncomeCallRoot }
 
+procedure TfrmIncomeCallRoot.DoCallCancel;
+begin
+  fCallCancel := True;
+
+    
+  if Assigned(frmIncomeCall) then
+  begin
+     frmIncomeCall.ModalResult := mrCancel;
+    //FreeAndNil(frmIncomeCall);
+  end;
+  if Assigned(frmIncomeCallUr) then
+  begin
+    frmIncomeCallUr.ModalResult := mrCancel;
+    //frmIncomeCallUr.Close;
+    //FreeAndNil(frmIncomeCallUr);
+  end;
+  if Assigned(frmCallUnknown) then
+    frmCallUnknown.ModalResult := mrCancel;
+
+  //Self.ModalResult := mrCancel;
+  (*if Assigned(frmCallEvent) then
+    FreeAndNil(frmCallEvent); 
+       
+    fClientClose  := True;
+    fSessionClose := True;
+    Self.ModalResult := mrCancel;
+    Self.CloseModal;*)
+end;
+
 procedure TfrmIncomeCallRoot.CallFinish;
 begin
-  if fSessionClose and fClientClose then
+  if fCallCancel or (fSessionClose and not fCallAccepted) then
+  begin
+    ModalResult := mrCancel;
+    Exit;
+  end;
+    
+  if fSessionClose and fClientClose  then
   begin
     fCallResult := DM.FinishSession(CallId, ClientId);
     ModalResult := mrOk;
   end;
 end;
 
+procedure TfrmIncomeCallRoot.CheckAccept;
+begin
+  if fCallCancel then
+    ModalResult := mrCancel
+  else 
+  if Assigned(frmCallEvent) and (frmCallEvent.ModalResult <> mrCancel) then
+  begin   
+    if not DM.CheckAcceptCall(CallId) then
+    begin
+      fCallCancel := True;
+      frmCallEvent.ModalResult := mrCancel;
+      Exit; 
+    end
+    else 
+      fCallAccepted := True;
+  end;
+end;
+
 procedure TfrmIncomeCallRoot.CheckSession;
 begin
+  if fCallCancel then
+    ModalResult := mrCancel
+  else 
+  if Assigned(frmCallEvent) and (frmCallEvent.ModalResult = mrNone) then
+  begin   
+    if not fCallAccepted and DM.CheckCloseCall(CallId) then
+    begin
+      frmCallEvent.ModalResult := mrCancel;
+      Exit; 
+    end;
+  end;
+    
+  if Assigned(frmCallEvent) and
+     ((frmCallEvent.ModalResult = mrNone) or 
+     (frmCallEvent.ModalResult = mrCancel)) then
+    Exit;
   fSessionClose := DM.CheckCloseSession(CallId);
   CallFinish;
 end;
@@ -112,7 +192,7 @@ begin
          Close;
          if Transaction.InTransaction then
            Transaction.CommitRetaining;
-         ParamByName('ATS_Num').AsString := DM.CurrentUserSets.ATS_Phone_Num;
+         //ParamByName('ATS_Num').AsString := DM.CurrentUserSets.ATS_Phone_Num;
          ParamByName('date_start').AsDateTime := DM.DateStart;
 
          Open;
@@ -133,11 +213,11 @@ begin
            //ExtPrm.CallParam := CLP;
 
            //берем звонок в обработку
-           if not DM.SetReadedCall(id) then
-           begin
-             // ошибка
-             exit;
-           end;
+//           if not DM.SetReadedCall(id) then
+//           begin
+//             // ошибка
+//             exit;
+//           end;
 
            DM.incomeCalling := True;
 
@@ -175,6 +255,7 @@ begin
 
   finally
     DM.incomeCalling := False;
+    FreeAndNil(frmCallEvent);
     FreeAndNil(frmIncomeCallRoot);
   end;
 end;
@@ -190,6 +271,7 @@ begin
   Timer1.Enabled := False;
  DM.GetDataset(DM.Clients);
  try
+  Timer2.Enabled := True;
   if fClientCallPrm.Client_Type = '' then
   begin  // Вызываем неизвестный звонок.
    ExtPrm.CallParam := @fClientCallPrm;
@@ -213,6 +295,20 @@ begin
  finally
    ClientClose := True;
  end;
+end;
+
+procedure TfrmIncomeCallRoot.Timer2Timer(Sender: TObject);
+begin
+  Timer2.Enabled := False;
+  frmCallEvent := TfrmCallEvent.Create(nil);
+  frmCallEvent.ShowModal;
+
+  if frmCallEvent.ModalResult = mrCancel then
+    DoCallCancel
+  else
+  if frmCallEvent.ModalResult = mrOk then
+     formMain.ClientSocket.Socket.SendText('#callaccept:' + CallId +',' +DM.CurrentUserSets.ATS_Phone_Num);
+  
 end;
 
 end.

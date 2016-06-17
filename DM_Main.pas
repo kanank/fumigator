@@ -70,6 +70,8 @@ type
     DSWorkerTypeByDate: TDataSource;
     WorkerTypeByDate_upd: TIBUpdateSQL;
     QSession_Check: TIBQuery;
+    QCall_Check: TIBQuery;
+    QCallAcceptCheck: TIBQuery;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -106,6 +108,8 @@ type
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function CheckCloseSession(callid: string): boolean; //проверка закрытия сессии
+    function CheckCloseCall(callid: string): boolean; //проверка окончания непринятого звонка
+    function CheckAcceptCall(callid: string): boolean; //проверка захвата звонка
     function FinishSession(callid: string; client_id: integer): string;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
@@ -687,6 +691,43 @@ begin
   except
     if QSession_Check.Transaction.Active then
      QSession_Check.Transaction.RollbackRetaining;
+  end;
+end;
+
+function TDataModuleMain.CheckAcceptCall(callid: string): boolean;
+begin
+  Result := false;
+  QCallAcceptCheck.Close;
+  QCallAcceptCheck.ParamByName('callid').AsString := CallId;
+  QCallAcceptCheck.ParamByName('phone').AsString := CurrentUserSets.ATS_Phone_Num;
+  if QCallAcceptCheck.Transaction.Active then
+    QCallAcceptCheck.Transaction.CommitRetaining;
+  try
+    QCallAcceptCheck.Open;
+    Result := (QCallAcceptCheck.RecordCount > 0);
+    if QCallAcceptCheck.Transaction.Active then
+      QCallAcceptCheck.Transaction.CommitRetaining;
+  except
+    if QCallAcceptCheck.Transaction.Active then
+     QCallAcceptCheck.Transaction.RollbackRetaining;
+  end;
+end;
+
+function TDataModuleMain.CheckCloseCall(callid: string): boolean;
+begin
+  Result := false;
+  QCall_Check.Close;
+  QCall_Check.ParamByName('callid').AsString := CallId;
+  if QCall_Check.Transaction.Active then
+    QCall_Check.Transaction.CommitRetaining;
+  try
+    QCall_Check.Open;
+    Result := (QCall_Check.RecordCount > 0);
+    if QCall_Check.Transaction.Active then
+      QCall_Check.Transaction.CommitRetaining;
+  except
+    if QCall_Check.Transaction.Active then
+     QCall_Check.Transaction.RollbackRetaining;
   end;
 end;
 

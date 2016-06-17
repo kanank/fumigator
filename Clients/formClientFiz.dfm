@@ -66,6 +66,7 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitWidth = 734
     inherited Exit_bnt: TRzButton
       Left = 600
+      OnClick = Exit_bntClick
       ExplicitLeft = 600
     end
     object butOK: TRzButton
@@ -464,6 +465,7 @@ inherited frmClientFiz: TfrmClientFiz
     end
   end
   object DS: TDataSource
+    AutoEdit = False
     Left = 352
     Top = 319
   end

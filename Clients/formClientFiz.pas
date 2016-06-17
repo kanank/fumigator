@@ -32,6 +32,7 @@ type
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
     procedure FramePersonDSDataChange(Sender: TObject; Field: TField);
+    procedure Exit_bntClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -123,6 +124,15 @@ begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
   end;
+end;
+
+procedure TfrmClientFiz.Exit_bntClick(Sender: TObject);
+begin
+  DS.DataSet.Cancel;
+  FramePerson.Cancel;
+  FramePhones.Cancel;
+  FrameUslugi.Cancel;
+  FrameAddress.Cancel;
 end;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);

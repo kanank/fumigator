@@ -434,6 +434,7 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
+    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -443,6 +444,7 @@ object MF: TMF
     Top = 80
   end
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -461,12 +463,13 @@ object MF: TMF
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      
-        'execute procedure CALL_EVENT_CREATE(:CALLFLOW, :CALLID, :CALLERI' +
-        'DNUM, :CALLERIDNAME,'
+      '  INSERT INTO CALL_EVENTS'
+      ' (CALLFLOW, CALLID, CALLERIDNUM, CALLERIDNAME,'
+      ' CALLEDDID, CALLEDEXTENSION, CALLSTATUS, CALLEREXTENSION,'
+      ' CALLEDNUMBER, CALLAPIID)'
+      ' VALUES (:CALLFLOW, :CALLID, :CALLERIDNUM, :CALLERIDNAME,'
       ' :CALLEDDID, :CALLEDEXTENSION, :CALLSTATUS, :CALLEREXTENSION,'
-      ' :CALLEDNUMBER, :CALLAPIID);'
-      '')
+      ' :CALLEDNUMBER, :CALLAPIID);')
     Left = 385
     Top = 143
     ParamData = <
@@ -521,14 +524,14 @@ object MF: TMF
         ParamType = ptUnknown
       end>
   end
-  object ServerSocket: TServerSocket
+  object ServerSocket0: TServerSocket
     Active = False
     Port = 1025
     ServerType = stNonBlocking
-    OnClientConnect = ServerSocketClientConnect
-    OnClientDisconnect = ServerSocketClientDisconnect
-    OnClientRead = ServerSocketClientRead
-    OnClientError = ServerSocketClientError
+    OnClientConnect = ServerSocket0ClientConnect
+    OnClientDisconnect = ServerSocket0ClientDisconnect
+    OnClientRead = ServerSocket0ClientRead
+    OnClientError = ServerSocket0ClientError
     Left = 577
     Top = 265
   end
@@ -536,7 +539,6 @@ object MF: TMF
     AutoRegister = False
     Database = DB
     Events.Strings = (
-      'ACCEPT_PHONE'
       'INCOME_CALL'
       'SESSION_CLOSE'
       'SESSION_OPEN')
@@ -544,5 +546,39 @@ object MF: TMF
     OnEventAlert = IBEventsEventAlert
     Left = 377
     Top = 73
+  end
+  object ServerSocket: TIdCmdTCPServer
+    Bindings = <>
+    DefaultPort = 1025
+    CommandHandlers = <
+      item
+        CmdDelimiter = ':'
+        Command = '#setphone'
+        Disconnect = False
+        Name = 'TIdCommandSetPhone'
+        NormalReply.Code = '200'
+        ParamDelimiter = ' '
+        ParseParams = True
+        Tag = 0
+        OnCommand = ServerSocketCommandHandlers0Command
+      end>
+    ExceptionReply.Code = '500'
+    ExceptionReply.Text.Strings = (
+      'Unknown Internal Error')
+    Greeting.Code = '200'
+    Greeting.Text.Strings = (
+      'Welcome')
+    HelpReply.Code = '100'
+    HelpReply.Text.Strings = (
+      'Help follows')
+    MaxConnectionReply.Code = '300'
+    MaxConnectionReply.Text.Strings = (
+      'Too many connections. Try again later.')
+    ReplyTexts = <>
+    ReplyUnknownCommand.Code = '400'
+    ReplyUnknownCommand.Text.Strings = (
+      'Unknown Command')
+    Left = 472
+    Top = 304
   end
 end

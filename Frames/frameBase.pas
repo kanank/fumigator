@@ -58,8 +58,11 @@ var
 begin
   Result := False;
   try
-    DS.DataSet.Cancel;
-    TIBQuery(DS.DataSet).CancelUpdates;
+    if Assigned(DS.DataSet) then
+    begin
+      DS.DataSet.Cancel;
+      TIBQuery(DS.DataSet).CancelUpdates;
+    end;
     Result := True;
   except
     Result := False;

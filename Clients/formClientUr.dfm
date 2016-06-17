@@ -27,6 +27,7 @@ inherited frmClientUr: TfrmClientUr
     end
     inherited Exit_bnt: TRzButton
       Left = 595
+      OnClick = Exit_bntClick
       ExplicitLeft = 595
     end
     object butOK: TRzButton

@@ -141,9 +141,9 @@ procedure TfrmSessions.GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
 begin
  ColumnID := TcxGridDBTableView(Sender).GetColumnByFieldName('DURATION').Index;
  Cellvalue := AViewInfo.GridRecord.Values[ColumnID];
- if (Cellvalue < 60000) then
+ if (Cellvalue > 40000) then
   begin
-    ACanvas.Canvas.Brush.Color := $0097F0F2; //$00F1A283;
+    ACanvas.Canvas.Brush.Color := clMoneyGreen; //$00F1A283;
   end;
 end;
 

@@ -751,6 +751,7 @@ begin
     ShowModal;
     if Q.Modified then
     try
+      Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
       Q.Post;
       if Q.Transaction.Active then
          Q.Transaction.CommitRetaining;

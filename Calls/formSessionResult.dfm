@@ -125,7 +125,8 @@ inherited frmSessionResult: TfrmSessionResult
       'worker_id = :worker_id,'
       'client_id = :client_id,'
       'ishod = :ishod,'
-      'result = :result'
+      'result = :result,'
+      'localnum = :localnum'
       'where id=:id')
     Left = 136
     Top = 80

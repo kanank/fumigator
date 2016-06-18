@@ -4,7 +4,6 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 924
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -136
   ExplicitWidth = 940
   ExplicitHeight = 445
   PixelsPerInch = 96
@@ -146,7 +145,7 @@ inherited frmSessions: TfrmSessions
       end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #8470' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1103
-        DataBinding.FieldName = 'CALLEDNUM'
+        DataBinding.FieldName = 'CALLEDN'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
         Width = 86
@@ -323,10 +322,14 @@ inherited frmSessions: TfrmSessions
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select sessions.*,'
+      
+        'select sessions.*, case when calltype=0 then localnum else CALLE' +
+        'DNUM end CALLEDN,'
       ' (select datestring from diffdatestr(starttime, endtime)) '
       'from sessions'
-      'where starttime >=:date1 and  starttime <:date2')
+      
+        'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
+        'ot null')
     Left = 72
     Top = 80
     ParamData = <

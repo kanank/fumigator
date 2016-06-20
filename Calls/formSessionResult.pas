@@ -19,6 +19,7 @@ type
     Q: TIBQuery;
     Q_upd: TIBUpdateSQL;
     Cancel_btn: TRzButton;
+    QApi: TIBQuery;
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure Cancel_btnClick(Sender: TObject);
   private

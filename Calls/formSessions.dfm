@@ -104,6 +104,7 @@ inherited frmSessions: TfrmSessions
     Width = 924
     Height = 265
     Align = alClient
+    PopupMenu = GridPopup
     ExplicitTop = 93
     ExplicitWidth = 924
     ExplicitHeight = 265
@@ -391,5 +392,21 @@ inherited frmSessions: TfrmSessions
     DataSet = MemHeader
     Left = 496
     Top = 304
+  end
+  object GridPopup: TPopupMenu
+    Left = 352
+    Top = 256
+    object N1: TMenuItem
+      Caption = #1060#1080#1083#1100#1090#1088#1099
+      object N2: TMenuItem
+        Caption = #1058#1086#1083#1100#1082#1086' '#1086#1090#1074#1077#1090#1080#1074#1096#1080#1077
+      end
+      object N401: TMenuItem
+        Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100#1102' '#1073#1086#1083#1077#1077' 40'#1089#1077#1082
+      end
+      object N3: TMenuItem
+        Caption = #1057#1085#1103#1090#1100' '#1074#1089#1077' '#1092#1080#1083#1100#1090#1088#1099
+      end
+    end
   end
 end

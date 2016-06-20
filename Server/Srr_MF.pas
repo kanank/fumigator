@@ -7,8 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask,
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
-  IBX.IBCustomDataSet, IBX.IBQury, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents, IBX.IBQuery;
+  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
+  TelpinAPI, IBX.IBEvents;
 
 type
   TMF = class(TForm)
@@ -251,7 +251,7 @@ end;
 
 procedure TMF.AfterOutcomCall(Sender: TObject);
 begin
-  SendCommandToUser(Caller.Extension, '#callid:' + Caller.CallId);
+  SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
 end;
 
 procedure TMF.btnPhoneClick(Sender: TObject);
@@ -489,6 +489,7 @@ begin
       Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
 
       try
+        Log_memo.Lines.Add('Ищем сокет: ' + command);
         socket := GetUserSocket(atsnum);
       except
         Result := False;
@@ -507,7 +508,9 @@ begin
           Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
           Exception(ExceptObject).Message);
         end;
-      end;
+      end
+      else
+        Log_memo.Lines.Add('Сокет не найден: ' + command);
     end
     else
     begin
@@ -637,7 +640,7 @@ begin
       if not Assigned(Caller) then
       begin
         Caller := TPhoneCalls.Create(AccessToken);
-        //Caller.OnAfterCall  := AfterOutcomCall;
+        Caller.OnAfterCall  := AfterOutcomCall;
        // Caller.OnCallFinish := CallFinished;
       end;
       Caller.PickUpCall(argList[0], argList[1]);

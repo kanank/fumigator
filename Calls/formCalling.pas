@@ -61,7 +61,7 @@ uses
 
 procedure TfrmCalling.CallFinish;
 begin
-  Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
+  Self.CallResult := DM.FinishSession('', Self.DS.Dataset.FieldByName('ID').AsInteger, CallId);
   ModalResult := mrOk;
   (*frmSessionResult := TfrmSessionResult.Create(nil);
   with frmSessionResult do
@@ -93,7 +93,7 @@ end;
 
 procedure TfrmCalling.CheckSession;
 begin
-  if DM.CheckCloseSession(CallId) then
+  if DM.CheckCloseSession('', CallId) then
     CallFinish;
 
   (*Q.Close;

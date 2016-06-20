@@ -105,7 +105,7 @@ inherited frmSessionResult: TfrmSessionResult
     SQL.Strings = (
       
         'select id,worker_id, client_id, callid, ishod, result, callresul' +
-        't'
+        't, localnum'
       'from sessions'
       'where callid = :callid')
     UpdateObject = Q_upd
@@ -128,7 +128,29 @@ inherited frmSessionResult: TfrmSessionResult
       'result = :result,'
       'localnum = :localnum'
       'where id=:id')
-    Left = 136
+    Left = 160
     Top = 80
+  end
+  object QApi: TIBQuery
+    Database = DataModuleMain.DB
+    Transaction = DataModuleMain.Calls_Tr
+    BeforeOpen = QBeforeOpen
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select id,worker_id, client_id, callid, ishod, result, callresul' +
+        't, localnum'
+      'from sessions'
+      'where callapiid = :callid')
+    Left = 112
+    Top = 80
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'callid'
+        ParamType = ptUnknown
+      end>
   end
 end

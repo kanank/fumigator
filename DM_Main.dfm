@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 487
   Width = 790
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -950,6 +952,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1087,7 +1090,8 @@ object DataModuleMain: TDataModuleMain
       'CALLAPIID,'
       'CALL_TIME'
       ' from current_calls c'
-      ' where char_length(call_Num) >2  and readed=0'
+      ' where  right(c.calledextension,4) ='#39'*'#39'|| :ATS_Num and'
+      'char_length(call_Num) >2  and readed=0'
       '  and missed=0 and create_date > :date_start and '
       '  call_time_end is null'
       'order by id desc')
@@ -1096,11 +1100,17 @@ object DataModuleMain: TDataModuleMain
     ParamData = <
       item
         DataType = ftUnknown
+        Name = 'ATS_Num'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
         Name = 'date_start'
         ParamType = ptUnknown
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1246,7 +1256,7 @@ object DataModuleMain: TDataModuleMain
       'select id'
       'from current_calls'
       'where callapiid = :callid and call_time_end is not null')
-    Left = 104
+    Left = 168
     Top = 152
     ParamData = <
       item
@@ -1265,7 +1275,7 @@ object DataModuleMain: TDataModuleMain
       'select id'
       'from current_calls'
       'where callapiid = :callid and accept_phone = :phone')
-    Left = 184
+    Left = 248
     Top = 152
     ParamData = <
       item
@@ -1287,7 +1297,7 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from check_session(:callid)')
-    Left = 256
+    Left = 320
     Top = 152
     ParamData = <
       item
@@ -1442,6 +1452,25 @@ object DataModuleMain: TDataModuleMain
           07FFFE0003FFFE0003FFFE0001FFFE0001FFFE0001FFFE0001FFFE0001FFFE00
           01FFFE0001FFFF0003FFFF8007FFFF8007FFFFC00FFFFFE01FFFFFF03FFFFFF8
           FFFF}
+      end>
+  end
+  object QSession_CheckApi: TIBQuery
+    Database = DB
+    Transaction = Calls_Tr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id'
+      'from sessions'
+      'where callapiid = :callapiid and endtime > starttime')
+    Left = 96
+    Top = 152
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'callapiid'
+        ParamType = ptUnknown
       end>
   end
 end

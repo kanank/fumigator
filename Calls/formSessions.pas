@@ -11,7 +11,7 @@ uses
   cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses,
   cxContainer, Vcl.ComCtrls, dxCore, cxDateUtils, cxTextEdit, cxMaskEdit,
   cxDropDownEdit, cxCalendar, Vcl.StdCtrls, IBX.IBCustomDataSet, IBX.IBQuery,
-  cxDBLookupComboBox, dxmdaset;
+  cxDBLookupComboBox, dxmdaset, Vcl.Menus;
 
 type
   TfrmSessions = class(TSprForm)
@@ -53,6 +53,11 @@ type
     MemHeaderSUM_DURATION: TDateTimeField;
     MemHeaderAVG_DURATION: TDateTimeField;
     GridViewColumn11: TcxGridDBColumn;
+    GridPopup: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N401: TMenuItem;
+    N3: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -145,6 +150,12 @@ begin
   begin
     ACanvas.Canvas.Brush.Color := clMoneyGreen; //$00F1A283;
   end;
+ ColumnID := TcxGridDBTableView(Sender).GetColumnByFieldName('ISHOD').Index;
+ Cellvalue := AViewInfo.GridRecord.Values[ColumnID];
+ if not VarIsNull(Cellvalue) then
+   ACanvas.Canvas.Font.Style := [fsBold]
+ else
+   ACanvas.Canvas.Font.Style := [];
 end;
 
 function TfrmSessions.MillesecondToDateTime(ms: int64): TDateTime;

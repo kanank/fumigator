@@ -96,10 +96,13 @@ procedure TfrmIncomeCallRoot.CallFinish;
 begin
   if fCallCancel or (fSessionClose and not fCallAccepted) then
   begin
+    if Assigned(frmCallEvent) then
+      frmCallEvent.ModalResult := mrCancel;
+
     ModalResult := mrCancel;
     Exit;
   end;
-    
+
   if fSessionClose and fClientClose  then
   begin
     fCallResult := DM.FinishSession(CallId, ClientId);
@@ -126,6 +129,8 @@ begin
 end;
 
 procedure TfrmIncomeCallRoot.CheckSession;
+var
+  accept: boolean;
 begin
   (*if fCallCancel then
     ModalResult := mrCancel
@@ -144,7 +149,15 @@ begin
      (frmCallEvent.ModalResult = mrCancel)) then
     Exit;*)
   //fSessionClose := DM.CheckCloseSession(CallId);
-  DM.CheckSession(CallId, fSessionClose, fCallAccepted);
+  DM.CheckSession(CallId, fSessionClose, accept);
+  if accept then //приняли звонок
+  begin
+    fCallAccepted := true;
+    if Assigned(frmCallEvent) then
+      frmCallEvent.ModalResult := mrOk
+    else
+      DoCallCancel;
+  end;
   CallFinish;
 end;
 
@@ -195,7 +208,7 @@ begin
          Close;
          if Transaction.InTransaction then
            Transaction.CommitRetaining;
-         //ParamByName('ATS_Num').AsString := DM.CurrentUserSets.ATS_Phone_Num;
+         ParamByName('ATS_Num').AsString := DM.CurrentUserSets.ATS_Phone_Num;
          ParamByName('date_start').AsDateTime := DM.DateStart;
 
          Open;
@@ -272,7 +285,7 @@ var
 begin
   extPrm.Setup;
 
-  Timer1.Enabled := False;
+ Timer1.Enabled := False;
  DM.GetDataset(DM.Clients);
  try
   Timer2.Enabled := True;
@@ -304,8 +317,13 @@ end;
 procedure TfrmIncomeCallRoot.Timer2Timer(Sender: TObject);
 begin
   Timer2.Enabled := False;
+
   frmCallEvent := TfrmCallEvent.Create(nil);
-  frmCallEvent.ShowModal;
+
+  if not fCallAccepted then
+    frmCallEvent.ShowModal
+  else
+    frmCallEvent.ModalResult := mrOk;
 
   if frmCallEvent.ModalResult = mrCancel then
     DoCallCancel

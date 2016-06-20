@@ -186,7 +186,7 @@ begin
       if Q.Transaction.Active then
          Q.Transaction.CommitRetaining;
       Result := True;
-      fResultSaved := True;;
+      fResultSaved := True;
     except
        if Q.Transaction.Active then
          Q.Transaction.RollbackRetaining;

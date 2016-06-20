@@ -74,6 +74,7 @@ type
     QCallAcceptCheck: TIBQuery;
     QSessionCheckAct: TIBQuery;
     imgListTray: TcxImageList;
+    QSession_CheckApi: TIBQuery;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -109,12 +110,12 @@ type
     function CallingWithResult(ATSnumber, Aphone: string; client_id: integer): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
-    function CheckCloseSession(callid: string): boolean; //проверка закрытия сессии
+    function CheckCloseSession(callid: string; callapiid: string = ''): boolean; //проверка закрытия сессии
     function CheckCloseCall(callid: string): boolean; //проверка окончания непринятого звонка
     function CheckAcceptCall(callid: string): boolean; //проверка захвата звонка
     procedure CheckSession(callid: string; var finished, accepted: Boolean); //проверка сессии на окончание и приём
 
-    function FinishSession(callid: string; client_id: integer): string;
+    function FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
     function GetClientCallParams(TelNum: string): ClientCallParams;
@@ -520,6 +521,7 @@ begin
 
   finally
     CliInfo.Free;
+    FreeAndNil(frmCalling);
   end;
 end;
 
@@ -680,21 +682,41 @@ begin
   end;
 end;
 
-function TDataModuleMain.CheckCloseSession(callid: string): boolean;
+function TDataModuleMain.CheckCloseSession(callid: string; callapiid: string = ''): boolean;
 begin
   Result := false;
-  QSession_Check.Close;
-  QSession_Check.ParamByName('callid').AsString := CallId;
-  if QSession_Check.Transaction.Active then
-    QSession_Check.Transaction.CommitRetaining;
-  try
-    QSession_Check.Open;
-    Result := (QSession_Check.RecordCount > 0);
+  if callapiid = '' then
+  begin
+    QSession_Check.Close;
+    QSession_Check.ParamByName('callid').AsString := CallId;
     if QSession_Check.Transaction.Active then
       QSession_Check.Transaction.CommitRetaining;
-  except
-    if QSession_Check.Transaction.Active then
-     QSession_Check.Transaction.RollbackRetaining;
+    try
+      QSession_Check.Open;
+      Result := (QSession_Check.RecordCount > 0);
+      if QSession_Check.Transaction.Active then
+        QSession_Check.Transaction.CommitRetaining;
+    except
+      if QSession_Check.Transaction.Active then
+       QSession_Check.Transaction.RollbackRetaining;
+    end;
+  end
+
+  else //CALLAPIID
+  begin
+    QSession_CheckApi.Close;
+    QSession_CheckApi.ParamByName('callapiid').AsString := CallapiId;
+    if QSession_CheckApi.Transaction.Active then
+      QSession_CheckApi.Transaction.CommitRetaining;
+    try
+      QSession_CheckApi.Open;
+      Result := (QSession_CheckApi.RecordCount > 0);
+      if QSession_CheckApi.Transaction.Active then
+        QSession_CheckApi.Transaction.CommitRetaining;
+    except
+      if QSession_CheckApi.Transaction.Active then
+       QSession_CheckApi.Transaction.RollbackRetaining;
+    end;
   end;
 end;
 
@@ -756,33 +778,46 @@ begin
   end;
 end;
 
-function TDataModuleMain.FinishSession(callid: string; client_id: integer): string;
+function TDataModuleMain.FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
+var
+  _Q: TIBQuery;
 begin
   frmSessionResult := TfrmSessionResult.Create(nil);
   with frmSessionResult do
   try
-    if Q.Transaction.Active then
-      Q.Transaction.CommitRetaining;
+    if callapiid = '' then
+      _Q := Q
+    else
+      _Q := QApi;
+    _Q.UpdateObject := Q_upd;
+    DS.DataSet := _Q;
 
-    Q.ParamByName('callid').AsString := Callid;
-    Q.Open;
-    Q.Edit;
-    Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-    Q.FieldByName('client_id').AsInteger := client_id;
+    if _Q.Transaction.Active then
+      _Q.Transaction.CommitRetaining;
+
+    if callapiid = '' then
+      _Q.ParamByName('callid').AsString := Callid
+    else
+      _Q.ParamByName('callid').AsString := callapiid;
+
+    _Q.Open;
+    _Q.Edit;
+    _Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+    _Q.FieldByName('client_id').AsInteger := client_id;
     if client_id = 0 then //клиент не был создан
-      Q.FieldByName('ishod').AsString := 'Карточка клиента не создана';
+      _Q.FieldByName('ishod').AsString := 'Карточка клиента не создана';
 
-    Result := Q.FieldByName('callresult').AsString;
+    Result := _Q.FieldByName('callresult').AsString;
     ShowModal;
-    if Q.Modified then
+    if _Q.Modified then
     try
-      //Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
-      Q.Post;
-      if Q.Transaction.Active then
-         Q.Transaction.CommitRetaining;
+      _Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
+      _Q.Post;
+      if _Q.Transaction.Active then
+         _Q.Transaction.CommitRetaining;
     except
-       if Q.Transaction.Active then
-         Q.Transaction.RollbackRetaining;
+       if _Q.Transaction.Active then
+         _Q.Transaction.RollbackRetaining;
     end;
   finally
     FreeAndNil(frmSessionResult);

@@ -204,4 +204,24 @@ inherited frmMain: TfrmMain
     Left = 576
     Top = 64
   end
+  object TrayIcon: TRzTrayIcon
+    Hint = #1060#1091#1084#1080#1075#1072#1090#1086#1088
+    PopupMenu = TrayMenu
+    Icons = DataModuleMain.imgListTray
+    PopupMenuOn = ticRightClick
+    Left = 345
+    Top = 266
+  end
+  object TrayMenu: TPopupMenu
+    Left = 280
+    Top = 264
+    object miShowMain: TMenuItem
+      Caption = #1042#1086#1089#1089#1090#1072#1085#1086#1074#1080#1090#1100
+      OnClick = miShowMainClick
+    end
+    object miExit: TMenuItem
+      Caption = #1042#1099#1093#1086#1076
+      OnClick = miExitClick
+    end
+  end
 end

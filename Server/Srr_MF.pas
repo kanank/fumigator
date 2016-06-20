@@ -7,8 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask,
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
-  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents;
+  IBX.IBCustomDataSet, IBX.IBQury, SyncObjs, System.Win.ScktComp,
+  TelpinAPI, IBX.IBEvents, IBX.IBQuery;
 
 type
   TMF = class(TForm)
@@ -671,7 +671,7 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
 
     if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
     begin
-      if (ServerSocket.Socket.ActiveConnections > 0) then
+      //if (ServerSocket.Socket.ActiveConnections > 0) then
         if AddCallEvent(ARequestInfo.Params) = true then
           AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
              + ARequestInfo.Params.Values['CallStatus']);

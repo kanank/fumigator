@@ -17,6 +17,7 @@ type
     procedure Timer2Timer(Sender: TObject);
   private
     fCallId: string;
+    fCallApiId: string;
     fClientClose: boolean;
     fSessionClose: Boolean;
     fCallResult: string;
@@ -25,13 +26,14 @@ type
     fClientForm: TForm;
     fCallCancel: Boolean;
     fCallAccepted: Boolean;
-    function GetCallFinished: boolean;
+    function  GetCallFinished: boolean;
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
     procedure SetClientCallPrm(AValue: ClientCallParams);
   public
     property CallResult: string read fCallResult write SetCallResult;
     property CallId: string read fCallId write fCallId;
+    property CallApiId: string read fCallApiId write fCallApiId;
     property CallFinished: boolean read GetCallFinished;
     property ClientClose: boolean read fClientClose write SetClientClose;
     property ClientId: Integer read fClientId write fClientId;
@@ -125,7 +127,7 @@ end;
 
 procedure TfrmIncomeCallRoot.CheckSession;
 begin
-  if fCallCancel then
+  (*if fCallCancel then
     ModalResult := mrCancel
   else 
   if Assigned(frmCallEvent) and (frmCallEvent.ModalResult = mrNone) then
@@ -140,8 +142,9 @@ begin
   if Assigned(frmCallEvent) and
      ((frmCallEvent.ModalResult = mrNone) or 
      (frmCallEvent.ModalResult = mrCancel)) then
-    Exit;
-  fSessionClose := DM.CheckCloseSession(CallId);
+    Exit;*)
+  //fSessionClose := DM.CheckCloseSession(CallId);
+  DM.CheckSession(CallId, fSessionClose, fCallAccepted);
   CallFinish;
 end;
 
@@ -222,7 +225,8 @@ begin
            DM.incomeCalling := True;
 
            frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
-           frmIncomeCallRoot.CallId         := FieldByName('CALLAPIID').AsString;
+           frmIncomeCallRoot.CallId         := FieldByName('CALLID').AsString;
+           frmIncomeCallRoot.CallApiId      := FieldByName('CALLAPIID').AsString;
            frmIncomeCallRoot.ClientCallPrm  := ClP;
            frmIncomeCallRoot.ClientId       := ClP.Client_id;
            frmIncomeCallRoot.ClientClose    := false;

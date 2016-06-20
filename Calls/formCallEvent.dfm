@@ -61,9 +61,10 @@ object frmCallEvent: TfrmCallEvent
     Font.Style = []
     ParentFont = False
     TabOrder = 0
+    Visible = False
   end
   object btnDecline: TRzButton
-    Left = 229
+    Left = 137
     Top = 75
     Width = 105
     Height = 36

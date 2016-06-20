@@ -434,6 +434,7 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
+    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -443,6 +444,7 @@ object MF: TMF
     Top = 80
   end
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'

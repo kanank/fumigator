@@ -72,6 +72,8 @@ type
     QSession_Check: TIBQuery;
     QCall_Check: TIBQuery;
     QCallAcceptCheck: TIBQuery;
+    QSessionCheckAct: TIBQuery;
+    imgListTray: TcxImageList;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -110,6 +112,8 @@ type
     function CheckCloseSession(callid: string): boolean; //проверка закрытия сессии
     function CheckCloseCall(callid: string): boolean; //проверка окончания непринятого звонка
     function CheckAcceptCall(callid: string): boolean; //проверка захвата звонка
+    procedure CheckSession(callid: string; var finished, accepted: Boolean); //проверка сессии на окончание и приём
+
     function FinishSession(callid: string; client_id: integer): string;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
@@ -694,6 +698,27 @@ begin
   end;
 end;
 
+procedure TDataModuleMain.CheckSession(callid: string; var finished, accepted: Boolean);
+begin
+  QSessionCheckAct.Close;
+  QSessionCheckAct.ParamByName('callid').AsString := CallId;
+  if QSessionCheckAct.Transaction.Active then
+    QSessionCheckAct.Transaction.CommitRetaining;
+  try
+    QSessionCheckAct.Open;
+    if QSessionCheckAct.RecordCount > 0 then
+    begin
+      finished := (QSessionCheckAct.FieldByName('finished').AsInteger = 1);
+      accepted := (QSessionCheckAct.FieldByName('accept').AsInteger = 1);
+    end;
+    if QSessionCheckAct.Transaction.Active then
+      QSessionCheckAct.Transaction.CommitRetaining;
+  except
+    if QSessionCheckAct.Transaction.Active then
+     QSessionCheckAct.Transaction.RollbackRetaining;
+  end;
+end;
+
 function TDataModuleMain.CheckAcceptCall(callid: string): boolean;
 begin
   Result := false;
@@ -751,7 +776,7 @@ begin
     ShowModal;
     if Q.Modified then
     try
-      Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
+      //Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
       Q.Post;
       if Q.Transaction.Active then
          Q.Transaction.CommitRetaining;

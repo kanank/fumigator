@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
-  Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp;
+  Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray;
 
 const
   WM_SHOWMSG = WM_USER + 100;
@@ -36,6 +36,10 @@ type
     lblSocket: TLabel;
     RzMenuButton3: TRzMenuButton;
     RzMenuButton4: TRzMenuButton;
+    TrayIcon: TRzTrayIcon;
+    TrayMenu: TPopupMenu;
+    miShowMain: TMenuItem;
+    miExit: TMenuItem;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -53,7 +57,10 @@ type
     procedure RzMenuButton3Click(Sender: TObject);
     procedure RzMenuButton4Click(Sender: TObject);
     procedure FizClients_miClick(Sender: TObject);
+    procedure miExitClick(Sender: TObject);
+    procedure miShowMainClick(Sender: TObject);
   private
+    fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
   public
@@ -208,8 +215,11 @@ end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  inherited;
+  //inherited;
   //Application.MainForm.Close;
+  CanClose := fCanClose;
+  if not fCanClose then
+    TrayIcon.MinimizeApp;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
@@ -218,6 +228,21 @@ begin
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')';
   DoSocketConnect;
+end;
+
+procedure TfrmMain.miExitClick(Sender: TObject);
+begin
+  if Application.MessageBox('Вы действительно хотите закрыть программу?',
+    'Выход из программы', MB_YESNO + MB_ICONQUESTION) = mrYes then
+    begin
+      fCanClose := True;
+      Self.Close;
+    end;
+end;
+
+procedure TfrmMain.miShowMainClick(Sender: TObject);
+begin
+  TrayIcon.RestoreApp;
 end;
 
 procedure TfrmMain.NewFizClnt_miClick(Sender: TObject);

@@ -187,7 +187,7 @@ begin
   if cmd = 'checkacceptcall' then //звонок принят
   begin
     if Assigned(frmIncomeCallRoot) then
-      frmIncomeCallRoot.CheckAccept;
+      frmIncomeCallRoot.CheckSession; //.CheckAccept;
   end
 
   else

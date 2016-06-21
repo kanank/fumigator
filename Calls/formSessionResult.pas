@@ -7,12 +7,12 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit,
   IBX.IBCustomDataSet, IBX.IBUpdateSQL, Data.DB, IBX.IBQuery, cxTextEdit,
-  cxMemo, cxDBEdit, Vcl.StdCtrls, dxGDIPlusClasses, Vcl.ExtCtrls, RzButton;
+  cxMemo, cxDBEdit, Vcl.StdCtrls, dxGDIPlusClasses, Vcl.ExtCtrls, RzButton,
+  cxMaskEdit, cxDropDownEdit;
 
 type
   TfrmSessionResult = class(TBaseForm)
     Label11: TLabel;
-    edtIshod: TcxDBMemo;
     edtResult: TcxDBMemo;
     Label1: TLabel;
     DS: TDataSource;
@@ -20,6 +20,7 @@ type
     Q_upd: TIBUpdateSQL;
     Cancel_btn: TRzButton;
     QApi: TIBQuery;
+    cmbIshod: TcxDBComboBox;
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure Cancel_btnClick(Sender: TObject);
   private
@@ -40,7 +41,7 @@ uses
 
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
 begin
-  if (edtIshod.Text = '') or (edtResult.Text = '')  then
+  if (cmbIshod.Text = '') or (edtResult.Text = '')  then
   begin
     Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
     Exit;
@@ -51,7 +52,7 @@ end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);
 begin
-  edtIshod.Text  := '';
+  cmbIshod.Text  := '';
   edtResult.Text := '';
 end;
 

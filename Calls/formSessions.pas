@@ -55,17 +55,22 @@ type
     GridViewColumn11: TcxGridDBColumn;
     GridPopup: TPopupMenu;
     N1: TMenuItem;
-    N2: TMenuItem;
-    N401: TMenuItem;
-    N3: TMenuItem;
+    miFilterAccepted: TMenuItem;
+    miFilterDuration: TMenuItem;
+    miFilterOff: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
       ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
       var ADone: Boolean);
+    procedure QFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+    procedure miFilterOffClick(Sender: TObject);
+    procedure miFilterAcceptedClick(Sender: TObject);
+    procedure miFilterDurationClick(Sender: TObject);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
+    procedure SetFilter;
   public
     { Public declarations }
   end;
@@ -158,6 +163,24 @@ begin
    ACanvas.Canvas.Font.Style := [];
 end;
 
+procedure TfrmSessions.miFilterAcceptedClick(Sender: TObject);
+begin
+  TMenuItem(Sender).Checked := not TMenuItem(Sender).Checked;
+end;
+
+procedure TfrmSessions.miFilterDurationClick(Sender: TObject);
+begin
+  TMenuItem(Sender).Checked := not TMenuItem(Sender).Checked;
+  SetFilter;
+end;
+
+procedure TfrmSessions.miFilterOffClick(Sender: TObject);
+begin
+  miFilterAccepted.Checked := false;
+  miFilterDuration.Checked := False;
+  Q.Filtered := false;
+end;
+
 function TfrmSessions.MillesecondToDateTime(ms: int64): TDateTime;
 const
   //Значение 1 миллисекунды в формате TDateTime.
@@ -165,6 +188,20 @@ const
 begin
   //Время в формате TDateTime.
   Result := Ms * MsTime;
+end;
+
+procedure TfrmSessions.QFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+var
+  f1, f2: Boolean;
+begin
+  f1 := True; f2 := True;
+
+  if miFilterAccepted.Checked then
+    f1 := DataSet.FieldByName('ISHOD').AsString <> '';
+  if miFilterDuration.Checked then
+    f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
+
+  Accept := f1 and f2;
 end;
 
 procedure TfrmSessions.RzButton1Click(Sender: TObject);
@@ -179,6 +216,12 @@ begin
   Q.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
   Q.Open;
   CalcHeader;
+end;
+
+procedure TfrmSessions.SetFilter;
+begin
+  Q.Filtered := False;
+  Q.Filtered := True;
 end;
 
 end.

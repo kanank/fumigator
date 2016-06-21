@@ -1,16 +1,16 @@
 inherited frmSessionResult: TfrmSessionResult
   BorderIcons = [biSystemMenu]
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
-  ClientHeight = 131
-  ClientWidth = 517
+  ClientHeight = 159
+  ClientWidth = 309
   Position = poDesktopCenter
-  ExplicitWidth = 533
-  ExplicitHeight = 169
+  ExplicitWidth = 325
+  ExplicitHeight = 197
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 319
-    Top = 24
+    Left = 111
+    Top = 52
     Width = 194
     Height = 62
     AutoSize = True
@@ -38,11 +38,11 @@ inherited frmSessionResult: TfrmSessionResult
     ParentFont = False
   end
   object Label1: TLabel
-    Left = 224
-    Top = 8
-    Width = 89
+    Left = 8
+    Top = 41
+    Width = 106
     Height = 13
-    Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1089#1077#1089#1089#1080#1080
+    Caption = #1050#1086#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
     Color = clBtnShadow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -52,28 +52,18 @@ inherited frmSessionResult: TfrmSessionResult
     ParentColor = False
     ParentFont = False
   end
-  object edtIshod: TcxDBMemo
-    Left = 8
-    Top = 24
-    DataBinding.DataField = 'ISHOD'
-    DataBinding.DataSource = DS
-    Properties.HideSelection = False
-    TabOrder = 0
-    Height = 53
-    Width = 185
-  end
   object edtResult: TcxDBMemo
-    Left = 224
-    Top = 23
+    Left = 8
+    Top = 55
     DataBinding.DataField = 'RESULT'
     DataBinding.DataSource = DS
-    TabOrder = 1
-    Height = 54
+    TabOrder = 0
+    Height = 50
     Width = 289
   end
   object Cancel_btn: TRzButton
-    Left = 201
-    Top = 92
+    Left = 91
+    Top = 126
     Width = 124
     Height = 29
     Anchors = [akTop, akRight]
@@ -86,9 +76,24 @@ inherited frmSessionResult: TfrmSessionResult
     HotTrack = True
     HotTrackColor = 16625984
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 1
     ThemeAware = False
     OnClick = Cancel_btnClick
+  end
+  object cmbIshod: TcxDBComboBox
+    Left = 91
+    Top = 5
+    DataBinding.DataField = 'ISHOD'
+    DataBinding.DataSource = DS
+    Properties.DropDownSizeable = True
+    Properties.Items.Strings = (
+      #1087#1088#1086#1074#1077#1076#1077#1085#1072' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1103
+      #1073#1077#1079' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1080
+      ' '#1074#1099#1079#1086#1074' '#1087#1077#1088#1077#1074#1077#1076#1077#1085
+      #1074#1099#1079#1086#1074' '#1089#1086#1088#1074#1072#1083#1089#1103
+      #1085#1086#1084#1077#1088' '#1079#1072#1085#1103#1090'/'#1085#1077#1076#1086#1089#1090#1091#1087#1077#1085)
+    TabOrder = 2
+    Width = 206
   end
   object DS: TDataSource
     DataSet = Q

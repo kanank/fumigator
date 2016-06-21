@@ -144,33 +144,27 @@ inherited frmSessions: TfrmSessions
         Styles.Header = cxStyle1
         Width = 93
       end
+      object GridViewColumn8: TcxGridDBColumn
+        Caption = #1050#1083#1080#1077#1085#1090
+        DataBinding.FieldName = 'CLIENT_ID'
+        PropertiesClassName = 'TcxLookupComboBoxProperties'
+        Properties.GridMode = True
+        Properties.KeyFieldNames = 'ID'
+        Properties.ListColumns = <
+          item
+            FieldName = 'NAME'
+          end>
+        Properties.ListSource = DataModuleMain.DsClients
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 90
+      end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #8470' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1103
         DataBinding.FieldName = 'CALLEDN'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
         Width = 86
-      end
-      object GridViewColumn4: TcxGridDBColumn
-        Caption = #1053#1072#1095#1072#1083#1086
-        DataBinding.FieldName = 'STARTTIME'
-        HeaderAlignmentHorz = taCenter
-        Styles.Header = cxStyle1
-        Width = 106
-      end
-      object GridViewColumn5: TcxGridDBColumn
-        Caption = #1050#1086#1085#1077#1094
-        DataBinding.FieldName = 'ENDTIME'
-        HeaderAlignmentHorz = taCenter
-        Styles.Header = cxStyle1
-        Width = 114
-      end
-      object GridViewColumn6: TcxGridDBColumn
-        Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
-        DataBinding.FieldName = 'DATESTRING'
-        HeaderAlignmentHorz = taCenter
-        Styles.Header = cxStyle1
-        Width = 66
       end
       object GridViewColumn7: TcxGridDBColumn
         Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082
@@ -187,21 +181,6 @@ inherited frmSessions: TfrmSessions
         Styles.Header = cxStyle1
         Width = 75
       end
-      object GridViewColumn8: TcxGridDBColumn
-        Caption = #1050#1083#1080#1077#1085#1090
-        DataBinding.FieldName = 'CLIENT_ID'
-        PropertiesClassName = 'TcxLookupComboBoxProperties'
-        Properties.GridMode = True
-        Properties.KeyFieldNames = 'ID'
-        Properties.ListColumns = <
-          item
-            FieldName = 'NAME'
-          end>
-        Properties.ListSource = DataModuleMain.DsClients
-        HeaderAlignmentHorz = taCenter
-        Styles.Header = cxStyle1
-        Width = 90
-      end
       object GridViewColumn9: TcxGridDBColumn
         Caption = #1048#1089#1093#1086#1076
         DataBinding.FieldName = 'ISHOD'
@@ -210,11 +189,32 @@ inherited frmSessions: TfrmSessions
         Width = 85
       end
       object GridViewColumn10: TcxGridDBColumn
-        Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090
+        Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
         DataBinding.FieldName = 'RESULT'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
         Width = 130
+      end
+      object GridViewColumn6: TcxGridDBColumn
+        Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
+        DataBinding.FieldName = 'DATESTRING'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 66
+      end
+      object GridViewColumn4: TcxGridDBColumn
+        Caption = #1053#1072#1095#1072#1083#1086
+        DataBinding.FieldName = 'STARTTIME'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 106
+      end
+      object GridViewColumn5: TcxGridDBColumn
+        Caption = #1050#1086#1085#1077#1094
+        DataBinding.FieldName = 'ENDTIME'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 114
       end
       object GridViewColumn11: TcxGridDBColumn
         DataBinding.FieldName = 'DURATION'
@@ -331,6 +331,7 @@ inherited frmSessions: TfrmSessions
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
         'ot null')
+    OnFilterRecord = QFilterRecord
     Left = 72
     Top = 80
     ParamData = <
@@ -398,14 +399,17 @@ inherited frmSessions: TfrmSessions
     Top = 256
     object N1: TMenuItem
       Caption = #1060#1080#1083#1100#1090#1088#1099
-      object N2: TMenuItem
+      object miFilterAccepted: TMenuItem
         Caption = #1058#1086#1083#1100#1082#1086' '#1086#1090#1074#1077#1090#1080#1074#1096#1080#1077
+        OnClick = miFilterDurationClick
       end
-      object N401: TMenuItem
+      object miFilterDuration: TMenuItem
         Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100#1102' '#1073#1086#1083#1077#1077' 40'#1089#1077#1082
+        OnClick = miFilterDurationClick
       end
-      object N3: TMenuItem
+      object miFilterOff: TMenuItem
         Caption = #1057#1085#1103#1090#1100' '#1074#1089#1077' '#1092#1080#1083#1100#1090#1088#1099
+        OnClick = miFilterOffClick
       end
     end
   end

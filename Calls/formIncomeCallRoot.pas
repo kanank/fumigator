@@ -112,20 +112,20 @@ end;
 
 procedure TfrmIncomeCallRoot.CheckAccept;
 begin
-  if fCallCancel then
+  (*if fCallCancel then
     ModalResult := mrCancel
-  else 
+  else
   if Assigned(frmCallEvent) and (frmCallEvent.ModalResult <> mrCancel) then
-  begin   
+  begin
     if not DM.CheckAcceptCall(CallId) then
     begin
       fCallCancel := True;
       frmCallEvent.ModalResult := mrCancel;
-      Exit; 
+      Exit;
     end
-    else 
+    else
       fCallAccepted := True;
-  end;
+  end;  *)
 end;
 
 procedure TfrmIncomeCallRoot.CheckSession;
@@ -134,18 +134,18 @@ var
 begin
   (*if fCallCancel then
     ModalResult := mrCancel
-  else 
+  else
   if Assigned(frmCallEvent) and (frmCallEvent.ModalResult = mrNone) then
-  begin   
+  begin
     if not fCallAccepted and DM.CheckCloseCall(CallId) then
     begin
       frmCallEvent.ModalResult := mrCancel;
-      Exit; 
+      Exit;
     end;
   end;
-    
+
   if Assigned(frmCallEvent) and
-     ((frmCallEvent.ModalResult = mrNone) or 
+     ((frmCallEvent.ModalResult = mrNone) or
      (frmCallEvent.ModalResult = mrCancel)) then
     Exit;*)
   //fSessionClose := DM.CheckCloseSession(CallId);
@@ -327,9 +327,9 @@ begin
 
   if frmCallEvent.ModalResult = mrCancel then
     DoCallCancel
-  else
-  if frmCallEvent.ModalResult = mrOk then
-     formMain.ClientSocket.Socket.SendText('#callaccept:' + CallId +',' +DM.CurrentUserSets.ATS_Phone_Num);
+  //else
+  //if frmCallEvent.ModalResult = mrOk then
+  //   formMain.ClientSocket.Socket.SendText('#callaccept:' + CallApiId +',' +DM.CurrentUserSets.ATS_Phone_Num);
   
 end;
 

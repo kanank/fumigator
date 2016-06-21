@@ -14,6 +14,8 @@ var
 
   InitBirthYear: integer = 30;
 
+  ServerHost: string = '81.177.48.139';
+  ServerPort: integer = 1025;
 
 implementation
 

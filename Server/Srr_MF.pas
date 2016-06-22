@@ -78,7 +78,7 @@ type
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
     Function AddCallEvent(Params :TStrings) :Boolean;
-    Function ProkadoCommand(Params :TStrings) :Boolean; //выполнение комманд от клиентов прокадо
+    Function FumigatorCommand(Params :TStrings) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
 
@@ -93,7 +93,7 @@ type
 
   public
     CSection: TCriticalSection;
-    CSectionProkado: TCriticalSection;
+    CSectionFumigator: TCriticalSection;
     CSectionSocket:  TCriticalSection;
     CSectionCommand: TCriticalSection;
 
@@ -459,14 +459,14 @@ begin
     SendCommandToUser('*', '#checkacceptcall:')
 end;
 
-function TMF.ProkadoCommand(Params: TStrings): Boolean;
+function TMF.FumigatorCommand(Params: TStrings): Boolean;
 begin
   //обязательный параметр action
   if Params.IndexOfName('action') < 0 then
     exit;
 
   // активность пользователя
-  if Params.Values['action'] = 'user_set' then
+  if Params.Values['action'] = 'getlastversion' then
   begin
    /// if FActiveUsers.IndexOfName(Params.Values['phone']) then
 
@@ -654,13 +654,14 @@ procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;
   ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
 begin
 
-  if ARequestInfo.URI = 'prokado' then
+  if ARequestInfo.URI = 'fumigator' then
   try
-    CSectionProkado.Enter;
-    ProkadoCommand(ARequestInfo.Params);
+    CSectionFumigator.Enter;
+    FumigatorCommand(ARequestInfo.Params);
+
 
   finally
-    CSectionProkado.Leave;
+    CSectionFumigator.Leave;
   end;
 
 // новое Вхождение

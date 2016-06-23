@@ -38,7 +38,6 @@ inherited frmClientResult: TfrmClientResult
     BorderOuter = fsFlat
     BorderSides = [sdTop]
     TabOrder = 1
-    ExplicitTop = 285
     DesignSize = (
       729
       87)

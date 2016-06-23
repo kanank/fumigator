@@ -28,11 +28,15 @@ type
     FrameAddress: TFrameKladrAdrFull;
 	FramePhones: TFramePhones;
     QCheck: TIBQuery;
+    cmbWorker: TcxDBLookupComboBox;
+    Label5: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
     procedure FramePersonDSDataChange(Sender: TObject; Field: TField);
     procedure Exit_bntClick(Sender: TObject);
+    procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
+    procedure cmbWorkerPropertiesPopup(Sender: TObject);
   private
     { Private declarations }
   public
@@ -124,6 +128,20 @@ begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
   end;
+end;
+
+procedure TfrmClientFiz.cmbWorkerPropertiesCloseUp(Sender: TObject);
+var
+  id: Integer;
+begin
+  id := TcxDBLookupComboBox(Sender).EditValue;
+  DM.OffFilter(DM.Workers);
+  TcxDBLookupComboBox(Sender).EditValue := id;
+end;
+
+procedure TfrmClientFiz.cmbWorkerPropertiesPopup(Sender: TObject);
+begin
+  DM.SetFilterNonDelete(DM.Workers);
 end;
 
 procedure TfrmClientFiz.Exit_bntClick(Sender: TObject);

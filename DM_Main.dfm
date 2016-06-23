@@ -3,7 +3,6 @@ object DataModuleMain: TDataModuleMain
   Height = 487
   Width = 790
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -118,7 +117,8 @@ object DataModuleMain: TDataModuleMain
       #9'USER_PASSWORD = :USER_PASSWORD,'
       #9'USER_TYPE = :USER_TYPE,'
       #9'USER_BLOCKED = :USER_BLOCKED,'
-      #9'ATS_NUM  = :ATS_NUM'
+      #9'ATS_NUM  = :ATS_NUM,'
+      '              WORKER_ID = :WORKER_ID '
       'where id = :ID')
     InsertSQL.Strings = (
       'INSERT INTO WORKERS ('
@@ -133,7 +133,8 @@ object DataModuleMain: TDataModuleMain
       #9'USER_PASSWORD,'
       #9'USER_TYPE,'
       #9'USER_BLOCKED,'
-      #9'ATS_NUM)'
+      #9'ATS_NUM,'
+      #9'WORKER_ID)'
       'Values('
       #9':ID,'
       '    '#9':PERSON_ID,'
@@ -146,7 +147,8 @@ object DataModuleMain: TDataModuleMain
       #9':USER_PASSWORD,'
       #9':USER_TYPE,'
       #9':USER_BLOCKED,'
-      #9':ATS_NUM)'#9)
+      #9':ATS_NUM,'
+      #9':WORKER_ID)'#9)
     DeleteSQL.Strings = (
       'update workers'
       'set IS_DELETED = 1'
@@ -1108,7 +1110,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

@@ -119,6 +119,9 @@ type
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
     function GetClientCallParams(TelNum: string): ClientCallParams;
+    procedure SetFilterNonDelete(ADataset: TDataset);
+    function OffFilter(ADataset: TDataset; AField: TField = nil): Variant; //сброс фильтра и установка на запись
+    procedure FilterNonDelete(DataSet: TDataSet; var Accept: Boolean);
     //function CopyClientCallParams(ASource: ClientCallParams): ClientCallParams;
   var
     CurrentUserSets: CurrentUserRec;
@@ -1004,6 +1007,37 @@ with Form do
     Width,
     Height,
     SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+
+end;
+
+procedure TDataModuleMain.SetFilterNonDelete(ADataset: TDataset);
+begin
+  ADataset.Filtered := False;
+  ADataset.OnFilterRecord := FilterNonDelete;
+  ADataset.Filtered := true;
+end;
+
+procedure TDataModuleMain.FilterNonDelete(DataSet: TDataSet; var Accept: Boolean);
+begin
+  Accept := (DataSet.FieldByName('is_deleted').AsInteger = 0);
+end;
+
+function TDataModuleMain.OffFilter(ADataset: TDataset; AField: TField = nil): Variant;
+var
+  val: Variant;
+begin
+  if not ADataset.Filtered then
+    exit;
+
+  if AField = nil then
+    AField := ADataset.FindField('id');
+  if AField <> nil then
+    val := AField.AsVariant;
+  ADataset.Filtered := False;
+
+  ADataset.Locate(AField.FieldName, val, []);
+
+  Result := AField.AsVariant;
 
 end;
 

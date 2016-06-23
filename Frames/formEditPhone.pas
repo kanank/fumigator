@@ -16,6 +16,8 @@ type
     cmbPhoneType: TcxDBLookupComboBox;
     Label1: TLabel;
     cxDBMaskEdit1: TcxDBMaskEdit;
+    Label3: TLabel;
+    cxDBMaskEdit2: TcxDBMaskEdit;
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
   private
@@ -79,6 +81,9 @@ begin
       DS.DataSet.FieldByName('ismain').AsInteger := 1;
     chbkIsMain.Enabled := False;
   end;
+
+  if DS.DataSet.State = dsInsert then
+    cmbPhoneType.EditValue := 1;
 end;
 
 end.

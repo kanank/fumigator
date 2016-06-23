@@ -112,7 +112,7 @@ end;
 
 procedure TfrmClientResult.CheckSession;
 begin
-  if DM.CheckCloseSession(CallId) then
+  if DM.CheckCloseSession('', CallId) then
     CallFinish;
 
 end;

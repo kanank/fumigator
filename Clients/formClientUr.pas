@@ -14,7 +14,6 @@ uses
 
 type
   TfrmClientUr = class(TSimpleForm)
-    FrameClientExtUr: TFrameClientExtUr;
     RzGroupBox1: TRzGroupBox;
     FramePerson: TFramePersonSmall;
     RzPanel2: TRzPanel;
@@ -37,10 +36,15 @@ type
     DS: TDataSource;
     FrameAddress: TFrameKladrAdrFull;
     QCheck: TIBQuery;
+    FrameClientExtUr: TFrameClientExtUr;
+    Label5: TLabel;
+    cmbWorker: TcxDBLookupComboBox;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure DSDataChange(Sender: TObject; Field: TField);
     procedure Exit_bntClick(Sender: TObject);
+    procedure cmbWorkerPropertiesPopup(Sender: TObject);
+    procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
   private
     { Private declarations }
   public
@@ -63,8 +67,8 @@ begin
   //проверка
   res := False;
   if not (ValidateData(DS, self) and
-  ValidateData(FramePerson.DS, FramePerson) and
-  FrameClientExtUr.ValidateData) then
+    ValidateData(FramePerson.DS, FramePerson) and
+    FrameClientExtUr.ValidateData) then
   begin
     Application.MessageBox('Не заполнены все необходимые поля!',
      'Внимание', MB_ICONWARNING + MB_OK);
@@ -134,6 +138,20 @@ begin
       TIBQuery(DS.DataSet).CancelUpdates;
     end
   end;
+end;
+
+procedure TfrmClientUr.cmbWorkerPropertiesCloseUp(Sender: TObject);
+var
+  id: Integer;
+begin
+  id := TcxDBLookupComboBox(Sender).EditValue;
+  DM.OffFilter(DM.Workers);
+  TcxDBLookupComboBox(Sender).EditValue := id;
+end;
+
+procedure TfrmClientUr.cmbWorkerPropertiesPopup(Sender: TObject);
+begin
+  DM.SetFilterNonDelete(DM.Workers);
 end;
 
 procedure TfrmClientUr.DSDataChange(Sender: TObject; Field: TField);

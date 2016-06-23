@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
-  Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray;
+  Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP;
 
 const
   WM_SHOWMSG = WM_USER + 100;
@@ -40,6 +41,7 @@ type
     TrayMenu: TPopupMenu;
     miShowMain: TMenuItem;
     miExit: TMenuItem;
+    IdHTTP1: TIdHTTP;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -68,6 +70,8 @@ type
   end;
 
 procedure LoadOptions(AIniFile: string);
+function CheckUpdates: boolean;
+function FindParam(AParam: string): Boolean;  // проверка наличия параметра запуска
 
 var
   formMain: TfrmMain;
@@ -82,7 +86,8 @@ implementation
 uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, CommonTypes, formLogo, formCalling, formSessions,
-  formIncomeCallRoot, System.DateUtils, formClientResult;
+  formIncomeCallRoot, System.DateUtils, formClientResult,
+  CommonVars, CommonFunc;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -186,8 +191,8 @@ begin
   else
   if cmd = 'checkacceptcall' then //звонок принят
   begin
-    if Assigned(frmIncomeCallRoot) then
-      frmIncomeCallRoot.CheckSession; //.CheckAccept;
+    //if Assigned(frmIncomeCallRoot) then
+    //  frmIncomeCallRoot.CheckSession; //.CheckAccept;
   end
 
   else
@@ -226,7 +231,7 @@ procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
-    ' (' + DM.CurrentUserSets.UserTypeName + ')';
+    ' (' + DM.CurrentUserSets.UserTypeName + ')' + ' [вер.: ' + FileVersion(Application.ExeName) + ']';
   DoSocketConnect;
 end;
 
@@ -342,8 +347,70 @@ procedure LoadOptions(AIniFile: string);
 begin
   MainOptions := TAppOptions.Create;
 
-  MainOptions.ServerHost := '81.177.48.139'; //'localhost';//
-  MainOptions.ServerPort := 1025;
+  MainOptions.ServerHost := ServerHost; //'81.177.48.139'; //'localhost';//
+  MainOptions.ServerPort := ServerPort; //1025;
+end;
+
+function CheckUpdates: boolean;
+var
+  HTTP: TIdHTTP;
+  url: string;
+  Stream: TStringStream;
+  fStream: TMemoryStream;
+  verServer, verLocal: string;
+begin
+  result := False;
+
+  if FindParam('NOUPDATE') then // без проверки
+    Exit;
+
+
+  HTTP := TIdHTTP.Create(nil);
+  try
+    Stream := TStringStream.Create;
+    url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastversion';
+    try HTTP.Get(url, Stream); except end;
+//    if HTTP.ResponseCode = 200 then
+    verServer := Stream.DataString;
+    verLocal  := FileVersion(Application.ExeName);
+    if (HTTP.ResponseCode = 200) and (verLocal <> verServer) then
+    try
+      fStream := TMemoryStream.Create;
+      url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastfile';
+      try HTTP.Get(url, fStream); except end;
+      if HTTP.ResponseCode = 200 then
+      begin
+        if FileExists(Application.ExeName + '_') then
+          DeleteFile(Application.ExeName + '_');
+
+        RenameFile(Application.ExeName, Application.ExeName + '_');
+        fStream.SaveToFile(ExtractFilePath(Application.ExeName)+ 'fumigator.exe');
+        Result := True;
+      end;
+
+    finally
+      fStream.Free;
+    end;
+  finally
+     Stream.Free;
+     HTTP.Free;
+  end;
+end;
+
+function FindParam(AParam: string): Boolean;
+var
+  i, cnt: Integer;
+begin
+  Result := False;
+  cnt := ParamCount;
+  if cnt = 0 then
+    Exit;
+  for I := 1 to cnt do
+    if UpperCase(ParamStr(i)) = UpperCase(AParam) then
+    begin
+      Result := True;
+      break;
+    end;
 end;
 
 end.

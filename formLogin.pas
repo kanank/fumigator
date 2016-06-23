@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, RzButton, Vcl.StdCtrls,
-  Vcl.Mask, RzEdit, dxGDIPlusClasses, Vcl.ExtCtrls, RzLabel;
+  Vcl.Mask, RzEdit, dxGDIPlusClasses, Vcl.ExtCtrls, RzLabel, IdBaseComponent,
+  IdComponent, IdTCPConnection, IdTCPClient, IdHTTP;
 
 type
   TfrmLogin = class(TForm)
@@ -23,7 +24,7 @@ type
     procedure FormActivate(Sender: TObject);
 
   private
-    { Private declarations }
+    fShowNewVersion: Boolean;
   public
     { Public declarations }
   end;
@@ -37,7 +38,7 @@ implementation
 
 uses
   DM_Main,
-  IBX.IBQuery, formLogo;
+  IBX.IBQuery, formLogo, frmMain, CommonFunc;
 
 procedure TfrmLogin.btnOKClick(Sender: TObject);
 var
@@ -93,6 +94,14 @@ begin
     self.FormStyle := fsNormal;
     BringWindowToTop(Self.Handle);
   end;
+
+  if FindParam('NEWVERSION') and not fShowNewVersion then
+  begin
+    Application.MessageBox(PChar('Программа была обновлена до версии: ' +
+      FileVersion(Application.ExeName)), 'Обновление', MB_ICONINFORMATION);
+    fShowNewVersion := True;
+  end
+
 end;
 
 

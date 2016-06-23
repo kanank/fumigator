@@ -80,7 +80,7 @@ inherited FrameRekvizits: TFrameRekvizits
       BeepOnEnter = False
       DataBinding.DataField = 'BANK_NAME'
       DataBinding.DataSource = DS
-      Properties.MaxLength = 16
+      Properties.MaxLength = 0
       Properties.ValidationOptions = [evoShowErrorIcon]
       Style.HotTrack = False
       Style.LookAndFeel.Kind = lfFlat

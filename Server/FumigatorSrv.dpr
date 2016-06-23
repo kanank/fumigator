@@ -3,7 +3,8 @@ program Fumigator_srv;
 uses
   Vcl.Forms,
   Srr_MF in 'Srr_MF.pas' {MF},
-  TelpinAPI in 'TelpinAPI.pas';
+  TelpinAPI in 'TelpinAPI.pas',
+  CommonFunc in 'CommonFunc.pas';
 
 {$R *.res}
 

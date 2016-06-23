@@ -1,10 +1,10 @@
 inherited frmEditPhone: TfrmEditPhone
   Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072
-  ClientHeight = 138
+  ClientHeight = 164
   ClientWidth = 168
   OnShow = FormShow
   ExplicitWidth = 174
-  ExplicitHeight = 166
+  ExplicitHeight = 192
   PixelsPerInch = 96
   TextHeight = 13
   inherited lblData: TLabel
@@ -12,7 +12,7 @@ inherited frmEditPhone: TfrmEditPhone
   end
   object Label2: TLabel [1]
     Left = 8
-    Top = 76
+    Top = 99
     Width = 18
     Height = 13
     Caption = #1058#1080#1087
@@ -36,6 +36,19 @@ inherited frmEditPhone: TfrmEditPhone
     Font.Style = []
     ParentFont = False
   end
+  object Label3: TLabel [3]
+    Left = 8
+    Top = 75
+    Width = 64
+    Height = 13
+    Caption = #1044#1086#1073#1072#1074#1086#1095#1085#1099#1081
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
   inherited edtData: TcxDBMaskEdit
     Top = 49
     DataBinding.DataField = 'PHONE'
@@ -48,21 +61,21 @@ inherited frmEditPhone: TfrmEditPhone
   end
   inherited btnOK: TRzButton
     Left = 7
-    Top = 100
+    Top = 130
     ModalResult = 0
     Anchors = [akTop]
     OnClick = btnOKClick
     ExplicitLeft = 7
-    ExplicitTop = 100
+    ExplicitTop = 130
   end
   inherited bntCancel: TRzButton
     Left = 88
-    Top = 100
+    Top = 130
     Anchors = [akTop]
     ExplicitLeft = 88
-    ExplicitTop = 100
+    ExplicitTop = 130
   end
-  object chbkIsMain: TcxDBCheckBox [6]
+  object chbkIsMain: TcxDBCheckBox [7]
     Left = 5
     Top = 2
     AutoSize = False
@@ -80,9 +93,9 @@ inherited frmEditPhone: TfrmEditPhone
     Height = 21
     Width = 121
   end
-  object cmbPhoneType: TcxDBLookupComboBox [7]
+  object cmbPhoneType: TcxDBLookupComboBox [8]
     Left = 43
-    Top = 73
+    Top = 96
     DataBinding.DataField = 'PHONE_TYPE_ID'
     DataBinding.DataSource = DS
     Properties.KeyFieldNames = 'ID'
@@ -96,7 +109,7 @@ inherited frmEditPhone: TfrmEditPhone
     TabOrder = 4
     Width = 117
   end
-  object cxDBMaskEdit1: TcxDBMaskEdit [8]
+  object cxDBMaskEdit1: TcxDBMaskEdit [9]
     Left = 58
     Top = 27
     DataBinding.DataField = 'CODE'
@@ -107,6 +120,18 @@ inherited frmEditPhone: TfrmEditPhone
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 5
     Width = 100
+  end
+  object cxDBMaskEdit2: TcxDBMaskEdit [10]
+    Left = 78
+    Top = 72
+    DataBinding.DataField = 'ADD_NUMBER'
+    DataBinding.DataSource = DS
+    Properties.AlwaysShowBlanksAndLiterals = True
+    Properties.BeepOnError = True
+    Properties.EditMask = '99999;0;'#9618
+    Properties.ValidationOptions = [evoShowErrorIcon]
+    TabOrder = 6
+    Width = 80
   end
   inherited DS: TDataSource
     Left = 133

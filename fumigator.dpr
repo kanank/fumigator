@@ -3,6 +3,7 @@ program fumigator;
 uses
   Vcl.Forms,
   System.UITypes,
+  Winapi.ShellAPI,
   Winapi.Windows,
   ClassFrmBase in 'classes\ClassFrmBase.pas' {BaseForm},
   ClassSprForm in 'classes\ClassSprForm.pas' {SprForm},
@@ -58,7 +59,8 @@ uses
   formCallPause in 'Calls\formCallPause.pas' {frmCallPause},
   formIncomeCallRoot in 'Calls\formIncomeCallRoot.pas' {frmIncomeCallRoot},
   formClientResult in 'Clients\formClientResult.pas' {frmClientResult},
-  formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent};
+  formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent},
+  CommonFunc in 'Server\CommonFunc.pas';
 
 {$R *.res}
 
@@ -68,6 +70,13 @@ begin
 
   Application.CreateForm(TDataModuleMain, DM);
   LoadOptions(CfgFileName);
+
+  if CheckUpdates then
+  begin
+    ShellExecute(0, 'open', PChar(Application.ExeName), 'NEWVERSION', nil, SW_SHOW);
+    Application.Terminate;
+    Exit;
+  end;
 
   frmLogin := TfrmLogin.Create(nil);
   if frmLogin.ShowModal <> mrOk then

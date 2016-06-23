@@ -78,7 +78,7 @@ type
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
     Function AddCallEvent(Params :TStrings) :Boolean;
-    Function FumigatorCommand(Params :TStrings) :Boolean; //выполнение комманд от клиентов прокадо
+    Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
 
@@ -112,7 +112,7 @@ implementation
 
 {$R *.dfm}
 uses
-  System.DateUtils;
+  System.DateUtils, CommonFunc;
 
 function TMF.AcceptCall(ACallId, APhone: string): boolean;
 var Q :TIBQuery;
@@ -376,11 +376,11 @@ end;
 
 procedure TMF.FormCreate(Sender: TObject);
 begin
-  CSection        := TCriticalSection.Create;
-  CSectionProkado := TCriticalSection.Create;
-  CSectionSocket  := TCriticalSection.Create;
-  CSectionCommand := TCriticalSection.Create;
-  FActiveUsers    := TStringList.Create;
+  CSection          := TCriticalSection.Create;
+  CSectionFumigator := TCriticalSection.Create;
+  CSectionSocket    := TCriticalSection.Create;
+  CSectionCommand   := TCriticalSection.Create;
+  FActiveUsers      := TStringList.Create;
 
   AccessToken := TTelphinToken.Create;
   AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
@@ -391,7 +391,7 @@ procedure TMF.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(FActiveUsers);
   CSection.Release;
-  CSectionProkado.Release;
+  CSectionFumigator.Release;
   CSectionSocket.Release;
   CSectionCommand.Release;
 
@@ -459,18 +459,53 @@ begin
     SendCommandToUser('*', '#checkacceptcall:')
 end;
 
-function TMF.FumigatorCommand(Params: TStrings): Boolean;
+function TMF.FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo): Boolean;
+var
+  s: string;
+  fumigatorFileName: string;
+  Stream: TMemoryStream;
 begin
   //обязательный параметр action
-  if Params.IndexOfName('action') < 0 then
+  if ARequestInfo.Params.IndexOfName('action') < 0 then
     exit;
 
-  // активность пользователя
-  if Params.Values['action'] = 'getlastversion' then
+  fumigatorFileName := ExtractFilePath(Application.ExeName) + 'fumigator.exe';
+  // получить версию fumigator.exe
+  if ARequestInfo.Params.Values['action'] = 'getlastversion' then
   begin
-   /// if FActiveUsers.IndexOfName(Params.Values['phone']) then
+    if not FileExists(fumigatorFileName) then
+    begin
+      AResponseInfo.ResponseNo := 404;
+      Exit;
+    end;
 
-  end;
+    s := FileVersion(fumigatorFileName);
+    AResponseInfo.ContentText := s;
+    AResponseInfo.ResponseNo := 200;
+  end
+
+  else
+  // получить файл fumigator.exe
+  if ARequestInfo.Params.Values['action'] = 'getlastfile' then
+  begin
+    if not FileExists(fumigatorFileName) then
+    begin
+      AResponseInfo.ResponseNo := 404;
+      Exit;
+    end;
+
+    Stream := TMemoryStream.Create;
+    try
+      Stream.LoadFromFile(fumigatorFileName);
+      Stream.Position := 0;
+      AResponseInfo.ContentStream := Stream;
+      AResponseInfo.ResponseNo    := 200;
+      AResponseInfo.ContentType   := 'application/octet-stream';
+      AResponseInfo.WriteContent;
+    finally
+      //Stream.Free;
+    end;
+  end
 
 end;
 
@@ -654,12 +689,10 @@ procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;
   ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
 begin
 
-  if ARequestInfo.URI = 'fumigator' then
+  if ARequestInfo.URI = '/fumigator' then
   try
     CSectionFumigator.Enter;
-    FumigatorCommand(ARequestInfo.Params);
-
-
+    FumigatorCommand(ARequestInfo, AResponseInfo);
   finally
     CSectionFumigator.Leave;
   end;

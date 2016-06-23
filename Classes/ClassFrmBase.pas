@@ -109,7 +109,8 @@ begin
     AComponent := ADataSource.Owner;
 
   resAll := True;
-  if Assigned(ADataSource.DataSet) then
+
+  if Assigned(ADataSource.DataSet) and  ADataSource.DataSet.Modified then
     for i  := 0 to ADataSource.DataSet.FieldCount - 1 do
       if ADataSource.DataSet.Fields[i].Required and
         (TIBQuery(ADataSource.DataSet).GeneratorField.Field <>

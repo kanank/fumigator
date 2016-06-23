@@ -77,6 +77,7 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <Debugger_RunParams>NOUPDATE</Debugger_RunParams>
         <Icon_MainIcon>fumigator_Icon.ico</Icon_MainIcon>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -89,6 +90,12 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_PreRelease>true</VerInfo_PreRelease>
+        <VerInfo_MajorVer>0</VerInfo_MajorVer>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=0.1.2.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Release>2</VerInfo_Release>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <Icon_MainIcon>fumigator_Icon.ico</Icon_MainIcon>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -234,56 +241,44 @@
         </DCCReference>
         <DCCReference Include="Calls\formIncomeCalls.pas">
             <Form>frmIncomeCall</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formIncomeCallsUr.pas">
             <Form>frmIncomeCallUr</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formCallUnknown.pas">
             <Form>frmCallUnknown</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formCalling.pas">
             <Form>frmCalling</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formClientsForCall.pas">
             <Form>frmClientsForCall</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formEndCalling.pas">
             <Form>frmEndCalling</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formSessionResult.pas">
             <Form>frmSessionResult</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formSessions.pas">
             <Form>frmSessions</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Clients\formClientCard.pas">
             <Form>frmClientCard</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formCallPause.pas">
             <Form>frmCallPause</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formIncomeCallRoot.pas">
             <Form>frmIncomeCallRoot</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Clients\formClientResult.pas">
             <Form>frmClientResult</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Calls\formCallEvent.pas">
             <Form>frmCallEvent</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Server\CommonFunc.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -33,6 +33,7 @@ inherited FramePhones: TFramePhones
         DataController.Summary.FooterSummaryItems = <>
         DataController.Summary.SummaryGroups = <>
         OptionsBehavior.IncSearchItem = grdPhoneDBTableView2Column2
+        OptionsBehavior.ColumnHeaderHints = False
         OptionsData.CancelOnExit = False
         OptionsData.Deleting = False
         OptionsData.DeletingConfirmation = False
@@ -40,9 +41,8 @@ inherited FramePhones: TFramePhones
         OptionsView.CellEndEllipsis = True
         OptionsView.NoDataToDisplayInfoText = '<'#1053#1086#1084#1077#1088#1072' '#1085#1077' '#1076#1086#1073#1072#1074#1083#1077#1085#1099' >'
         OptionsView.ScrollBars = ssVertical
-        OptionsView.GridLines = glNone
+        OptionsView.GridLines = glVertical
         OptionsView.GroupByBox = False
-        OptionsView.Header = False
         object grdPhoneDBTableView2Column1: TcxGridDBColumn
           DataBinding.FieldName = 'ismain'
           PropertiesClassName = 'TcxCheckBoxProperties'
@@ -59,9 +59,11 @@ inherited FramePhones: TFramePhones
         end
         object grdPhoneDBTableView2Column4: TcxGridDBColumn
           DataBinding.FieldName = 'CODE'
+          Options.ShowCaption = False
           Width = 20
         end
         object grdPhoneDBTableView2Column2: TcxGridDBColumn
+          Caption = #1053#1086#1084#1077#1088
           DataBinding.FieldName = 'phone'
           PropertiesClassName = 'TcxMaskEditProperties'
           Properties.AlwaysShowBlanksAndLiterals = True
@@ -71,10 +73,16 @@ inherited FramePhones: TFramePhones
           Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
           Options.Editing = False
           Options.Moving = False
-          Options.ShowCaption = False
-          Width = 92
+          Width = 75
+        end
+        object grdPhoneDBTableView2Column5: TcxGridDBColumn
+          Caption = #1044#1086#1087'.'
+          DataBinding.FieldName = 'ADD_NUMBER'
+          Options.Editing = False
+          Width = 27
         end
         object grdPhoneDBTableView2Column3: TcxGridDBColumn
+          Caption = #1058#1080#1087
           DataBinding.FieldName = 'PHONE_TYPE_ID'
           PropertiesClassName = 'TcxLookupComboBoxProperties'
           Properties.DropDownListStyle = lsFixedList
@@ -87,7 +95,8 @@ inherited FramePhones: TFramePhones
           Properties.ListOptions.GridLines = glNone
           Properties.ListOptions.ShowHeader = False
           Properties.ListSource = DataModuleMain.DsDicPhoneType
-          Width = 33
+          Options.Editing = False
+          Width = 29
         end
       end
       inherited grdPhoneLevel1: TcxGridLevel
@@ -130,7 +139,8 @@ inherited FramePhones: TFramePhones
       'ISMAIN = :ISMAIN,'
       '"TYPE" = :TYPE,'
       'PHONE_TYPE_ID = :PHONE_TYPE_ID,'
-      'CODE = :CODE'
+      'CODE = :CODE,'
+      'ADD_NUMBER = :ADD_NUMBER '
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into phones('
@@ -140,7 +150,8 @@ inherited FramePhones: TFramePhones
       'ISMAIN,'
       '"TYPE",'
       'PHONE_TYPE_ID,'
-      'CODE'
+      'CODE,'
+      'ADD_NUMBER'
       ')'
       'values('
       ':ID,'
@@ -149,7 +160,8 @@ inherited FramePhones: TFramePhones
       ':ISMAIN,'
       ':TYPE,'
       ':PHONE_TYPE_ID,'
-      ':CODE'
+      ':CODE,'
+      ':ADD_NUMBER'
       ')')
     DeleteSQL.Strings = (
       'delete from phones where id = :ID')

@@ -1,31 +1,30 @@
 inherited frmClients: TfrmClients
   Caption = #1050#1083#1080#1077#1085#1090#1099
-  ClientWidth = 834
+  ClientWidth = 922
   Position = poDesktopCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
-  ExplicitWidth = 850
-  ExplicitHeight = 240
+  ExplicitWidth = 938
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 641
+    Left = 729
     Visible = False
     ExplicitLeft = 641
   end
   inherited RzPanel2: TRzPanel
-    Width = 834
+    Width = 922
     Height = 30
     ExplicitWidth = 834
     ExplicitHeight = 30
     inherited Image1: TImage
-      Left = 3
+      Left = 91
       Top = 1
       ExplicitLeft = 3
       ExplicitTop = 1
     end
     object Fiz_btn: TRzButton
-      Left = 561
+      Left = 649
       Top = 1
       Width = 130
       Height = 27
@@ -34,7 +33,7 @@ inherited frmClients: TfrmClients
       ShowDownPattern = False
       Anchors = [akTop, akRight]
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
-      Color = 16444638
+      Color = 15332600
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -46,9 +45,10 @@ inherited frmClients: TfrmClients
       TabOrder = 0
       ThemeAware = False
       OnClick = Fiz_btnClick
+      ExplicitLeft = 561
     end
     object Ur_btn: TRzButton
-      Left = 697
+      Left = 785
       Top = 1
       Width = 130
       Height = 27
@@ -72,13 +72,38 @@ inherited frmClients: TfrmClients
       TabOrder = 1
       ThemeAware = False
       OnClick = Ur_btnClick
+      ExplicitLeft = 697
+    end
+    object btnAll: TRzButton
+      Left = 497
+      Top = 1
+      Width = 130
+      Height = 27
+      GroupIndex = 2
+      FrameColor = clGray
+      ShowDownPattern = False
+      Anchors = [akTop, akRight]
+      Caption = #1054#1073#1097#1080#1081' '#1089#1087#1080#1089#1086#1082
+      Color = 16444638
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 2
+      ThemeAware = False
+      OnClick = btnAllClick
+      ExplicitLeft = 409
     end
   end
   inherited RzPanel1: TRzPanel
-    Width = 834
+    Width = 922
     ExplicitWidth = 834
     inherited Cancel_btn: TRzButton
-      Left = 697
+      Left = 785
       Caption = #1042#1099#1093#1086#1076
       ExplicitLeft = 697
     end
@@ -113,7 +138,7 @@ inherited frmClients: TfrmClients
   end
   inherited Grid: TcxGrid
     Top = 48
-    Width = 834
+    Width = 922
     Height = 260
     Anchors = [akLeft, akTop, akRight]
     ExplicitTop = 48
@@ -139,13 +164,31 @@ inherited frmClients: TfrmClients
         DataBinding.FieldName = 'NAME'
         HeaderAlignmentHorz = taCenter
         Options.Editing = False
-        Width = 204
+        Width = 189
+      end
+      object GridViewColumn7: TcxGridDBColumn
+        Caption = #1056#1077#1075#1080#1086#1085
+        HeaderAlignmentHorz = taCenter
+        Width = 90
+      end
+      object GridViewColumn8: TcxGridDBColumn
+        Caption = #1059#1089#1083#1091#1075#1080
+        HeaderAlignmentHorz = taCenter
+        Width = 132
       end
       object GridViewColumn3: TcxGridDBColumn
         Caption = #1058#1077#1083#1077#1092#1086#1085
         DataBinding.FieldName = 'PHONE'
         HeaderAlignmentHorz = taCenter
         Width = 126
+      end
+      object GridViewColumn5: TcxGridDBColumn
+        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+        DataBinding.FieldName = 'WORKER_NAME'
+        HeaderAlignmentHorz = taCenter
+        Options.GroupFooters = False
+        Options.Grouping = False
+        Width = 138
       end
       object GridViewColumn4: TcxGridDBColumn
         DataBinding.FieldName = 'Email'
@@ -159,16 +202,8 @@ inherited frmClients: TfrmClients
         Options.Moving = False
         Width = 112
       end
-      object GridViewColumn5: TcxGridDBColumn
-        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
-        DataBinding.FieldName = 'WORKER_NAME'
-        HeaderAlignmentHorz = taCenter
-        Options.GroupFooters = False
-        Options.Grouping = False
-        Width = 223
-      end
       object GridViewColumn6: TcxGridDBColumn
-        Caption = #1050#1086#1083'-'#1074#1086' '#1076#1086#1075'.'
+        Caption = #1050#1086#1083'-'#1074#1086' '#1074#1099#1087'. '#1079#1072#1103#1074#1086#1082
         DataBinding.FieldName = 'CNT_DOG'
         HeaderAlignmentHorz = taCenter
       end
@@ -201,25 +236,33 @@ inherited frmClients: TfrmClients
         DataBinding.FieldName = 'NAME'
         HeaderAlignmentHorz = taCenter
         Options.Editing = False
-        Width = 138
+        Width = 172
       end
       object GridViewUrColumn7: TcxGridDBColumn
-        Caption = #1048#1053#1053
+        Caption = #1056#1077#1075#1080#1086#1085
         DataBinding.FieldName = 'INN'
         HeaderAlignmentHorz = taCenter
         Width = 99
       end
       object GridViewUrColumn8: TcxGridDBColumn
-        Caption = #1056#1091#1082#1086#1074#1086#1076#1080#1090#1077#1083#1100
+        Caption = #1059#1089#1083#1091#1075#1080
         DataBinding.FieldName = 'PERSON_NAME'
         HeaderAlignmentHorz = taCenter
-        Width = 124
+        Width = 132
+      end
+      object GridViewUrColumn5: TcxGridDBColumn
+        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+        DataBinding.FieldName = 'WORKER_NAME'
+        HeaderAlignmentHorz = taCenter
+        Options.GroupFooters = False
+        Options.Grouping = False
+        Width = 123
       end
       object GridViewUrColumn3: TcxGridDBColumn
         Caption = #1058#1077#1083#1077#1092#1086#1085
         DataBinding.FieldName = 'PHONE'
         HeaderAlignmentHorz = taCenter
-        Width = 106
+        Width = 118
       end
       object GridViewUrColumn4: TcxGridDBColumn
         DataBinding.FieldName = 'Email'
@@ -233,18 +276,34 @@ inherited frmClients: TfrmClients
         Options.Moving = False
         Width = 112
       end
-      object GridViewUrColumn5: TcxGridDBColumn
-        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
-        DataBinding.FieldName = 'WORKER_NAME'
-        HeaderAlignmentHorz = taCenter
-        Options.GroupFooters = False
-        Options.Grouping = False
-        Width = 123
-      end
       object GridViewUrColumn6: TcxGridDBColumn
-        Caption = #1050#1086#1083'-'#1074#1086' '#1076#1086#1075'.'
+        Caption = #1050#1086#1083'-'#1074#1086' '#1074#1099#1087'. '#1079#1072#1103#1074#1086#1082
         DataBinding.FieldName = 'CNT_DOG'
         HeaderAlignmentHorz = taCenter
+      end
+    end
+    object GridViewAll: TcxGridDBTableView [2]
+      Navigator.Buttons.CustomButtons = <>
+      DataController.Summary.DefaultGroupSummaryItems = <>
+      DataController.Summary.FooterSummaryItems = <>
+      DataController.Summary.SummaryGroups = <>
+      object GridViewAllColumn1: TcxGridDBColumn
+      end
+      object GridViewAllColumn2: TcxGridDBColumn
+      end
+      object GridViewAllColumn3: TcxGridDBColumn
+      end
+      object GridViewAllColumn4: TcxGridDBColumn
+      end
+      object GridViewAllColumn5: TcxGridDBColumn
+      end
+      object GridViewAllColumn6: TcxGridDBColumn
+      end
+      object GridViewAllColumn7: TcxGridDBColumn
+      end
+      object GridViewAllColumn8: TcxGridDBColumn
+      end
+      object GridViewAllColumn9: TcxGridDBColumn
       end
     end
     inherited GridLevel1: TcxGridLevel

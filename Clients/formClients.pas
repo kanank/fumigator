@@ -35,6 +35,19 @@ type
     GridViewUrColumn7: TcxGridDBColumn;
     GridViewUrColumn8: TcxGridDBColumn;
     RzButton1: TRzButton;
+    btnAll: TRzButton;
+    GridViewColumn7: TcxGridDBColumn;
+    GridViewColumn8: TcxGridDBColumn;
+    GridViewAll: TcxGridDBTableView;
+    GridViewAllColumn1: TcxGridDBColumn;
+    GridViewAllColumn2: TcxGridDBColumn;
+    GridViewAllColumn3: TcxGridDBColumn;
+    GridViewAllColumn4: TcxGridDBColumn;
+    GridViewAllColumn5: TcxGridDBColumn;
+    GridViewAllColumn6: TcxGridDBColumn;
+    GridViewAllColumn7: TcxGridDBColumn;
+    GridViewAllColumn8: TcxGridDBColumn;
+    GridViewAllColumn9: TcxGridDBColumn;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -51,6 +64,7 @@ type
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
     procedure RzButton1Click(Sender: TObject);
+    procedure btnAllClick(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -58,6 +72,7 @@ type
     procedure SetIsUr(AValue: integer);
     procedure SetStatus(AValue: integer);
     procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
+    procedure SetButton(AButton: TRzButton);
   public
     constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0); overload;
     property isUr: Integer read FisUr write SetIsUr;
@@ -98,6 +113,11 @@ begin
     DS.DataSet.Locate('ID', id, []);
     Grid.SetFocus;
   end;
+end;
+
+procedure TfrmClients.btnAllClick(Sender: TObject);
+begin
+  isUr := -1;
 end;
 
 procedure TfrmClients.btnCliClick(Sender: TObject);
@@ -179,7 +199,8 @@ end;
 procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
 begin
   Accept := (DataSet.FieldByName('ACT').AsInteger = 1) and
-            (DataSet.FieldByName('type_cli').AsInteger = isUr) and
+            (((isUr >= 0) and (DataSet.FieldByName('type_cli').AsInteger = isUr)) or
+             ((isUr < 0) and  (DataSet.FieldByName('type_cli').AsInteger >= 0 ))) and
             (DataSet.FieldByName('status_id').AsInteger = status);
 end;
 
@@ -263,6 +284,20 @@ begin
 
 end;
 
+procedure TfrmClients.SetButton(AButton: TRzButton);
+begin
+    AButton.Down then
+    begin
+      AButton.Color  := $00FAECDE;
+      Abutton.Font.Style := Abutton.Font.Style + [fsBold];
+    end
+    else
+    begin
+      AButton.Color  := $00E9F4F8;
+      Abutton.Font.Style := Abutton.Font.Style - [fsBold];
+    end;
+end;
+
 procedure TfrmClients.SetFilter;
 begin
   DS.DataSet.Filtered := false;
@@ -284,24 +319,14 @@ begin
     fisUr := AValue;
     SetFilter;
   end;
-  if AValue = 1 then
-  begin
-    Ur_btn.Down   := True;
-    Fiz_btn.Down  := False;
-    Ur_btn.Color  := $00FAECDE;
-    Fiz_btn.Color := $00E9F4F8;
-    Fiz_btn.Font.Style := Fiz_btn.Font.Style - [fsBold];
-    Ur_btn.Font.Style  := Ur_btn.Font.Style + [fsBold];
-  end
-  else
-  begin
-    Ur_btn.Down   := False;
-    Fiz_btn.Down  := True;
-    Ur_btn.Color  := $00E9F4F8;
-    Fiz_btn.Color := $00FAECDE;
-    Fiz_btn.Font.Style := Fiz_btn.Font.Style + [fsBold];
-    Ur_btn.Font.Style  := Ur_btn.Font.Style - [fsBold];
-  end;
+
+  Ur_btn.Down   := AValue = 1;
+  Fiz_btn.Down  := AValue = 0;
+  btnAll.Down   := AValue = -1;
+
+  SetButton(Ur_btn);
+  SetButton(Fiz_btn);
+  SetButton(btnAll);
 end;
 
 procedure TfrmClients.SetStatus(AValue: integer);
@@ -333,7 +358,6 @@ end;
 
 procedure TfrmClients.Ur_btnClick(Sender: TObject);
 begin
-  inherited;
   isUr := 1;
  end;
 

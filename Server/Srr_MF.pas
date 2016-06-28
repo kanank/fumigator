@@ -499,8 +499,12 @@ begin
       Stream.LoadFromFile(fumigatorFileName);
       Stream.Position := 0;
       AResponseInfo.ContentStream := Stream;
-      AResponseInfo.ResponseNo    := 200;
+      AResponseInfo.ContentLength := Stream.Size;
+      AResponseInfo.ContentDisposition := 'attachment; filename=' + ExtractFileName(fumigatorFileName);
       AResponseInfo.ContentType   := 'application/octet-stream';
+      AResponseInfo.ResponseNo    := 200;
+
+      AResponseInfo.WriteHeader;
       AResponseInfo.WriteContent;
     finally
       //Stream.Free;

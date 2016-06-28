@@ -41,7 +41,6 @@ type
     TrayMenu: TPopupMenu;
     miShowMain: TMenuItem;
     miExit: TMenuItem;
-    IdHTTP1: TIdHTTP;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -358,6 +357,7 @@ var
   Stream: TStringStream;
   fStream: TMemoryStream;
   verServer, verLocal: string;
+  fGet: boolean;
 begin
   result := False;
 
@@ -377,8 +377,15 @@ begin
     try
       fStream := TMemoryStream.Create;
       url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastfile';
-      try HTTP.Get(url, fStream); except end;
-      if HTTP.ResponseCode = 200 then
+      try
+        fGet := False;
+        HTTP.Get(url, fStream);
+        if HTTP.Response.ContentLength = fStream.Size then
+          fGet := True;
+      except
+        fGet := false;
+      end;
+      if fGet and (HTTP.ResponseCode = 200) then
       begin
         if FileExists(Application.ExeName + '_') then
           DeleteFile(Application.ExeName + '_');

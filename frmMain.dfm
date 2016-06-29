@@ -184,6 +184,10 @@ inherited frmMain: TfrmMain
   object Clients_PUM: TPopupMenu
     Left = 208
     Top = 64
+    object AllCli_mi: TMenuItem
+      Caption = #1054#1073#1097#1080#1081' '#1089#1087#1080#1089#1086#1082
+      OnClick = AllCli_miClick
+    end
     object FizClients_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1080#1077' '#1083#1080#1094#1072
       OnClick = FizClients_miClick

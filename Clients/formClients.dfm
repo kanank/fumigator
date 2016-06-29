@@ -1,21 +1,25 @@
 inherited frmClients: TfrmClients
   Caption = #1050#1083#1080#1077#1085#1090#1099
+  ClientHeight = 435
   ClientWidth = 922
   Position = poDesktopCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
   ExplicitWidth = 938
+  ExplicitHeight = 473
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 729
+    Top = 331
     Visible = False
     ExplicitLeft = 641
+    ExplicitTop = 331
   end
   inherited RzPanel2: TRzPanel
     Width = 922
     Height = 30
-    ExplicitWidth = 834
+    ExplicitWidth = 922
     ExplicitHeight = 30
     inherited Image1: TImage
       Left = 91
@@ -45,7 +49,6 @@ inherited frmClients: TfrmClients
       TabOrder = 0
       ThemeAware = False
       OnClick = Fiz_btnClick
-      ExplicitLeft = 561
     end
     object Ur_btn: TRzButton
       Left = 785
@@ -72,7 +75,6 @@ inherited frmClients: TfrmClients
       TabOrder = 1
       ThemeAware = False
       OnClick = Ur_btnClick
-      ExplicitLeft = 697
     end
     object btnAll: TRzButton
       Left = 497
@@ -96,16 +98,17 @@ inherited frmClients: TfrmClients
       TabOrder = 2
       ThemeAware = False
       OnClick = btnAllClick
-      ExplicitLeft = 409
     end
   end
   inherited RzPanel1: TRzPanel
+    Top = 386
     Width = 922
-    ExplicitWidth = 834
+    ExplicitTop = 386
+    ExplicitWidth = 922
     inherited Cancel_btn: TRzButton
       Left = 785
       Caption = #1042#1099#1093#1086#1076
-      ExplicitLeft = 697
+      ExplicitLeft = 785
     end
     inherited Edit_btn: TRzButton
       OnClick = Edit_btnClick
@@ -114,7 +117,10 @@ inherited frmClients: TfrmClients
       OnClick = Del_btnClick
     end
     inherited Add_btn: TRzButton
+      Top = 5
+      Visible = False
       OnClick = Add_btnClick
+      ExplicitTop = 5
     end
     object RzButton1: TRzButton
       Left = 537
@@ -135,15 +141,34 @@ inherited frmClients: TfrmClients
       Visible = False
       OnClick = RzButton1Click
     end
+    object Add_btn1: TRzMenuButton
+      Left = 8
+      Top = 8
+      Width = 122
+      Height = 29
+      Caption = #1057#1086#1079#1076#1072#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 5
+      ThemeAware = False
+      DropDownMenu = NewClientBtn_PUM
+      ShowArrow = False
+    end
   end
   inherited Grid: TcxGrid
     Top = 48
     Width = 922
-    Height = 260
-    Anchors = [akLeft, akTop, akRight]
+    Height = 337
+    Anchors = [akLeft, akTop, akRight, akBottom]
     ExplicitTop = 48
-    ExplicitWidth = 834
-    ExplicitHeight = 260
+    ExplicitWidth = 922
+    ExplicitHeight = 337
     inherited GridView: TcxGridDBTableView
       OnCellDblClick = GridViewUrCellDblClick
       DataController.DataModeController.GridMode = True
@@ -168,11 +193,13 @@ inherited frmClients: TfrmClients
       end
       object GridViewColumn7: TcxGridDBColumn
         Caption = #1056#1077#1075#1080#1086#1085
+        DataBinding.FieldName = 'region'
         HeaderAlignmentHorz = taCenter
         Width = 90
       end
       object GridViewColumn8: TcxGridDBColumn
         Caption = #1059#1089#1083#1091#1075#1080
+        DataBinding.FieldName = 'uslugi'
         HeaderAlignmentHorz = taCenter
         Width = 132
       end
@@ -240,13 +267,13 @@ inherited frmClients: TfrmClients
       end
       object GridViewUrColumn7: TcxGridDBColumn
         Caption = #1056#1077#1075#1080#1086#1085
-        DataBinding.FieldName = 'INN'
+        DataBinding.FieldName = 'region'
         HeaderAlignmentHorz = taCenter
         Width = 99
       end
       object GridViewUrColumn8: TcxGridDBColumn
         Caption = #1059#1089#1083#1091#1075#1080
-        DataBinding.FieldName = 'PERSON_NAME'
+        DataBinding.FieldName = 'uslugi'
         HeaderAlignmentHorz = taCenter
         Width = 132
       end
@@ -284,30 +311,90 @@ inherited frmClients: TfrmClients
     end
     object GridViewAll: TcxGridDBTableView [2]
       Navigator.Buttons.CustomButtons = <>
+      Navigator.Buttons.Append.Enabled = False
+      Navigator.Buttons.Delete.Enabled = False
+      Navigator.Buttons.Edit.Enabled = False
+      Navigator.Buttons.Cancel.Enabled = False
+      Navigator.Buttons.Cancel.Visible = False
+      DataController.DataSource = DS
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      OptionsBehavior.IncSearch = True
+      OptionsBehavior.IncSearchItem = GridViewAllColumn3
+      OptionsCustomize.ColumnGrouping = False
+      OptionsData.CancelOnExit = False
+      OptionsData.Deleting = False
+      OptionsData.DeletingConfirmation = False
+      OptionsData.Editing = False
+      OptionsData.Inserting = False
+      OptionsView.GroupByBox = False
+      OptionsView.HeaderHeight = 32
       object GridViewAllColumn1: TcxGridDBColumn
+        Caption = 'ID'
+        DataBinding.FieldName = 'id'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
       end
       object GridViewAllColumn2: TcxGridDBColumn
+        Caption = #1060#1086#1088#1084#1072' '#1082#1083#1080#1077#1085#1090#1072
+        DataBinding.FieldName = 'type_clis'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 69
       end
       object GridViewAllColumn3: TcxGridDBColumn
+        Caption = #1050#1083#1080#1077#1085#1090
+        DataBinding.FieldName = 'name'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 150
       end
       object GridViewAllColumn4: TcxGridDBColumn
+        Caption = #1056#1077#1075#1080#1086#1085
+        DataBinding.FieldName = 'region'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 84
       end
       object GridViewAllColumn5: TcxGridDBColumn
+        Caption = #1059#1089#1083#1091#1075#1080
+        DataBinding.FieldName = 'uslugi'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 146
       end
       object GridViewAllColumn6: TcxGridDBColumn
+        Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+        DataBinding.FieldName = 'WORKER_NAME'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 133
       end
       object GridViewAllColumn7: TcxGridDBColumn
+        Caption = #1058#1077#1083#1077#1092#1086#1085
+        DataBinding.FieldName = 'PHONE'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 102
       end
       object GridViewAllColumn8: TcxGridDBColumn
+        Caption = 'Email'
+        DataBinding.FieldName = 'email'
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 88
       end
       object GridViewAllColumn9: TcxGridDBColumn
+        DataBinding.FieldName = #1050#1086#1083'-'#1074#1086' '#1074#1099#1087'. '#1079#1072#1103#1074#1086#1082
+        HeaderAlignmentHorz = taCenter
+        Options.Editing = False
+        Styles.Header = cxStyle1
+        Width = 76
       end
     end
     inherited GridLevel1: TcxGridLevel
-      GridView = GridViewUr
+      GridView = GridViewAll
     end
   end
   object btnCli: TRzButton
@@ -373,5 +460,197 @@ inherited frmClients: TfrmClients
     AutoEdit = False
     Left = 453
     Top = 312
+  end
+  object NewClientBtn_PUM: TPopupMenu
+    Left = 208
+    Top = 16
+    object NewFizClnt_mi: TMenuItem
+      Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
+      OnClick = NewFizClnt_miClick
+    end
+    object NewURClnt_mi: TMenuItem
+      Caption = #1070#1088#1080#1076#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
+      OnClick = NewFizClnt_miClick
+    end
+  end
+  object PropStore: TcxPropertiesStore
+    Active = False
+    Components = <
+      item
+        Component = Owner
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = Grid
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn1
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn2
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn3
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn4
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn5
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn6
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn7
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn8
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewAllColumn9
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn1
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn2
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn3
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn4
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn5
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn6
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn7
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewColumn8
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn1
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn2
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn3
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn4
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn5
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn6
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn7
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = GridViewUrColumn8
+        Properties.Strings = (
+          'Width')
+      end
+      item
+        Component = Image1
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = img1
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = RzButton1
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = RzPanel1
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = RzPanel2
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end
+      item
+        Component = Ur_btn
+        Properties.Strings = (
+          'Height'
+          'Width')
+      end>
+    StorageName = 'fumigator.prop'
+    Left = 376
+    Top = 104
   end
 end

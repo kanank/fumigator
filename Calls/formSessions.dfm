@@ -330,7 +330,7 @@ inherited frmSessions: TfrmSessions
       'from sessions'
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
-        'ot null')
+        'ot null and localnum not like '#39'%*%'#39)
     OnFilterRecord = QFilterRecord
     Left = 72
     Top = 80

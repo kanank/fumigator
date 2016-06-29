@@ -8,7 +8,8 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter,
   cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, cxGridLevel,
   cxClasses, cxGridCustomView, cxGridCustomTableView, cxGridTableView,
-  cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses;
+  cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses,
+  Vcl.Menus, cxDropDownEdit, cxDBExtLookupComboBox, cxPropertiesStore;
 
 type
   TfrmClients = class(TSprForm)
@@ -48,6 +49,11 @@ type
     GridViewAllColumn7: TcxGridDBColumn;
     GridViewAllColumn8: TcxGridDBColumn;
     GridViewAllColumn9: TcxGridDBColumn;
+    Add_btn1: TRzMenuButton;
+    NewClientBtn_PUM: TPopupMenu;
+    NewFizClnt_mi: TMenuItem;
+    NewURClnt_mi: TMenuItem;
+    PropStore: TcxPropertiesStore;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -65,6 +71,7 @@ type
       AShift: TShiftState; var AHandled: Boolean);
     procedure RzButton1Click(Sender: TObject);
     procedure btnAllClick(Sender: TObject);
+    procedure NewFizClnt_miClick(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -95,6 +102,7 @@ procedure TfrmClients.Add_btnClick(Sender: TObject);
 var
   id: integer;
   extPrm: TClientParam;
+  fUr: integer;
 begin
   try
     DS.DataSet.Filtered := false;
@@ -102,7 +110,17 @@ begin
     extPrm := TClientParam.Init(status, 0, nil);
     //extPrm.CallParam.Status_Id := status;
 
-    if FisUr = 1 then
+    if Sender is TMenuItem then
+    begin
+      if (TComponent(Sender).Name = 'NewURClnt_mi') then
+        fUr := 1
+      else
+        fUr :=0;
+    end
+    else
+      fUr := FisUr;
+
+    if (FUr = 1) then
       DM.ShowClientUr(asCreate, extPrm)
     else
       DM.ShowClientFiz(asCreate, extPrm);
@@ -176,7 +194,7 @@ begin
   DM.GetDataset(DM.Clients);
 
   prm := NewFrmCreateParam(asEdit, DM.Clients);
-  if fIsUr = 0 then
+  if DS.DataSet.FieldByName('isur').AsInteger = 0 then
   begin
     frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
     mres := frmClientFiz.ShowModal;
@@ -245,6 +263,11 @@ begin
   Edit_btn.Click;
 end;
 
+procedure TfrmClients.NewFizClnt_miClick(Sender: TObject);
+begin
+  Add_btnClick(Sender);
+end;
+
 procedure TfrmClients.RzButton1Click(Sender: TObject);
 var
   prm: TFrmCreateParam;
@@ -286,7 +309,7 @@ end;
 
 procedure TfrmClients.SetButton(AButton: TRzButton);
 begin
-    AButton.Down then
+    if AButton.Down then
     begin
       AButton.Color  := $00FAECDE;
       Abutton.Font.Style := Abutton.Font.Style + [fsBold];
@@ -307,7 +330,13 @@ begin
   if isUr = 0 then
     GridLevel1.GridView := GridView
   else
-    GridLevel1.GridView := GridViewUr;
+  if isUr = 1 then
+    GridLevel1.GridView := GridViewUr
+  else
+    GridLevel1.GridView := GridViewAll;
+
+  Add_btn.Visible := isUr > -1;
+  Add_btn1.Visible := isUr = -1;
 
   Grid.Refresh;
 end;
@@ -339,10 +368,10 @@ begin
   if AValue = 1 then
   begin
     btnCli.Down   := True;
-    btnLid.Down  := False;
+    btnLid.Down   := False;
     btnCli.Color  := $00FAECDE;
-    btnLid.Color := $00E9F4F8;
-    btnCli.Font.Style := btnCli.Font.Style + [fsBold];
+    btnLid.Color  := $00E9F4F8;
+    btnCli.Font.Style  := btnCli.Font.Style + [fsBold];
     btnLid.Font.Style  := btnLid.Font.Style - [fsBold];
   end
   else
@@ -351,7 +380,7 @@ begin
     btnLid.Down   := True;
     btnCli.Color  := $00E9F4F8;
     btnLid.Color  := $00FAECDE;
-    btnCli.Font.Style := btnCli.Font.Style - [fsBold];
+    btnCli.Font.Style  := btnCli.Font.Style - [fsBold];
     btnLid.Font.Style  := btnLid.Font.Style + [fsBold];
   end;
 end;

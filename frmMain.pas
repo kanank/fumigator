@@ -41,6 +41,7 @@ type
     TrayMenu: TPopupMenu;
     miShowMain: TMenuItem;
     miExit: TMenuItem;
+    AllCli_mi: TMenuItem;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -60,6 +61,7 @@ type
     procedure FizClients_miClick(Sender: TObject);
     procedure miExitClick(Sender: TObject);
     procedure miShowMainClick(Sender: TObject);
+    procedure AllCli_miClick(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
@@ -305,6 +307,19 @@ begin
     ClientSocket.Open;
   except
     DM.SocketTimer.Interval := 20000;
+  end;
+end;
+
+procedure TfrmMain.AllCli_miClick(Sender: TObject);
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  frmClients := TfrmClients.Create(self, nil, -1);
+  try
+    frmClients.ShowModal;
+  finally
+    FreeAndNil(frmClients);
   end;
 end;
 

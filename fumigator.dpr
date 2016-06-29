@@ -60,7 +60,8 @@ uses
   formIncomeCallRoot in 'Calls\formIncomeCallRoot.pas' {frmIncomeCallRoot},
   formClientResult in 'Clients\formClientResult.pas' {frmClientResult},
   formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent},
-  CommonFunc in 'Server\CommonFunc.pas';
+  CommonFunc in 'Server\CommonFunc.pas',
+  formSessionEdit in 'Calls\formSessionEdit.pas' {frmSessionEdit};
 
 {$R *.res}
 

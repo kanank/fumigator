@@ -89,14 +89,16 @@ inherited frmSessions: TfrmSessions
       Left = 788
       ExplicitLeft = 788
     end
-    inherited Edit_btn: TRzButton
+    inherited Del_btn: TRzButton [1]
       Visible = False
     end
-    inherited Del_btn: TRzButton
+    inherited Add_btn: TRzButton [2]
       Visible = False
     end
-    inherited Add_btn: TRzButton
-      Visible = False
+    inherited Edit_btn: TRzButton [3]
+      Left = 9
+      OnClick = Edit_btnClick
+      ExplicitLeft = 9
     end
   end
   inherited Grid: TcxGrid

@@ -29,21 +29,24 @@ type
     fCallId: string;
     fClientSaved: Boolean;
     fResultSaved: Boolean;
+    fCallResult: string;
 
     procedure SetCallId(AValue: string);
     function GetCallFinished: boolean;
     function SaveResult: Boolean;
     function SaveClient: Boolean;
     function CheckFinish: boolean;
+    function GetCallResult: string;
   public
     AtsPhone: string;
     Phone: string;
-    CallResult: string;
+    //CallResult: string;
     ClientId: Integer;
     frmCli: TForm;
     TypeCli: Integer;
     property CallId: string read fCallId write SetCallId;
     property CallFinished: boolean read GetCallFinished;
+    property CallResult: string read GetCallResult write fCallResult;
     procedure CallFinish;
     procedure CheckSession;
   end;
@@ -79,15 +82,15 @@ begin
   //Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
   frmSessionResult := TfrmSessionResult.Create(nil);
 
-  if frmSessionResult.Q.Transaction.Active then
-    frmSessionResult.Q.Transaction.CommitRetaining;
+  if frmSessionResult.QApi.Transaction.Active then
+    frmSessionResult.QApi.Transaction.CommitRetaining;
 
-  frmSessionResult.Q.ParamByName('callid').AsString := Callid;
-  frmSessionResult.Q.Open;
-  frmSessionResult.Q.Edit;
-  frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-  frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
-  Self.CallResult := frmSessionResult.Q.FieldByName('callresult').AsString;
+  frmSessionResult.QApi.ParamByName('callid').AsString := Callid;
+  frmSessionResult.QApi.Open;
+  frmSessionResult.QApi.Edit;
+  frmSessionResult.QApi.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+  frmSessionResult.QApi.FieldByName('client_id').AsInteger := ClientId;
+  Self.CallResult := frmSessionResult.QApi.FieldByName('callresult').AsString;
 
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
@@ -135,6 +138,12 @@ end;
 function TfrmClientResult.GetCallFinished: boolean;
 begin
   Result := (CallResult <> '');
+end;
+
+function TfrmClientResult.GetCallResult: string;
+begin
+  if Assigned(frmSessionResult) and frmSessionResult.QApi.Active then
+    Result := frmSessionResult.QApi.FieldByName('callresult').AsString;
 end;
 
 procedure TfrmClientResult.btnCallLaterClick(Sender: TObject);

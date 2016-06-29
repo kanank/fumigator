@@ -67,6 +67,7 @@ type
     procedure miFilterOffClick(Sender: TObject);
     procedure miFilterAcceptedClick(Sender: TObject);
     procedure miFilterDurationClick(Sender: TObject);
+    procedure Edit_btnClick(Sender: TObject);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -82,7 +83,8 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, formSessionEdit, formSessionResult, formClientFiz, formClientUr,
+  formClientResult, CommonTypes;
 
 procedure TfrmSessions.CalcHeader;
 var
@@ -129,6 +131,69 @@ begin
     Post;
   end;
 
+end;
+
+procedure TfrmSessions.Edit_btnClick(Sender: TObject);
+var
+  prm: TFrmCreateParam;
+  mres: TModalResult;
+  frm: TForm;
+begin
+  frmSessionEdit := TfrmSessionEdit.Create(self);
+
+  try
+  // результат
+  frmSessionResult := TfrmSessionResult.Create(self);
+  frmSessionResult.Cancel_btn.Visible := False;
+  frmSessionResult.Height := frmSessionResult.Height -
+    frmSessionResult.Cancel_btn.Height - 10;
+  frmSessionResult.Parent := frmSessionEdit.pnlResult;
+  frmSessionResult.Q.ParamByName('callid').AsString :=
+    DS.DataSet.FieldByName('callid').AsString;
+  frmSessionResult.Position := poDefault;
+  frmSessionResult.Show;
+
+  //карточка клиента
+  DM.GetDataset(DM.Clients);
+
+  if not DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
+    Exit;
+
+    prm := NewFrmCreateParam(asShow, DM.Clients);
+    if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+    begin
+      frmClientFiz := TfrmClientFiz.Create(frmSessionEdit, '', @prm);
+      frmClientFiz.RzPanel1.Visible := False;
+      frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
+      frm := frmClientFiz;
+    end
+    else
+    begin
+      frmClientUr := TfrmClientUr.Create(frmSessionEdit, '', @prm);
+      frmClientUr.RzPanel1.Visible := False;
+      frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
+      frm := frmClientUr;
+    end;
+
+    frm.BorderIcons := [];
+    frm.BorderStyle := bsNone;
+    frm.Parent      := frmSessionEdit.pnlClient;
+    frmSessionEdit.pnlClient.Height := frm.Height + 5;
+    frmSessionEdit.pnlClient.Width  := frm.Width;
+
+    frm.Position := poDefault;
+    frm.Show;
+
+    frmSessionEdit.Height := frmSessionEdit.pnlResult.Height +
+      frmSessionEdit.pnlClient.Height + frmSessionEdit.pnlCalls.Height +
+       frmClientResult.RzPanel1.Height;
+
+    frmSessionEdit.ShowModal;
+  finally
+    FreeAndNil(frmSessionEdit);
+    //FreeAndNil(frmSessionEdit);
+    //FreeAndNil(frmSessionEdit);
+  end;
 end;
 
 procedure TfrmSessions.FormCreate(Sender: TObject);

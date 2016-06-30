@@ -91,8 +91,11 @@ inherited frmWorkerShedule: TfrmWorkerShedule
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      OptionsBehavior.ImmediateEditor = False
       OptionsCustomize.ColumnGrouping = False
-      OptionsSelection.CellSelect = False
+      OptionsSelection.HideFocusRectOnExit = False
+      OptionsSelection.MultiSelect = True
+      OptionsSelection.UnselectFocusedRecordOnExit = False
       OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
       OptionsView.GridLines = glVertical
       OptionsView.GroupByBox = False
@@ -115,6 +118,10 @@ inherited frmWorkerShedule: TfrmWorkerShedule
         Caption = #1054#1090#1074'. '#1089#1086#1090#1088#1091#1076#1085#1080#1082
         DataBinding.FieldName = 'WORKER_NAME'
         Width = 89
+      end
+      object GridCliUrViewColumn5: TcxGridDBColumn
+        DataBinding.FieldName = 'id'
+        Visible = False
       end
     end
     object GridCliLevel1: TcxGridLevel
@@ -176,7 +183,7 @@ inherited frmWorkerShedule: TfrmWorkerShedule
     Width = 350
     Height = 257
     TabOrder = 4
-    object cxGridDBTableView1: TcxGridDBTableView
+    object GridSheduleView: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       Navigator.InfoPanel.Visible = True
       DataController.DataSource = DS
@@ -230,7 +237,7 @@ inherited frmWorkerShedule: TfrmWorkerShedule
       end
     end
     object cxGridLevel1: TcxGridLevel
-      GridView = cxGridDBTableView1
+      GridView = GridSheduleView
     end
   end
   object btnAdd: TRzBitBtn

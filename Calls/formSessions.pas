@@ -150,14 +150,21 @@ begin
   frmSessionResult.Parent := frmSessionEdit.pnlResult;
   frmSessionResult.Q.ParamByName('callid').AsString :=
     DS.DataSet.FieldByName('callid').AsString;
+  frmSessionResult.Q.Open;
+  frmSessionResult.Q.Edit;
   frmSessionResult.Position := poDefault;
+
+  frmSessionResult.BorderIcons := [];
+  frmSessionResult.BorderStyle := bsNone;
+
+  //frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
   frmSessionResult.Show;
 
   //карточка клиента
   DM.GetDataset(DM.Clients);
 
-  if not DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
-    Exit;
+  if DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
+  begin
 
     prm := NewFrmCreateParam(asShow, DM.Clients);
     if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
@@ -178,17 +185,51 @@ begin
     frm.BorderIcons := [];
     frm.BorderStyle := bsNone;
     frm.Parent      := frmSessionEdit.pnlClient;
-    frmSessionEdit.pnlClient.Height := frm.Height + 5;
-    frmSessionEdit.pnlClient.Width  := frm.Width;
+
+    //frmSessionEdit.pnlClient.Height := frm.Height + 5;
+    //frmSessionEdit.pnlClient.Width  := frm.Width;
 
     frm.Position := poDefault;
-    frm.Show;
 
-    frmSessionEdit.Height := frmSessionEdit.pnlResult.Height +
-      frmSessionEdit.pnlClient.Height + frmSessionEdit.pnlCalls.Height +
-       frmClientResult.RzPanel1.Height;
+    if frm.Width > frmSessionEdit.Width then
+      frmSessionEdit.Width := frm.Width;
+
+    frm.Show;
+    frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
+      frm.Height + 5 + frmSessionEdit.pnlCalls.Height +
+       frmSessionEdit.RzPanel1.ClientHeight;
+
+    frmSessionEdit.pnlClient.Height := frm.Height + 5;
+  end
+  else
+  begin
+    frmSessionEdit.pnlClient.Visible := False;
+    frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
+       frmSessionEdit.pnlCalls.Height +
+        frmSessionEdit.RzPanel1.ClientHeight;
+  end;
+
+    frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
+
+    frmSessionEdit.frameClientCalls.AddParam('client_id', DS.DataSet.FieldByName('client_id'));
+    frmSessionEdit.frameClientCalls.OpenData;
 
     frmSessionEdit.ShowModal;
+
+    if frmSessionEdit.ModalResult = mrOk then
+    begin
+      if frmSessionResult.CheckFields then
+      try
+        frmSessionResult.Q.Post;
+          if frmSessionResult.Q.Transaction.Active then
+             frmSessionResult.Q.Transaction.CommitRetaining;
+        except
+           if frmSessionResult.Q.Transaction.Active then
+             frmSessionResult.Q.Transaction.RollbackRetaining;
+        end;
+
+    end;
+
   finally
     FreeAndNil(frmSessionEdit);
     //FreeAndNil(frmSessionEdit);

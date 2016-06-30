@@ -3,6 +3,7 @@ program fumigator;
 uses
   Vcl.Forms,
   System.UITypes,
+  System.SysUtils,
   Winapi.ShellAPI,
   Winapi.Windows,
   ClassFrmBase in 'classes\ClassFrmBase.pas' {BaseForm},
@@ -61,10 +62,10 @@ uses
   formClientResult in 'Clients\formClientResult.pas' {frmClientResult},
   formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent},
   CommonFunc in 'Server\CommonFunc.pas',
-  formSessionEdit in 'Calls\formSessionEdit.pas' {frmSessionEdit};
+  formSessionEdit in 'Calls\formSessionEdit.pas' {frmSessionEdit},
+  frClientCalls in 'Frames\frClientCalls.pas' {frameClientCalls: TFrame};
 
 {$R *.res}
-
 begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
@@ -85,6 +86,8 @@ begin
     Application.Terminate;
     Exit;
   end;
+
+  SaveLogin(ExtractFilePath(Application.ExeName) + CfgFileName, frmLogin.Edt1.Text);
 
   frmLogo := TFrmLogo.Create(nil);
   frmLogo.Show;

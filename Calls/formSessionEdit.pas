@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, RzButton, Vcl.ExtCtrls,
-  RzPanel, dxGDIPlusClasses;
+  RzPanel, dxGDIPlusClasses, frameBase, frListBase, frClientCalls;
 
 type
   TfrmSessionEdit = class(TSimpleForm)
@@ -13,10 +13,10 @@ type
     pnlCalls: TRzPanel;
     pnlClient: TRzPanel;
     RzButton1: TRzButton;
+    frameClientCalls: TframeClientCalls;
   private
     { Private declarations }
   public
-    { Public declarations }
   end;
 
 var

@@ -27,6 +27,7 @@ type
     { Private declarations }
   public
     CallResult: string;
+    function CheckFields: Boolean;
   end;
 
 var
@@ -41,13 +42,26 @@ uses
 
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
 begin
-  if (cmbIshod.Text = '') or (edtResult.Text = '')  then
+  (*if (cmbIshod.Text = '') or (edtResult.Text = '')  then
   begin
     Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
     Exit;
   end
-  else
+  else*)
+  if CheckFields then
     ModalResult := mrOk;
+end;
+
+function TfrmSessionResult.CheckFields: Boolean;
+begin
+  if (cmbIshod.Text = '') or (edtResult.Text = '')  then
+  begin
+    Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
+    Exit;
+    Result := False;
+  end
+  else
+    Result := true;
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

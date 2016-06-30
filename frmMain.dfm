@@ -70,6 +70,7 @@ inherited frmMain: TfrmMain
     TabOrder = 1
     ThemeAware = False
     OnClick = btnTuneClick
+    DropDownMenu = mOptions
     ShowArrow = False
   end
   object RzMenuButton1: TRzMenuButton
@@ -138,7 +139,7 @@ inherited frmMain: TfrmMain
     Height = 31
     Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1085#1072' '#1076#1072#1090#1091
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clInactiveCaption
     Font.Height = -12
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -170,8 +171,8 @@ inherited frmMain: TfrmMain
     ShowArrow = False
   end
   object NewClientBtn_PUM: TPopupMenu
-    Left = 208
-    Top = 16
+    Left = 192
+    Top = 88
     object NewFizClnt_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
       OnClick = NewFizClnt_miClick
@@ -182,8 +183,8 @@ inherited frmMain: TfrmMain
     end
   end
   object Clients_PUM: TPopupMenu
-    Left = 208
-    Top = 64
+    Left = 128
+    Top = 128
     object AllCli_mi: TMenuItem
       Caption = #1054#1073#1097#1080#1081' '#1089#1087#1080#1089#1086#1082
       OnClick = AllCli_miClick
@@ -226,6 +227,21 @@ inherited frmMain: TfrmMain
     object miExit: TMenuItem
       Caption = #1042#1099#1093#1086#1076
       OnClick = miExitClick
+    end
+  end
+  object mOptions: TPopupMenu
+    Left = 392
+    Top = 200
+    object miListCli: TMenuItem
+      Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1076#1083#1103' '#1086#1087#1077#1088#1072#1090#1086#1088#1086#1074
+      OnClick = miListCliClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object miOptions: TMenuItem
+      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+      OnClick = miOptionsClick
     end
   end
 end

@@ -27,7 +27,7 @@ type
     Ur_btn: TRzButton;
     DsCli: TDataSource;
     GridShedule: TcxGrid;
-    cxGridDBTableView1: TcxGridDBTableView;
+    GridSheduleView: TcxGridDBTableView;
     cxGridDBColumn1: TcxGridDBColumn;
     cxGridDBColumn3: TcxGridDBColumn;
     cxGridDBColumn4: TcxGridDBColumn;
@@ -46,6 +46,7 @@ type
     memDataWORKER_ID: TIntegerField;
     memDataDATESHEDULE: TDateField;
     MemCli: TdxMemData;
+    GridCliUrViewColumn5: TcxGridDBColumn;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -81,20 +82,56 @@ uses
 
 
 procedure TfrmWorkerShedule.btnAddClick(Sender: TObject);
+Var
+  i, id: integer;
+  ARowIndex: Integer;
+  ARowInfo:  TcxRowInfo;
 begin
   try
-    QWorkerShedule.Append;
-    QWorkerShedule.FieldByName('WORKER_ID').AsInteger :=
-      MemData.FieldByName('WORKER_ID').AsInteger;
-    QWorkerShedule.FieldByName('DATESHEDULE').AsDateTime :=
-      MemData.FieldByName('DATESHEDULE').AsDateTime;
-    QWorkerShedule.FieldByName('CLIENT_ID').AsInteger :=
-      DsCli.DataSet.FieldByName('ID').AsInteger;
-    QWorkerShedule.Post;
+    ARowIndex := GridCliUrView.DataController.GetFocusedRowIndex;
 
-    MemCli.Edit;
-    MemCli.FieldByName('spec').AsInteger :=1;
-    MemCli.Post;
+    with GridCliUrView.DataController do
+    begin
+      BeginUpdate;
+      Screen.Cursor := crHourGlass;
+      try
+        for I := 0 to GetSelectedCount - 1 do
+          begin
+            ARowIndex := GetSelectedRowIndex(I);
+            ARowInfo  := GetRowInfo(ARowIndex);
+            if ARowInfo.Level < Groups.GroupingItemCount then
+              Continue
+            else
+              begin
+                id := Values[ARowInfo.RecordIndex,  GridCliUrView.GetColumnByFieldName('id').Index];
+                QWorkerShedule.Append;
+                QWorkerShedule.FieldByName('WORKER_ID').AsInteger :=
+                  MemData.FieldByName('WORKER_ID').AsInteger;
+                QWorkerShedule.FieldByName('DATESHEDULE').AsDateTime :=
+                  MemData.FieldByName('DATESHEDULE').AsDateTime;
+                QWorkerShedule.FieldByName('CLIENT_ID').AsInteger := id;
+                  //DsCli.DataSet.FieldByName('ID').AsInteger;
+                QWorkerShedule.Post;
+
+                if MemCli.Locate('id', id, []) then
+                begin
+                  MemCli.Edit;
+                  MemCli.FieldByName('spec').AsInteger :=1;
+                  MemCli.Post;
+                end;
+              end;//else
+          end;//for
+      finally
+        EndUpdate;
+        Screen.Cursor := crDefault;
+        GridCliUrView.DataController.DeleteSelection;
+        if ARowIndex > GetRowCount - 1 then
+           ARowIndex := GetRowCount - 1;
+        if ARowIndex >= 0 then
+          GridCliUrView.DataController.SelectRows(ARowIndex, ARowIndex);
+      end;//try
+    end;
+
   except
 
   end;
@@ -195,12 +232,50 @@ begin
 end;
 
 procedure TfrmWorkerShedule.btnDelClick(Sender: TObject);
-var
-  id: Integer;
+Var
+  i, id: integer;
+  ARowIndex: Integer;
+  ARowInfo:  TcxRowInfo;
 begin
   try
-    try
-      id := QWorkerShedule.FieldByName('CLIENT_ID').AsInteger;
+    ARowIndex := GridSheduleView.DataController.GetFocusedRowIndex;
+
+    with GridSheduleView.DataController do
+    begin
+      BeginUpdate;
+      Screen.Cursor := crHourGlass;
+      try
+        for I := 0 to GetSelectedCount - 1 do
+          try
+            ARowIndex := GetSelectedRowIndex(I);
+            ARowInfo  := GetRowInfo(ARowIndex);
+
+            id := Values[ARowInfo.RecordIndex,  GridSheduleView.GetColumnByFieldName('CLIENT_ID').Index];
+            if not QWorkerShedule.Locate('CLIENT_ID', id, []) then
+              Continue;
+
+            QWorkerShedule.Delete;
+
+             MemCli.Filtered := False;
+             if MemCli.Locate('ID', id, []) then
+               SetFieldValue(MemCli.FieldByName('spec'), 0);
+
+          except
+            MemCli.Cancel;
+            QWorkerShedule.CancelUpdates;
+
+          end;//for
+      finally
+        EndUpdate;
+        Screen.Cursor := crDefault;
+        DeleteSelection;
+        if ARowIndex > GetRowCount - 1 then
+           ARowIndex := GetRowCount - 1;
+        if ARowIndex >= 0 then
+          SelectRows(ARowIndex, ARowIndex);
+      end;//try
+    end;
+      (*id := QWorkerShedule.FieldByName('CLIENT_ID').AsInteger;
       QWorkerShedule.Delete;
 
        MemCli.Filtered := False;
@@ -210,7 +285,7 @@ begin
     except
       MemCli.Cancel;
       QWorkerShedule.CancelUpdates;
-    end;
+    end;*)
   finally
     MemCli.Filtered := True;
     MemCli.Locate('ID', id, []);

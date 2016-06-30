@@ -1,16 +1,16 @@
 inherited frmSessions: TfrmSessions
   Caption = #1057#1077#1089#1089#1080#1080
-  ClientHeight = 407
+  ClientHeight = 517
   ClientWidth = 924
   Position = poDesktopCenter
   OnCreate = FormCreate
   ExplicitWidth = 940
-  ExplicitHeight = 445
+  ExplicitHeight = 555
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 731
-    Top = 303
+    Top = 413
     ExplicitLeft = 594
     ExplicitTop = 303
   end
@@ -81,9 +81,9 @@ inherited frmSessions: TfrmSessions
     end
   end
   inherited RzPanel1: TRzPanel
-    Top = 358
+    Top = 468
     Width = 924
-    ExplicitTop = 358
+    ExplicitTop = 468
     ExplicitWidth = 924
     inherited Cancel_btn: TRzButton
       Left = 788
@@ -104,12 +104,12 @@ inherited frmSessions: TfrmSessions
   inherited Grid: TcxGrid
     Top = 93
     Width = 924
-    Height = 265
+    Height = 375
     Align = alClient
     PopupMenu = GridPopup
     ExplicitTop = 93
     ExplicitWidth = 924
-    ExplicitHeight = 265
+    ExplicitHeight = 375
     inherited GridView: TcxGridDBTableView
       OnCustomDrawCell = GridViewCustomDrawCell
       DataController.DataSource = DS

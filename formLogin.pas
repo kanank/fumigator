@@ -38,7 +38,7 @@ implementation
 
 uses
   DM_Main,
-  IBX.IBQuery, formLogo, frmMain, CommonFunc;
+  IBX.IBQuery, formLogo, frmMain, CommonFunc, CommonVars;
 
 procedure TfrmLogin.btnOKClick(Sender: TObject);
 var
@@ -77,7 +77,7 @@ begin
   if not cancel then
   begin
     self.ModalResult := mrOk;
-    Edt1.Text := '';
+    //Edt1.Text := '';
     Edt2.Text := '';
   end;
 end;
@@ -100,8 +100,11 @@ begin
     Application.MessageBox(PChar('Программа была обновлена до версии: ' +
       FileVersion(Application.ExeName)), 'Обновление', MB_ICONINFORMATION);
     fShowNewVersion := True;
-  end
+  end;
 
+  Edt1.Text := ReadLogin(ExtractFilePath(Application.ExeName) + CfgFileName);
+  if Edt1.Text <> '' then
+    Edt2.SetFocus;
 end;
 
 

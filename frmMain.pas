@@ -42,6 +42,10 @@ type
     miShowMain: TMenuItem;
     miExit: TMenuItem;
     AllCli_mi: TMenuItem;
+    mOptions: TPopupMenu;
+    miListCli: TMenuItem;
+    N2: TMenuItem;
+    miOptions: TMenuItem;
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -62,6 +66,8 @@ type
     procedure miExitClick(Sender: TObject);
     procedure miShowMainClick(Sender: TObject);
     procedure AllCli_miClick(Sender: TObject);
+    procedure miListCliClick(Sender: TObject);
+    procedure miOptionsClick(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
@@ -71,6 +77,8 @@ type
   end;
 
 procedure LoadOptions(AIniFile: string);
+function SaveLogin(AIniFile, Alogin: string): Boolean;
+function ReadLogin(AIniFile: string): string;
 function CheckUpdates: boolean;
 function FindParam(AParam: string): Boolean;  // проверка наличия параметра запуска
 
@@ -85,10 +93,11 @@ implementation
 {$R *.dfm}
 
 uses
+  System.IniFiles,
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, CommonTypes, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
-  CommonVars, CommonFunc;
+  CommonVars, CommonFunc, formWorkerShedule;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -148,6 +157,7 @@ begin
   begin
     msgText := arg;
     PostMessage(Self.Handle, WM_SHOWMSG, 0,0);
+    Application.ProcessMessages;
   end
   else
 
@@ -244,6 +254,24 @@ begin
       fCanClose := True;
       Self.Close;
     end;
+end;
+
+procedure TfrmMain.miListCliClick(Sender: TObject);
+begin
+  try
+    DM.GetDataset(DM.Clients);
+    frmWorkerShedule := TfrmWorkerShedule.Create(self);
+    frmWorkerShedule.ShowModal;
+  finally
+    FreeAndNil(frmWorkerShedule);
+  end;
+end;
+
+procedure TfrmMain.miOptionsClick(Sender: TObject);
+begin
+  frmOptions := TfrmOptions.Create(self);
+  frmOptions.ShowModal;
+  FreeAndNil(frmOptions);
 end;
 
 procedure TfrmMain.miShowMainClick(Sender: TObject);
@@ -363,6 +391,31 @@ begin
 
   MainOptions.ServerHost := ServerHost; //'81.177.48.139'; //'localhost';//
   MainOptions.ServerPort := ServerPort; //1025;
+end;
+
+function SaveLogin(AIniFile, ALogin: string): Boolean;
+var
+  Ini: TIniFile;
+begin
+  Ini := TIniFile.Create(AIniFile);
+  try
+    Ini.WriteString('LastLogin', 'Name', ALogin);
+  finally
+  Ini.Free;
+  end;
+end;
+
+function ReadLogin(AIniFile: string): string;
+var
+  Ini: TIniFile;
+begin
+  Ini := TIniFile.Create(AIniFile);
+  if Assigned(Ini) then
+  try
+    Result := Ini.ReadString('LastLogin', 'Name', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function CheckUpdates: boolean;

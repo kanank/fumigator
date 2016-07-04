@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
-  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP;
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
+  IdSync;
 
 const
   WM_SHOWMSG = WM_USER + 100;
@@ -19,6 +20,23 @@ type
     ServerHost: string;
     ServerPort: integer;
   end;
+
+  TReadingThread = class(TThread)
+    protected
+      FConn: TIdTCPConnection;
+      procedure Execute; override;
+    public
+      constructor Create(AConn: TIdTCPConnection); reintroduce;
+    end;
+
+  TServerCmd = class(TIdSync)
+    protected
+      FMsg: String;
+      procedure DoSynchronize; override;
+    public
+      constructor Create(const AMsg: String);
+      class procedure DoCmd(const AMsg: String);
+    end;
 
 type
   TfrmMain = class(TBaseForm)
@@ -46,6 +64,8 @@ type
     miListCli: TMenuItem;
     N2: TMenuItem;
     miOptions: TMenuItem;
+    TCPClient: TIdTCPClient;
+
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnTuneClick(Sender: TObject);
@@ -58,7 +78,7 @@ type
     procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
     procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
     procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
-      ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+     ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
     procedure RzMenuButton4Click(Sender: TObject);
@@ -68,11 +88,14 @@ type
     procedure AllCli_miClick(Sender: TObject);
     procedure miListCliClick(Sender: TObject);
     procedure miOptionsClick(Sender: TObject);
+    procedure TCPClientConnected(Sender: TObject);
+    procedure TCPClientDisconnected(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
   public
+    ReadThread: TReadingThread;
     procedure DoSocketConnect;
   end;
 
@@ -327,12 +350,32 @@ begin
   FreeAndNil(frmSessions);
 end;
 
+procedure TfrmMain.TCPClientConnected(Sender: TObject);
+begin
+  DM.SocketTimer.Interval := 0;
+  ReadThread := TReadingThread.Create(TCPClient);
+
+  lblSocket.Caption := 'Соединение с сервером установлено';
+  DM.DateStart := Now;
+  TCPClient.Socket.WriteLn('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
+end;
+
+procedure TfrmMain.TCPClientDisconnected(Sender: TObject);
+begin
+  if ReadThread <> nil then
+  begin
+    ReadThread.Terminate;
+    ReadThread.WaitFor;
+    FreeAndNil(ReadThread);
+  end;
+end;
+
 procedure TfrmMain.DoSocketConnect;
 begin
-  ClientSocket.Host := MainOptions.ServerHost;
-  ClientSocket.Port := MainOptions.ServerPort;
+  TCPClient.Host := MainOptions.ServerHost;
+  TCPClient.Port := MainOptions.ServerPort;
   try
-    ClientSocket.Open;
+    TCPClient.Connect;
   except
     DM.SocketTimer.Interval := 20000;
   end;
@@ -487,5 +530,121 @@ begin
       break;
     end;
 end;
+
+{ TServerCmd }
+
+class procedure TServerCmd.DoCmd(const AMsg: String);
+begin
+  with Create(AMsg) do
+  try
+    Synchronize;
+  finally
+    Free;
+  end;
+end;
+
+constructor TServerCmd.Create(const AMsg: String);
+begin
+  FMsg := AMsg;
+  inherited Create;
+end;
+
+procedure TServerCmd.DoSynchronize;
+var
+  s: string;
+  p: Integer;
+  cmd, arg: string;
+begin
+  s := FMsg;
+
+  if Copy(s, 1, 1) = '#' then
+  begin
+    p := Pos(':', s);
+    cmd := Copy(s, 2, p - 2);
+    arg := Copy(s, p + 1, Length(s));
+  end;
+
+  if cmd = 'msg' then
+  begin
+    msgText := arg;
+    PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
+    Application.ProcessMessages;
+  end
+  else
+
+  if cmd = 'callid' then //создан исходящий звонок с CallId
+  begin
+    if Assigned(frmCalling) then
+      frmCalling.CallId := arg;
+    if Assigned(frmClientResult) then
+      frmClientResult.CallId := arg;
+  end
+  else
+  if cmd = 'callfinish' then  //в варианте c CallListener
+  begin
+    if Assigned(frmCalling) and (frmCalling.CallId = arg) then
+      frmCalling.CallFinish;
+    if Assigned(frmClientResult) and (frmClientResult.CallId = arg) then
+      frmClientResult.CallFinish;
+  end
+
+  else
+
+  if cmd = 'checkcall' then //поступил новый звонок
+  begin
+    PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0);
+    //DM.Calls_TimerTimer(DM.Calls_Timer);
+  end
+
+  else
+  if cmd = 'checksession' then //завершен звонок
+  begin
+    if Assigned(frmCalling) then
+      frmCalling.CheckSession
+    else
+    if Assigned(frmIncomeCallRoot) then
+      frmIncomeCallRoot.CheckSession
+    else
+    if Assigned(frmClientResult) then
+      frmClientResult.CheckSession;
+
+  end
+
+  else
+  if cmd = 'checkacceptcall' then //звонок принят
+  begin
+    //if Assigned(frmIncomeCallRoot) then
+    //  frmIncomeCallRoot.CheckSession; //.CheckAccept;
+  end
+
+  else
+  if cmd = 'servertime' then
+  begin
+    TimeShift := StrToInt(arg) - SecondOfTheDay(DM.DateStart);
+    DM.DateStart := IncSecond(DM.DateStart, TimeShift);
+    DM.CallS_Q.ParamByName('date_start').AsDateTime := DM.DateStart;
+  end;
+
+
+end;
+
+{ TReadingThread }
+
+constructor TReadingThread.Create(AConn: TIdTCPConnection);
+begin
+  FConn := AConn;
+  inherited Create(False);
+end;
+
+procedure TReadingThread.Execute;
+begin
+  while not Terminated and FConn.Connected do
+  begin
+    // refer to my earlier message for this code...
+    TServerCmd.DoCmd(FConn.IOHandler.ReadLn);
+  end;
+
+end;
+
 
 end.

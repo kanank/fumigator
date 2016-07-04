@@ -244,4 +244,14 @@ inherited frmMain: TfrmMain
       OnClick = miOptionsClick
     end
   end
+  object TCPClient: TIdTCPClient
+    OnDisconnected = TCPClientDisconnected
+    OnConnected = TCPClientConnected
+    ConnectTimeout = 0
+    IPVersion = Id_IPv4
+    Port = 0
+    ReadTimeout = -1
+    Left = 504
+    Top = 64
+  end
 end

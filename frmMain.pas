@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
-  IdSync;
+  IdSync, IdGlobal;
 
 const
   WM_SHOWMSG = WM_USER + 100;
@@ -90,6 +90,7 @@ type
     procedure miOptionsClick(Sender: TObject);
     procedure TCPClientConnected(Sender: TObject);
     procedure TCPClientDisconnected(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
@@ -97,6 +98,7 @@ type
   public
     ReadThread: TReadingThread;
     procedure DoSocketConnect;
+    procedure AppException(Sender: TObject; E: Exception);
   end;
 
 procedure LoadOptions(AIniFile: string);
@@ -110,6 +112,7 @@ var
   MainOptions: TAppOptions;
   msgText: string;
   TimeShift: Integer; //смещение с сервером в секундах
+  hMutex: THandle;
 
 implementation
 
@@ -252,6 +255,12 @@ begin
   end;
 end;
 
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  TCPClient.Disconnect;
+
+end;
+
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   //inherited;
@@ -333,8 +342,9 @@ procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
 begin
-  n := InputBox('Входящий звонок', 'Номер вызывающего', '+79104579648');
-  ClientSocket.Socket.SendText('#call:' + n + ',755,755');
+ // n := InputBox('Входящий звонок', 'Номер вызывающего', '+79104579648');
+ // ClientSocket.Socket.SendText('#call:' + n + ',755,755');
+  TCPClient.Socket.WriteLn (AnsiToUtf8('Тест'));
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
@@ -357,6 +367,7 @@ begin
 
   lblSocket.Caption := 'Соединение с сервером установлено';
   DM.DateStart := Now;
+  TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
   TCPClient.Socket.WriteLn('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
 end;
 
@@ -392,6 +403,12 @@ begin
   finally
     FreeAndNil(frmClients);
   end;
+end;
+
+procedure TfrmMain.AppException(Sender: TObject; E: Exception);
+begin
+  if E.ClassName = 'EIdNotConnected' then
+    Exit;
 end;
 
 procedure TfrmMain.btnClientsClick(Sender: TObject);
@@ -637,14 +654,35 @@ begin
 end;
 
 procedure TReadingThread.Execute;
+var
+  s: string;
 begin
   while not Terminated and FConn.Connected do
   begin
-    // refer to my earlier message for this code...
-    TServerCmd.DoCmd(FConn.IOHandler.ReadLn);
+    try
+      // refer to my earlier message for this code...
+      if Terminated then
+        Exit;
+
+      if not FConn.IOHandler.Connected then
+        Exit;
+
+      s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
+      s := URLDecode(s);
+      if not Terminated and (s <> '') then
+        TServerCmd.DoCmd(s);
+    except
+      s := Exception(ExceptObject).Message;
+    end;
   end;
 
 end;
 
+initialization
+  hMutex := CreateMutex(nil, True,
+    Pchar(ExtractFileName((Application.ExeName))));
+
+finalization
+  CloseHandle(hMutex);
 
 end.

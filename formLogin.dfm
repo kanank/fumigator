@@ -14,6 +14,7 @@ object frmLogin: TfrmLogin
   OldCreateOrder = True
   Position = poDesktopCenter
   OnActivate = FormActivate
+  OnCreate = FormCreate
   DesignSize = (
     304
     302)

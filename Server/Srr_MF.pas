@@ -8,9 +8,30 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents;
+  TelpinAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal;
 
 type
+  TMyContext = class(TIdServerContext)
+    public
+      IP: String;
+      Nick: String;
+      Con: TDateTime;
+      function SendMsg(const ANick: String; const AMsg: String) : Boolean;
+      procedure BroadcastMsg(const bmsg: String);
+      procedure BroadcastMsgAll(const ANick: String; const bmsg: String);
+      procedure SendNicks;
+      procedure SendFile(const ANick,Fn:string);
+  end;
+
+  (*TLog = class(TIdSync)
+    protected
+        FMsg: String;
+    public
+        constructor Create(const AMsg: String);
+        class procedure AddMsg(const AMsg: String);
+
+    end;*)
+
   TMF = class(TForm)
     Panel1: TPanel;
     Log_memo: TMemo;
@@ -54,6 +75,7 @@ type
     IBEvents: TIBEvents;
     Button6: TButton;
     DebugMode_cb: TCheckBox;
+    TCPServer: TIdTCPServer;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -74,6 +96,9 @@ type
     procedure ServerSocketClientError(Sender: TObject; Socket: TCustomWinSocket;
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     procedure Button6Click(Sender: TObject);
+    procedure TCPServerConnect(AContext: TIdContext);
+    procedure TCPServerDisconnect(AContext: TIdContext);
+    procedure TCPServerExecute(AContext: TIdContext);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string);
@@ -91,6 +116,9 @@ type
     function GetUserSocket(ATelNum: string): TCustomWinSocket;
  //  function CreateRWProc :TIBStoredProc;
 
+    Function SendMsg(const ANick: String; const AMsg:String) : Boolean;
+    procedure BroadcastMsg(const bmsg: String);
+    
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -254,6 +282,25 @@ begin
   SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
 end;
 
+procedure TMF.BroadcastMsg(const bmsg: String);
+var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+begin
+  // FContextList is inherited from TIdContext
+  List := TCPServer.Contexts.LockList;
+  try
+    for I := 0 to List.Count-1 do
+    begin
+      Context := TMyContext(List[I]);
+      Context.Connection.IOHandler.WriteLn(URLEncode(bmsg));
+    end;
+  finally
+    TCPServer.Contexts.UnlockList;
+  end;
+end;
+
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
   AccessToken.GetToken;
@@ -295,10 +342,20 @@ procedure TMF.Button2Click(Sender: TObject);
 var
   Caller: TPhoneCalls;
 begin
-  ServerSocket.Close;
+  try
+  (*ServerSocket.Close;
   ServerSocket.Port := edtSocketPort.Value;
-  ServerSocket.Open;
+  ServerSocket.Open;*)
+
+  TCPServer.Active := False;
+  TCPServer.DefaultPort := edtSocketPort.Value;
+  TCPServer.Active := true;
+
   Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
+  except
+    Log_memo.Lines.Add('Ошибка при запуске сервер сокетов: ' + 
+      Exception(ExceptObject).Message);
+  end;
 
   //Caller := TPhoneCalls.Create(AccessToken);
   //Caller.SimpleCall('104', '+79104579648');
@@ -308,13 +365,7 @@ procedure TMF.Button4Click(Sender: TObject);
 var
   i: Integer;
 begin
- for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
-   try
-     ServerSocket.Socket.Connections[i].SendText('#msg:' + Edit1.Text);
-
-   except
-
-   end;
+ BroadcastMsg('#msg:' + Edit1.Text);
 end;
 
 procedure TMF.Button5Click(Sender: TObject);
@@ -385,6 +436,8 @@ begin
   AccessToken := TTelphinToken.Create;
   AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
   AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
+
+  TCPServer.ContextClass := TMyContext;
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -516,7 +569,8 @@ end;
 function TMF.SendCommandToUser(atsnum, command: string): Boolean;
 var
   i, p: Integer;
-  socket: TCustomWinSocket;
+  List: TList;
+  Context: TMyContext;
 begin
   try
     CSectionCommand.Enter;
@@ -527,50 +581,56 @@ begin
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
       Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
 
+      Log_memo.Lines.Add('Посылаем сообщение: ' + command);
       try
-        Log_memo.Lines.Add('Ищем сокет: ' + command);
-        socket := GetUserSocket(atsnum);
+        SendMsg(atsnum, command);
+        Application.ProcessMessages;
       except
-        Result := False;
-        Log_memo.Lines.Add('Ошибка поиска сокета: ' + command + #13#10 +
+        Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
         Exception(ExceptObject).Message);
-        socket := nil;
       end;
 
-      if Assigned(socket) then
-      begin
-        Log_memo.Lines.Add('Посылаем сообщение: ' + command);
-        try
-          socket.SendText(command);
-          Application.ProcessMessages;
-        except
-          Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
-          Exception(ExceptObject).Message);
-        end;
-      end
-      else
-        Log_memo.Lines.Add('Сокет не найден: ' + command);
     end
-    else
-    begin
-      for I := 0 to ServerSocket.Socket.ActiveConnections - 1 do
-        try
-          Log_memo.Lines.Add('Посылаем сообщение: ' + command);
-          try
-            if ServerSocket.Socket.Connections[i].Connected then
-              ServerSocket.Socket.Connections[i].SendText(command);
-            Application.ProcessMessages;
-          except
-            Log_memo.Lines.Add('Ошибка сообщения: ' + command+ #13#10 +
-              Exception(ExceptObject).Message);
 
-          end;
-        except
-          Continue;
-        end;
+    else   //всем
+    begin
+      try
+        Log_memo.Lines.Add('Посылаем всем сообщение: ' + command);
+        BroadcastMsg(AnsiToUtf8(command));
+      except
+
+      end;
     end;
   finally
     CSectionCommand.Leave;
+  end;
+end;
+
+function TMF.SendMsg(const ANick, AMsg: String): Boolean;
+var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+begin
+  Result := False;
+  //FContextList is inherited from TIdContext
+  List := TCPServer.Contexts.LockList;
+  try
+    for I := 0 to List.Count-1 do
+    begin
+      Context := TMyContext(List[I]);
+      if lowercase(Context.Nick) = lowercase(ANick) then
+      begin
+        try
+          Context.Connection.IOHandler.WriteLn(AMsg);
+          Result := True;
+        except
+        end;
+        Exit;
+      end;
+    end;
+  finally
+    TCPServer.Contexts.UnlockList;
   end;
 end;
 
@@ -687,6 +747,62 @@ begin
   finally
     argList.Free;
   end;
+end;
+
+procedure TMF.TCPServerConnect(AContext: TIdContext);
+begin
+  AContext.Connection.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
+  with TMyContext(AContext) do
+  begin
+    Con := Now;
+    if (Connection.Socket <> nil) then
+      IP := Connection.Socket.Binding.PeerIP;
+    
+    //Nick := Connection.IOHandler.ReadLn;
+    //BroadcastMsg('addlist|' + Nick);
+  end;
+end;
+
+procedure TMF.TCPServerDisconnect(AContext: TIdContext);
+begin
+//tmycontext(acontext).broadcastMsg('deletelist|' + tmycontext(acontext).Nick);
+end;
+
+procedure TMF.TCPServerExecute(AContext: TIdContext);
+var
+  p: Integer;
+  s, cmd, arg: string;
+begin
+  try
+    if not AContext.Connection.Connected then
+      Exit;
+    
+    s := AContext.Connection.IOHandler.ReadLn;
+    if s = '' then
+      Exit;
+      
+    Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
+    if Copy(s, 1, 1) = '#' then
+    begin
+      p := Pos(':', s);
+      cmd := Copy(s, 2, p - 2);
+      arg := Copy(s, p + 1, Length(s));
+
+      if cmd = 'setphone' then
+      begin
+        TMyContext(AContext).Nick := arg;
+
+        AContext.Connection.IOHandler.WriteLn(AnsiToUtf8('#servertime:' + IntToStr(SecondOfTheDay(Now))));
+        Application.ProcessMessages;
+      end
+      else
+        SocketCommand(cmd, arg);
+
+    end;
+  except
+    Log_memo.Lines.Add('Ошибка чтения: ' +Exception(ExceptObject).Message);
+  end;
+
 end;
 
 procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;
@@ -808,5 +924,168 @@ begin
     FreeAndNil(Q);
   end;
 end;
+
+Function TMyContext.SendMsg(const ANick: String; const AMsg:String) : Boolean;
+var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+begin
+  Result := False;
+  //FContextList is inherited from TIdContext
+  List := FContextList.LockList;
+  try
+    for I := 0 to List.Count-1 do
+    begin
+      Context := TMyContext(List[I]);
+      if lowercase(Context.Nick) = lowercase(ANick) then
+      begin
+        try
+          Context.Connection.IOHandler.WriteLn(AMsg);
+          Result := True;
+        except
+        end;
+        Exit;
+      end;
+    end;
+  finally
+    FContextList.UnlockList;
+  end;
+end;
+
+procedure TMyContext.SendFile(const ANick,Fn:string);
+var
+        List: TList;
+        Context: TMyContext;
+        I: Integer;
+        FStream: TFileStream;
+//IdStream : TIdStreamVCL;
+begin
+ (*  // FContextList is inherited from TIdContext
+    List := FContextList.LockList;
+    try
+        for I := 0 to List.Count-1 do
+        begin
+            Context := TMyContext(List[I]);
+            if Context.Nick = ANick then
+            begin
+                try
+   // Context.Connection.IOHandler.WriteLn(AMsg+'@'+ANick+':'+fromNick );
+   //Self.Connection.IOHandler.WriteLn('Msg sent to ' + ANick + '>>' + AMsg);
+    //showmessage('Reach that bit');
+    FStream := TFileStream.Create(fn, fmOpenRead or fmShareDenyWrite);
+    //showmessage('FStream created');
+    try
+        //IdStream := TIdStreamVCL.Create(fstream);
+       // showmessage('IDStream created');
+        try
+
+            Context.Connection.IOHandler.WriteLn('pic@'+fn+';Sending file...');
+            Context.Connection.IOHandler.Write(IdStream, 0, True);
+            Context.Connection.IOHandler.WriteLn('done!');
+        finally
+            IdStream.Free;
+        end;
+    finally
+        FStream.Free;
+    end;
+
+
+   except
+                end;
+                Exit;
+            end;
+        end;
+    finally
+        FContextList.UnlockList;
+    end;
+    Self.Connection.IOHandler.WriteLn('msg from SendFile Procedure : The name you send the message to does not exist. Please click on ''Get list of Names on Chat'' button to get a full list of names.');*)
+end;
+
+
+//******broadcast procedures *******//
+procedure TMycontext.BroadcastMsgAll(const ANick: String; const bmsg: String);
+var
+    List: TList;
+    Context: TMyContext;
+    I: Integer;
+begin
+    // FContextList is inherited from TIdContext
+    List := FContextList.LockList;
+    try
+        for I := 0 to List.Count-1 do
+        begin
+            Context := TMyContext(List[I]);
+            if Context <> Self  then try
+                Context.Connection.IOHandler.WriteLn(ANick + '> ' + bmsg);
+
+            except end;
+        end;
+    finally
+        FContextList.UnlockList;
+    end;
+end;
+
+procedure TMyContext.BroadcastMsg(const bmsg: String);
+var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+begin
+  // FContextList is inherited from TIdContext
+  List := FContextList.LockList;
+  try
+    for I := 0 to List.Count-1 do
+    begin
+      Context := TMyContext(List[I]);
+      if Context <> Self then
+      try
+        Context.Connection.IOHandler.WriteLn(bmsg);
+      except
+      end;
+    end;
+  finally
+    FContextList.UnlockList;
+  end;
+end;
+
+procedure TMyContext.SendNicks;
+begin
+
+end;
+(*var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+  ServerSettingsFile : TINIFile;
+  strings : TStringlist;
+begin
+  List := FContextList.LockList;
+  try
+    Connection.IOHandler.WriteLn('list|clear');
+
+    //gee lys terug
+    if List.Count > 1 then
+    begin
+      for I := 0 to List.Count -1 do
+      begin
+        Context := TMyContext(List[I]);
+        if Context <> Self then
+          Connection.IOHandler.WriteLn('list|'+ Context.Nick);
+      end;
+    end;
+
+    //groups
+    ServerSettingsFile := TINIFile.Create(MainDir(True) + 'ServerSettings.ini');
+    Strings := TStringlist.Create;
+    ServerSettingsFile.ReadSection('groups', Strings);
+    if Strings.Count <> 0 then
+      for i := 0 to strings.Count -1 do
+        Connection.IOHandler.WriteLn('list|' + Strings[i]);
+
+  finally
+    FContextList.UnlockList;
+  end;
+end;*)
 
 end.

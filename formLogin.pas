@@ -22,6 +22,7 @@ type
     Shape1: TShape;
     procedure btnOKClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
 
   private
     fShowNewVersion: Boolean;
@@ -107,5 +108,10 @@ begin
     Edt2.SetFocus;
 end;
 
+
+procedure TfrmLogin.FormCreate(Sender: TObject);
+begin
+  fShowNewVersion := False;
+end;
 
 end.

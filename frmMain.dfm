@@ -1,5 +1,6 @@
 inherited frmMain: TfrmMain
   Position = poDesktopCenter
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   ExplicitWidth = 657

@@ -40,9 +40,9 @@ inherited frmSessionResult: TfrmSessionResult
   object Label1: TLabel
     Left = 8
     Top = 41
-    Width = 106
+    Width = 112
     Height = 13
-    Caption = #1050#1086#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
+    Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
     Color = clBtnShadow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack

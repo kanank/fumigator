@@ -547,4 +547,13 @@ object MF: TMF
     Left = 377
     Top = 73
   end
+  object TCPServer: TIdTCPServer
+    Bindings = <>
+    DefaultPort = 0
+    OnConnect = TCPServerConnect
+    OnDisconnect = TCPServerDisconnect
+    OnExecute = TCPServerExecute
+    Left = 520
+    Top = 336
+  end
 end

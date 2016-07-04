@@ -66,9 +66,18 @@ uses
   frClientCalls in 'Frames\frClientCalls.pas' {frameClientCalls: TFrame};
 
 {$R *.res}
+var
+  err: string;
 begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
+
+  // пароверяем запущенную программу
+  if Waitforsingleobject(hMutex, 0) <> 0 then
+  begin
+    Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
+    Application.terminate;
+  end;
 
   Application.CreateForm(TDataModuleMain, DM);
   LoadOptions(CfgFileName);
@@ -98,8 +107,14 @@ begin
   frmLogin.Free;
 
   frmLogo.Free;
+
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmMain, formMain);
+  Application.OnException := formMain.AppException;
 
-  Application.Run;
+  try
+    Application.Run;
+  except
+    err := Exception(ExceptObject).Message;
+  end;
 end.

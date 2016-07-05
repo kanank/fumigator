@@ -58,6 +58,7 @@ type
     miFilterAccepted: TMenuItem;
     miFilterDuration: TMenuItem;
     miFilterOff: TMenuItem;
+    cmbFilter: TcxComboBox;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -68,6 +69,7 @@ type
     procedure miFilterAcceptedClick(Sender: TObject);
     procedure miFilterDurationClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
+    procedure cmbFilterPropertiesChange(Sender: TObject);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -131,6 +133,12 @@ begin
     Post;
   end;
 
+end;
+
+
+procedure TfrmSessions.cmbFilterPropertiesChange(Sender: TObject);
+begin
+  SetFilter;
 end;
 
 procedure TfrmSessions.Edit_btnClick(Sender: TObject);
@@ -245,6 +253,7 @@ begin
   MemHeader.Open;
   MemHeader.Append;
   MemHeader.Post;
+  cmbFilter.ItemIndex := 0;
 end;
 
 
@@ -272,6 +281,7 @@ end;
 procedure TfrmSessions.miFilterAcceptedClick(Sender: TObject);
 begin
   TMenuItem(Sender).Checked := not TMenuItem(Sender).Checked;
+  SetFilter;
 end;
 
 procedure TfrmSessions.miFilterDurationClick(Sender: TObject);
@@ -298,7 +308,7 @@ end;
 
 procedure TfrmSessions.QFilterRecord(DataSet: TDataSet; var Accept: Boolean);
 var
-  f1, f2: Boolean;
+  ff, f1, f2: Boolean;
 begin
   f1 := True; f2 := True;
 
@@ -307,7 +317,14 @@ begin
   if miFilterDuration.Checked then
     f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
 
-  Accept := f1 and f2;
+   case cmbFilter.ItemIndex of
+     0: ff := DataSet.FieldByName('ID').AsInteger > 0;
+     1: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 0;
+     2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
+     3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
+   end;
+
+  Accept := ff and f1 and f2;
 end;
 
 procedure TfrmSessions.RzButton1Click(Sender: TObject);

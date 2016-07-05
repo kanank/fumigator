@@ -75,15 +75,16 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 301
     Width = 786
     TabOrder = 8
-    ExplicitTop = 271
-    ExplicitWidth = 734
+    ExplicitTop = 301
+    ExplicitWidth = 786
     inherited Image2: TImage
       Left = 58
+      ExplicitLeft = 58
     end
     inherited Exit_bnt: TRzButton
       Left = 652
       OnClick = Exit_bntClick
-      ExplicitLeft = 600
+      ExplicitLeft = 652
     end
     object butOK: TRzButton
       Left = 508
@@ -103,7 +104,6 @@ inherited frmClientFiz: TfrmClientFiz
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
-      ExplicitLeft = 456
     end
   end
   object ID_edt: TcxDBTextEdit
@@ -132,7 +132,6 @@ inherited frmClientFiz: TfrmClientFiz
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 2
     Visible = False
-    ExplicitWidth = 21
     Width = 73
   end
   object Comments_memo: TcxDBMemo
@@ -204,6 +203,7 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited RzPanel1: TRzPanel
       Width = 338
+      ExplicitWidth = 338
       inherited Label10: TLabel [0]
       end
       inherited Label9: TLabel [1]
@@ -225,15 +225,23 @@ inherited frmClientFiz: TfrmClientFiz
       end
       inherited Label8: TLabel [6]
         Top = 85
+        Width = 51
+        Height = 26
+        WordWrap = True
         ExplicitTop = 85
+        ExplicitWidth = 51
+        ExplicitHeight = 26
       end
       inherited edtSurName: TcxDBTextEdit [7]
+        ExplicitWidth = 266
         Width = 266
       end
       inherited edtName: TcxDBTextEdit [8]
+        ExplicitWidth = 266
         Width = 266
       end
       inherited edtFamily: TcxDBTextEdit [9]
+        ExplicitWidth = 266
         Width = 266
       end
       inherited cmbSex: TcxDBComboBox [10]
@@ -246,13 +254,18 @@ inherited frmClientFiz: TfrmClientFiz
       inherited edtCitizen: TcxDBTextEdit [12]
         Top = 110
         ExplicitTop = 110
+        ExplicitWidth = 215
         Width = 215
       end
       inherited cmbDateBirth: TcxDBDateEdit [13]
-        Top = 80
+        Left = 72
+        Top = 81
+        Properties.OnChange = cmbDateBirthPropertiesChange
         Properties.OnInitPopup = FramePersoncmbDateBirthPropertiesInitPopup
-        ExplicitTop = 80
-        Width = 158
+        ExplicitLeft = 72
+        ExplicitTop = 81
+        ExplicitWidth = 125
+        Width = 125
       end
     end
     inherited FrameAddress: TFrameKladrAdrFull
@@ -293,7 +306,7 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited edtEmailPrivate: TcxDBTextEdit
       Visible = False
-      ExplicitWidth = 80
+      ExplicitWidth = 133
       Width = 133
     end
     inherited edtEmailWork: TcxDBTextEdit
@@ -356,12 +369,12 @@ inherited frmClientFiz: TfrmClientFiz
       Width = 212
       Height = 128
       ExplicitWidth = 212
-      ExplicitHeight = 126
+      ExplicitHeight = 128
       inherited grdPhone: TcxGrid
         Width = 202
         Height = 81
         ExplicitWidth = 202
-        ExplicitHeight = 79
+        ExplicitHeight = 81
         inherited grdPhoneDBTableView1: TcxGridDBTableView
           OptionsView.Header = False
           inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
@@ -374,7 +387,7 @@ inherited frmClientFiz: TfrmClientFiz
         Top = 97
         Width = 210
         Height = 30
-        ExplicitTop = 95
+        ExplicitTop = 97
         ExplicitWidth = 210
         ExplicitHeight = 30
         inherited btnDel: TRzBitBtn
@@ -439,7 +452,7 @@ inherited frmClientFiz: TfrmClientFiz
       Width = 41
       Height = 31
       Layout = blGlyphTop
-      ExplicitLeft = 331
+      ExplicitLeft = 384
       ExplicitTop = 9
       ExplicitWidth = 41
       ExplicitHeight = 31
@@ -483,6 +496,7 @@ inherited frmClientFiz: TfrmClientFiz
         Height = 91
         ExplicitLeft = 5
         ExplicitTop = 15
+        ExplicitWidth = 225
         ExplicitHeight = 91
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
@@ -496,6 +510,7 @@ inherited frmClientFiz: TfrmClientFiz
       inherited RzPanel2: TRzPanel
         Left = 230
         Height = 95
+        ExplicitLeft = 230
         ExplicitHeight = 95
         inherited btnEdit: TRzBitBtn
           Top = 34

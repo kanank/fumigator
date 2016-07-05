@@ -130,6 +130,7 @@ begin
   end;
 end;
 
+
 procedure TfrmClientFiz.cmbWorkerPropertiesCloseUp(Sender: TObject);
 var
   id: Integer;

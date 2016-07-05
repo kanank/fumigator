@@ -72,8 +72,15 @@ begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
 
+  frmLogo := TFrmLogo.Create(nil);
+  frmLogo.Info.Caption := 'Проверка новой версии';
+  frmLogo.Show;
+  frmLogo.RefreshForm;
+  //BringWindowToTop(frmLogo.Handle);
+  //frmLogo.Repaint;
+
   // пароверяем запущенную программу
-  if Waitforsingleobject(hMutex, 0) <> 0 then
+  if WaitForSingleObject(hMutex, 0) <> 0 then
   begin
     Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
     Application.terminate;
@@ -89,6 +96,9 @@ begin
     Exit;
   end;
 
+  frmLogo.ProgressBar.Visible := False;
+  frmLogo.InfoText := 'Подготовка к запуску...';
+
   frmLogin := TfrmLogin.Create(nil);
   if frmLogin.ShowModal <> mrOk then
   begin
@@ -96,12 +106,9 @@ begin
     Exit;
   end;
 
-  SaveLogin(ExtractFilePath(Application.ExeName) + CfgFileName, frmLogin.Edt1.Text);
+  frmLogo.InfoText := 'Запуск программы...';
 
-  frmLogo := TFrmLogo.Create(nil);
-  frmLogo.Show;
-  BringWindowToTop(frmLogo.Handle);
-  frmLogo.Repaint;
+  SaveLogin(ExtractFilePath(Application.ExeName) + CfgFileName, frmLogin.Edt1.Text);
 
   DM.AfterLogin;
   frmLogin.Free;

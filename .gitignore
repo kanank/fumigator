@@ -1,2 +1,6 @@
 __history
 Win32
+*.dcu
+*.res
+*.dcu
+*.exe

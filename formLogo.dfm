@@ -3,7 +3,7 @@ object frmLogo: TfrmLogo
   Top = 0
   BorderIcons = []
   BorderStyle = bsNone
-  ClientHeight = 155
+  ClientHeight = 156
   ClientWidth = 294
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,14 +15,14 @@ object frmLogo: TfrmLogo
   Position = poDesktopCenter
   DesignSize = (
     294
-    155)
+    156)
   PixelsPerInch = 96
   TextHeight = 13
   object Shape1: TShape
     Left = 0
     Top = 0
     Width = 294
-    Height = 155
+    Height = 156
     Brush.Style = bsClear
   end
   object img1: TImage
@@ -161,11 +161,13 @@ object frmLogo: TfrmLogo
     Stretch = True
   end
   object Info: TRzLabel
-    Left = 117
-    Top = 134
-    Width = 61
+    Left = 4
+    Top = 115
+    Width = 287
     Height = 16
-    Caption = #1047#1072#1075#1088#1091#1079#1082#1072
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1047#1072#1075#1088#1091#1079#1082#1072'...'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clLime
     Font.Height = -13
@@ -180,23 +182,26 @@ object frmLogo: TfrmLogo
     LightTextStyle = True
     Rotation = roFlat
   end
-  object RzLabel1: TRzLabel
-    Left = 179
+  object ProgressBar: TcxProgressBar
+    Left = 1
     Top = 134
-    Width = 20
-    Height = 16
-    Caption = '.....'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clLime
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    GlowSize = 1
+    Anchors = [akLeft, akRight, akBottom]
+    AutoSize = False
     ParentFont = False
-    BlinkColor = clLime
-    BorderSides = []
-    FlyByColor = clGreen
-    LightTextStyle = True
-    Rotation = roFlat
+    Properties.AnimationPath = cxapPingPong
+    Style.Font.Charset = DEFAULT_CHARSET
+    Style.Font.Color = clWhite
+    Style.Font.Height = -11
+    Style.Font.Name = 'Tahoma'
+    Style.Font.Style = []
+    Style.IsFontAssigned = True
+    TabOrder = 0
+    Visible = False
+    Height = 21
+    Width = 292
+  end
+  object XPManifest1: TXPManifest
+    Left = 240
+    Top = 80
   end
 end

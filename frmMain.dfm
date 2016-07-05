@@ -172,8 +172,8 @@ inherited frmMain: TfrmMain
     ShowArrow = False
   end
   object NewClientBtn_PUM: TPopupMenu
-    Left = 192
-    Top = 88
+    Left = 288
+    Top = 48
     object NewFizClnt_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
       OnClick = NewFizClnt_miClick
@@ -184,8 +184,8 @@ inherited frmMain: TfrmMain
     end
   end
   object Clients_PUM: TPopupMenu
-    Left = 128
-    Top = 128
+    Left = 208
+    Top = 48
     object AllCli_mi: TMenuItem
       Caption = #1054#1073#1097#1080#1081' '#1089#1087#1080#1089#1086#1082
       OnClick = AllCli_miClick
@@ -254,5 +254,9 @@ inherited frmMain: TfrmMain
     ReadTimeout = -1
     Left = 504
     Top = 64
+  end
+  object XPManifest1: TXPManifest
+    Left = 576
+    Top = 136
   end
 end

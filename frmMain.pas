@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
-  IdSync, IdGlobal;
+  IdSync, IdGlobal, Vcl.XPMan;
 
 const
   WM_SHOWMSG = WM_USER + 100;
@@ -65,6 +65,7 @@ type
     N2: TMenuItem;
     miOptions: TMenuItem;
     TCPClient: TIdTCPClient;
+    XPManifest1: TXPManifest;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -503,6 +504,11 @@ begin
     verLocal  := FileVersion(Application.ExeName);
     if (HTTP.ResponseCode = 200) and (verLocal <> verServer) then
     try
+      frmLogo.ProgressBar.Visible := True;
+      HTTP.OnWork      := frmLogo.HTTPWork;
+      HTTP.OnWorkBegin := frmLogo.HTTPWorkBegin;
+      HTTP.OnWorkEnd   := frmLogo.HTTPWorkEnd;
+
       fStream := TMemoryStream.Create;
       url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastfile';
       try

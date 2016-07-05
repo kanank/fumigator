@@ -79,6 +79,18 @@ inherited frmSessions: TfrmSessions
       ThemeAware = False
       OnClick = RzButton1Click
     end
+    object cmbFilter: TcxComboBox
+      Left = 483
+      Top = 5
+      Properties.Items.Strings = (
+        #1042#1089#1077
+        #1042#1093#1086#1076#1103#1097#1080#1077
+        #1048#1089#1093#1086#1076#1103#1097#1080#1077
+        #1055#1088#1086#1087#1091#1097#1077#1085#1085#1099#1077)
+      Properties.OnChange = cmbFilterPropertiesChange
+      TabOrder = 2
+      Width = 136
+    end
   end
   inherited RzPanel1: TRzPanel
     Top = 468
@@ -326,10 +338,14 @@ inherited frmSessions: TfrmSessions
     ParamCheck = True
     SQL.Strings = (
       
-        'select sessions.*, case when calltype=0 then localnum else CALLE' +
-        'DNUM end CALLEDN,'
-      ' (select datestring from diffdatestr(starttime, endtime)) '
-      'from sessions'
+        'select s.*, case when calltype=0 then localnum else CALLEDNUM en' +
+        'd CALLEDN,'
+      ' (select datestring from diffdatestr(starttime, endtime)),'
+      
+        ' case when calltype=0 then (select count(*)from sessions where c' +
+        'allapiid=s.callapiid'
+      ' and localnum not like '#39'%*%'#39') else 0 end answer'
+      'from sessions s'
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
         'ot null')

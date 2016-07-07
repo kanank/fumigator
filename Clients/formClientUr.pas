@@ -39,6 +39,8 @@ type
     FrameClientExtUr: TFrameClientExtUr;
     Label5: TLabel;
     cmbWorker: TcxDBLookupComboBox;
+    Label6: TLabel;
+    edtDogNum: TcxDBTextEdit;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure DSDataChange(Sender: TObject; Field: TField);

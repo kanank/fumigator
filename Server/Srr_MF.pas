@@ -124,6 +124,7 @@ type
     CSectionFumigator: TCriticalSection;
     CSectionSocket:  TCriticalSection;
     CSectionCommand: TCriticalSection;
+    CSectionLog: TCriticalSection;
 
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
@@ -257,19 +258,23 @@ begin
   LogStr2 :=  DateTimeToStr(Now) + ' - '+LogStr;
 
   FileName := ExtractFilePath(Application.ExeName) +   LogFile;
-  AssignFile(F, FileName);
-  if FileExists(FileName) then
-    Append(F)
-  else
-    Rewrite(F);
+  try
+    CSectionLog.Enter;
+    AssignFile(F, FileName);
+    if FileExists(FileName) then
+      Append(F)
+    else
+      Rewrite(F);
 
- if LogStr[1] = '#' then
-   WriteLn(F,  ' ');
+   if LogStr[1] = '#' then
+     WriteLn(F,  ' ');
 
-  WriteLn(F,  LogStr2);
+    WriteLn(F,  LogStr2);
 
-  CloseFile(F);
-
+  finally
+    try CloseFile(F); except end;
+    CSectionLog.Leave;
+  end;
   if DebugMode_cb.Checked then begin
      if LogStr[1] = '#' then Log_memo.Lines.Add('');
      Log_memo.Lines.Add(LogStr2);
@@ -351,9 +356,9 @@ begin
   TCPServer.DefaultPort := edtSocketPort.Value;
   TCPServer.Active := true;
 
-  Log_memo.Lines.Add('Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
+  AddLog('#Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
   except
-    Log_memo.Lines.Add('Ошибка при запуске сервер сокетов: ' + 
+    Log_memo.Lines.Add('#Ошибка при запуске сервер сокетов: ' +
       Exception(ExceptObject).Message);
   end;
 
@@ -431,6 +436,7 @@ begin
   CSectionFumigator := TCriticalSection.Create;
   CSectionSocket    := TCriticalSection.Create;
   CSectionCommand   := TCriticalSection.Create;
+  CSectionLog       := TCriticalSection.Create;
   FActiveUsers      := TStringList.Create;
 
   AccessToken := TTelphinToken.Create;
@@ -447,6 +453,7 @@ begin
   CSectionFumigator.Release;
   CSectionSocket.Release;
   CSectionCommand.Release;
+  CSectionLog.Release;
 
   FreeAndNil(AccessToken);
   FreeAndNil(Caller);
@@ -496,7 +503,7 @@ end;
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
-  Log_memo.Lines.Add('IBEvent: ' + EventName);
+  Log_memo.Lines.Add('#IBEvent: ' + EventName);
   if Copy(EventName,1,11) = 'INCOME_CALL' then
   begin
 
@@ -579,14 +586,14 @@ begin
       p := Pos('*', atsnum);
       if p > 0 then
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
-      Log_memo.Lines.Add(command +' atsnum = ' + atsnum);
+      Log_memo.Lines.Add('#' + command +' atsnum = ' + atsnum);
 
-      Log_memo.Lines.Add('Посылаем сообщение: ' + command);
+      Log_memo.Lines.Add('#Посылаем сообщение: ' + command);
       try
         SendMsg(atsnum, command);
         Application.ProcessMessages;
       except
-        Log_memo.Lines.Add('Ошибка сообщения: ' + command + #13#10 +
+        Log_memo.Lines.Add('#Ошибка сообщения: ' + command + #13#10 +
         Exception(ExceptObject).Message);
       end;
 
@@ -595,7 +602,7 @@ begin
     else   //всем
     begin
       try
-        Log_memo.Lines.Add('Посылаем всем сообщение: ' + command);
+        Log_memo.Lines.Add('#Посылаем всем сообщение: ' + command);
         BroadcastMsg(AnsiToUtf8(command));
       except
 
@@ -637,7 +644,7 @@ end;
 procedure TMF.ServerSocketClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
-   Log_memo.Lines.Add('Присоединение клиента');
+   Log_memo.Lines.Add('#Присоединение клиента');
 end;
 
 procedure TMF.ServerSocketClientDisconnect(Sender: TObject;
@@ -651,7 +658,7 @@ begin
     if i > -1 then
     begin
       FActiveUsers.Delete(i);
-      Log_memo.Lines.Add('Отсоединение клиента');
+      Log_memo.Lines.Add('#Отсоединение клиента');
     end;
   finally
     CSectionSocket.Leave;
@@ -674,7 +681,7 @@ begin
       CSectionSocket.Enter;
 
       s := Socket.ReceiveText;
-      Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
+      Log_memo.Lines.Add('#Клиент прислал сообщение: ' + s);
       if Copy(s, 1, 1) = '#' then
       begin
         p := Pos(':', s);
@@ -766,6 +773,7 @@ end;
 procedure TMF.TCPServerDisconnect(AContext: TIdContext);
 begin
 //tmycontext(acontext).broadcastMsg('deletelist|' + tmycontext(acontext).Nick);
+  Log_memo.Lines.Add('#Отсоединение клиента: ' + TMyContext(AContext).Nick);
 end;
 
 procedure TMF.TCPServerExecute(AContext: TIdContext);
@@ -781,7 +789,7 @@ begin
     if s = '' then
       Exit;
       
-    Log_memo.Lines.Add('Клиент прислал сообщение: ' + s);
+    Log_memo.Lines.Add('#Клиент прислал сообщение: ' + s);
     if Copy(s, 1, 1) = '#' then
     begin
       p := Pos(':', s);
@@ -800,7 +808,7 @@ begin
 
     end;
   except
-    Log_memo.Lines.Add('Ошибка чтения: ' +Exception(ExceptObject).Message);
+    Log_memo.Lines.Add('#Ошибка чтения: ' +Exception(ExceptObject).Message);
   end;
 
 end;

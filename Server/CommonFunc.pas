@@ -97,7 +97,9 @@ var
   N: Integer;
   P: PansiChar;
 begin
-  Result := '';
+  Result := str;
+  Exit;
+
   Len := Length(Str);
   P := PansiChar(@N);
   for i := 1 to Len do
@@ -183,7 +185,10 @@ var
   P: PAnsiChar;
   Ch: AnsiChar;
 begin
-  Result := '';
+  Result := str;
+  Exit;
+
+
   P := @Str[1];
   while GetCh(P, Ch) <> #0 do
   begin
@@ -201,6 +206,5 @@ begin
     Inc(P);
   end;
 end;
-
 
 end.

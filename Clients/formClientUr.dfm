@@ -28,7 +28,20 @@ inherited frmClientUr: TfrmClientUr
     Font.Style = []
     ParentFont = False
   end
-  inline FrameClientExtUr: TFrameClientExtUr [2]
+  object Label6: TLabel [2]
+    Left = 345
+    Top = 317
+    Width = 82
+    Height = 13
+    Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  inline FrameClientExtUr: TFrameClientExtUr [3]
     Left = 0
     Top = -2
     Width = 773
@@ -136,17 +149,18 @@ inherited frmClientUr: TfrmClientUr
     Top = 340
     Width = 775
     TabOrder = 8
-    ExplicitTop = 310
-    ExplicitWidth = 724
+    ExplicitTop = 340
+    ExplicitWidth = 775
     inherited Image2: TImage
       Left = 57
       Top = 6
+      ExplicitLeft = 57
       ExplicitTop = 6
     end
     inherited Exit_bnt: TRzButton
       Left = 646
       OnClick = Exit_bntClick
-      ExplicitLeft = 595
+      ExplicitLeft = 646
     end
     object butOK: TRzButton
       Left = 507
@@ -167,7 +181,6 @@ inherited frmClientUr: TfrmClientUr
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
-      ExplicitLeft = 456
     end
   end
   object RzGroupBox1: TRzGroupBox
@@ -215,6 +228,7 @@ inherited frmClientUr: TfrmClientUr
         end
         inherited cmbProf: TcxDBLookupComboBox
           Top = 86
+          Properties.ListSource = DataModuleMain.DsDicCliProfs
           ExplicitTop = 86
           ExplicitWidth = 218
           Width = 218
@@ -363,7 +377,7 @@ inherited frmClientUr: TfrmClientUr
       inherited grdPhone: TcxGrid
         Width = 198
         Height = 96
-        ExplicitWidth = 153
+        ExplicitWidth = 198
         ExplicitHeight = 96
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column4: TcxGridDBColumn
@@ -390,7 +404,7 @@ inherited frmClientUr: TfrmClientUr
       inherited RzPanel2: TRzPanel
         Left = 202
         Height = 108
-        ExplicitLeft = 157
+        ExplicitLeft = 202
         ExplicitHeight = 108
         inherited btnEdit: TRzBitBtn
           Top = 30
@@ -606,6 +620,27 @@ inherited frmClientUr: TfrmClientUr
     Properties.OnPopup = cmbWorkerPropertiesPopup
     TabOrder = 10
     Width = 178
+  end
+  object edtDogNum: TcxDBTextEdit
+    Left = 432
+    Top = 314
+    Anchors = [akLeft, akTop, akRight]
+    BeepOnEnter = False
+    DataBinding.DataField = 'DOG_NUM'
+    DataBinding.DataSource = DS
+    Style.BorderStyle = ebsFlat
+    Style.HotTrack = False
+    Style.LookAndFeel.Kind = lfFlat
+    Style.LookAndFeel.NativeStyle = True
+    Style.TransparentBorder = True
+    StyleDisabled.LookAndFeel.Kind = lfFlat
+    StyleDisabled.LookAndFeel.NativeStyle = True
+    StyleFocused.LookAndFeel.Kind = lfFlat
+    StyleFocused.LookAndFeel.NativeStyle = True
+    StyleHot.LookAndFeel.Kind = lfFlat
+    StyleHot.LookAndFeel.NativeStyle = True
+    TabOrder = 11
+    Width = 105
   end
   object DS: TDataSource
     OnDataChange = DSDataChange

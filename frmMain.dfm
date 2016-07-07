@@ -259,4 +259,8 @@ inherited frmMain: TfrmMain
     Left = 576
     Top = 136
   end
+  object Timer1: TTimer
+    Left = 400
+    Top = 136
+  end
 end

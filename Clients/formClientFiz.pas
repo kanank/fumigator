@@ -17,11 +17,7 @@ type
     ID_edt: TcxDBTextEdit;
     Label14: TLabel;
     Comments_memo: TcxDBMemo;
-    Label15: TLabel;
-    Label18: TLabel;
     DS: TDataSource;
-    cmbFormat: TcxDBLookupComboBox;
-    cmbStatus: TcxDBLookupComboBox;
     FramePerson: TFramePersonFull;
     FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
@@ -30,6 +26,13 @@ type
     QCheck: TIBQuery;
     cmbWorker: TcxDBLookupComboBox;
     Label5: TLabel;
+    RzPanel2: TRzPanel;
+    Label2: TLabel;
+    Label1: TLabel;
+    cmbFormat: TcxDBLookupComboBox;
+    cmbStatus: TcxDBLookupComboBox;
+    Label3: TLabel;
+    edtDogNum: TcxDBTextEdit;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);

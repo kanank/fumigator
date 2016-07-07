@@ -4,6 +4,7 @@ inherited frmCallUnknown: TfrmCallUnknown
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1050#1083#1080#1077#1085#1090' '#1085#1077' '#1085#1072#1081#1076#1077#1085
   ClientHeight = 193
   ClientWidth = 470
+  FormStyle = fsStayOnTop
   Position = poDesktopCenter
   ExplicitWidth = 476
   ExplicitHeight = 221
@@ -41,6 +42,8 @@ inherited frmCallUnknown: TfrmCallUnknown
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
+    BlinkIntervalOff = 1000
+    BlinkIntervalOn = 1000
   end
   inherited RzPanel1: TRzPanel
     Top = 149

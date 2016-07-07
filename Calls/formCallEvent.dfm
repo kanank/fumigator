@@ -6,13 +6,14 @@ object frmCallEvent: TfrmCallEvent
   BorderIcons = []
   BorderStyle = bsNone
   ClientHeight = 130
-  ClientWidth = 378
+  ClientWidth = 246
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OldCreateOrder = False
   Position = poDesktopCenter
   OnShow = FormShow
@@ -21,18 +22,16 @@ object frmCallEvent: TfrmCallEvent
   object Shape1: TShape
     Left = 0
     Top = 0
-    Width = 378
+    Width = 246
     Height = 130
     Align = alClient
     Brush.Style = bsClear
-    ExplicitTop = 4
-    ExplicitWidth = 65
-    ExplicitHeight = 65
+    ExplicitWidth = 233
   end
   object RzLabel1: TRzLabel
-    Left = 4
+    Left = 1
     Top = 16
-    Width = 371
+    Width = 244
     Height = 25
     Alignment = taCenter
     AutoSize = False
@@ -64,7 +63,7 @@ object frmCallEvent: TfrmCallEvent
     Visible = False
   end
   object btnDecline: TRzButton
-    Left = 137
+    Left = 71
     Top = 75
     Width = 105
     Height = 36

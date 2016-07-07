@@ -66,6 +66,7 @@ type
     miOptions: TMenuItem;
     TCPClient: TIdTCPClient;
     XPManifest1: TXPManifest;
+    Timer1: TTimer;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -380,6 +381,7 @@ begin
     ReadThread.WaitFor;
     FreeAndNil(ReadThread);
   end;
+   lblSocket.Caption := 'Соединение с сервером не установлено'
 end;
 
 procedure TfrmMain.DoSocketConnect;
@@ -674,7 +676,7 @@ begin
         Exit;
 
       s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
-      s := URLDecode(s);
+      //s := URLDecode(s);
       if not Terminated and (s <> '') then
         TServerCmd.DoCmd(s);
     except

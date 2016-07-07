@@ -918,7 +918,9 @@ object DataModuleMain: TDataModuleMain
       'EMAIL'#9#9'= :EMAIL,'
       'WORKER_ID'#9'= :WORKER_ID,'
       'COMMENT'#9'= :COMMENT,'
-      'ACT                         = :ACT'
+      'ACT                      = :ACT,'
+      'DOG_NUM             = :DOG_NUM,'
+      'DOG_DATE            = :DOG_DATE'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
@@ -932,7 +934,9 @@ object DataModuleMain: TDataModuleMain
       'EMAIL,'
       'WORKER_ID,'
       'COMMENT,'
-      'ACT)'
+      'ACT,'
+      'DOG_NUM,'
+      'DOG_DATE)'
       'values'
       '('
       ':id,'
@@ -945,7 +949,9 @@ object DataModuleMain: TDataModuleMain
       ':EMAIL,'
       ':WORKER_ID,'
       ':COMMENT,'
-      ':ACT'
+      ':ACT,'
+      ':DOG_NUM,'
+      ':DOG_DATE'
       ')')
     DeleteSQL.Strings = (
       'update clients set act=0 where id=:id')

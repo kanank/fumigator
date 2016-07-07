@@ -316,6 +316,7 @@ inherited frmClients: TfrmClients
       Navigator.Buttons.Edit.Enabled = False
       Navigator.Buttons.Cancel.Enabled = False
       Navigator.Buttons.Cancel.Visible = False
+      OnCellDblClick = GridViewUrCellDblClick
       DataController.DataSource = DS
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>

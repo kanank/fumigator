@@ -27,6 +27,7 @@ type
     procedure btnCallLaterClick(Sender: TObject);
   private
     fCallId: string;
+    fCallApiId: string;
     fClientSaved: Boolean;
     fResultSaved: Boolean;
     fCallResult: string;
@@ -45,6 +46,8 @@ type
     frmCli: TForm;
     TypeCli: Integer;
     property CallId: string read fCallId write SetCallId;
+    property CallApiId: string read fCallApiId write fCallApiId;
+
     property CallFinished: boolean read GetCallFinished;
     property CallResult: string read GetCallResult write fCallResult;
     procedure CallFinish;
@@ -82,15 +85,15 @@ begin
   //Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
   frmSessionResult := TfrmSessionResult.Create(nil);
 
-  if frmSessionResult.QApi.Transaction.Active then
-    frmSessionResult.QApi.Transaction.CommitRetaining;
+  if frmSessionResult.Q.Transaction.Active then
+    frmSessionResult.Q.Transaction.CommitRetaining;
 
-  frmSessionResult.QApi.ParamByName('callid').AsString := Callid;
-  frmSessionResult.QApi.Open;
-  frmSessionResult.QApi.Edit;
-  frmSessionResult.QApi.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-  frmSessionResult.QApi.FieldByName('client_id').AsInteger := ClientId;
-  Self.CallResult := frmSessionResult.QApi.FieldByName('callresult').AsString;
+  frmSessionResult.Q.ParamByName('callid').AsString := Callid;
+  frmSessionResult.Q.Open;
+  frmSessionResult.Q.Edit;
+  frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+  frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
+  Self.CallResult := frmSessionResult.Q.FieldByName('callresult').AsString;
 
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
@@ -115,7 +118,7 @@ end;
 
 procedure TfrmClientResult.CheckSession;
 begin
-  if DM.CheckCloseSession('', CallId) then
+  if DM.CheckCloseSession(CallId) then
     CallFinish;
 
 end;

@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, RzLabel,
   cxTextEdit, cxMaskEdit, cxDBEdit, Vcl.StdCtrls, RzButton, Vcl.ExtCtrls,
-  RzPanel, dxGDIPlusClasses, Data.DB;
+  RzPanel, dxGDIPlusClasses, Data.DB, Vcl.Menus;
 
 type
   TfrmCallUnknown = class(TSimpleForm)
@@ -17,6 +17,12 @@ type
     btnNewUrCli: TRzButton;
     DS: TDataSource;
     edtPhone: TcxMaskEdit;
+    RzButton1: TRzButton;
+    btnClients: TRzMenuButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Label11Click(Sender: TObject);
+    procedure RzButton2Click(Sender: TObject);
+    procedure btnClientsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,6 +37,9 @@ implementation
 {$R *.dfm}
 
 uses
-  DM_Main, formClientFiz, formClientUr, CommonTypes;
+  DM_Main, formClientFiz, formClientUr, CommonTypes, frmMain;
+
+
+
 
 end.

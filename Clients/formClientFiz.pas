@@ -206,8 +206,8 @@ begin
   FramePhones.OpenData;
 
   if (fFrmParam.action = asCreate) and
-     (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
-     (TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
+     (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) then //and
+     //(TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
   begin
     FramePhones.DS.DataSet.Append;
     FramePhones.DS.DataSet.FieldByName('phone').AsString :=

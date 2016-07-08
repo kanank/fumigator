@@ -2,24 +2,24 @@ inherited frmCallUnknown: TfrmCallUnknown
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1050#1083#1080#1077#1085#1090' '#1085#1077' '#1085#1072#1081#1076#1077#1085
-  ClientHeight = 193
+  ClientHeight = 237
   ClientWidth = 470
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   ExplicitWidth = 476
-  ExplicitHeight = 221
+  ExplicitHeight = 265
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 453
-    Top = -229
+    Top = -185
     Visible = False
     ExplicitLeft = 624
     ExplicitTop = -64
   end
   object Label11: TLabel [1]
-    Left = 233
-    Top = 11
+    Left = 8
+    Top = 14
     Width = 88
     Height = 13
     Caption = #1053#1086#1084#1077#1088' '#1090#1077#1083#1077#1092#1086#1085#1072':'
@@ -32,7 +32,7 @@ inherited frmCallUnknown: TfrmCallUnknown
   end
   object RzLabel1: TRzLabel [2]
     Left = 133
-    Top = 48
+    Top = 63
     Width = 182
     Height = 23
     Caption = #1050#1083#1080#1077#1085#1090' '#1085#1077' '#1085#1072#1081#1076#1077#1085'!'
@@ -46,7 +46,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     BlinkIntervalOn = 1000
   end
   inherited RzPanel1: TRzPanel
-    Top = 149
+    Top = 193
     Width = 470
     ExplicitTop = 149
     ExplicitWidth = 470
@@ -55,14 +55,14 @@ inherited frmCallUnknown: TfrmCallUnknown
       ExplicitLeft = 4
     end
     inherited Exit_bnt: TRzButton
-      Left = 188
+      Left = 173
       Caption = #1054#1090#1084#1077#1085#1072
-      ExplicitLeft = 188
+      ExplicitLeft = 173
     end
   end
   object btnNewFizCli: TRzButton
     Left = 8
-    Top = 88
+    Top = 103
     Width = 192
     Height = 29
     ModalResult = 1
@@ -80,7 +80,7 @@ inherited frmCallUnknown: TfrmCallUnknown
   end
   object btnNewUrCli: TRzButton
     Left = 268
-    Top = 88
+    Top = 103
     Width = 192
     Height = 29
     ModalResult = 6
@@ -97,8 +97,8 @@ inherited frmCallUnknown: TfrmCallUnknown
     ThemeAware = False
   end
   object edtPhone: TcxMaskEdit
-    Left = 331
-    Top = 8
+    Left = 108
+    Top = 11
     ParentFont = False
     Properties.AlwaysShowBlanksAndLiterals = True
     Properties.EditMask = '\(999\)000\-00\-00;0;'#9618
@@ -114,8 +114,45 @@ inherited frmCallUnknown: TfrmCallUnknown
     Text = '          '
     Width = 129
   end
+  object RzButton1: TRzButton
+    Left = 243
+    Top = 6
+    Width = 217
+    Height = 30
+    ModalResult = 6
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082' '#1089#1091#1097#1077#1089#1090#1074#1091#1102#1097#1077#1084#1091' '#1082#1083#1080#1077#1085#1090#1091
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 4
+    ThemeAware = False
+  end
+  object btnClients: TRzMenuButton
+    Left = 142
+    Top = 149
+    Width = 170
+    Height = 38
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1074' '#1089#1087#1080#1089#1086#1082' '#1080#1089#1082#1083#1102#1095#1077#1085#1080#1081
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 5
+    ThemeAware = False
+    DropDownMenu = frmMain.mExceptList
+    ShowArrow = False
+  end
   object DS: TDataSource
-    Left = 8
-    Top = 8
+    Left = 40
+    Top = 32
   end
 end

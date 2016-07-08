@@ -109,6 +109,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 3
     ThemeAware = False
+    OnClick = btnClientsClick
     DropDownMenu = Clients_PUM
     ShowArrow = False
   end
@@ -262,5 +263,13 @@ inherited frmMain: TfrmMain
   object Timer1: TTimer
     Left = 400
     Top = 136
+  end
+  object IdAntiFreeze: TIdAntiFreeze
+    Left = 504
+    Top = 112
+  end
+  object mExceptList: TPopupMenu
+    Left = 384
+    Top = 56
   end
 end

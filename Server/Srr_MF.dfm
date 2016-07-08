@@ -556,4 +556,8 @@ object MF: TMF
     Left = 520
     Top = 336
   end
+  object IdAntiFreeze1: TIdAntiFreeze
+    Left = 520
+    Top = 384
+  end
 end

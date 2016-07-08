@@ -8,7 +8,8 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal;
+  TelpinAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
+  Vcl.IdAntiFreeze;
 
 type
   TMyContext = class(TIdServerContext)
@@ -76,6 +77,7 @@ type
     Button6: TButton;
     DebugMode_cb: TCheckBox;
     TCPServer: TIdTCPServer;
+    IdAntiFreeze1: TIdAntiFreeze;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -109,7 +111,7 @@ type
 
     procedure AfterOutcomCall(Sender: TObject);
     procedure CallFinished(Sender: TObject);
-    function SendCommandToUser(atsnum, command: string): Boolean;
+    function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
 
@@ -178,7 +180,7 @@ function TMF.AddCallEvent(Params: TStrings): Boolean;
 var Q :TIBQuery;
     Cf :Byte;
     Fld :string;
-    userid: string;
+    userid, tel: string;
     p: Integer;
 begin
    if Params.indexOfName('CALLFLOW') = -1 then
@@ -193,7 +195,10 @@ begin
     userid := Params.Values['CallerExtension'];
   p := Pos('*', userid);
   if p > 0 then
+  begin
+    tel := Copy(userid, p + 1, Length(userid));
     userid := Copy(userid, 1, p - 1);
+  end;
 
   if userid = edtUserId.Text then //только нужную АТС отсекаем
   try
@@ -220,8 +225,13 @@ begin
     Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
 
     Try
-    Q.ExecSQL;
-    Result := true;
+      Q.ExecSQL;
+      Result := true;
+
+      if (Cf = 1) and (Params.Values['CallStatus'] = 'CALLING') then //посылаем сообщение о звонке
+      SendCommandToUser(tel, '#outcomecall:' + Params.Values['CallID'] +
+          ',' + Params.Values['CallAPIID'] + ',' +
+          Params.Values['CalledNumber'], False);
     Except
     on E : Exception
         do begin
@@ -299,6 +309,7 @@ begin
     for I := 0 to List.Count-1 do
     begin
       Context := TMyContext(List[I]);
+      Log_memo.Lines.Add(Context.Nick + ' ' + bmsg);
       Context.Connection.IOHandler.WriteLn(URLEncode(bmsg));
     end;
   finally
@@ -573,14 +584,15 @@ begin
 
 end;
 
-function TMF.SendCommandToUser(atsnum, command: string): Boolean;
+function TMF.SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
 var
   i, p: Integer;
   List: TList;
   Context: TMyContext;
 begin
   try
-    CSectionCommand.Enter;
+    if ALock then
+     CSectionCommand.Enter;
     if atsnum <> '*' then
     begin
       p := Pos('*', atsnum);
@@ -603,13 +615,14 @@ begin
     begin
       try
         Log_memo.Lines.Add('#Посылаем всем сообщение: ' + command);
-        BroadcastMsg(AnsiToUtf8(command));
+        BroadcastMsg(command);
       except
 
       end;
     end;
   finally
-    CSectionCommand.Leave;
+    if ALock then
+      CSectionCommand.Leave;
   end;
 end;
 
@@ -633,7 +646,6 @@ begin
           Result := True;
         except
         end;
-        Exit;
       end;
     end;
   finally

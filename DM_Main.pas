@@ -108,6 +108,7 @@ type
 
     function Calling(ATSnumber, Aphone: string; client_id: integer): string;
     function CallingWithResult(ATSnumber, Aphone: string; client_id: integer): string;
+    function ShowOutcomCall(ACallId, ACallApiId: string; APhone: string): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
 
     function CheckCloseSession(callid: string; callapiid: string = ''): boolean; //проверка закрытия сессии
@@ -246,6 +247,90 @@ begin
   finally
     FreeAndNil(frmIncomeCall);
   end;
+end;
+
+function TDataModuleMain.ShowOutcomCall(ACallId, ACallApiId: string; APhone: string): string;
+var Q : TIBQuery;
+    ClP :ClientCallParams;
+    tel :string;
+    id: integer;
+    Prm: TFrmCreateParam;
+    newFiz, newUr: Boolean;
+    frm: TForm;
+begin
+
+  if Db.Connected = false then  Exit;
+
+  try
+     //получаем параметры звонка
+     CLP := getClientCallParams(APhone);
+     //CLP.id_call := ACallid;
+     ClP.TelNum  := APhone;
+
+     Prm.ExtParam.CallParam := @CLP;
+
+     DM.GetDataset(DM.Clients);
+
+    //if not DM.Clients.Locate('id', CLP.Client_id, []) then
+    //  Exit;
+
+    inCalling := True;
+
+    if clp.Client_Type = '' then
+      case ShowUnknownCallForm(Aphone).ModalRes of
+        mrOk: newFiz := true;
+        mrYes: NewUr := True;
+      end
+    else
+    if not DM.Clients.Locate('id', CLP.Client_id, []) then
+      Exit;
+
+    frmClientResult := TfrmClientResult.Create(self);
+
+    if newFiz or NewUr then
+      prm := NewFrmCreateParam(asCreate, DM.Clients);
+
+    if not newUr and
+      ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
+    begin
+      frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+      frmClientFiz.RzPanel1.Visible := False;
+      frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
+      frm := frmClientFiz;
+    end
+    else
+    begin
+      frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+      frmClientUr.RzPanel1.Visible := False;
+      frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
+      frm := frmClientUr;
+    end;
+
+    frm.BorderIcons := [];
+    frm.BorderStyle := bsNone;
+    frm.Parent      := frmClientResult.pnlForm;
+    frmClientResult.pnlForm.Height := frm.Height + 10;
+    frmClientResult.pnlForm.Width  := frm.Width;
+    frmClientResult.Height := frmClientResult.pnlForm.Height +
+      frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+    frm.Position := poDefault;
+    frm.Show;
+
+    frmClientResult.frmCli    := frm;
+    frmClientResult.TypeCli   :=  DM.Clients.FieldByName('type_cli').AsInteger;
+    frmClientResult.ClientId  := CLP.Client_id;
+    frmClientResult.CallId    := ACallId;
+    frmClientResult.CallApiId := ACallApiId;
+    frmClientResult.ShowModal;
+    Result := frmClientResult.CallResult;
+    frmClientResult.Free;
+  finally
+    inCalling := False;
+  end;
+
+  //end;
+
 end;
 
 function TDataModuleMain.ShowUnknownCallForm(APhone: string): FormResult;

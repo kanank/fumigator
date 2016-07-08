@@ -7,11 +7,12 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
-  IdSync, IdGlobal, Vcl.XPMan;
+  IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze;
 
 const
-  WM_SHOWMSG = WM_USER + 100;
-  WM_SHOWINCOMECALL = WM_USER + 101;
+  WM_SHOWMSG         = WM_USER + 100;
+  WM_SHOWINCOMECALL  = WM_USER + 101;
+  WM_SHOWOUTCOMECALL = WM_USER + 102;
 
 type
   TAppOptions = class
@@ -67,6 +68,8 @@ type
     TCPClient: TIdTCPClient;
     XPManifest1: TXPManifest;
     Timer1: TTimer;
+    IdAntiFreeze: TIdAntiFreeze;
+    mExceptList: TPopupMenu;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -97,6 +100,7 @@ type
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
+    procedure WmShowOutcomeCall(var Msg: TMessage); message WM_SHOWOUTCOMECALL;
   public
     ReadThread: TReadingThread;
     procedure DoSocketConnect;
@@ -113,6 +117,9 @@ var
   formMain: TfrmMain;
   MainOptions: TAppOptions;
   msgText: string;
+  OutCallid: string; // callId из сообщения об исх. звонке
+  OutCallApiId: string;
+  OutPhone: string;  // телефон из сообщения об исх. звонке
   TimeShift: Integer; //смещение с сервером в секундах
   hMutex: THandle;
 
@@ -171,6 +178,7 @@ var
   s: string;
   p: Integer;
   cmd, arg: string;
+  argList: TStringList;
 begin
   s := Socket.ReceiveText;
 
@@ -227,6 +235,7 @@ begin
 
   end
 
+       
   else
   if cmd = 'checkacceptcall' then //звонок принят
   begin
@@ -448,6 +457,11 @@ begin
   MessageBox(Handle, PChar(msgText), 'Сообщение от сервера', MB_ICONINFORMATION);
 end;
 
+procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
+begin
+   DM.ShowOutcomCall(OutCallid, OutCallApiid, OutPhone);
+end;
+
 procedure LoadOptions(AIniFile: string);
 begin
   MainOptions := TAppOptions.Create;
@@ -579,6 +593,7 @@ var
   s: string;
   p: Integer;
   cmd, arg: string;
+  argList: TStringList;
 begin
   s := FMsg;
 
@@ -635,6 +650,25 @@ begin
 
   end
 
+  else
+  if cmd = 'outcomecall' then //исходящий звонок
+  begin
+    if Assigned(frmClientResult) then
+      Exit;
+    try
+      argList := TStringList.Create;
+      argList.Delimiter := ',';
+      argList.DelimitedText := arg;
+      OutCallId    := argList[0];
+      OutCallApiId := argList[1];
+      OutPhone     := argList[2];
+      PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
+      Application.ProcessMessages;
+    finally
+      FreeAndNil(argList);
+    end;
+  end
+  
   else
   if cmd = 'checkacceptcall' then //звонок принят
   begin

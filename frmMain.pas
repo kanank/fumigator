@@ -713,6 +713,7 @@ begin
       //s := URLDecode(s);
       if not Terminated and (s <> '') then
         TServerCmd.DoCmd(s);
+        Sleep(200);
     except
       s := Exception(ExceptObject).Message;
     end;

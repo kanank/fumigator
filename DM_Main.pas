@@ -255,9 +255,11 @@ var Q : TIBQuery;
     tel :string;
     id: integer;
     Prm: TFrmCreateParam;
+    extParam: TClientParam;
     newFiz, newUr: Boolean;
     frm: TForm;
 begin
+  Application.ProcessMessages;
 
   if Db.Connected = false then  Exit;
 
@@ -267,7 +269,8 @@ begin
      //CLP.id_call := ACallid;
      ClP.TelNum  := APhone;
 
-     Prm.ExtParam.CallParam := @CLP;
+     extParam.Init(0, 0, @CLP);
+     prm.action := asEdit;
 
      DM.GetDataset(DM.Clients);
 
@@ -288,8 +291,12 @@ begin
     frmClientResult := TfrmClientResult.Create(self);
 
     if newFiz or NewUr then
+    begin
       prm := NewFrmCreateParam(asCreate, DM.Clients);
+    end;
 
+    Prm.ExtParam := @ExtParam;
+    Prm.Dataset := DM.Clients;
     if not newUr and
       ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
     begin

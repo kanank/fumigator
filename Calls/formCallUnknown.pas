@@ -19,10 +19,6 @@ type
     edtPhone: TcxMaskEdit;
     RzButton1: TRzButton;
     btnClients: TRzMenuButton;
-    procedure FormCreate(Sender: TObject);
-    procedure Label11Click(Sender: TObject);
-    procedure RzButton2Click(Sender: TObject);
-    procedure btnClientsClick(Sender: TObject);
   private
     { Private declarations }
   public

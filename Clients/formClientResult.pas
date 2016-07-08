@@ -111,7 +111,8 @@ end;
 
 function TfrmClientResult.CheckFinish: boolean;
 begin
-  if CallResult = '' then
+  Result := CallResult <> '';
+  if not Result then
     Application.MessageBox('Действие не разрешено во время звонка!',
      'Исходящий звонок', MB_ICONSTOP);
 end;

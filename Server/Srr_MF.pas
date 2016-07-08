@@ -310,7 +310,7 @@ begin
     begin
       Context := TMyContext(List[I]);
       Log_memo.Lines.Add(Context.Nick + ' ' + bmsg);
-      Context.Connection.IOHandler.WriteLn(URLEncode(bmsg));
+      Context.Connection.IOHandler.WriteLn(bmsg);
     end;
   finally
     TCPServer.Contexts.UnlockList;
@@ -517,17 +517,16 @@ begin
   Log_memo.Lines.Add('#IBEvent: ' + EventName);
   if Copy(EventName,1,11) = 'INCOME_CALL' then
   begin
-
-    SendCommandToUser('*', '#checkcall:')
+    SendCommandToUser('*', '#checkcall:', false)
   end
   else
 
   if Copy(EventName,1,13) = 'SESSION_CLOSE' then
-    SendCommandToUser('*', '#checksession:')
-
+    SendCommandToUser('*', '#checksession:', false)
   else
+
   if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
-    SendCommandToUser('*', '#checkacceptcall:')
+    SendCommandToUser('*', '#checkacceptcall:', false)
 end;
 
 function TMF.FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo): Boolean;
@@ -600,7 +599,7 @@ begin
         atsnum := Copy(atsnum, p + 1, Length(atsnum));
       Log_memo.Lines.Add('#' + command +' atsnum = ' + atsnum);
 
-      Log_memo.Lines.Add('#Посылаем сообщение: ' + command);
+      //Log_memo.Lines.Add('#Посылаем сообщение: ' + command);
       try
         SendMsg(atsnum, command);
         Application.ProcessMessages;
@@ -616,6 +615,7 @@ begin
       try
         Log_memo.Lines.Add('#Посылаем всем сообщение: ' + command);
         BroadcastMsg(command);
+         Application.ProcessMessages;
       except
 
       end;

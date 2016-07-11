@@ -589,7 +589,7 @@ var
 begin
   CliInfo := nil;
   try
-    if not formMain.ClientSocket.Active then
+    if not formMain.TCPClient.Connected then
     begin
       MessageBox(0, 'Нет соединения с сервером. Вызовы невозможны',
         'Исходящие вызовы', MB_ICONWARNING);

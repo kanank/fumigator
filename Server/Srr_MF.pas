@@ -12,6 +12,21 @@ uses
   Vcl.IdAntiFreeze;
 
 type
+  TMsgThread = class(TThread)
+  protected
+    FServer: TIdTCPServer;
+    FMsgList: TStringList;
+    FContList: TList;
+    fAddMsg: Boolean;
+    procedure Execute; override;
+  public
+    procedure AddMsg(Ato: string; AMsg: string);
+    constructor Create(AServer: TIdTCPServer); overload;
+    destructor Destroy; override;
+    function SendMsg(const ANick: String; const AMsg: String) : Boolean;
+    function BroadcastMsg(const bmsg: String): boolean;
+  end;
+
   TMyContext = class(TIdServerContext)
     public
       IP: String;
@@ -103,7 +118,8 @@ type
     procedure TCPServerExecute(AContext: TIdContext);
   private
     FActiveUsers: TStringList;
-    procedure AddLog (Logstr :string);
+    procedure AddLog (Logstr :string; ALock: boolean);
+    procedure AddLogMemo(Logstr :string);
     Function AddCallEvent(Params :TStrings) :Boolean;
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
@@ -118,9 +134,6 @@ type
     function GetUserSocket(ATelNum: string): TCustomWinSocket;
  //  function CreateRWProc :TIBStoredProc;
 
-    Function SendMsg(const ANick: String; const AMsg:String) : Boolean;
-    procedure BroadcastMsg(const bmsg: String);
-    
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -130,6 +143,7 @@ type
 
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
+    MsgThread: TMsgThread;
   end;
 
   const
@@ -137,7 +151,7 @@ type
 
 var
   MF: TMF;
-
+  LogMutex: THandle;
 
 implementation
 
@@ -154,7 +168,7 @@ begin
 
     Q := CreateRWQuery;
     Q.SQL.Text := Format('update current_calls set accept_phone=''%s'' where callapiid=''%s'' and accept_phone is null', [APhone, ACallId]);
-    Log_memo.Lines.Add(Q.SQL.Text);
+    AddLogMemo(Q.SQL.Text);
     Try
       Q.ExecSQL;
       Result := true;
@@ -285,42 +299,40 @@ begin
     try CloseFile(F); except end;
     CSectionLog.Leave;
   end;
-  if DebugMode_cb.Checked then begin
-     if LogStr[1] = '#' then Log_memo.Lines.Add('');
-     Log_memo.Lines.Add(LogStr2);
+  if DebugMode_cb.Checked then
+  begin
+     AddLogMemo(LogStr2);
+     //if LogStr[1] = '#' then Log_memo.Lines.Add('');
+     //Log_memo.Lines.Add(LogStr2);
   end;
 end;
 
+
+procedure TMF.AddLogMemo(Logstr: string; ALock: boolean);
+var
+  fLock: Boolean;
+begin
+  if ALock and LockMutex(LogMutex, 5000) then
+  try
+    if LogStr[1] = '#' then
+      Log_memo.Lines.Add('');
+    Log_memo.Lines.Add(Logstr);
+  finally
+    if ALock then
+      UnLockMutex(LogMutex);
+  end;
+end;
 
 procedure TMF.AfterOutcomCall(Sender: TObject);
 begin
   SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
 end;
 
-procedure TMF.BroadcastMsg(const bmsg: String);
-var
-  List: TList;
-  Context: TMyContext;
-  I: Integer;
-begin
-  // FContextList is inherited from TIdContext
-  List := TCPServer.Contexts.LockList;
-  try
-    for I := 0 to List.Count-1 do
-    begin
-      Context := TMyContext(List[I]);
-      Log_memo.Lines.Add(Context.Nick + ' ' + bmsg);
-      Context.Connection.IOHandler.WriteLn(bmsg);
-    end;
-  finally
-    TCPServer.Contexts.UnlockList;
-  end;
-end;
 
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
   AccessToken.GetToken;
-  Log_memo.Lines.Add('Получен токен доступа');
+  AddLogMemo('Получен токен доступа');
 end;
 
 procedure TMF.Button1Click(Sender: TObject);
@@ -367,6 +379,9 @@ begin
   TCPServer.DefaultPort := edtSocketPort.Value;
   TCPServer.Active := true;
 
+  MsgThread := TMsgThread.Create(TCPServer);
+  MsgThread.Start;
+
   AddLog('#Сервер сокетов запущен. Порт: ' + IntToStr(ServerSocket.Port));
   except
     Log_memo.Lines.Add('#Ошибка при запуске сервер сокетов: ' +
@@ -381,7 +396,8 @@ procedure TMF.Button4Click(Sender: TObject);
 var
   i: Integer;
 begin
- BroadcastMsg('#msg:' + Edit1.Text);
+ //BroadcastMsg('#msg:' + Edit1.Text);
+ SendCommandToUser('*', '#msg:' + Edit1.Text);
 end;
 
 procedure TMF.Button5Click(Sender: TObject);
@@ -459,6 +475,10 @@ end;
 
 procedure TMF.FormDestroy(Sender: TObject);
 begin
+  MsgThread.Terminate;
+  MsgThread.WaitFor;
+  MsgThread.Free;
+
   FreeAndNil(FActiveUsers);
   CSection.Release;
   CSectionFumigator.Release;
@@ -514,7 +534,7 @@ end;
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
-  Log_memo.Lines.Add('#IBEvent: ' + EventName);
+  AddLogMemo('#IBEvent: ' + EventName);
   if Copy(EventName,1,11) = 'INCOME_CALL' then
   begin
     SendCommandToUser('*', '#checkcall:', false)
@@ -589,6 +609,9 @@ var
   List: TList;
   Context: TMyContext;
 begin
+  MsgThread.AddMsg(atsnum, command);
+  Exit;
+
   try
     if ALock then
      CSectionCommand.Enter;
@@ -601,8 +624,15 @@ begin
 
       //Log_memo.Lines.Add('#Посылаем сообщение: ' + command);
       try
-        SendMsg(atsnum, command);
-        Application.ProcessMessages;
+        if TCPServer.Contexts.Count > 0 then
+          with TCPServer.Contexts.LockList do
+          try
+            TMyContext(Items[0]).SendMsg(atsnum, command);
+          finally
+            TCPServer.Contexts.UnlockList;
+          end;
+        //SendMsg(atsnum, command);
+        //Application.ProcessMessages;
       except
         Log_memo.Lines.Add('#Ошибка сообщения: ' + command + #13#10 +
         Exception(ExceptObject).Message);
@@ -612,44 +642,26 @@ begin
 
     else   //всем
     begin
-      try
         Log_memo.Lines.Add('#Посылаем всем сообщение: ' + command);
-        BroadcastMsg(command);
-         Application.ProcessMessages;
+
+        if TCPServer.Contexts.Count > 0 then
+          with TCPServer.Contexts.LockList do
+          try
+            TMyContext(Items[0]).BroadcastMsg(command);
+          finally
+            TCPServer.Contexts.UnlockList;
+          end;
+                 (* if TCPServer.Contexts.Count > 0 then
+          TMyContext(TCPServer.Contexts[0]).BroadcastMsg(command);
+        //BroadcastMsg(command);
+        // Application.ProcessMessages;
       except
 
-      end;
+      end; *)
     end;
   finally
     if ALock then
       CSectionCommand.Leave;
-  end;
-end;
-
-function TMF.SendMsg(const ANick, AMsg: String): Boolean;
-var
-  List: TList;
-  Context: TMyContext;
-  I: Integer;
-begin
-  Result := False;
-  //FContextList is inherited from TIdContext
-  List := TCPServer.Contexts.LockList;
-  try
-    for I := 0 to List.Count-1 do
-    begin
-      Context := TMyContext(List[I]);
-      if lowercase(Context.Nick) = lowercase(ANick) then
-      begin
-        try
-          Context.Connection.IOHandler.WriteLn(AMsg);
-          Result := True;
-        except
-        end;
-      end;
-    end;
-  finally
-    TCPServer.Contexts.UnlockList;
   end;
 end;
 
@@ -752,7 +764,7 @@ begin
     else
     if cmd = 'callaccept' then  // взяли звонок
     begin
-      Log_memo.Lines.Add('callaccept');
+      AddLogMemo('callaccept');
       AcceptCall(argList[0], argList[1]);
 
       if not Assigned(Caller) then
@@ -785,7 +797,7 @@ end;
 procedure TMF.TCPServerDisconnect(AContext: TIdContext);
 begin
 //tmycontext(acontext).broadcastMsg('deletelist|' + tmycontext(acontext).Nick);
-  Log_memo.Lines.Add('#Отсоединение клиента: ' + TMyContext(AContext).Nick);
+  AddLogMemo('#Отсоединение клиента: ' + TMyContext(AContext).Nick);
 end;
 
 procedure TMF.TCPServerExecute(AContext: TIdContext);
@@ -796,12 +808,12 @@ begin
   try
     if not AContext.Connection.Connected then
       Exit;
-    
+
     s := AContext.Connection.IOHandler.ReadLn;
     if s = '' then
       Exit;
-      
-    Log_memo.Lines.Add('#Клиент прислал сообщение: ' + s);
+
+    AddLogMemo('#Клиент прислал сообщение: ' + s, false);
     if Copy(s, 1, 1) = '#' then
     begin
       p := Pos(':', s);
@@ -813,14 +825,14 @@ begin
         TMyContext(AContext).Nick := arg;
 
         AContext.Connection.IOHandler.WriteLn(AnsiToUtf8('#servertime:' + IntToStr(SecondOfTheDay(Now))));
-        Application.ProcessMessages;
+        //Application.ProcessMessages;
       end
       else
         SocketCommand(cmd, arg);
 
     end;
   except
-    Log_memo.Lines.Add('#Ошибка чтения: ' +Exception(ExceptObject).Message);
+    AddLogMemo('#Ошибка чтения: ' +Exception(ExceptObject).Message);
   end;
 
 end;
@@ -843,8 +855,8 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
     CSection.Enter;
 
     Addlog('#Поступление события на службы Call_Events');
-    Log_memo.Lines.Add(ARequestInfo.URI);
-    Log_memo.Lines.Add(ARequestInfo.Params.Text);
+    AddLogMemo(ARequestInfo.URI);
+    AddLogMemo(ARequestInfo.Params.Text);
 
     if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
     begin
@@ -1108,4 +1120,119 @@ begin
   end;
 end;*)
 
+{ TMsgThread }
+
+procedure TMsgThread.AddMsg(Ato, AMsg: string);
+begin
+  try
+    fAddMsg := True;
+    FMsgList.BeginUpdate;
+    FMsgList.Add(Ato + '=' + AMsg);
+  finally
+    FMsgList.EndUpdate;
+    fAddMsg := false;
+  end;
+end;
+
+function TMsgThread.BroadcastMsg(const bmsg: String): boolean;
+var
+  i: Integer;
+  Context: TMyContext;
+begin
+   for I := 0 to FContList.Count-1 do
+    begin
+      Context := TMyContext(FContList[I]);
+      TMF(FServer.Owner).Log_memo.Lines.Add('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
+      Context.Connection.IOHandler.WriteLn(bmsg);
+    end;
+end;
+
+constructor TMsgThread.Create(AServer: TIdTCPServer);
+begin
+  FServer := AServer;
+  FMsgList := TStringList.Create;
+  inherited Create(true);
+end;
+
+destructor TMsgThread.Destroy;
+begin
+  FMsgList.Free;
+  inherited;
+end;
+
+procedure TMsgThread.Execute;
+var
+  List: TList;
+  cnt, step, cur: Integer;
+  f: Boolean;
+  s: string;
+  flock: Boolean;
+begin
+  while not Terminated do
+  begin
+    if not (Terminated or (FServer.Contexts.Count = 0) or
+           (FMsgList.Count = 0) or fAddMsg) then
+
+    if LockMutex(LogMutex, 5000) then
+    try
+      cnt := FMsgList.Count - 1;
+      cur := 0; step := 0;
+
+        FContList := FServer.Contexts.LockList;
+        FMsgList.BeginUpdate;
+        while step < cnt do
+        begin
+          f := False;
+          if FMsgList.Names[cur] = '*' then
+            f := BroadcastMsg(FMsgList.ValueFromIndex[cur])
+          else
+            f := SendMsg(FMsgList.Names[cur], FMsgList.ValueFromIndex[cur]);
+
+          Inc(step);
+          if f then
+            FMsgList.Delete(cur)
+          else
+             Inc(cur);
+        end;
+
+      finally
+        UnlockMutex(LogMutex);
+        FServer.Contexts.UnLockList;
+        FMsgList.EndUpdate;
+      end;
+
+      Sleep(200);
+    end;
+
+end;
+
+
+function TMsgThread.SendMsg(const ANick, AMsg: String): Boolean;
+var
+  List: TList;
+  Context: TMyContext;
+  I: Integer;
+begin
+  Result := False;
+    for I := 0 to FContList.Count-1 do
+    begin
+      Context := TMyContext(FContList[I]);
+      if lowercase(Context.Nick) = lowercase(ANick) then
+      begin
+        try
+          TMF(FServer.Owner).Log_memo.Lines.Add('Отправка сообщения для ' + ANick + ':' + AMsg);
+          Context.Connection.IOHandler.WriteLn(AMsg);
+          Result := True;
+        except
+        end;
+      end;
+    end;
+end;
+
+initialization
+  LogMutex := CreateMutex(nil, True,
+    Pchar(ExtractFileName((Application.ExeName))));
+
+finalization
+  CloseHandle(LogMutex);
 end.

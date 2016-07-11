@@ -5,6 +5,8 @@ interface
 function  FileVersion ( fName : string ) : string;
 function UrlEncode(Str: Ansistring): Ansistring;
 function UrlDecode(Str: Ansistring): Ansistring;
+function LockMutex(AHandle: THandle; ATimeout: integer): Boolean;
+function UnlockMutex(AHandle: THandle): boolean;
 
 implementation
 uses
@@ -204,6 +206,29 @@ begin
       Result := Result + Ch;
     end;
     Inc(P);
+  end;
+end;
+
+function LockMutex(AHandle: THandle; ATimeout: integer): Boolean;
+var
+  res: Cardinal;
+begin
+  Result := False;
+  try
+    res := WaitForSingleObject(AHandle, ATimeout);
+    Result := res = WAIT_OBJECT_0;
+  except
+    Result := False;
+  end;
+
+end;
+
+function UnlockMutex(AHandle: THandle): boolean;
+begin
+  try
+    Result := ReleaseMutex(AHandle);
+  except
+    result := False;
   end;
 end;
 

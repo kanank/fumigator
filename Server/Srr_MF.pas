@@ -18,6 +18,7 @@ type
     FMsgList: TStringList;
     FContList: TList;
     fAddMsg: Boolean;
+    fExecute: Boolean;
     procedure Execute; override;
   public
     procedure AddMsg(Ato: string; AMsg: string);
@@ -92,7 +93,6 @@ type
     Button6: TButton;
     DebugMode_cb: TCheckBox;
     TCPServer: TIdTCPServer;
-    IdAntiFreeze1: TIdAntiFreeze;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -118,8 +118,7 @@ type
     procedure TCPServerExecute(AContext: TIdContext);
   private
     FActiveUsers: TStringList;
-    procedure AddLog (Logstr :string; ALock: boolean);
-    procedure AddLogMemo(Logstr :string);
+    procedure AddLog (Logstr :string; ALock: boolean=True);
     Function AddCallEvent(Params :TStrings) :Boolean;
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
@@ -144,6 +143,8 @@ type
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
     MsgThread: TMsgThread;
+
+    procedure AddLogMemo(Logstr :string; ALock: boolean=True);
   end;
 
   const
@@ -152,6 +153,8 @@ type
 var
   MF: TMF;
   LogMutex: THandle;
+  MsgMutex: THandle;
+  CSectionMsg: TCriticalSection;
 
 implementation
 
@@ -273,7 +276,7 @@ begin
 
 end;
 
-procedure TMF.AddLog(Logstr: string);
+procedure TMF.AddLog(Logstr: string; ALock: Boolean=true);
  var
   F : TextFile;
   LogStr2 :string;
@@ -301,25 +304,27 @@ begin
   end;
   if DebugMode_cb.Checked then
   begin
-     AddLogMemo(LogStr2);
+     AddLogMemo(LogStr2, ALock);
      //if LogStr[1] = '#' then Log_memo.Lines.Add('');
      //Log_memo.Lines.Add(LogStr2);
   end;
 end;
 
 
-procedure TMF.AddLogMemo(Logstr: string; ALock: boolean);
+procedure TMF.AddLogMemo(Logstr: string; ALock: boolean=True);
 var
   fLock: Boolean;
 begin
-  if ALock and LockMutex(LogMutex, 5000) then
+  //if (ALock and LockMutex(LogMutex, 5000)) or not ALock then
   try
+    CSectionLog.Enter;
     if LogStr[1] = '#' then
       Log_memo.Lines.Add('');
     Log_memo.Lines.Add(Logstr);
   finally
-    if ALock then
-      UnLockMutex(LogMutex);
+    //if ALock then
+    //  UnLockMutex(LogMutex);
+    CSectionLog.Leave;
   end;
 end;
 
@@ -464,6 +469,7 @@ begin
   CSectionSocket    := TCriticalSection.Create;
   CSectionCommand   := TCriticalSection.Create;
   CSectionLog       := TCriticalSection.Create;
+  CSectionMsg       := TCriticalSection.Create;
   FActiveUsers      := TStringList.Create;
 
   AccessToken := TTelphinToken.Create;
@@ -471,6 +477,7 @@ begin
   AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
 
   TCPServer.ContextClass := TMyContext;
+
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -485,6 +492,7 @@ begin
   CSectionSocket.Release;
   CSectionCommand.Release;
   CSectionLog.Release;
+  CSectionMsg.Release;
 
   FreeAndNil(AccessToken);
   FreeAndNil(Caller);
@@ -787,8 +795,10 @@ begin
   begin
     Con := Now;
     if (Connection.Socket <> nil) then
+    begin
       IP := Connection.Socket.Binding.PeerIP;
-    
+      MF.AddLogMemo('#Присоединение клиента');
+    end;
     //Nick := Connection.IOHandler.ReadLn;
     //BroadcastMsg('addlist|' + Nick);
   end;
@@ -1125,12 +1135,20 @@ end;*)
 procedure TMsgThread.AddMsg(Ato, AMsg: string);
 begin
   try
-    fAddMsg := True;
-    FMsgList.BeginUpdate;
-    FMsgList.Add(Ato + '=' + AMsg);
+    CSectionMsg.Enter;
+    while fExecute do
+      Sleep(200);
+
+    try
+      fAddMsg := True;
+      FMsgList.BeginUpdate;
+      FMsgList.Add(Ato + '=' + AMsg);
+    finally
+      FMsgList.EndUpdate;
+      fAddMsg := false;
+    end;
   finally
-    FMsgList.EndUpdate;
-    fAddMsg := false;
+    CSectionMsg.Leave;
   end;
 end;
 
@@ -1142,7 +1160,8 @@ begin
    for I := 0 to FContList.Count-1 do
     begin
       Context := TMyContext(FContList[I]);
-      TMF(FServer.Owner).Log_memo.Lines.Add('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
+      TMF(FServer.Owner).AddLogMemo('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
+      //TMF(FServer.Owner).Log_memo.Lines.Add('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
       Context.Connection.IOHandler.WriteLn(bmsg);
     end;
 end;
@@ -1173,9 +1192,10 @@ begin
     if not (Terminated or (FServer.Contexts.Count = 0) or
            (FMsgList.Count = 0) or fAddMsg) then
 
-    if LockMutex(LogMutex, 5000) then
+    //if LockMutex(MsgMutex, 5000) then
     try
-      cnt := FMsgList.Count - 1;
+      fExecute := True;
+      cnt := FMsgList.Count;
       cur := 0; step := 0;
 
         FContList := FServer.Contexts.LockList;
@@ -1196,9 +1216,10 @@ begin
         end;
 
       finally
-        UnlockMutex(LogMutex);
+        //UnlockMutex(MsgMutex);
         FServer.Contexts.UnLockList;
         FMsgList.EndUpdate;
+        fExecute := False;
       end;
 
       Sleep(200);
@@ -1232,7 +1253,10 @@ end;
 initialization
   LogMutex := CreateMutex(nil, True,
     Pchar(ExtractFileName((Application.ExeName))));
+  MsgMutex := CreateMutex(nil, True,
+    Pchar(ExtractFileName((Application.ExeName)) + '_' + 'msg'));
 
 finalization
   CloseHandle(LogMutex);
+  CloseHandle(MsgMutex);
 end.

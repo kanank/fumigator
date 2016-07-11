@@ -68,7 +68,6 @@ type
     TCPClient: TIdTCPClient;
     XPManifest1: TXPManifest;
     Timer1: TTimer;
-    IdAntiFreeze: TIdAntiFreeze;
     mExceptList: TPopupMenu;
 
     procedure btnWorkersClick(Sender: TObject);

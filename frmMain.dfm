@@ -264,10 +264,6 @@ inherited frmMain: TfrmMain
     Left = 400
     Top = 136
   end
-  object IdAntiFreeze: TIdAntiFreeze
-    Left = 504
-    Top = 112
-  end
   object mExceptList: TPopupMenu
     Left = 384
     Top = 56

@@ -523,17 +523,6 @@ object MF: TMF
         ParamType = ptUnknown
       end>
   end
-  object ServerSocket: TServerSocket
-    Active = False
-    Port = 1025
-    ServerType = stNonBlocking
-    OnClientConnect = ServerSocketClientConnect
-    OnClientDisconnect = ServerSocketClientDisconnect
-    OnClientRead = ServerSocketClientRead
-    OnClientError = ServerSocketClientError
-    Left = 577
-    Top = 265
-  end
   object IBEvents: TIBEvents
     AutoRegister = False
     Database = DB
@@ -555,5 +544,9 @@ object MF: TMF
     OnExecute = TCPServerExecute
     Left = 520
     Top = 336
+  end
+  object IdAntiFreeze1: TIdAntiFreeze
+    Left = 520
+    Top = 392
   end
 end

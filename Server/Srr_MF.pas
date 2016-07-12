@@ -285,8 +285,9 @@ begin
   LogStr2 :=  DateTimeToStr(Now) + ' - '+LogStr;
 
   FileName := ExtractFilePath(Application.ExeName) +   LogFile;
+  if LockMutex(LogMutex, 5000) then
   try
-    CSectionLog.Enter;
+    //CSectionLog.Enter;
     AssignFile(F, FileName);
     if FileExists(FileName) then
       Append(F)
@@ -300,7 +301,8 @@ begin
 
   finally
     try CloseFile(F); except end;
-    CSectionLog.Leave;
+    //CSectionLog.Leave;
+    UnlockMutex(LogMutex);
   end;
   if DebugMode_cb.Checked then
   begin
@@ -315,16 +317,16 @@ procedure TMF.AddLogMemo(Logstr: string; ALock: boolean=True);
 var
   fLock: Boolean;
 begin
-  //if (ALock and LockMutex(LogMutex, 5000)) or not ALock then
+  if (ALock and LockMutex(LogMutex, 5000)) or not ALock then
   try
-    CSectionLog.Enter;
+    //CSectionLog.Enter;
     if LogStr[1] = '#' then
       Log_memo.Lines.Add('');
     Log_memo.Lines.Add(Logstr);
   finally
-    //if ALock then
-    //  UnLockMutex(LogMutex);
-    CSectionLog.Leave;
+    if ALock then
+      UnLockMutex(LogMutex);
+   // CSectionLog.Leave;
   end;
 end;
 
@@ -676,7 +678,7 @@ end;
 procedure TMF.ServerSocketClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
-   Log_memo.Lines.Add('#Присоединение клиента');
+   AddLogMemo('#Присоединение клиента');
 end;
 
 procedure TMF.ServerSocketClientDisconnect(Sender: TObject;
@@ -823,7 +825,7 @@ begin
     if s = '' then
       Exit;
 
-    AddLogMemo('#Клиент прислал сообщение: ' + s, false);
+    AddLogMemo('#Клиент прислал сообщение: ' + s);
     if Copy(s, 1, 1) = '#' then
     begin
       p := Pos(':', s);
@@ -1134,8 +1136,11 @@ end;*)
 
 procedure TMsgThread.AddMsg(Ato, AMsg: string);
 begin
+  if LockMutex(MsgMutex, 5000) then
+
   try
-    CSectionMsg.Enter;
+    //CSectionMsg.Enter;
+
     while fExecute do
       Sleep(200);
 
@@ -1148,7 +1153,8 @@ begin
       fAddMsg := false;
     end;
   finally
-    CSectionMsg.Leave;
+    //CSectionMsg.Leave;
+    UnlockMutex(MsgMutex);
   end;
 end;
 
@@ -1192,7 +1198,7 @@ begin
     if not (Terminated or (FServer.Contexts.Count = 0) or
            (FMsgList.Count = 0) or fAddMsg) then
 
-    //if LockMutex(MsgMutex, 5000) then
+    if LockMutex(MsgMutex, 5000) then
     try
       fExecute := True;
       cnt := FMsgList.Count;
@@ -1216,7 +1222,7 @@ begin
         end;
 
       finally
-        //UnlockMutex(MsgMutex);
+        UnlockMutex(MsgMutex);
         FServer.Contexts.UnLockList;
         FMsgList.EndUpdate;
         fExecute := False;
@@ -1241,7 +1247,7 @@ begin
       if lowercase(Context.Nick) = lowercase(ANick) then
       begin
         try
-          TMF(FServer.Owner).Log_memo.Lines.Add('Отправка сообщения для ' + ANick + ':' + AMsg);
+          MF.AddLogMemo('Отправка сообщения для ' + ANick + ':' + AMsg);
           Context.Connection.IOHandler.WriteLn(AMsg);
           Result := True;
         except
@@ -1251,9 +1257,9 @@ begin
 end;
 
 initialization
-  LogMutex := CreateMutex(nil, True,
+  LogMutex := CreateMutex(nil, False,
     Pchar(ExtractFileName((Application.ExeName))));
-  MsgMutex := CreateMutex(nil, True,
+  MsgMutex := CreateMutex(nil, False,
     Pchar(ExtractFileName((Application.ExeName)) + '_' + 'msg'));
 
 finalization

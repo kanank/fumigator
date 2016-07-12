@@ -661,11 +661,11 @@ begin
       OutCallId    := argList[0];
       OutCallApiId := argList[1];
       OutPhone     := argList[2];
-      PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
-      Application.ProcessMessages;
     finally
       FreeAndNil(argList);
     end;
+    PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
+      //Application.ProcessMessages;
   end
   
   else

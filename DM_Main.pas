@@ -256,7 +256,7 @@ var Q : TIBQuery;
     id: integer;
     Prm: TFrmCreateParam;
     extParam: TClientParam;
-    newFiz, newUr: Boolean;
+    newFiz, newUr, fCancel: Boolean;
     frm: TForm;
 begin
   Application.ProcessMessages;
@@ -283,6 +283,7 @@ begin
       case ShowUnknownCallForm(Aphone).ModalRes of
         mrOk: newFiz := true;
         mrYes: NewUr := True;
+        mrCancel: fCancel := True;
       end
     else
     if not DM.Clients.Locate('id', CLP.Client_id, []) then
@@ -290,43 +291,46 @@ begin
 
     frmClientResult := TfrmClientResult.Create(self);
 
-    if newFiz or NewUr then
+    if not fCancel then
     begin
-      prm := NewFrmCreateParam(asCreate, DM.Clients);
+      if newFiz or NewUr then
+      begin
+        prm := NewFrmCreateParam(asCreate, DM.Clients);
+      end;
+
+      Prm.ExtParam := @ExtParam;
+      Prm.Dataset := DM.Clients;
+      if not newUr and
+        ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
+      begin
+        frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+        frmClientFiz.RzPanel1.Visible := False;
+        frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
+        frm := frmClientFiz;
+      end
+      else
+      begin
+        frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+        frmClientUr.RzPanel1.Visible := False;
+        frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
+        frm := frmClientUr;
+      end;
+
+      frm.BorderIcons := [];
+      frm.BorderStyle := bsNone;
+      frm.Parent      := frmClientResult.pnlForm;
+      frmClientResult.pnlForm.Height := frm.Height + 10;
+      frmClientResult.pnlForm.Width  := frm.Width;
+      frmClientResult.Height := frmClientResult.pnlForm.Height +
+        frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+      frm.Position := poDefault;
+      frm.Show;
+
+      frmClientResult.frmCli    := frm;
+      frmClientResult.TypeCli   :=  DM.Clients.FieldByName('type_cli').AsInteger;
+      frmClientResult.ClientId  := CLP.Client_id;
     end;
-
-    Prm.ExtParam := @ExtParam;
-    Prm.Dataset := DM.Clients;
-    if not newUr and
-      ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
-    begin
-      frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
-      frmClientFiz.RzPanel1.Visible := False;
-      frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
-      frm := frmClientFiz;
-    end
-    else
-    begin
-      frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
-      frmClientUr.RzPanel1.Visible := False;
-      frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
-      frm := frmClientUr;
-    end;
-
-    frm.BorderIcons := [];
-    frm.BorderStyle := bsNone;
-    frm.Parent      := frmClientResult.pnlForm;
-    frmClientResult.pnlForm.Height := frm.Height + 10;
-    frmClientResult.pnlForm.Width  := frm.Width;
-    frmClientResult.Height := frmClientResult.pnlForm.Height +
-      frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
-
-    frm.Position := poDefault;
-    frm.Show;
-
-    frmClientResult.frmCli    := frm;
-    frmClientResult.TypeCli   :=  DM.Clients.FieldByName('type_cli').AsInteger;
-    frmClientResult.ClientId  := CLP.Client_id;
     frmClientResult.CallId    := ACallId;
     frmClientResult.CallApiId := ACallApiId;
     frmClientResult.ShowModal;

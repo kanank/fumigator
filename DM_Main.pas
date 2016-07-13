@@ -159,7 +159,7 @@ uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
   frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult,
-  formClientResult;
+  formClientResult, formContact;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -237,12 +237,19 @@ var
   prm: TFrmCreateParam;
 begin
   //prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
-  frmContact := TfrmfrmContact.Create(nil, '', @prm);
+  frmContact := TfrmContact.Create(nil, '', @prm);
   try
     Result.ModalRes := frmContact.ModalResult;
   finally
     FreeAndNil(frmContact);
   end;
+end;
+
+function TDataModuleMain.ShowContactCallForm(CLP: ClientCallParams): FormResult;
+var
+  s: string;
+begin
+
 end;
 
 function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
@@ -310,7 +317,6 @@ begin
     if not DM.Clients.Locate('id', CLP.Client_id, []) then
       Exit;
 
-    frmClientResult := TfrmClientResult.Create(self);
 
     if not fCancel then
     begin

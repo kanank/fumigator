@@ -8,7 +8,7 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, frListBase,
   frPhones, cxDBEdit, cxTextEdit, cxMaskEdit, cxDropDownEdit, cxLookupEdit,
   cxDBLookupEdit, cxDBLookupComboBox, Vcl.StdCtrls, Data.DB,
-  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL;
+  IBX.IBCustomDataSet, IBX.IBQuery, IBX.IBUpdateSQL, IBX.IBDatabase;
 
 type
   TFrameContact = class(TDbFrameBase)

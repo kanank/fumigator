@@ -538,19 +538,25 @@ end;
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
-  AddLogMemo('#IBEvent: ' + EventName);
-  if Copy(EventName,1,11) = 'INCOME_CALL' then
-  begin
-    SendCommandToUser('*', '#checkcall:', false)
-  end
-  else
+  try
+    CSection.Enter;
 
-  if Copy(EventName,1,13) = 'SESSION_CLOSE' then
-    SendCommandToUser('*', '#checksession:', false)
-  else
+    AddLogMemo('#IBEvent: ' + EventName);
+    if Copy(EventName,1,11) = 'INCOME_CALL' then
+    begin
+      SendCommandToUser('*', '#checkcall:', false)
+    end
+    else
 
-  if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
-    SendCommandToUser('*', '#checkacceptcall:', false)
+    if Copy(EventName,1,13) = 'SESSION_CLOSE' then
+      SendCommandToUser('*', '#checksession:', false)
+    else
+
+    if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
+      SendCommandToUser('*', '#checkacceptcall:', false)
+  finally
+    CSection.Leave;
+  end;
 end;
 
 function TMF.FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo): Boolean;
@@ -1077,6 +1083,8 @@ var
   i: Integer;
   Context: TMyContext;
 begin
+  if not Assigned(FContList) then
+    Exit;
    for I := 0 to FContList.Count-1 do
     begin
       Context := TMyContext(FContList[I]);
@@ -1133,7 +1141,7 @@ begin
 
         FContList := FServer.Contexts.LockList;
         fList.BeginUpdate;
-        while step < cnt do
+        while (step < cnt) and Assigned(FContList) do
         begin
           f := False;
           if fList.Names[cur] = '*' then
@@ -1172,6 +1180,9 @@ var
   I: Integer;
 begin
   Result := False;
+  if not Assigned(FContList) then
+    Exit;
+
     for I := 0 to FContList.Count-1 do
     begin
       Context := TMyContext(FContList[I]);

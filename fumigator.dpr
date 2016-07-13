@@ -88,8 +88,7 @@ begin
     Application.terminate;
   end;
 
-  Application.CreateForm(TDM, DM);
-  Application.CreateForm(TfrmContact, frmContact);
+  Application.CreateForm(TDataModuleMain, DM);
   LoadOptions(CfgFileName);
 
   if CheckUpdates then

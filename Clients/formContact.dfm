@@ -9,9 +9,11 @@ inherited frmContact: TfrmContact
   inherited img1: TImage
     Top = -154
     Visible = False
+    ExplicitTop = -154
   end
   inherited RzPanel1: TRzPanel
     Top = 160
+    ExplicitTop = 160
     inherited Image2: TImage
       Left = 2
       Top = 3
@@ -37,7 +39,6 @@ inherited frmContact: TfrmContact
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
-      ExplicitLeft = 328
     end
   end
   inline FrameContact: TFrameContact
@@ -50,9 +51,11 @@ inherited frmContact: TfrmContact
     ExplicitTop = 8
     inherited cmbType: TcxDBLookupComboBox
       Style.IsFontAssigned = True
+      ExplicitHeight = 24
     end
     inherited cxDBTextEdit1: TcxDBTextEdit
       Style.IsFontAssigned = True
+      ExplicitHeight = 24
     end
     inherited FramePhones: TFramePhones
       inherited grpPhone: TRzGroupBox
@@ -68,5 +71,9 @@ inherited frmContact: TfrmContact
         end
       end
     end
+  end
+  object DS: TDataSource
+    Left = 176
+    Top = 152
   end
 end

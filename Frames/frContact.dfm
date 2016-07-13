@@ -100,6 +100,7 @@ inherited FrameContact: TFrameContact
       inherited grdPhone: TcxGrid
         Width = 213
         Height = 119
+        ExplicitWidth = 213
         ExplicitHeight = 119
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
@@ -110,6 +111,7 @@ inherited FrameContact: TFrameContact
       inherited RzPanel2: TRzPanel
         Left = 218
         Height = 127
+        ExplicitLeft = 218
         ExplicitHeight = 127
         inherited btnAdd: TRzBitBtn
           Top = 2

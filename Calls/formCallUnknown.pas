@@ -18,11 +18,13 @@ type
     DS: TDataSource;
     edtPhone: TcxMaskEdit;
     RzButton1: TRzButton;
-    btnClients: TRzMenuButton;
+    btnContacts: TRzMenuButton;
   private
-    { Private declarations }
+    fOutcomeCall: Boolean;
+    procedure SetOutcomeCall(AValue: boolean);
   public
-    { Public declarations }
+    ContactType: integer;
+    property OutcomeCall: Boolean read fOutcomeCall write SetOutcomeCall;
   end;
 
 var
@@ -37,5 +39,16 @@ uses
 
 
 
+
+{ TfrmCallUnknown }
+
+procedure TfrmCallUnknown.SetOutcomeCall(AValue: boolean);
+begin
+  fOutcomeCall := AValue;
+
+  if AValue then
+    Caption := 'Исходящий звонок. Клиент не найден';
+
+end;
 
 end.

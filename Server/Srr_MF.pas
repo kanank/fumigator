@@ -28,6 +28,10 @@ type
     function BroadcastMsg(const bmsg: String): boolean;
   end;
 
+  //TCallWriter = class(TThread)
+   // protected
+  //end;
+
   TMyContext = class(TIdServerContext)
     public
       IP: String;
@@ -776,8 +780,9 @@ end;
 
 procedure TMF.Tel_SRVCommandGet(AContext: TIdContext;
   ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+var
+  LogList: TStringList;
 begin
-
   if ARequestInfo.URI = '/fumigator' then
   try
     CSectionFumigator.Enter;
@@ -788,48 +793,31 @@ begin
 
 // новое Вхождение
 if ARequestInfo.URI = Trim(TelURI_edt.Text) then
-  try
-    //CSection.Enter;
 
-    Addlog('#Поступление события на службы Call_Events');
-    AddLogMemo(ARequestInfo.URI);
-    AddLogMemo(ARequestInfo.Params.Text);
+    //Addlog('#Поступление события на службы Call_Events');
+    //AddLogMemo(ARequestInfo.URI);
+    //AddLogMemo(ARequestInfo.Params.Text);
 
     if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
-    begin
+    try
+      //CSection.Enter;
+      LogList := TStringList.Create;
+      LogList.Add('#Поступление события на службы Call_Events');
+      LogList.Add(ARequestInfo.URI);
+      LogList.Add(ARequestInfo.Params.Text);
+      AddLog(LogList.Text);
       //if (ServerSocket.Socket.ActiveConnections > 0) then
         if AddCallEvent(ARequestInfo.Params) = true then
-          AddLog('Событие Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
+          AddLog('Записан Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
              + ARequestInfo.Params.Values['CallStatus']);
-
-    //Входящий с мобильного
-    //CallID=1429413884.1298580
-    //CallerIDNum=+79086638953
-    //CallerIDName=79086638953
-    //CalledDID=00057766
-    //CalledExtension=11890*104
-    //CallStatus=CALLING
-    //CallFlow=in
-    //CallerExtension=
-    //CallAPIID=2gflhkjbozarrmnjp5go
-    //
-    ///Исходящий звонок.
-    //CallID=1429368433.1280855
-    //CallerIDNum=11890*104
-    //CallerIDName=104
-    //CalledDID=
-    //CallStatus=CALLING
-    //CallFlow=out
-    //CallerExtension=11890*104
-    //CalledNumber=000114509
-    //CallAPIID=lfrsmzqx7c6tahkgcdvj
-
+    finally
+      LogList.Free;
     end
     else
       Addlog('Запрос не содержит данных Call_Events, либо неверный URI.');
-  finally
+  //finally
     //CSection.Leave;
-  end;
+  //end;
 
 end;
 
@@ -1061,7 +1049,9 @@ end;*)
 
 procedure TMsgThread.AddMsg(Ato, AMsg: string);
 begin
-  //if FServer.Contexts.Count = 0 then Exit;
+  if not Assigned(FServer.Contexts) or
+    (Assigned(FServer.Contexts) and (FServer.Contexts.Count = 0)) then
+    Exit;
 
   if LockMutex(MsgMutex, MutexDelay) then
   try
@@ -1124,7 +1114,8 @@ begin
 
   while not Terminated do
   begin
-    if not (Terminated or (FServer.Contexts.Count = 0) or
+    if not (Terminated or not Assigned(FServer.Contexts) or
+      (Assigned(FServer.Contexts) and (FServer.Contexts.Count = 0)) or
            (FMsgList.Count = 0) or fAddMsg) then
 
     //if LockMutex(MsgMutex, 5000) then

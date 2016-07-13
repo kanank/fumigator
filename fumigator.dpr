@@ -63,7 +63,9 @@ uses
   formCallEvent in 'Calls\formCallEvent.pas' {frmCallEvent},
   CommonFunc in 'Server\CommonFunc.pas',
   formSessionEdit in 'Calls\formSessionEdit.pas' {frmSessionEdit},
-  frClientCalls in 'Frames\frClientCalls.pas' {frameClientCalls: TFrame};
+  frClientCalls in 'Frames\frClientCalls.pas' {frameClientCalls: TFrame},
+  frContact in 'Frames\frContact.pas' {FrameContact: TFrame},
+  formContact in 'Clients\formContact.pas' {frmContact};
 
 {$R *.res}
 var
@@ -86,7 +88,8 @@ begin
     Application.terminate;
   end;
 
-  Application.CreateForm(TDataModuleMain, DM);
+  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TfrmContact, frmContact);
   LoadOptions(CfgFileName);
 
   if CheckUpdates then

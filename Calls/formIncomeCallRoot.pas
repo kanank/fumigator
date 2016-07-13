@@ -292,9 +292,14 @@ begin
   if fClientCallPrm.Client_Type = '' then
   begin  // Вызываем неизвестный звонок.
    ExtPrm.CallParam := @fClientCallPrm;
-   case DM.ShowUnknownCallForm(fClientCallPrm.TelNum).ModalRes of
+   case DM.ShowUnknownCallForm(fClientCallPrm.TelNum, false).ModalRes of
      mrOk:  formRes := DM.ShowClientFiz(asCreate, ExtPrm);
      mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
+     mrAll:
+       begin
+        extPrm.ClientType := frmCallUnknown.ContactType;
+        formRes := DM.ShowContact(asCreate, ExtPrm);
+       end;
    end;
   end
   else
@@ -302,12 +307,17 @@ begin
     if fClientCallPrm.Client_Type = 'F' then
     begin
       DM.ShowFizCallForm(fClientCallPrm);
-    end;
-
+    end
+    else
     if fClientCallPrm.Client_Type = 'U' then
     begin
       DM.ShowUrCallForm(fClientCallPrm);
-    end;
+    end
+    else
+    if fClientCallPrm.Client_Type = 'C' then
+    begin
+      DM.ShowContactCallForm(fClientCallPrm);
+    end
   end;
  finally
    ClientClose := True;

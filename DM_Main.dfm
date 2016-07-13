@@ -1,6 +1,6 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
-  Height = 487
+  Height = 516
   Width = 790
   object DB: TIBDatabase
     Connected = True
@@ -16,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -1117,7 +1118,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1479,5 +1479,43 @@ object DataModuleMain: TDataModuleMain
         Name = 'callapiid'
         ParamType = ptUnknown
       end>
+  end
+  object DicContactTypes: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from DIC_CONTACT_TYPES')
+    UpdateObject = DicContactTypes_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_CONTACT_TYPES_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 252
+    Top = 358
+  end
+  object DsDicContactTypes: TDataSource
+    DataSet = DicContactTypes
+    Left = 253
+    Top = 409
+  end
+  object DicContactTypes_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from DIC_WORKER_PROFS where  ID = :ID')
+    ModifySQL.Strings = (
+      'update  DIC_CONTACT_TYPES set NAME = :NAME where id = :OLD_ID')
+    InsertSQL.Strings = (
+      'INSERT INTO DIC_CONTACT_TYPES (id, NAME) Values(:id, :NAME)'#9)
+    DeleteSQL.Strings = (
+      'delete from DIC_CONTACT_TYPES'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 256
+    Top = 456
+  end
+  object mContactTypes: TPopupMenu
+    Left = 696
+    Top = 64
   end
 end

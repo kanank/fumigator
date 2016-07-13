@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
   IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
-  CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset;
+  CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset, Vcl.Menus;
 
 
 type
@@ -75,11 +75,15 @@ type
     QSessionCheckAct: TIBQuery;
     imgListTray: TcxImageList;
     QSession_CheckApi: TIBQuery;
+    DicContactTypes: TIBQuery;
+    DsDicContactTypes: TDataSource;
+    DicContactTypes_upd: TIBUpdateSQL;
+    mContactTypes: TPopupMenu;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
   private
-
+    procedure CreateContactTypesPopup(Adata: TDataset); // создаем попап менютипов клиентов
   public
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
@@ -102,14 +106,17 @@ type
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientsForCall: FormResult;
     function SetReadedCall(id: integer): boolean;
-    function ShowUnknownCallForm(APhone: string): FormResult;
+    function ShowUnknownCallForm(APhone: string; AFreeForm: boolean=true): FormResult;
     function ShowFizCallForm(CLP: ClientCallParams): FormResult;
     function ShowUrCallForm(CLP: ClientCallParams): FormResult;
+    function ShowContact(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowContactCallForm(CLP: ClientCallParams): FormResult;
 
     function Calling(ATSnumber, Aphone: string; client_id: integer): string;
     function CallingWithResult(ATSnumber, Aphone: string; client_id: integer): string;
     function ShowOutcomCall(ACallId, ACallApiId: string; APhone: string): string;
     function GetClientInfoForCall(Aid: integer): TdxMemData;
+    procedure miContactTypesClick(Sender: TObject); //нажатие на меню типов контактов
 
     function CheckCloseSession(callid: string; callapiid: string = ''): boolean; //проверка закрытия сессии
     function CheckCloseCall(callid: string): boolean; //проверка окончания непринятого звонка
@@ -224,6 +231,20 @@ begin
   end;
 end;
 
+function TDataModuleMain.ShowContact(AAction: TActionStr;
+  AExtPrm: TClientParam): FormResult;
+var
+  prm: TFrmCreateParam;
+begin
+  //prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  frmContact := TfrmfrmContact.Create(nil, '', @prm);
+  try
+    Result.ModalRes := frmContact.ModalResult;
+  finally
+    FreeAndNil(frmContact);
+  end;
+end;
+
 function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
 var
   prm: TClientParam;
@@ -280,7 +301,7 @@ begin
     inCalling := True;
 
     if clp.Client_Type = '' then
-      case ShowUnknownCallForm(Aphone).ModalRes of
+      case ShowUnknownCallForm(Aphone, false).ModalRes of
         mrOk: newFiz := true;
         mrYes: NewUr := True;
         mrCancel: fCancel := True;
@@ -344,7 +365,7 @@ begin
 
 end;
 
-function TDataModuleMain.ShowUnknownCallForm(APhone: string): FormResult;
+function TDataModuleMain.ShowUnknownCallForm(APhone: string; AFreeForm: boolean=True): FormResult;
 begin
   frmCallUnknown := TfrmCallUnknown.Create(nil);
   try
@@ -352,7 +373,8 @@ begin
     frmCallUnknown.ShowModal;
     Result.ModalRes := frmCallUnknown.ModalResult;
   finally
-    FreeAndNil(frmCallUnknown);
+    if AFreeForm then
+      FreeAndNil(frmCallUnknown);
   end;
 end;
 
@@ -489,6 +511,8 @@ begin
       Post;
     end;
 
+    DicContactTypes.Open;
+    CreateContactTypesPopup(DicContactTypes);
 
     Result := True;
   except
@@ -739,6 +763,10 @@ begin
              case ShowUnknownCallForm(tel).ModalRes of
                mrOk: ShowClientFiz(asCreate, ExtPrm);
                mrYes: ShowClientUr(asCreate, ExtPrm);
+               mrContinue:
+               begin
+                 //extPrm.ClientType := frmCallUnknown.
+               end;
              end;
            end
            else
@@ -923,6 +951,25 @@ begin
   end;
 end;
 
+procedure TDataModuleMain.CreateContactTypesPopup(Adata: TDataset);
+var
+  mi: TMenuItem;
+begin
+  with Adata do
+  begin
+   First;
+   while not Eof do
+   begin
+     mi := TMenuItem.Create(mContactTypes);
+     mi.Caption := FieldByName('NAME').AsString;
+     mi.Tag     := FieldByName('ID').AsInteger;
+     mi.OnClick := miContactTypesClick;
+     mContactTypes.Items.Add(mi);
+     Next;
+   end;
+  end;
+end;
+
 function TDataModuleMain.CreateRWQuery: TIBQuery;
 var
   TR: TIBTransaction;
@@ -1090,6 +1137,12 @@ with Form do
     Width,
     Height,
     SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+end;
+
+procedure TDataModuleMain.miContactTypesClick(Sender: TObject);
+begin
+  frmCallUnknown.ContactType := TComponent(Sender).Tag;
+  frmCallUnknown.ModalResult := mrAll;
 end;
 
 procedure TDataModuleMain.UnMakeTopForm(Form: TForm);

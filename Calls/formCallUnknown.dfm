@@ -144,7 +144,6 @@ inherited frmCallUnknown: TfrmCallUnknown
     Height = 40
     ModalResult = 12
     Caption = #1053#1086#1074#1099#1081' '#1082#1086#1085#1090#1072#1082#1090
-    Enabled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12

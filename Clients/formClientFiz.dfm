@@ -58,6 +58,19 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Style = []
     ParentFont = False
   end
+  object Label4: TLabel [4]
+    Left = 484
+    Top = 281
+    Width = 138
+    Height = 13
+    Caption = #1054#1090#1074#1077#1090#1089#1090#1074#1077#1085#1085#1099#1081' '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
   inherited RzPanel1: TRzPanel
     Top = 301
     Width = 786
@@ -586,6 +599,25 @@ inherited frmClientFiz: TfrmClientFiz
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 9
     Width = 105
+  end
+  object cxDBLookupComboBox1: TcxDBLookupComboBox
+    Left = 627
+    Top = 278
+    DataBinding.DataField = 'WORKER_ID'
+    DataBinding.DataSource = DS
+    Properties.KeyFieldNames = 'ID'
+    Properties.ListColumns = <
+      item
+        FieldName = 'SHORT_NAME'
+      end>
+    Properties.ListOptions.GridLines = glNone
+    Properties.ListOptions.ShowHeader = False
+    Properties.ListSource = DataModuleMain.DSWorkers
+    Properties.ReadOnly = False
+    Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
+    Properties.OnPopup = cmbWorkerPropertiesPopup
+    TabOrder = 10
+    Width = 178
   end
   object DS: TDataSource
     AutoEdit = False

@@ -241,6 +241,7 @@ begin
   prm := NewFrmCreateParam(AACtion, DM.Contacts, @AExtPrm);
   frmContact := TfrmContact.Create(nil, '', @prm);
   try
+    frmContact.ShowModal;
     Result.ModalRes := frmContact.ModalResult;
   finally
     FreeAndNil(frmContact);
@@ -249,9 +250,25 @@ end;
 
 function TDataModuleMain.ShowContactCallForm(CLP: ClientCallParams): FormResult;
 var
-  s: string;
+  prm: TClientParam;
 begin
+  //prm := NewFrmCreateParam(asEdit, DM.Contacts);
+  frmContact:= TfrmContact.Create(nil, 'Входящий звонок. Контакт');
+  try
+    frmContact.Caption := 'Входящий звонок. Контакт';
+    frmContact.FrameContact.OpenData(CLP.Client_id);
+    frmContact.ShowModal;
+    (*if frmContact.ModalResult = mrOk then
+    begin
+      DM.GetDataset(DM.Contacts);
+      DM.Clients.Locate('ID', CLP.Client_id, []);
+      ShowClientFiz(asEdit, prm);
+    end;*)
 
+    Result.ModalRes := frmContact.ModalResult;
+  finally
+    FreeAndNil(frmContact);
+  end;
 end;
 
 function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
@@ -286,7 +303,7 @@ var Q : TIBQuery;
     id: integer;
     Prm: TFrmCreateParam;
     extParam: TClientParam;
-    newFiz, newUr, fCancel: Boolean;
+    newFiz, newUr, newContact, fCancel, isClient: Boolean;
     frm: TForm;
 begin
   Application.ProcessMessages;
@@ -302,10 +319,10 @@ begin
      extParam.Init(0, 0, @CLP);
      prm.action := asEdit;
 
-     DM.GetDataset(DM.Clients);
-
     //if not DM.Clients.Locate('id', CLP.Client_id, []) then
     //  Exit;
+
+    frmClientResult := TfrmClientResult.Create(nil);
 
     inCalling := True;
 
@@ -313,23 +330,40 @@ begin
       case ShowUnknownCallForm(Aphone, false).ModalRes of
         mrOk: newFiz := true;
         mrYes: NewUr := True;
+        mrAll: newContact := True;
         mrCancel: fCancel := True;
       end
     else
-    if not DM.Clients.Locate('id', CLP.Client_id, []) then
-      Exit;
-
+    begin
+      if (clp.Client_Type <> 'C') and not DM.Clients.Locate('id', CLP.Client_id, []) then
+        Exit;
+      if (clp.Client_Type = 'C') and not DM.Contacts.Locate('id', CLP.Client_id, []) then
+        Exit;
+    end;
 
     if not fCancel then
     begin
-      if newFiz or NewUr then
+      isClient := not(newContact or (clp.Client_Type = 'C'));
+      if isClient then
+        DM.GetDataset(DM.Clients)
+      else
+        DM.GetDataset(DM.Contacts);
+
+      if isClient and (newFiz or NewUr) then
       begin
         prm := NewFrmCreateParam(asCreate, DM.Clients);
       end;
+      if newContact then
+        prm := NewFrmCreateParam(asCreate, DM.Contacts);
 
       Prm.ExtParam := @ExtParam;
-      Prm.Dataset := DM.Clients;
-      if not newUr and
+
+      if isClient then
+        Prm.Dataset := DM.Clients
+      else
+        Prm.Dataset := DM.Contacts;
+
+      if isClient and not newUr and
         ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
       begin
         frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
@@ -338,11 +372,19 @@ begin
         frm := frmClientFiz;
       end
       else
+      if isClient then
       begin
         frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
         frmClientUr.RzPanel1.Visible := False;
         frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
         frm := frmClientUr;
+      end
+      else //контакт
+      begin
+        frmContact := TfrmContact.Create(frmClientResult, '', @prm);
+        frmContact.RzPanel1.Visible := False;
+        frmContact.Height := frmContact.Height - frmContact.RzPanel1.Height;
+        frm := frmContact;
       end;
 
       frm.BorderIcons := [];
@@ -357,7 +399,10 @@ begin
       frm.Show;
 
       frmClientResult.frmCli    := frm;
-      frmClientResult.TypeCli   :=  DM.Clients.FieldByName('type_cli').AsInteger;
+      if isClient then
+        frmClientResult.TypeCli   := DM.Clients.FieldByName('type_cli').AsInteger
+      else
+        frmClientResult.TypeCli   := 3;
       frmClientResult.ClientId  := CLP.Client_id;
     end;
     frmClientResult.CallId    := ACallId;
@@ -663,20 +708,22 @@ var
   frm: TForm;
 begin
   try
-    if not formMain.ClientSocket.Active then
+    if not formMain.TCPClient.Connected then
     begin
       MessageBox(0, 'Нет соединения с сервером. Вызовы невозможны',
         'Исходящие вызовы', MB_ICONWARNING);
       exit;
     end;
 
-    DM.GetDataset(DM.Clients);
+   // DM.GetDataset(DM.Clients);
 
-    if not DM.Clients.Locate('id', client_id, []) then
-      Exit;
+   // if not DM.Clients.Locate('id', client_id, []) then
+   //   Exit;
 
-    inCalling := True;
-    formMain.ClientSocket.Socket.SendText('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
+    //inCalling := True;
+    formMain.TCPClient.Socket.WriteLn('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
+    Exit;
+
 
     frmClientResult := TfrmClientResult.Create(self);
 

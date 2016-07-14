@@ -47,7 +47,7 @@ type
     procedure CheckAccept;
     procedure DoCallCancel;
 
-    class function ShowIncomeCall: Boolean;
+    class function ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
   end;
 
 var
@@ -149,6 +149,9 @@ begin
      (frmCallEvent.ModalResult = mrCancel)) then
     Exit;*)
   //fSessionClose := DM.CheckCloseSession(CallId);
+  if callid = ''  then
+    exit;
+
   DM.CheckSession(CallId, fSessionClose, accept);
   if accept then //приняли звонок
   begin
@@ -190,7 +193,7 @@ begin
   CallFinish;
 end;
 
-class function TfrmIncomeCallRoot.ShowIncomeCall: Boolean;
+class function TfrmIncomeCallRoot.ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
 var Q : TIBQuery;
     tel :string;
     id: integer;
@@ -202,6 +205,13 @@ begin
 
   CLP.Setup; //установка
 
+  DM.incomeCalling := True;
+  frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
+  if ACallId <> '' then
+    frmIncomeCallRoot.CallId := ACallId;
+  if ACallApiId <> '' then
+    frmIncomeCallRoot.CallApiId:= ACallApiId;
+  
   try
     with DM.CallS_Q do
     begin
@@ -235,11 +245,10 @@ begin
 //             exit;
 //           end;
 
-           DM.incomeCalling := True;
-
-           frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
-           frmIncomeCallRoot.CallId         := FieldByName('CALLID').AsString;
-           frmIncomeCallRoot.CallApiId      := FieldByName('CALLAPIID').AsString;
+           if ACallId = '' then
+             frmIncomeCallRoot.CallId         := FieldByName('CALLID').AsString;
+           if ACallApiId = '' then
+             frmIncomeCallRoot.CallApiId      := FieldByName('CALLAPIID').AsString;
            frmIncomeCallRoot.ClientCallPrm  := ClP;
            frmIncomeCallRoot.ClientId       := ClP.Client_id;
            frmIncomeCallRoot.ClientClose    := false;
@@ -271,6 +280,8 @@ begin
          end;
 
   finally
+    formMain.CallId    := '';
+    formMain.CallApiId := '';
     DM.incomeCalling := False;
     FreeAndNil(frmCallEvent);
     FreeAndNil(frmIncomeCallRoot);

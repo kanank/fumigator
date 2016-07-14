@@ -104,6 +104,8 @@ type
     procedure WmConnectSocket(var Msg: TMessage); message WM_CONNECTSOCKET;
   public
     ReadThread: TReadingThread;
+    CallId: string;
+    CallApiId: string;
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
   end;
@@ -356,7 +358,7 @@ var
 begin
  // n := InputBox('Входящий звонок', 'Номер вызывающего', '+79104579648');
  // ClientSocket.Socket.SendText('#call:' + n + ',755,755');
-  TCPClient.Socket.WriteLn (AnsiToUtf8('Тест'));
+  TCPClient.Socket.WriteLn ('Тест');
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
@@ -401,7 +403,7 @@ begin
   try
     TCPClient.Connect;
   except
-    DM.SocketTimer.Interval := 20000;
+    DM.SocketTimer.Interval := 5000;
   end;
 end;
 
@@ -450,13 +452,13 @@ end;
 procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
 begin
   TCPClientDisconnected(TCPClient);
-  DoSocketConnect;
+  DM.SocketTimer.Interval := 100;
 end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
   if not DM.incomeCalling then
-    TfrmIncomeCallRoot.ShowIncomeCall;
+    TfrmIncomeCallRoot.ShowIncomeCall(self.CallId, self.CallApiId);
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
@@ -639,6 +641,18 @@ begin
 
   if cmd = 'checkcall' then //поступил новый звонок
   begin
+    try
+      argList := TStringList.Create;
+      arglist.Delimiter := ',';
+      argList.DelimitedText := arg;
+      if argList.Count > 0 then
+      begin
+        formMain.CallId := arglist[0];
+        formMain.CallApiId := argList[1];
+      end;
+    finally
+      argList.free;
+    end;
     PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0);
     //DM.Calls_TimerTimer(DM.Calls_Timer);
   end

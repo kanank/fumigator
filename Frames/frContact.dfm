@@ -57,7 +57,8 @@ inherited FrameContact: TFrameContact
     Left = 95
     Top = 42
     BeepOnEnter = False
-    DataBinding.DataField = 'BANK_NAME'
+    DataBinding.DataField = 'NAME'
+    DataBinding.DataSource = DS
     ParentFont = False
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]

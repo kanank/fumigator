@@ -62,7 +62,7 @@ begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.CommitRetaining;
       if Assigned(frmIncomeCallRoot) then
-        frmIncomeCallRoot.ClientId := DS.DataSet.FieldByName('ID').AsInteger;
+        frmIncomeCallRoot.ClientId := FrameContact.DS.DataSet.FieldByName('ID').AsInteger;
      end
     else
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
@@ -72,7 +72,7 @@ end;
 
 procedure TfrmContact.FormCreate(Sender: TObject);
 var
-  Type_id: integer;
+  Type_id, id: integer;
 begin
   inherited;
   if fFrmParam.Dataset <> nil then
@@ -82,22 +82,27 @@ begin
    if (fFrmParam.ExtParam <> nil) and
       (fFrmParam.ExtParam^.ClientType <> 0) then
     type_id := fFrmParam.ExtParam^.ClientType;
+   if (fFrmParam.ExtParam^.CallParam <> nil) and
+         (fFrmParam.ExtParam^.CallParam.Client_id <> 0) then
+     id := fFrmParam.ExtParam^.CallParam.Client_id;
 
+  FrameContact.OpenData(id);
   case fFrmParam.action of
     asCreate:
       begin
         Title := Title + ' [новая запись]';
         if (DS.DataSet <> nil) and DS.DataSet.Active then
         begin
-          DS.DataSet.Append;
-          DS.DataSet.FieldByName('TYPE_ID').AsInteger  := type_id;
+          //FrameContact.DS.DataSet.Append;
+          FrameContact.DS.DataSet.FieldByName('TYPE_ID').AsInteger  := type_id;
         end;
       end;
     asEdit:
       begin
         Title := Title + ' [редактирование]';
-        if (DS.DataSet <> nil) and DS.DataSet.Active then
-          DS.DataSet.Edit;
+        if (FrameContact.DS.DataSet <> nil) and
+             FrameContact.DS.DataSet.Active then
+          FrameContact.DS.DataSet.Edit;
       end;
     asShow:
       begin
@@ -108,7 +113,7 @@ begin
   (*FramePhones.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FramePhones.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FramePhones.OpenData;*)
-  FrameContact.OpenData;
+  //FrameContact.OpenData;
 
   if (fFrmParam.action = asCreate) and
      (fFrmParam.ExtParam <> nil) and

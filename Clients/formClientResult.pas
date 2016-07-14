@@ -61,7 +61,8 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, formClientFiz, formClientUr, frmMain, formSessionResult;
+  DM_Main, formClientFiz, formClientUr, frmMain,
+  formSessionResult, formContact;
 
 
 procedure TfrmClientResult.butOKClick(Sender: TObject);
@@ -83,7 +84,11 @@ end;
 procedure TfrmClientResult.CallFinish;
 begin
   //Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
-  frmSessionResult := TfrmSessionResult.Create(nil);
+  if not Assigned(frmSessionResult) then
+    frmSessionResult := TfrmSessionResult.Create(nil);
+
+  if CallResult <> '' then
+    Exit;
 
   if frmSessionResult.Q.Transaction.Active then
     frmSessionResult.Q.Transaction.CommitRetaining;
@@ -136,7 +141,10 @@ begin
   if TypeCli = 0 then
     Caption := Caption + '. ' + 'Физическое лицо'
   else
-    Caption := Caption + '. ' + 'Юридическое лицо';
+  if TypeCli = 1 then
+    Caption := Caption + '. ' + 'Юридическое лицо'
+  else
+    Caption := Caption + '. ' + 'Контакт';
 end;
 
 function TfrmClientResult.GetCallFinished: boolean;
@@ -146,8 +154,8 @@ end;
 
 function TfrmClientResult.GetCallResult: string;
 begin
-  if Assigned(frmSessionResult) and frmSessionResult.QApi.Active then
-    Result := frmSessionResult.QApi.FieldByName('callresult').AsString;
+  if Assigned(frmSessionResult) and frmSessionResult.Q.Active then
+    Result := frmSessionResult.Q.FieldByName('callresult').AsString;
 end;
 
 procedure TfrmClientResult.btnCallLaterClick(Sender: TObject);
@@ -172,7 +180,11 @@ begin
     if TypeCli = 0 then
       TfrmClientFiz(frmCli).butOK.Click
     else
-      TfrmClientUr(frmCli).butOK.Click;
+    if TypeCli = 1 then
+      TfrmClientUr(frmCli).butOK.Click
+    else
+      TFrmContact(frmCli).butOk.Click;
+
     Result := (frmCli.ModalResult = mrOk);
     fClientSaved := True;
   except

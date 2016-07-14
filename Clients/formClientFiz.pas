@@ -33,6 +33,8 @@ type
     cmbStatus: TcxDBLookupComboBox;
     Label3: TLabel;
     edtDogNum: TcxDBTextEdit;
+    Label4: TLabel;
+    cxDBLookupComboBox1: TcxDBLookupComboBox;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);

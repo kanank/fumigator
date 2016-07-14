@@ -1,6 +1,8 @@
 inherited frmContact: TfrmContact
-  Caption = 'frmContact'
+  Caption = ''
   ClientHeight = 204
+  FormStyle = fsStayOnTop
+  Position = poDesktopCenter
   OnCreate = FormCreate
   ExplicitWidth = 657
   ExplicitHeight = 242
@@ -52,11 +54,9 @@ inherited frmContact: TfrmContact
     ExplicitTop = 8
     inherited cmbType: TcxDBLookupComboBox
       Style.IsFontAssigned = True
-      ExplicitHeight = 24
     end
     inherited cxDBTextEdit1: TcxDBTextEdit
       Style.IsFontAssigned = True
-      ExplicitHeight = 24
     end
     inherited FramePhones: TFramePhones
       inherited grpPhone: TRzGroupBox

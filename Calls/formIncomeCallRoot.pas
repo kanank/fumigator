@@ -290,7 +290,7 @@ begin
  try
   Timer2.Enabled := True;
   if fClientCallPrm.Client_Type = '' then
-  begin  // Вызываем неизвестный звонок.
+  try  // Вызываем неизвестный звонок.
    ExtPrm.CallParam := @fClientCallPrm;
    case DM.ShowUnknownCallForm(fClientCallPrm.TelNum, false).ModalRes of
      mrOk:  formRes := DM.ShowClientFiz(asCreate, ExtPrm);
@@ -301,6 +301,8 @@ begin
         formRes := DM.ShowContact(asCreate, ExtPrm);
        end;
    end;
+  finally
+    frmCallUnknown.Free;
   end
   else
   begin

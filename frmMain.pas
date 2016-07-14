@@ -13,6 +13,7 @@ const
   WM_SHOWMSG         = WM_USER + 100;
   WM_SHOWINCOMECALL  = WM_USER + 101;
   WM_SHOWOUTCOMECALL = WM_USER + 102;
+  WM_CONNECTSOCKET   = WM_USER + 103;
 
 type
   TAppOptions = class
@@ -100,6 +101,7 @@ type
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
     procedure WmShowOutcomeCall(var Msg: TMessage); message WM_SHOWOUTCOMECALL;
+    procedure WmConnectSocket(var Msg: TMessage); message WM_CONNECTSOCKET;
   public
     ReadThread: TReadingThread;
     procedure DoSocketConnect;
@@ -445,6 +447,12 @@ begin
   end;
 end;
 
+procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
+begin
+  TCPClientDisconnected(TCPClient);
+  DoSocketConnect;
+end;
+
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
   if not DM.incomeCalling then
@@ -708,7 +716,13 @@ begin
       if not FConn.IOHandler.Connected then
         Exit;
 
-      s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
+      try
+        s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
+      except
+        FConn.IOHandler.Close;
+        if not Terminated then
+          PostMessage(formMain.Handle, WM_CONNECTSOCKET, 0,0);
+      end;
       //s := URLDecode(s);
       if not Terminated and (s <> '') then
         TServerCmd.DoCmd(s);

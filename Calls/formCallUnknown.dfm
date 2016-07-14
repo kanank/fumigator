@@ -49,7 +49,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     Top = 193
     Width = 460
     ExplicitTop = 193
-    ExplicitWidth = 470
+    ExplicitWidth = 460
     inherited Image2: TImage
       Left = 26
       ExplicitLeft = 4
@@ -59,7 +59,7 @@ inherited frmCallUnknown: TfrmCallUnknown
       Cancel = True
       Caption = #1054#1090#1084#1077#1085#1072
       Font.Height = -13
-      ExplicitLeft = 317
+      ExplicitLeft = 327
     end
   end
   object btnNewFizCli: TRzButton
@@ -125,6 +125,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     Height = 30
     ModalResult = 6
     Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082' '#1089#1091#1097#1077#1089#1090#1074#1091#1102#1097#1077#1084#1091
+    Enabled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -143,6 +144,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     Height = 40
     ModalResult = 12
     Caption = #1053#1086#1074#1099#1081' '#1082#1086#1085#1090#1072#1082#1090
+    Enabled = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -153,7 +155,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 5
     ThemeAware = False
-    DropDownMenu = frmMain.mExceptList
+    DropDownMenu = DataModuleMain.mContactTypes
     ShowArrow = False
   end
   object DS: TDataSource

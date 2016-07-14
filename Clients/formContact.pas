@@ -13,6 +13,7 @@ type
     butOk: TRzButton;
     DS: TDataSource;
     procedure FormCreate(Sender: TObject);
+    procedure butOkClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -26,17 +27,61 @@ implementation
 
 {$R *.dfm}
 
-uses frPhones, CommonTypes, DM_Main;
+uses
+  IBX.IBQuery, system.StrUtils,
+  frPhones, CommonTypes, DM_Main, formIncomeCallRoot;
+
+procedure TfrmContact.butOkClick(Sender: TObject);
+var
+  res: Boolean;
+begin
+  //проверка
+  res := False;
+  if not ValidateData(DS, self) then
+  begin
+    Application.MessageBox('Не заполнены все необходимые поля!',
+     'Внимание', MB_ICONWARNING + MB_OK);
+    self.ModalResult := mrNone;
+    Exit;
+  end
+  else
+    self.ModalResult := mrOk;
+
+  res := False;
+  try
+    try
+      res := FrameContact.SaveData;
+    except
+      res := False;
+      ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
+      Exception(ExceptObject).Message);
+    end;
+  finally
+    if Res then
+    begin
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+      if Assigned(frmIncomeCallRoot) then
+        frmIncomeCallRoot.ClientId := DS.DataSet.FieldByName('ID').AsInteger;
+     end
+    else
+      if TIBQuery(DS.DataSet).Transaction.InTransaction then
+           TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
+  end;
+end;
 
 procedure TfrmContact.FormCreate(Sender: TObject);
+var
+  Type_id: integer;
 begin
   inherited;
-  //if fFrmParam.Dataset <> nil then
-  //  DS.DataSet := fFrmParam.Dataset;
+  if fFrmParam.Dataset <> nil then
+    DS.DataSet := fFrmParam.Dataset;
 
-   if (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
-  (TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id <> 0) then
-    //status_id := TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id;
+   Type_id := 1;
+   if (fFrmParam.ExtParam <> nil) and
+      (fFrmParam.ExtParam^.ClientType <> 0) then
+    type_id := fFrmParam.ExtParam^.ClientType;
 
   case fFrmParam.action of
     asCreate:
@@ -45,11 +90,7 @@ begin
         if (DS.DataSet <> nil) and DS.DataSet.Active then
         begin
           DS.DataSet.Append;
-          DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 0;
-          //DS.DataSet.FieldByName('STATUS_ID').AsInteger := status_id;
-          DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
-          DS.DataSet.FieldByName('ACT').AsInteger := 1;
-          DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
+          DS.DataSet.FieldByName('TYPE_ID').AsInteger  := type_id;
         end;
       end;
     asEdit:
@@ -66,19 +107,21 @@ begin
 
   (*FramePhones.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FramePhones.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
-  FramePhones.OpenData;
+  FramePhones.OpenData;*)
+  FrameContact.OpenData;
 
   if (fFrmParam.action = asCreate) and
-     (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) then //and
-     //(TClientParam(fFrmParam.ExtParam^).CallParam.id_call <> 0) then
+     (fFrmParam.ExtParam <> nil) and
+     (fFrmParam.ExtParam^.CallParam <> nil) and
+     (TClientParam(fFrmParam.ExtParam^).CallParam.TelNum <> '') then
   begin
-    FramePhones.DS.DataSet.Append;
-    FramePhones.DS.DataSet.FieldByName('phone').AsString :=
+    FrameContact.FramePhones.DS.DataSet.Append;
+    FrameContact.FramePhones.DS.DataSet.FieldByName('phone').AsString :=
       RightStr(TClientParam(fFrmParam.ExtParam^).CallParam.TelNum, 10);
-    FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
-    FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
-    FramePhones.DS.DataSet.Post;
-  end;*)
+    FrameContact.FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
+    FrameContact.FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
+    FrameContact.FramePhones.DS.DataSet.Post;
+  end;
 
 end;
 

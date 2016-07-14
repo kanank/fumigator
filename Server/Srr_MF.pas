@@ -771,7 +771,7 @@ begin
       begin
         TMyContext(AContext).Nick := arg;
 
-        AContext.Connection.IOHandler.WriteLn(AnsiToUtf8('#servertime:' + IntToStr(SecondOfTheDay(Now))));
+        AContext.Connection.IOHandler.WriteLn('#servertime:' + IntToStr(SecondOfTheDay(Now)));
         //Application.ProcessMessages;
       end
       else
@@ -780,6 +780,7 @@ begin
     end;
   except
     AddLogMemo('#Ошибка чтения: ' +Exception(ExceptObject).Message);
+    try AContext.Connection.IOHandler.Close; except end;
   end;
 
 end;
@@ -1090,7 +1091,14 @@ begin
       Context := TMyContext(FContList[I]);
 
       //TMF(FServer.Owner).Log_memo.Lines.Add('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
-      Context.Connection.IOHandler.WriteLn(bmsg);
+      try
+        Context.Connection.IOHandler.WriteLn(bmsg);
+      except
+        TMF(FServer.Owner).AddLogMemo('Ошибка отправки сообщения: ' +
+          Context.Nick + ': ' + bmsg + #13#10 +
+          Exception(ExceptObject).Message);
+          Context.Connection.IOHandler.Close;
+      end;
       TMF(FServer.Owner).AddLogMemo('Послали сообщение для ' + Context.Nick + ': ' + bmsg);
     end;
 end;
@@ -1193,6 +1201,11 @@ begin
           MF.AddLogMemo('Послали сообщение для ' + ANick + ':' + AMsg);
           Result := True;
         except
+          Result := False;
+          TMF(FServer.Owner).AddLogMemo('Ошибка отправки сообщения: ' +
+          ANick + ': ' + AMsg + #13#10 +
+          Exception(ExceptObject).Message);
+          Context.Connection.IOHandler.Close;
         end;
       end;
     end;

@@ -926,7 +926,6 @@ object DataModuleMain: TDataModuleMain
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
-      'id,'
       'NAME,'
       'TYPE_CLI,'
       'STATUS_ID,'
@@ -941,7 +940,6 @@ object DataModuleMain: TDataModuleMain
       'DOG_DATE)'
       'values'
       '('
-      ':id,'
       ':NAME,'
       ':TYPE_CLI,'
       ':STATUS_ID,'
@@ -1519,5 +1517,46 @@ object DataModuleMain: TDataModuleMain
   object mContactTypes: TPopupMenu
     Left = 696
     Top = 64
+  end
+  object Contacts: TIBQuery
+    Database = DB
+    Transaction = Clients_tr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from contacts')
+    UpdateObject = Contacts_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_CONTACTS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 424
+    Top = 24
+  end
+  object Contacts_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'select * from clientslist(:id, null)')
+    ModifySQL.Strings = (
+      'update contacts'
+      'set'
+      'NAME'#9#9'= :NAME,'
+      'TYPE_ID'#9#9'= :TYPE_ID,'
+      'COMMENT'#9'= :COMMENT,'
+      'where id = :ID')
+    InsertSQL.Strings = (
+      'insert into contacts('
+      'NAME,'
+      'TYPE_ID,'
+      'COMMENT)'
+      'values'
+      '('
+      ':NAME,'
+      ':TYPE_ID,'
+      ':COMMENT'
+      ')')
+    DeleteSQL.Strings = (
+      'delete from contacts where id=:id')
+    Left = 480
+    Top = 24
   end
 end

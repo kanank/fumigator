@@ -79,6 +79,8 @@ type
     DsDicContactTypes: TDataSource;
     DicContactTypes_upd: TIBUpdateSQL;
     mContactTypes: TPopupMenu;
+    Contacts: TIBQuery;
+    Contacts_upd: TIBUpdateSQL;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -159,7 +161,7 @@ uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
   frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult,
-  formClientResult, formContact;
+  formClientResult, formContact, formLogo;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -236,7 +238,7 @@ function TDataModuleMain.ShowContact(AAction: TActionStr;
 var
   prm: TFrmCreateParam;
 begin
-  //prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  prm := NewFrmCreateParam(AACtion, DM.Contacts, @AExtPrm);
   frmContact := TfrmContact.Create(nil, '', @prm);
   try
     Result.ModalRes := frmContact.ModalResult;
@@ -529,7 +531,7 @@ function TDataModuleMain.AfterLogin: boolean;
 begin
   Result := False;
   //TrayView := TrayNormal;
-
+  frmLogo.InfoText := 'Загрузка справочников...';
   if not LoadSpr then //загрузка справочников
   begin
     Application.MessageBox('Ошибка загрузки справочников','Ошибка', MB_ICONERROR);

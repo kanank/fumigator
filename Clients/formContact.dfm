@@ -39,6 +39,7 @@ inherited frmContact: TfrmContact
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
+      OnClick = butOkClick
     end
   end
   inline FrameContact: TFrameContact

@@ -119,8 +119,7 @@ object DataModuleMain: TDataModuleMain
       #9'USER_PASSWORD = :USER_PASSWORD,'
       #9'USER_TYPE = :USER_TYPE,'
       #9'USER_BLOCKED = :USER_BLOCKED,'
-      #9'ATS_NUM  = :ATS_NUM,'
-      '              WORKER_ID = :WORKER_ID '
+      #9'ATS_NUM  = :ATS_NUM'
       'where id = :ID')
     InsertSQL.Strings = (
       'INSERT INTO WORKERS ('
@@ -922,7 +921,9 @@ object DataModuleMain: TDataModuleMain
       'COMMENT'#9'= :COMMENT,'
       'ACT                      = :ACT,'
       'DOG_NUM             = :DOG_NUM,'
-      'DOG_DATE            = :DOG_DATE'
+      'DOG_DATE            = :DOG_DATE,'
+      'REGION_ID           = :REGION_ID,'
+      'GOODS                 = :GOODS'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
@@ -937,7 +938,9 @@ object DataModuleMain: TDataModuleMain
       'COMMENT,'
       'ACT,'
       'DOG_NUM,'
-      'DOG_DATE)'
+      'DOG_DATE,'
+      'REGION_ID,'
+      'GOODS)'
       'values'
       '('
       ':NAME,'
@@ -951,7 +954,9 @@ object DataModuleMain: TDataModuleMain
       ':COMMENT,'
       ':ACT,'
       ':DOG_NUM,'
-      ':DOG_DATE'
+      ':DOG_DATE,'
+      ':REGION_ID,'
+      ':GOODS'
       ')')
     DeleteSQL.Strings = (
       'update clients set act=0 where id=:id')
@@ -959,7 +964,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1117,7 +1121,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1558,5 +1561,141 @@ object DataModuleMain: TDataModuleMain
       'delete from contacts where id=:id')
     Left = 480
     Top = 24
+  end
+  object DicDogTypes: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from DIC_DOG_TYPE')
+    UpdateObject = DicDogTypes_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_DOG_TYPE_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 316
+    Top = 374
+  end
+  object DSDicDogTypes: TDataSource
+    DataSet = DicDogTypes
+    Left = 317
+    Top = 425
+  end
+  object DicDogTypes_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from DIC_DOG_TYPE where  ID = :ID')
+    ModifySQL.Strings = (
+      'update  DIC_DOG_TYPE set NAME = :NAME where id = :OLD_ID')
+    InsertSQL.Strings = (
+      'INSERT INTO DIC_DOG_TYPE (id, NAME) Values(:id, :NAME)'#9)
+    DeleteSQL.Strings = (
+      'delete from DIC_DOG_TYPE'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 320
+    Top = 472
+  end
+  object DicAreaVolume: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from Dic_Area_Volume')
+    UpdateObject = DicAreaVolume_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_AREA_VOLUME_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 364
+    Top = 358
+  end
+  object DsDicAreaVolume: TDataSource
+    DataSet = DicAreaVolume
+    Left = 365
+    Top = 409
+  end
+  object DicAreaVolume_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from DIC_AREA_VOLUME where  ID = :ID')
+    ModifySQL.Strings = (
+      'update  Dic_Area_Volume set NAME = :NAME where id = :OLD_ID')
+    InsertSQL.Strings = (
+      'INSERT INTO Dic_Area_Volume (id, NAME) Values(:id, :NAME)'#9)
+    DeleteSQL.Strings = (
+      'delete from Dic_Area_Volume'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 368
+    Top = 451
+  end
+  object DicUnits: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from DIC_UNITS')
+    UpdateObject = DicUnits_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_AREA_VOLUME_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 412
+    Top = 374
+  end
+  object DsDicUnits: TDataSource
+    DataSet = DicUnits
+    Left = 413
+    Top = 425
+  end
+  object DicUnits_upd: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from DIC_UNITS where  ID = :ID')
+    ModifySQL.Strings = (
+      'update  DIC_UNITS set NAME = :NAME where id = :OLD_ID')
+    InsertSQL.Strings = (
+      'INSERT INTO DIC_UNITS (id, NAME) Values(:id, :NAME)'#9)
+    DeleteSQL.Strings = (
+      'delete from DIC_UNITS'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 416
+    Top = 467
+  end
+  object IBQuery1: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from DIC_UNITS')
+    UpdateObject = IBUpdateSQL1
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_AREA_VOLUME_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 452
+    Top = 358
+  end
+  object DataSource1: TDataSource
+    DataSet = IBQuery1
+    Left = 453
+    Top = 409
+  end
+  object IBUpdateSQL1: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select * from DIC_UNITS where  ID = :ID')
+    ModifySQL.Strings = (
+      'update  DIC_UNITS set NAME = :NAME where id = :OLD_ID')
+    InsertSQL.Strings = (
+      'INSERT INTO DIC_UNITS (id, NAME) Values(:id, :NAME)'#9)
+    DeleteSQL.Strings = (
+      'delete from DIC_UNITS'
+      'where'
+      '  ID = :OLD_ID')
+    Left = 456
+    Top = 443
   end
 end

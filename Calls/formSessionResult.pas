@@ -23,6 +23,7 @@ type
     cmbIshod: TcxDBComboBox;
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure Cancel_btnClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     { Private declarations }
   public
@@ -62,6 +63,14 @@ begin
   end
   else
     Result := true;
+end;
+
+procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if not CheckFields then
+    CanClose := False;
+
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

@@ -144,7 +144,6 @@ inherited FramePhones: TFramePhones
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into phones('
-      'ID,'
       'PHONE,'
       'CLIENT_ID,'
       'ISMAIN,'
@@ -154,7 +153,6 @@ inherited FramePhones: TFramePhones
       'ADD_NUMBER'
       ')'
       'values('
-      ':ID,'
       ':PHONE,'
       ':CLIENT_ID,'
       ':ISMAIN,'

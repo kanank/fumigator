@@ -428,6 +428,7 @@ object MF: TMF
   end
   object Tel_SRV: TIdHTTPServer
     Bindings = <>
+    TerminateWaitTime = 30000
     AutoStartSession = True
     OnCommandGet = Tel_SRVCommandGet
     Left = 345

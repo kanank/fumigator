@@ -83,7 +83,7 @@ end;
 
 procedure TfrmClientResult.CallFinish;
 begin
-  //Self.CallResult := DM.FinishSession(CallId, Self.DS.Dataset.FieldByName('ID').AsInteger);
+  //DM.FinishSession(CallId, ClientId);
   if not Assigned(frmSessionResult) then
     frmSessionResult := TfrmSessionResult.Create(nil);
 
@@ -98,6 +98,8 @@ begin
   frmSessionResult.Q.Edit;
   frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
   frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
+  if clientid = 0 then //клиент не был создан
+      frmSessionResult.Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
   Self.CallResult := frmSessionResult.Q.FieldByName('callresult').AsString;
 
   frmSessionResult.BorderIcons := [];
@@ -168,7 +170,7 @@ end;
 procedure TfrmClientResult.btnDeleteCallClick(Sender: TObject);
 begin
   try
-    formMain.ClientSocket.Socket.SendText('#calldelete:' + Self.CallId);
+    formMain.TCPClient.Socket.WriteLn('#calldelete:' + Self.CallApiId);
   finally
     DM.inCalling := False;
   end;
@@ -178,14 +180,17 @@ function TfrmClientResult.SaveClient: Boolean;
 begin
   try
     if TypeCli = 0 then
-      TfrmClientFiz(frmCli).butOK.Click
+      if Assigned(frmCli) then
+        TfrmClientFiz(frmCli).butOK.Click
     else
     if TypeCli = 1 then
-      TfrmClientUr(frmCli).butOK.Click
+      if Assigned(frmCli) then
+         TfrmClientUr(frmCli).butOK.Click
     else
-      TFrmContact(frmCli).butOk.Click;
+      if Assigned(frmCli) then
+        TFrmContact(frmCli).butOk.Click;
 
-    Result := (frmCli.ModalResult = mrOk);
+    Result := not Assigned(frmCli) or (frmCli.ModalResult = mrOk);
     fClientSaved := True;
   except
     result := False;

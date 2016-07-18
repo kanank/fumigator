@@ -13,7 +13,7 @@ uses
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxClasses,
   cxGridCustomView, cxGrid, cxListBox, cxImage, ClassSimpleForm,
   dxGDIPlusClasses, frameBase, frPersonSmall, frPersonSmallFoto,
-  frPersonFullFoto;
+  frPersonFullFoto, frListBase, frWorkerRegions;
 
 type
   TfrmWorker = class(TSimpleForm)
@@ -41,6 +41,7 @@ type
     Label3: TLabel;
     cxDBTextEdit3: TcxDBTextEdit;
     DS: TDataSource;
+    FrameRegions: TFrameWorkerRegions;
     procedure FullForm_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Save_btnClick(Sender: TObject);
@@ -140,6 +141,10 @@ begin
   _FramePersonFull.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));
   _FramePersonFull.OpenData;
 
+  FrameRegions.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FrameRegions.AddParam('WORKER_ID', DS.DataSet.FindField('ID'));
+  FrameRegions.OpenData;
+
 end;
 
 
@@ -207,8 +212,8 @@ begin
       TIBQuery(DS.DataSet).Transaction.CommitRetaining;
       TIBQuery(DS.DataSet).Refresh;
 
-      //услуги
-      //res := FrameUslugi.SaveData;
+      //регионы
+      res := FrameRegions.SaveData;
     except
       res := False;
       ModalResult := mrNone;

@@ -10,21 +10,15 @@ uses
   cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
   Vcl.StdCtrls, frPersonSmall, RzPanel, frameBase, frClientExtUr, RzButton,
   Vcl.ExtCtrls, dxGDIPlusClasses, frUslugi, Data.DB, frKladrAll, FrKladrAdrFull,
-  IBX.IBCustomDataSet, IBX.IBQuery;
+  IBX.IBCustomDataSet, IBX.IBQuery, frGoods;
 
 type
   TfrmClientUr = class(TSimpleForm)
     RzGroupBox1: TRzGroupBox;
     FramePerson: TFramePersonSmall;
-    RzPanel2: TRzPanel;
-    Label1: TLabel;
-    cmbStatus: TcxDBLookupComboBox;
-    Label2: TLabel;
-    cmbFormat: TcxDBLookupComboBox;
     RzPanel3: TRzPanel;
     Label3: TLabel;
     txtName: TcxDBTextEdit;
-    FramePhones: TFramePhones;
     RzPanel4: TRzPanel;
     cxDBTextEdit2: TcxDBTextEdit;
     Label4: TLabel;
@@ -39,8 +33,23 @@ type
     FrameClientExtUr: TFrameClientExtUr;
     Label5: TLabel;
     cmbWorker: TcxDBLookupComboBox;
+    RzPanel2: TRzPanel;
+    Label2: TLabel;
+    Label1: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    cmbFormat: TcxDBLookupComboBox;
+    cmbStatus: TcxDBLookupComboBox;
+    cxDBLookupComboBox1: TcxDBLookupComboBox;
+    cxDBTextEdit1: TcxDBTextEdit;
+    cxDBLookupComboBox2: TcxDBLookupComboBox;
+    cxDBLookupComboBox3: TcxDBLookupComboBox;
+    cxDBLookupComboBox4: TcxDBLookupComboBox;
+    FramePhones: TFramePhones;
     Label6: TLabel;
-    edtDogNum: TcxDBTextEdit;
+    cxDBMemo1: TcxDBMemo;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure DSDataChange(Sender: TObject; Field: TField);

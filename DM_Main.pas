@@ -81,6 +81,18 @@ type
     mContactTypes: TPopupMenu;
     Contacts: TIBQuery;
     Contacts_upd: TIBUpdateSQL;
+    DicDogTypes: TIBQuery;
+    DSDicDogTypes: TDataSource;
+    DicDogTypes_upd: TIBUpdateSQL;
+    DicAreaVolume: TIBQuery;
+    DsDicAreaVolume: TDataSource;
+    DicAreaVolume_upd: TIBUpdateSQL;
+    DicUnits: TIBQuery;
+    DsDicUnits: TDataSource;
+    DicUnits_upd: TIBUpdateSQL;
+    IBQuery1: TIBQuery;
+    DataSource1: TDataSource;
+    IBUpdateSQL1: TIBUpdateSQL;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -140,6 +152,7 @@ type
     MissCount: integer;
     DBFileName :string;
     inCalling: Boolean;
+    waitCalling: Boolean; //ожидание исх.звонка
     incomeCalling: Boolean;
     incomeCallId: string;
     DateStart: TDateTime; //врем€ запуска программы
@@ -325,6 +338,8 @@ begin
     frmClientResult := TfrmClientResult.Create(nil);
 
     inCalling := True;
+    DM.GetDataset(DM.Clients);
+    DM.GetDataset(DM.Contacts);
 
     if clp.Client_Type = '' then
       case ShowUnknownCallForm(Aphone, false).ModalRes of
@@ -412,6 +427,7 @@ begin
     frmClientResult.Free;
   finally
     inCalling := False;
+    waitCalling := False;
   end;
 
   //end;
@@ -548,6 +564,9 @@ begin
     DicCliProfs.Open;
     DicRegions.Open;
     DicPhoneType.Open;
+    DicDogTypes.Open;
+    DicAreaVolume.Open;
+    DicUnits.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
 
@@ -706,6 +725,7 @@ var
   prm: TFrmCreateParam;
   mres: TModalResult;
   frm: TForm;
+  cnt: Integer;
 begin
   try
     if not formMain.TCPClient.Connected then
@@ -722,6 +742,13 @@ begin
 
     //inCalling := True;
     formMain.TCPClient.Socket.WriteLn('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
+    WaitCalling := true;
+    while waitCalling and (cnt < 60) do
+    begin
+      Application.ProcessMessages;
+      Sleep(500);
+      Inc(cnt);
+    end;
     Exit;
 
 
@@ -963,8 +990,12 @@ end;
 function TDataModuleMain.FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
 var
   _Q: TIBQuery;
+  f: boolean;
 begin
-  frmSessionResult := TfrmSessionResult.Create(nil);
+  f := Assigned(frmSessionResult);
+  if not f then
+    frmSessionResult := TfrmSessionResult.Create(nil);
+
   with frmSessionResult do
   try
     if callapiid = '' then
@@ -990,7 +1021,8 @@ begin
       _Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
 
     Result := _Q.FieldByName('callresult').AsString;
-    ShowModal;
+    if not f then
+      ShowModal;
     if _Q.Modified then
     try
       _Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
@@ -1002,7 +1034,8 @@ begin
          _Q.Transaction.RollbackRetaining;
     end;
   finally
-    FreeAndNil(frmSessionResult);
+    if not f then
+      FreeAndNil(frmSessionResult);
   end;
 end;
 

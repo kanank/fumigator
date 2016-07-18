@@ -894,10 +894,11 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
     //Addlog('#Поступление события на службы Call_Events');
     //AddLogMemo(ARequestInfo.URI);
     //AddLogMemo(ARequestInfo.Params.Text);
-
+    try
+      CSection.Enter;
     if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
+
       try
-        //CSection.Enter;
         LogList := TStringList.Create;
         LogList.Add('#Поступление события на службы Call_Events');
         LogList.Add(ARequestInfo.URI);
@@ -912,9 +913,9 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
       end
     else
       Addlog('Запрос не содержит данных Call_Events, либо неверный URI.');
-  //finally
-    //CSection.Leave;
-  //end;
+  finally
+    CSection.Leave;
+  end;
 
 end;
 

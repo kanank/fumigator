@@ -10,7 +10,7 @@ uses
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
   frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
   frPasport, frListBase, frPersonFull, frUslugi, frKladrAll, FrKladrAdrFull,
-  IBX.IBCustomDataSet, IBX.IBQuery;
+  IBX.IBCustomDataSet, IBX.IBQuery, frGoods;
 
 type
   TfrmClientFiz = class(TSimpleForm)
@@ -31,10 +31,17 @@ type
     Label1: TLabel;
     cmbFormat: TcxDBLookupComboBox;
     cmbStatus: TcxDBLookupComboBox;
+    cmbRegion: TcxDBLookupComboBox;
     Label3: TLabel;
     edtDogNum: TcxDBTextEdit;
-    Label4: TLabel;
+    Label6: TLabel;
     cxDBLookupComboBox1: TcxDBLookupComboBox;
+    Label7: TLabel;
+    cxDBLookupComboBox2: TcxDBLookupComboBox;
+    cxDBLookupComboBox3: TcxDBLookupComboBox;
+    Label4: TLabel;
+    cxDBMemo1: TcxDBMemo;
+    Label8: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);

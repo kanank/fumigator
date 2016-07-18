@@ -1,16 +1,16 @@
 inherited frmClientFiz: TfrmClientFiz
   Caption = #1050#1072#1088#1090#1086#1095#1082#1072' '#1082#1083#1080#1077#1085#1090#1072'. '#1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
-  ClientHeight = 345
+  ClientHeight = 455
   ClientWidth = 786
   Position = poDesktopCenter
   OnCreate = FormCreate
   ExplicitWidth = 802
-  ExplicitHeight = 383
+  ExplicitHeight = 493
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 652
-    Top = 256
+    Top = 366
     Width = 126
     Height = 40
     Visible = False
@@ -20,8 +20,8 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitHeight = 40
   end
   object Label14: TLabel [1]
-    Left = 3
-    Top = 248
+    Left = 386
+    Top = 352
     Width = 67
     Height = 13
     Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
@@ -33,10 +33,10 @@ inherited frmClientFiz: TfrmClientFiz
     ParentFont = False
   end
   object Label5: TLabel [2]
-    Left = 4
-    Top = 278
-    Width = 138
-    Height = 13
+    Left = 385
+    Top = 379
+    Width = 84
+    Height = 26
     Caption = #1054#1090#1074#1077#1090#1089#1090#1074#1077#1085#1085#1099#1081' '#1089#1086#1090#1088#1091#1076#1085#1080#1082
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -44,26 +44,14 @@ inherited frmClientFiz: TfrmClientFiz
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
+    WordWrap = True
   end
-  object Label3: TLabel [3]
-    Left = 365
-    Top = 278
-    Width = 82
+  object Label4: TLabel [3]
+    Left = 594
+    Top = 94
+    Width = 38
     Height = 13
-    Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label4: TLabel [4]
-    Left = 484
-    Top = 281
-    Width = 138
-    Height = 13
-    Caption = #1054#1090#1074#1077#1090#1089#1090#1074#1077#1085#1085#1099#1081' '#1089#1086#1090#1088#1091#1076#1085#1080#1082
+    Caption = #1058#1086#1074#1072#1088#1099
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -72,10 +60,10 @@ inherited frmClientFiz: TfrmClientFiz
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 301
+    Top = 411
     Width = 786
     TabOrder = 6
-    ExplicitTop = 301
+    ExplicitTop = 411
     ExplicitWidth = 786
     inherited Image2: TImage
       Left = 58
@@ -135,39 +123,48 @@ inherited frmClientFiz: TfrmClientFiz
     Width = 73
   end
   object Comments_memo: TcxDBMemo
-    Left = 77
-    Top = 244
+    Left = 460
+    Top = 348
     DataBinding.DataField = 'COMMENT'
     DataBinding.DataSource = DS
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 3
     Height = 26
-    Width = 480
+    Width = 300
   end
   inline FramePerson: TFramePersonFull
-    Left = -1
-    Top = 0
-    Width = 786
-    Height = 172
+    Left = 0
+    Top = 80
+    Width = 370
+    Height = 313
     TabOrder = 0
-    ExplicitLeft = -1
-    ExplicitWidth = 786
+    ExplicitTop = 80
+    ExplicitWidth = 370
+    ExplicitHeight = 313
     inherited Label3: TLabel
       Visible = False
     end
     inherited Label5: TLabel
-      Left = 367
-      Top = 151
+      Left = 238
+      Top = 181
       Width = 24
       Caption = 'Email'
-      ExplicitLeft = 367
-      ExplicitTop = 151
+      ExplicitLeft = 238
+      ExplicitTop = 181
       ExplicitWidth = 24
     end
     inherited FramePassport: TFramePassport
-      Left = 564
-      ExplicitLeft = 564
+      Left = 5
+      Top = 160
+      ExplicitLeft = 5
+      ExplicitTop = 160
+      inherited RzGroupBox1: TRzGroupBox
+        Top = 15
+        Height = 136
+        ExplicitTop = 15
+        ExplicitHeight = 136
+      end
     end
     inherited FramePhones: TFramePhones
       Left = 288
@@ -181,6 +178,7 @@ inherited frmClientFiz: TfrmClientFiz
       inherited grpPhone: TRzGroupBox
         Top = -2
         Height = 112
+        Visible = False
         ExplicitTop = -2
         ExplicitHeight = 112
         inherited grdPhone: TcxGrid
@@ -202,8 +200,10 @@ inherited frmClientFiz: TfrmClientFiz
       end
     end
     inherited RzPanel1: TRzPanel
-      Width = 338
-      ExplicitWidth = 338
+      Top = 6
+      Width = 287
+      ExplicitTop = 6
+      ExplicitWidth = 287
       inherited Label10: TLabel [0]
       end
       inherited Label9: TLabel [1]
@@ -233,18 +233,18 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitHeight = 26
       end
       inherited edtSurName: TcxDBTextEdit [7]
-        ExplicitWidth = 216
-        Width = 216
+        ExplicitWidth = 165
+        Width = 165
       end
       inherited edtName: TcxDBTextEdit [8]
-        ExplicitWidth = 215
-        Width = 215
+        ExplicitWidth = 164
+        Width = 164
       end
       inherited edtFamily: TcxDBTextEdit [9]
         Left = 71
         ExplicitLeft = 71
-        ExplicitWidth = 216
-        Width = 216
+        ExplicitWidth = 165
+        Width = 165
       end
       inherited cmbSex: TcxDBComboBox [10]
         Top = 81
@@ -256,8 +256,8 @@ inherited frmClientFiz: TfrmClientFiz
       inherited edtCitizen: TcxDBTextEdit [12]
         Top = 110
         ExplicitTop = 110
-        ExplicitWidth = 215
-        Width = 215
+        ExplicitWidth = 164
+        Width = 164
       end
       inherited cmbDateBirth: TcxDBDateEdit [13]
         Left = 72
@@ -265,8 +265,8 @@ inherited frmClientFiz: TfrmClientFiz
         Properties.OnInitPopup = FramePersoncmbDateBirthPropertiesInitPopup
         ExplicitLeft = 72
         ExplicitTop = 81
-        ExplicitWidth = 125
-        Width = 125
+        ExplicitWidth = 74
+        Width = 74
       end
     end
     inherited FrameAddress: TFrameKladrAdrFull
@@ -306,41 +306,48 @@ inherited frmClientFiz: TfrmClientFiz
       end
     end
     inherited edtEmailPrivate: TcxDBTextEdit
+      Left = 288
+      Top = 179
+      AutoSize = False
       Visible = False
-      ExplicitWidth = 133
-      Width = 133
+      ExplicitLeft = 288
+      ExplicitTop = 179
+      ExplicitWidth = 0
+      Width = 0
     end
     inherited edtEmailWork: TcxDBTextEdit
-      Left = 394
-      Top = 148
-      ExplicitLeft = 394
-      ExplicitTop = 148
-      ExplicitWidth = 164
-      Width = 164
+      Left = 268
+      Top = 179
+      ExplicitLeft = 268
+      ExplicitTop = 179
+      ExplicitWidth = 92
+      Width = 92
     end
     inherited DS: TDataSource
       OnDataChange = FramePersonDSDataChange
     end
   end
   inline FrameUslugi: TFrameUslugi
-    Left = 563
-    Top = 144
-    Width = 216
+    Left = 380
+    Top = 87
+    Width = 205
     Height = 125
     TabOrder = 4
-    ExplicitLeft = 563
-    ExplicitTop = 144
-    ExplicitWidth = 216
+    ExplicitLeft = 380
+    ExplicitTop = 87
+    ExplicitWidth = 205
     ExplicitHeight = 125
     inherited grpPhone: TRzGroupBox
-      Width = 212
+      Left = 3
+      Width = 201
       Height = 128
-      ExplicitWidth = 212
+      ExplicitLeft = 3
+      ExplicitWidth = 201
       ExplicitHeight = 128
       inherited grdPhone: TcxGrid
-        Width = 202
+        Width = 191
         Height = 81
-        ExplicitWidth = 202
+        ExplicitWidth = 191
         ExplicitHeight = 81
         inherited grdPhoneDBTableView1: TcxGridDBTableView
           OptionsView.Header = False
@@ -352,29 +359,28 @@ inherited frmClientFiz: TfrmClientFiz
       end
       inherited RzPanel2: TRzPanel
         Top = 97
-        Width = 210
+        Width = 199
         Height = 30
         ExplicitTop = 97
-        ExplicitWidth = 210
+        ExplicitWidth = 199
         ExplicitHeight = 30
         inherited btnDel: TRzBitBtn
-          Left = 173
-          ExplicitLeft = 173
+          Left = 162
+          ExplicitLeft = 162
         end
       end
     end
   end
   inline FrameAddress: TFrameKladrAdrFull
-    Left = -1
-    Top = 171
-    Width = 562
-    Height = 71
+    Left = 432
+    Top = 0
+    Width = 350
+    Height = 81
     TabOrder = 5
     Visible = False
-    ExplicitLeft = -1
-    ExplicitTop = 171
-    ExplicitWidth = 562
-    ExplicitHeight = 71
+    ExplicitLeft = 432
+    ExplicitWidth = 350
+    ExplicitHeight = 81
     inherited Label2: TLabel [0]
       Left = 5
       Top = 50
@@ -398,10 +404,11 @@ inherited frmClientFiz: TfrmClientFiz
       Top = 47
       ExplicitLeft = 76
       ExplicitTop = 47
-      ExplicitWidth = 482
-      Width = 482
+      ExplicitWidth = 271
+      Width = 271
     end
     inherited FrameRegion: TFrameItemKLADR [5]
+      Visible = False
     end
     inherited FrameCity: TFrameItemKLADR [6]
     end
@@ -414,13 +421,13 @@ inherited frmClientFiz: TfrmClientFiz
     inherited FrameArea: TFrameItemKLADR [10]
     end
     inherited btnEdit: TRzBitBtn [11]
-      Left = 384
-      Top = 9
+      Left = 300
+      Top = 8
       Width = 41
       Height = 31
       Layout = blGlyphTop
-      ExplicitLeft = 384
-      ExplicitTop = 9
+      ExplicitLeft = 300
+      ExplicitTop = 8
       ExplicitWidth = 41
       ExplicitHeight = 31
     end
@@ -429,33 +436,37 @@ inherited frmClientFiz: TfrmClientFiz
       Top = 2
       ExplicitLeft = 75
       ExplicitTop = 2
-      ExplicitWidth = 251
-      Width = 251
+      ExplicitWidth = 210
+      Width = 210
     end
     inherited edtSite: TcxTextEdit [13]
       Left = 75
       Top = 24
       ExplicitLeft = 75
       ExplicitTop = 24
-      ExplicitWidth = 251
-      Width = 251
+      ExplicitWidth = 210
+      Width = 210
     end
   end
   inline FramePhones: TFramePhones
-    Left = 291
-    Top = 30
+    Left = 386
+    Top = 212
     Width = 267
-    Height = 112
+    Height = 127
     TabOrder = 1
-    ExplicitLeft = 291
-    ExplicitTop = 30
+    ExplicitLeft = 386
+    ExplicitTop = 212
     ExplicitWidth = 267
-    ExplicitHeight = 112
+    ExplicitHeight = 127
     inherited grpPhone: TRzGroupBox
+      Left = 2
+      Top = 3
       Width = 262
-      Height = 110
+      Height = 125
+      ExplicitLeft = 2
+      ExplicitTop = 3
       ExplicitWidth = 262
-      ExplicitHeight = 110
+      ExplicitHeight = 125
       inherited grdPhone: TcxGrid
         Left = 5
         Top = 15
@@ -476,9 +487,9 @@ inherited frmClientFiz: TfrmClientFiz
       end
       inherited RzPanel2: TRzPanel
         Left = 230
-        Height = 95
+        Height = 110
         ExplicitLeft = 230
-        ExplicitHeight = 95
+        ExplicitHeight = 110
         inherited btnEdit: TRzBitBtn
           Top = 34
           ExplicitTop = 34
@@ -491,8 +502,8 @@ inherited frmClientFiz: TfrmClientFiz
     end
   end
   object cmbWorker: TcxDBLookupComboBox
-    Left = 147
-    Top = 275
+    Left = 472
+    Top = 380
     DataBinding.DataField = 'WORKER_ID'
     DataBinding.DataSource = DS
     Properties.KeyFieldNames = 'ID'
@@ -510,15 +521,18 @@ inherited frmClientFiz: TfrmClientFiz
     Width = 178
   end
   object RzPanel2: TRzPanel
-    Left = 295
+    Left = -2
     Top = 0
-    Width = 262
-    Height = 28
+    Width = 425
+    Height = 88
     BorderSides = []
     TabOrder = 8
+    DesignSize = (
+      425
+      88)
     object Label2: TLabel
-      Left = 138
-      Top = 10
+      Left = 219
+      Top = 32
       Width = 38
       Height = 13
       Caption = #1060#1086#1088#1084#1072#1090
@@ -530,8 +544,8 @@ inherited frmClientFiz: TfrmClientFiz
       ParentFont = False
     end
     object Label1: TLabel
-      Left = 0
-      Top = 10
+      Left = 219
+      Top = 8
       Width = 36
       Height = 13
       Caption = #1057#1090#1072#1090#1091#1089
@@ -542,9 +556,62 @@ inherited frmClientFiz: TfrmClientFiz
       Font.Style = []
       ParentFont = False
     end
+    object Label3: TLabel
+      Left = 6
+      Top = 33
+      Width = 82
+      Height = 13
+      Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 6
+      Top = 58
+      Width = 69
+      Height = 13
+      Caption = #1058#1080#1087' '#1076#1086#1075#1086#1074#1086#1088#1072
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 219
+      Top = 54
+      Width = 54
+      Height = 26
+      Caption = #1055#1083#1086#1097#1072#1076#1100' '#1086#1073#1088#1072#1073#1086#1090#1082#1080
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      WordWrap = True
+    end
+    object Label8: TLabel
+      Left = 4
+      Top = 8
+      Width = 35
+      Height = 13
+      Caption = #1056#1077#1075#1080#1086#1085
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
     object cmbFormat: TcxDBLookupComboBox
-      Left = 180
-      Top = 6
+      Left = 263
+      Top = 31
       DataBinding.DataField = 'FORMAT_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'ID'
@@ -557,11 +624,11 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsFormatsCli
       TabOrder = 1
-      Width = 81
+      Width = 88
     end
     object cmbStatus: TcxDBLookupComboBox
-      Left = 43
-      Top = 6
+      Left = 262
+      Top = 4
       AutoSize = False
       DataBinding.DataField = 'STATUS_ID'
       DataBinding.DataSource = DS
@@ -578,46 +645,114 @@ inherited frmClientFiz: TfrmClientFiz
       Height = 21
       Width = 89
     end
+    object cmbRegion: TcxDBLookupComboBox
+      Left = 44
+      Top = 4
+      DataBinding.DataField = 'REGION_ID'
+      DataBinding.DataSource = DS
+      Properties.KeyFieldNames = 'REGION_ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.GridLines = glNone
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DsDicRegions
+      Properties.ReadOnly = False
+      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
+      Properties.OnPopup = cmbWorkerPropertiesPopup
+      TabOrder = 2
+      Width = 162
+    end
+    object edtDogNum: TcxDBTextEdit
+      Left = 93
+      Top = 30
+      Anchors = [akLeft, akTop, akRight]
+      AutoSize = False
+      BeepOnEnter = False
+      DataBinding.DataField = 'DOG_NUM'
+      DataBinding.DataSource = DS
+      Style.BorderStyle = ebsFlat
+      Style.HotTrack = False
+      Style.LookAndFeel.Kind = lfFlat
+      Style.LookAndFeel.NativeStyle = True
+      Style.TransparentBorder = True
+      StyleDisabled.LookAndFeel.Kind = lfFlat
+      StyleDisabled.LookAndFeel.NativeStyle = True
+      StyleFocused.LookAndFeel.Kind = lfFlat
+      StyleFocused.LookAndFeel.NativeStyle = True
+      StyleHot.LookAndFeel.Kind = lfFlat
+      StyleHot.LookAndFeel.NativeStyle = True
+      TabOrder = 3
+      Height = 21
+      Width = 110
+    end
+    object cxDBLookupComboBox1: TcxDBLookupComboBox
+      Left = 94
+      Top = 53
+      DataBinding.DataField = 'DOG_TYPE_ID'
+      DataBinding.DataSource = DS
+      Properties.KeyFieldNames = 'ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.GridLines = glNone
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DSDicDogTypes
+      Properties.ReadOnly = False
+      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
+      Properties.OnPopup = cmbWorkerPropertiesPopup
+      TabOrder = 4
+      Width = 111
+    end
+    object cxDBLookupComboBox2: TcxDBLookupComboBox
+      Left = 281
+      Top = 57
+      DataBinding.DataField = 'AREA_ID'
+      DataBinding.DataSource = DS
+      Properties.KeyFieldNames = 'ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.GridLines = glNone
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DsDicAreaVolume
+      Properties.ReadOnly = False
+      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
+      Properties.OnPopup = cmbWorkerPropertiesPopup
+      TabOrder = 5
+      Width = 88
+    end
+    object cxDBLookupComboBox3: TcxDBLookupComboBox
+      Left = 375
+      Top = 57
+      DataBinding.DataField = 'AREA_UNIT_ID'
+      DataBinding.DataSource = DS
+      Properties.KeyFieldNames = 'ID'
+      Properties.ListColumns = <
+        item
+          FieldName = 'NAME'
+        end>
+      Properties.ListOptions.GridLines = glNone
+      Properties.ListOptions.ShowHeader = False
+      Properties.ListSource = DataModuleMain.DsDicUnits
+      Properties.ReadOnly = False
+      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
+      Properties.OnPopup = cmbWorkerPropertiesPopup
+      TabOrder = 6
+      Width = 46
+    end
   end
-  object edtDogNum: TcxDBTextEdit
-    Left = 452
-    Top = 275
-    Anchors = [akLeft, akTop, akRight]
-    BeepOnEnter = False
-    DataBinding.DataField = 'DOG_NUM'
+  object cxDBMemo1: TcxDBMemo
+    Left = 593
+    Top = 107
+    DataBinding.DataField = 'goods'
     DataBinding.DataSource = DS
-    Style.BorderStyle = ebsFlat
-    Style.HotTrack = False
-    Style.LookAndFeel.Kind = lfFlat
-    Style.LookAndFeel.NativeStyle = True
-    Style.TransparentBorder = True
-    StyleDisabled.LookAndFeel.Kind = lfFlat
-    StyleDisabled.LookAndFeel.NativeStyle = True
-    StyleFocused.LookAndFeel.Kind = lfFlat
-    StyleFocused.LookAndFeel.NativeStyle = True
-    StyleHot.LookAndFeel.Kind = lfFlat
-    StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 9
-    Width = 105
-  end
-  object cxDBLookupComboBox1: TcxDBLookupComboBox
-    Left = 627
-    Top = 278
-    DataBinding.DataField = 'WORKER_ID'
-    DataBinding.DataSource = DS
-    Properties.KeyFieldNames = 'ID'
-    Properties.ListColumns = <
-      item
-        FieldName = 'SHORT_NAME'
-      end>
-    Properties.ListOptions.GridLines = glNone
-    Properties.ListOptions.ShowHeader = False
-    Properties.ListSource = DataModuleMain.DSWorkers
-    Properties.ReadOnly = False
-    Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-    Properties.OnPopup = cmbWorkerPropertiesPopup
-    TabOrder = 10
-    Width = 178
+    Height = 89
+    Width = 185
   end
   object DS: TDataSource
     AutoEdit = False

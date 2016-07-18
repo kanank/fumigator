@@ -36,6 +36,10 @@ type
     cxGridDBColumn4: TcxGridDBColumn;
     cxGridLevel4: TcxGridLevel;
     tvMaterials: TdxDBTreeView;
+    GridGoods: TcxGrid;
+    cxGridDBTableView5: TcxGridDBTableView;
+    cxGridDBColumn5: TcxGridDBColumn;
+    cxGridLevel5: TcxGridLevel;
     procedure GridUserTypesEnter(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
     procedure FormShow(Sender: TObject);

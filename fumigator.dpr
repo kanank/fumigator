@@ -65,7 +65,10 @@ uses
   formSessionEdit in 'Calls\formSessionEdit.pas' {frmSessionEdit},
   frClientCalls in 'Frames\frClientCalls.pas' {frameClientCalls: TFrame},
   frContact in 'Frames\frContact.pas' {FrameContact: TFrame},
-  formContact in 'Clients\formContact.pas' {frmContact};
+  formContact in 'Clients\formContact.pas' {frmContact},
+  frGoods in 'Frames\frGoods.pas' {FrameGoods: TFrame},
+  frWorkerRegions in 'Frames\frWorkerRegions.pas' {FrameWorkerRegions: TFrame},
+  formEditRegion in 'Frames\formEditRegion.pas' {frmEditRegion};
 
 {$R *.res}
 var

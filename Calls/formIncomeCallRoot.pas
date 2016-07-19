@@ -94,6 +94,25 @@ end;
 
 procedure TfrmIncomeCallRoot.CallFinish;
 begin
+ if fCallCancel or fSessionClose then
+ begin
+     if Assigned(frmCallUnknown) then
+    begin
+      frmCallUnknown.CloseAbsolute;
+      //frmCallUnknown.Free;
+    end;
+    if Assigned(frmIncomeCall) then
+    begin
+      frmIncomeCall.CloseAbsolute;
+      //frmIncomeCall.Free;
+    end;
+    if Assigned(frmIncomeCallUr) then
+    begin
+      frmIncomeCallUr.CloseAbsolute;
+      //frmIncomeCallUr.Free;
+    end;
+ end;
+
   if fCallCancel or (fSessionClose and not fCallAccepted) then
   begin
     if Assigned(frmCallEvent) then
@@ -102,6 +121,8 @@ begin
     ModalResult := mrCancel;
     Exit;
   end;
+
+
 
   if fSessionClose and fClientClose  then
   begin

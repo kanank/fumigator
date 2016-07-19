@@ -141,6 +141,7 @@ end;
 
 procedure TfrmCalling.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
+  inherited;
   if DM.inCalling and not CallFinished then
     CanClose := False;
 end;

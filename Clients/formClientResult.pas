@@ -134,6 +134,7 @@ end;
 procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
+  inherited;
   if not (fClientSaved and fResultSaved) then
     CanClose := False;
 end;
@@ -203,7 +204,7 @@ begin
   with frmSessionResult do
   begin
     if (Q.FieldByName('ISHOD').AsString = '') or
-       (Q.FieldByName('RESULT').AsString = '')  then
+       (Length(Q.FieldByName('RESULT').AsString) < 5)  then
     begin
       Application.MessageBox('Не заполнены все поля результата сессии!',
        'Исходящий звонок', MB_ICONSTOP);

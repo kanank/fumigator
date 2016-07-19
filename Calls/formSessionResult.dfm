@@ -4,7 +4,6 @@ inherited frmSessionResult: TfrmSessionResult
   ClientHeight = 159
   ClientWidth = 309
   Position = poDesktopCenter
-  OnCloseQuery = FormCloseQuery
   ExplicitWidth = 325
   ExplicitHeight = 197
   PixelsPerInch = 96

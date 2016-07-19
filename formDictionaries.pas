@@ -36,10 +36,6 @@ type
     cxGridDBColumn4: TcxGridDBColumn;
     cxGridLevel4: TcxGridLevel;
     tvMaterials: TdxDBTreeView;
-    GridGoods: TcxGrid;
-    cxGridDBTableView5: TcxGridDBTableView;
-    cxGridDBColumn5: TcxGridDBColumn;
-    cxGridLevel5: TcxGridLevel;
     procedure GridUserTypesEnter(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -66,6 +62,7 @@ var
   data: TDataSet;
   frm: TfrmSimpleSpr;
   s: string;
+  parent, type_id, service_id, subtype_id: integer;
 begin
   data := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).DataController.DataSet;
   s := TcxGridDBTableView(TcxGrid(pnlEdit.Tag).ActiveView).Columns[0].Caption;
@@ -73,7 +70,23 @@ begin
     try
       frm := TfrmSimpleSpr.Create(Self, s + ' [добавление]');
       frm.DS.DataSet := data;
+
+      if data = DM.DicMaterials then
+      begin
+        parent      := DM.DicMaterials.FieldByName('parent').AsInteger;
+        type_id     := DM.DicMaterials.FieldByName('type_id').AsInteger;
+        service_id  := DM.DicMaterials.FieldByName('service_id').AsInteger;
+        subtype_id  := DM.DicMaterials.FieldByName('subtype_id').AsInteger;
+      end;
       data.Append;
+      if data = DM.DicMaterials then
+      begin
+          DM.DicMaterials.FieldByName('parent').AsInteger     :=  parent;
+          DM.DicMaterials.FieldByName('type_id').AsInteger    :=  type_id;
+          DM.DicMaterials.FieldByName('service_id').AsInteger := service_id;
+          DM.DicMaterials.FieldByName('subtype_id').AsInteger := subtype_id;
+      end;
+
       frm.ShowModal;
       if frm.ModalResult = mrOk then
       begin

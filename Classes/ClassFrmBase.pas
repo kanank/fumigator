@@ -13,19 +13,27 @@ const
 type
   TBaseForm = class(TForm)
     img1: TImage;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     procedure SetCaption(AValue: string);
   protected
+    fCanClose: Boolean;
     fTitle: string;
     fFrmParam: TFrmCreateParam;
     fNonValidateList: TStringList;
+    fValidateList: TStringList;  //процедуры возвращают пол€ без признака Required
     procedure SetNonValidate(Alist: string);
+    function Validate(ADataSource: TDataSource): Boolean;
+
   public
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
-    class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
+    class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil; AValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
     destructor Destroy; overload;
+    procedure SetValidateList(Alist: string);
+    procedure CloseAbsolute; //закрыть, не смотр€ CanClose
   published
     property Title: string read fTitle write SetCaption;
+    property CanClose: Boolean read fCanClose write fCanClose;
   end;
 
 
@@ -34,6 +42,12 @@ implementation
 {$R *.dfm}
 uses
   System.TypInfo, IBX.IBQuery, cxDBEdit, cxDBLookupComboBox, frameBase;
+
+procedure TBaseForm.CloseAbsolute;
+begin
+  CanClose := True;
+  Close;
+end;
 
 constructor TBaseForm.Create(AOwner: TComponent; ATitle: string=''; AParam: PFrmCreateParam=nil);
 begin
@@ -45,11 +59,23 @@ begin
 
   Title := ATitle;
   fNonValidateList := TStringList.Create;
+  fValidateList := TStringList.Create;
+  fCanClose := True;
 end;
 
 destructor TBaseForm.Destroy;
 begin
   fNonValidateList.Free;
+  fValidateList.Free;
+end;
+
+procedure TBaseForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  CanClose := fCanClose;
+  if not CanClose then
+  begin
+    Exit;
+  end;
 end;
 
 procedure TBaseForm.SetCaption(AValue: string);
@@ -63,7 +89,18 @@ begin
   fNonValidateList.DelimitedText := Alist;
 end;
 
-class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil): Boolean;
+procedure TBaseForm.SetValidateList(Alist: string);
+begin
+  fValidateList.DelimitedText := Alist;
+end;
+
+function TBaseForm.Validate(ADataSource: TDataSource): Boolean;
+begin
+  Result := ValidateData(ADataSource, self, fNonValidateList, fValidateList);
+  fCanClose := Result;
+end;
+
+class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil; AValidList: TStringList=nil): Boolean;
 
   function SetRequiredBorder(AComponent: TComponent; AField: TField): boolean;
   var
@@ -104,6 +141,7 @@ class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TCom
 var
   i: Integer;
   res, resAll: Boolean;
+  fld: TField;
 begin
   if AComponent = nil then
     AComponent := ADataSource.Owner;
@@ -112,16 +150,23 @@ begin
 
   if Assigned(ADataSource.DataSet) and  ADataSource.DataSet.Modified then
     for i  := 0 to ADataSource.DataSet.FieldCount - 1 do
-      if ADataSource.DataSet.Fields[i].Required and
-        (TIBQuery(ADataSource.DataSet).GeneratorField.Field <>
-          ADataSource.DataSet.Fields[i].FieldName) and
-          (not Assigned(ANonValidList) or (Assigned(ANonValidList) and
-          (ANonValidList.IndexOf(ADataSource.DataSet.Fields[i].FieldName)=-1))) then //пол€ генератора исключаем из проверки
+    begin
+      fld := ADataSource.DataSet.Fields[i];
+      if (fld.Required or
+           (Assigned(AValidList) and
+             (AValidList.IndexOf(fld.FieldName) > -1)))
+         and
+           (TIBQuery(ADataSource.DataSet).GeneratorField.Field <>
+             fld.FieldName)
+         and
+          not(Assigned(ANonValidList) and
+           (ANonValidList.IndexOf(ADataSource.DataSet.Fields[i].FieldName)> -1)) then //пол€ генератора исключаем из проверки
       begin
         res := SetRequiredBorder(AComponent, ADataSource.DataSet.Fields[i]);
         if not res then
           resAll := False;
       end;
+    end;
   Result := resAll;
 end;
 

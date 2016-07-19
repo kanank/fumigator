@@ -19,6 +19,12 @@ type
     edtPhone: TcxMaskEdit;
     RzButton1: TRzButton;
     btnContacts: TRzMenuButton;
+    procedure FormCreate(Sender: TObject);
+    procedure btnNewFizCliClick(Sender: TObject);
+    procedure btnNewUrCliClick(Sender: TObject);
+    procedure btnContactsClick(Sender: TObject);
+    procedure RzButton1Click(Sender: TObject);
+    procedure Exit_bntClick(Sender: TObject);
   private
     fOutcomeCall: Boolean;
     procedure SetOutcomeCall(AValue: boolean);
@@ -41,6 +47,37 @@ uses
 
 
 { TfrmCallUnknown }
+
+procedure TfrmCallUnknown.btnContactsClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmCallUnknown.btnNewFizCliClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmCallUnknown.btnNewUrCliClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmCallUnknown.Exit_bntClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmCallUnknown.FormCreate(Sender: TObject);
+begin
+  inherited;
+  CanClose := false;
+end;
+
+procedure TfrmCallUnknown.RzButton1Click(Sender: TObject);
+begin
+  CanClose := True;
+end;
 
 procedure TfrmCallUnknown.SetOutcomeCall(AValue: boolean);
 begin

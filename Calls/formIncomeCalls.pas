@@ -35,10 +35,13 @@ type
     cmbFormat: TcxLookupComboBox;
     cmbStatus: TcxLookupComboBox;
     lblWorker: TcxLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure Exit_bntClick(Sender: TObject);
+    procedure btnTransferClick(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+
   end;
 
 var
@@ -50,5 +53,21 @@ implementation
 uses
   DM_Main;
 
+
+procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmIncomeCall.Exit_bntClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmIncomeCall.FormCreate(Sender: TObject);
+begin
+  inherited;
+  CanClose := False;
+end;
 
 end.

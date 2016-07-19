@@ -23,6 +23,9 @@ type
     cmbForma: TcxLookupComboBox;
     edtINN: TcxTextEdit;
     edtName: TcxTextEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure Exit_bntClick(Sender: TObject);
+    procedure btnTransferClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -38,5 +41,21 @@ implementation
 uses
   DM_Main;
 
+
+procedure TfrmIncomeCallUr.btnTransferClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmIncomeCallUr.Exit_bntClick(Sender: TObject);
+begin
+  CanClose := True;
+end;
+
+procedure TfrmIncomeCallUr.FormCreate(Sender: TObject);
+begin
+  inherited;
+    CanClose := false;
+end;
 
 end.

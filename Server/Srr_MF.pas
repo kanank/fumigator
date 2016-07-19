@@ -9,7 +9,7 @@ uses
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
   TelpinAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
-  Vcl.IdAntiFreeze;
+  Vcl.IdAntiFreeze, IBX.IBSQL;
 
 type
   TMsgThread = class(TThread)
@@ -119,6 +119,7 @@ type
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
+    function CreateRWSql :TIBSQL;
 
     procedure AfterOutcomCall(Sender: TObject);
     procedure CallFinished(Sender: TObject);
@@ -193,7 +194,103 @@ begin
 end;
 
 function TMF.AddCallEvent(Params: TStrings): Boolean;
-var Q :TIBQuery;
+var
+    Q :TIBSQL;
+    Cf :Byte;
+    Fld :string;
+    userid, tel: string;
+    p: Integer;
+begin
+ try
+   if Params.indexOfName('CALLFLOW') = -1 then
+   begin
+     Result := False;
+     Exit;
+   end;
+
+  if Params.Values['CALLFLOW'] = 'in' then
+    userid := Params.Values['CalledExtension']
+  else
+    userid := Params.Values['CallerExtension'];
+  p := Pos('*', userid);
+  if p > 0 then
+  begin
+    tel := Copy(userid, p + 1, Length(userid));
+    userid := Copy(userid, 1, p - 1);
+  end;
+
+  if userid = edtUserId.Text then //только нужную АТС отсекаем
+  try
+    if not DB.Connected then
+      Exit;
+
+    Q := CreateRWSQL;
+    Q.Transaction.Active := True;
+    Q.SQL.Text := CallEnent_Q.SQL.Text;
+    //Q.Prepare;
+    if Params.Values['CALLFLOW'] = 'in' then
+      cf := 0
+    else
+      cf := 1;
+
+    Q.Transaction.Active := True;
+    Q.ParamByName('CALLFLOW').AsInteger       :=  cf;
+    Q.ParamByName('CALLID').AsString          :=  Params.Values['CallID'];
+    Q.ParamByName('CALLERIDNUM').AsString     :=  Params.Values['CallerIDNum'];
+    Q.ParamByName('CALLERIDNAME').AsString    :=  Params.Values['CallerIDName'];
+    Q.ParamByName('CALLEDDID').AsString       :=  Params.Values['CalledDID'];
+    Q.ParamByName('CALLEREXTENSION').AsString :=  Params.Values['CallerExtension'];
+    Q.ParamByName('CALLSTATUS').AsString      :=  Params.Values['CallStatus'];
+    Q.ParamByName('CALLEDEXTENSION').AsString :=  Params.Values['CalledExtension'];
+    Q.ParamByName('CALLEDNUMBER').AsString    :=  Params.Values['CalledNumber'];
+    Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
+
+    Try
+      Q.ExecQuery;
+      Result := true;
+
+    Except
+    on E : Exception
+        do begin
+        AddLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
+        Result := false;
+        end;
+
+    End;
+
+    if Q.Transaction.Active then
+         Q.Transaction.Commit;
+
+    if Result then
+    try
+      if (Cf = 1) and (Params.Values['CallStatus'] = 'CALLING') then //посылаем сообщение о звонке
+        MF.SendCommandToUser(tel, '#outcomecall:' + Params.Values['CallID'] +
+          ',' + Params.Values['CallAPIID'] + ',' +
+          Params.Values['CalledNumber'], False)
+      else
+      if (Cf = 0) and (Params.Values['CallStatus'] = 'CALLING') then //посылаем сообщение о звонке
+        MF.SendCommandToUser(tel, '#checkcall:' + Params.Values['CallID'] +
+          ',' + Params.Values['CallAPIID'] + ',' +
+          Params.Values['CallerIDNum'], False)
+      else
+        MF.SendCommandToUser('*', '#checksession:' + Params.Values['CallID'] +
+          ',' + Params.Values['CallAPIID'] + ',' +
+          Params.Values['CallerIDNum'], False);
+    except
+
+    end;
+  finally
+      Q.Transaction.Free;
+      FreeAndNil(Q);
+  end;
+ except
+
+ end;
+end;
+
+(*function TMF.AddCallEvent(Params: TStrings): Boolean;
+var
+    Q :TIBQuery;
     Cf :Byte;
     Fld :string;
     userid, tel: string;
@@ -290,7 +387,7 @@ begin
  except
 
  end;
-end;
+end;*)
 
 procedure TMF.AddLog(Logstr: string; ALock: Boolean=true);
  var
@@ -506,6 +603,23 @@ begin
 
 end;
 
+function TMF.CreateRWSQL: TIBSQL;
+var TR :TIBTransaction;
+begin
+  TR := TIBTransaction.Create(self);
+  TR.DefaultDatabase := DB;
+  TR.DefaultAction := TACommit;
+  TR.AutoStopAction := saCommit;
+
+  TR.Params.Add('isc_tpb_read_committed');
+  TR.Params.Add('isc_tpb_rec_version');
+  TR.Params.Add('isc_tpb_wait');
+
+  result := TIBSQL.Create(self);
+  result.Database := DB;
+  result.Transaction := TR;
+
+end;
 
 procedure TMF.FormCreate(Sender: TObject);
 begin

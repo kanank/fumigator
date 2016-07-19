@@ -67,6 +67,7 @@ uses
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
   res: Boolean;
+  err: string;
 begin
   //проверка
   res := False;
@@ -83,6 +84,9 @@ begin
   res := False;
   try
     try
+      ModalResult := mrNone;
+      CanClose := False;
+
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
       DS.DataSet.FieldByName('name').AsString :=
@@ -93,12 +97,13 @@ begin
 
       //сохраняем ссылки
       res := FramePerson.SaveData;
-      if not res then
-        Exit;
+      err := FramePerson.Err;
 
-      res := FrameAddress.SaveData;
-      if not res then
-        Exit;
+      if res then
+      begin
+        res := FrameAddress.SaveData;
+        err := FrameAddress.Err;
+      end;
 
       // PERSON_ID
       if DS.DataSet.FieldByName('PERSON_ID').AsInteger <> FramePerson.Id then
@@ -112,21 +117,42 @@ begin
       if DS.DataSet.FieldByName('ADRES_ID').AsInteger <> FrameAddress.Id then
         DS.DataSet.FieldByName('ADRES_ID').AsInteger := FrameAddress.Id;
 
-      DS.DataSet.Post;
-      TIBQuery(DS.DataSet).ApplyUpdates;
+      try
+        DS.DataSet.Post;
+        TIBQuery(DS.DataSet).ApplyUpdates;
+        res := True;
+      except
+        res := False;
+        err := Exception(ExceptObject).Message;
+      end;
 
       //телефоны
-      res := FramePhones.SaveData;
-      if not res then
-        Exit;
+      if res then
+      begin
+        res := FramePhones.SaveData;
+        err := FramePhones.err;
+      end;
 
       //услуги
-      res := FrameUslugi.SaveData;
+      if res then
+      begin
+        res := FrameUslugi.SaveData;
+        err := FrameUslugi.Err;
+      end;
 
+      if res then
+      begin
+        ModalResult := mrOk;
+        CanClose := True;
+      end
+      else
+        raise Exception.Create(err);
     except
       res := False;
       ShowMessage('Произошла ошибка сохранения данных!' + #13#10 +
       Exception(ExceptObject).Message);
+      self.ModalResult := mrNone;
+      fCanClose := False;
     end;
   finally
     if Res then
@@ -139,6 +165,8 @@ begin
     else
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
            TIBQuery(DS.DataSet).Transaction.RollbackRetaining;
+    if not fCanClose then
+      self.ModalResult := mrNone;
   end;
 end;
 
@@ -164,6 +192,7 @@ begin
   FramePhones.Cancel;
   FrameUslugi.Cancel;
   FrameAddress.Cancel;
+  fCanClose := True;
 end;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);
@@ -204,6 +233,8 @@ begin
         Title := Title + ' [просмотр]';
       end;
   end;
+
+  SetValidateList('NAME,FORMAT_ID,STATUS_ID');
 
   FramePerson.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FramePerson.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));

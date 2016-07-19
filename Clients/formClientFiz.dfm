@@ -659,8 +659,6 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicRegions
       Properties.ReadOnly = False
-      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-      Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 2
       Width = 162
     end

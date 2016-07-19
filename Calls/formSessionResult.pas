@@ -55,9 +55,9 @@ end;
 
 function TfrmSessionResult.CheckFields: Boolean;
 begin
-  if (cmbIshod.Text = '') or (edtResult.Text = '')  then
+  if (cmbIshod.Text = '') or (Length(edtResult.Text) < 5)  then
   begin
-    Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
+    Application.MessageBox('Необходимо заполнить поля! Комментарий - не менее 5 символов ', 'Результат сессии', MB_ICONSTOP);
     Exit;
     Result := False;
   end
@@ -68,6 +68,7 @@ end;
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
+  inherited;
   if not CheckFields then
     CanClose := False;
 

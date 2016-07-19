@@ -16,7 +16,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -708,16 +707,16 @@ object DataModuleMain: TDataModuleMain
       '  SUBTYPE_ID = :SUBTYPE_ID,'
       '  TYPE_ID = :TYPE_ID'
       'where'
-      '  ID = :OLD_ID')
+      '  ID = :ID')
     InsertSQL.Strings = (
       'insert into DIC_MATERIALS'
-      '  (id, NAME, SERVICE_ID, SUBTYPE_ID, TYPE_ID)'
+      '  (NAME, SERVICE_ID, SUBTYPE_ID, TYPE_ID)'
       'values'
-      '  (:id, :NAME, :SERVICE_ID, :SUBTYPE_ID, :TYPE_ID)')
+      '  (:NAME, :SERVICE_ID, :SUBTYPE_ID, :TYPE_ID)')
     DeleteSQL.Strings = (
       'delete from DIC_MATERIALS'
       'where'
-      '  ID = :OLD_ID')
+      '  ID = :ID')
     Left = 488
     Top = 320
   end
@@ -864,11 +863,14 @@ object DataModuleMain: TDataModuleMain
     Database = DB
     Transaction = DefTr
     BufferChunks = 1000
-    CachedUpdates = False
+    CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
       'select * from get_materials_tree')
     UpdateObject = DicMaterials_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_MATERIALS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 488
     Top = 160
   end
@@ -892,6 +894,8 @@ object DataModuleMain: TDataModuleMain
   object Clients: TIBQuery
     Database = DB
     Transaction = Clients_tr
+    ObjectView = True
+    FieldOptions.UpdatePersistent = True
     BufferChunks = 1000
     CachedUpdates = True
     ParamCheck = True
@@ -922,8 +926,11 @@ object DataModuleMain: TDataModuleMain
       'ACT                      = :ACT,'
       'DOG_NUM             = :DOG_NUM,'
       'DOG_DATE            = :DOG_DATE,'
-      'REGION_ID           = :REGION_ID,'
-      'GOODS                 = :GOODS'
+      'REGION_ID            = :REGION_ID,'
+      'GOODS                 = :GOODS,'
+      'DOG_TYPE_ID       = :DOG_TYPE_ID,'
+      'AREA_ID               = :AREA_ID,'
+      'AREA_UNIT_ID     = :AREA_UNIT_ID'
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
@@ -940,7 +947,10 @@ object DataModuleMain: TDataModuleMain
       'DOG_NUM,'
       'DOG_DATE,'
       'REGION_ID,'
-      'GOODS)'
+      'GOODS,'
+      'DOG_TYPE_ID,'
+      'AREA_ID,'
+      'AREA_UNIT_ID)'
       'values'
       '('
       ':NAME,'
@@ -956,7 +966,10 @@ object DataModuleMain: TDataModuleMain
       ':DOG_NUM,'
       ':DOG_DATE,'
       ':REGION_ID,'
-      ':GOODS'
+      ':GOODS,'
+      ':DOG_TYPE_ID,'
+      ':AREA_ID,'
+      ':AREA_UNIT_ID'
       ')')
     DeleteSQL.Strings = (
       'update clients set act=0 where id=:id')
@@ -1121,6 +1134,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

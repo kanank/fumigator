@@ -1,10 +1,7 @@
 inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnClose = FormClose
-  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  ExplicitWidth = 657
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage

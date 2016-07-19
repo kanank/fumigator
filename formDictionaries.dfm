@@ -1,34 +1,32 @@
 inherited frmDictionaries: TfrmDictionaries
   Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-  ClientWidth = 984
+  ClientWidth = 957
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitLeft = -159
-  ExplicitWidth = 1000
-  ExplicitHeight = 396
+  ExplicitWidth = 973
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 799
+    Left = 772
     Visible = False
     ExplicitLeft = 713
   end
   inherited RzPanel1: TRzPanel
-    Width = 984
+    Width = 957
     ExplicitWidth = 984
     inherited Image2: TImage
-      Left = 84
+      Left = 57
       ExplicitLeft = 84
     end
     inherited Exit_bnt: TRzButton
-      Left = 850
+      Left = 823
       ExplicitLeft = 850
     end
   end
   object GridUserTypes: TcxGrid
     Left = 8
     Top = 8
-    Width = 168
+    Width = 225
     Height = 265
     TabOrder = 1
     OnEnter = GridUserTypesEnter
@@ -76,14 +74,14 @@ inherited frmDictionaries: TfrmDictionaries
   object pnlEdit: TRzPanel
     Left = 8
     Top = 273
-    Width = 168
+    Width = 225
     Height = 34
     Align = alCustom
     BorderInner = fsStatus
     BorderOuter = fsPopup
     TabOrder = 2
     DesignSize = (
-      168
+      225
       34)
     object btnAdd: TRzBitBtn
       Left = 7
@@ -108,7 +106,7 @@ inherited frmDictionaries: TfrmDictionaries
       Images = DataModuleMain.ImgList
     end
     object btnDel: TRzBitBtn
-      Left = 135
+      Left = 192
       Top = 3
       Width = 28
       Height = 28
@@ -118,12 +116,13 @@ inherited frmDictionaries: TfrmDictionaries
       OnClick = btnDelClick
       ImageIndex = 3
       Images = DataModuleMain.ImgList
+      ExplicitLeft = 135
     end
   end
   object GridProfs: TcxGrid
-    Left = 193
+    Left = 245
     Top = 8
-    Width = 177
+    Width = 225
     Height = 265
     TabOrder = 3
     OnEnter = GridUserTypesEnter
@@ -169,9 +168,9 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object GridMaterials: TcxGrid
-    Left = 384
+    Left = 482
     Top = 8
-    Width = 208
+    Width = 225
     Height = 265
     TabOrder = 4
     OnEnter = GridUserTypesEnter
@@ -217,9 +216,9 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object GridServices: TcxGrid
-    Left = 608
+    Left = 719
     Top = 8
-    Width = 177
+    Width = 225
     Height = 265
     TabOrder = 5
     OnEnter = GridUserTypesEnter
@@ -265,9 +264,9 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object tvMaterials: TdxDBTreeView
-    Left = 384
+    Left = 482
     Top = 27
-    Width = 208
+    Width = 225
     Height = 246
     ShowNodeHint = True
     RowSelect = True
@@ -287,55 +286,6 @@ inherited frmDictionaries: TfrmDictionaries
     SelectedIndex = -1
     TabOrder = 6
     OnEnter = tvMaterialsEnter
-  end
-  object GridGoods: TcxGrid
-    Left = 799
-    Top = 8
-    Width = 177
-    Height = 265
-    TabOrder = 7
-    Visible = False
-    OnEnter = GridUserTypesEnter
-    object cxGridDBTableView5: TcxGridDBTableView
-      Navigator.Buttons.CustomButtons = <>
-      Navigator.InfoPanel.Visible = True
-      DataController.DataSource = DataModuleMain.DSDicServices
-      DataController.Options = [dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText]
-      DataController.Summary.DefaultGroupSummaryItems = <>
-      DataController.Summary.FooterSummaryItems = <>
-      DataController.Summary.SummaryGroups = <>
-      OptionsCustomize.ColumnFiltering = False
-      OptionsCustomize.ColumnGrouping = False
-      OptionsData.CancelOnExit = False
-      OptionsData.Deleting = False
-      OptionsData.DeletingConfirmation = False
-      OptionsData.Editing = False
-      OptionsData.Inserting = False
-      OptionsSelection.CellSelect = False
-      OptionsView.FocusRect = False
-      OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
-      OptionsView.GridLines = glNone
-      OptionsView.GroupByBox = False
-      object cxGridDBColumn5: TcxGridDBColumn
-        Caption = #1059#1089#1083#1091#1075#1080
-        DataBinding.FieldName = 'NAME'
-        HeaderAlignmentHorz = taCenter
-        Options.Editing = False
-        Options.FilteringPopup = False
-        Options.FilteringPopupMultiSelect = False
-        Options.IgnoreTimeForFiltering = False
-        Options.ShowEditButtons = isebNever
-        Options.AutoWidthSizable = False
-        Options.GroupFooters = False
-        Options.Grouping = False
-        Options.Moving = False
-        Styles.Header = cxStyle1
-        Width = 205
-      end
-    end
-    object cxGridLevel5: TcxGridLevel
-      GridView = cxGridDBTableView5
-    end
   end
   object cxStyleRepository1: TcxStyleRepository
     PixelsPerInch = 96

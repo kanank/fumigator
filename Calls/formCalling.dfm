@@ -7,7 +7,6 @@ inherited frmCalling: TfrmCalling
   ClientHeight = 200
   ClientWidth = 380
   Position = poDesktopCenter
-  OnCloseQuery = FormCloseQuery
   ExplicitWidth = 386
   ExplicitHeight = 228
   PixelsPerInch = 96

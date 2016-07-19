@@ -161,7 +161,6 @@ inherited FrameClientExtUr: TFrameClientExtUr
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into CLIENTS_EXT_UR('
-      'ID,'
       'CLIENT_ID,'
       'REKVIZIT_ID,'
       'FORMA_ID,'
@@ -170,7 +169,6 @@ inherited FrameClientExtUr: TFrameClientExtUr
       'KPP,'
       'OGRN)'
       'values('
-      ':ID,'
       ':CLIENT_ID,'
       ':REKVIZIT_ID,'
       ':FORMA_ID,'

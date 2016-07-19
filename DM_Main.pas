@@ -1230,6 +1230,7 @@ end;
 procedure TDataModuleMain.miContactTypesClick(Sender: TObject);
 begin
   frmCallUnknown.ContactType := TComponent(Sender).Tag;
+  frmCallUnknown.CanClose := True;
   frmCallUnknown.ModalResult := mrAll;
 end;
 

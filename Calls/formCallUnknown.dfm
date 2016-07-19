@@ -6,6 +6,7 @@ inherited frmCallUnknown: TfrmCallUnknown
   ClientWidth = 460
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
+  OnCreate = FormCreate
   ExplicitWidth = 466
   ExplicitHeight = 265
   PixelsPerInch = 96
@@ -59,6 +60,7 @@ inherited frmCallUnknown: TfrmCallUnknown
       Cancel = True
       Caption = #1054#1090#1084#1077#1085#1072
       Font.Height = -13
+      OnClick = Exit_bntClick
       ExplicitLeft = 327
     end
   end
@@ -79,6 +81,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 1
     ThemeAware = False
+    OnClick = btnNewFizCliClick
   end
   object btnNewUrCli: TRzButton
     Left = 8
@@ -97,6 +100,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 2
     ThemeAware = False
+    OnClick = btnNewUrCliClick
   end
   object edtPhone: TcxMaskEdit
     Left = 117
@@ -136,6 +140,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 4
     ThemeAware = False
+    OnClick = RzButton1Click
   end
   object btnContacts: TRzMenuButton
     Left = 268
@@ -154,6 +159,7 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 5
     ThemeAware = False
+    OnClick = btnContactsClick
     DropDownMenu = DataModuleMain.mContactTypes
     ShowArrow = False
   end

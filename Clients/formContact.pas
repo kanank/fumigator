@@ -81,8 +81,11 @@ begin
    Type_id := 1;
    if (fFrmParam.ExtParam <> nil) and
       (fFrmParam.ExtParam^.ClientType <> 0) then
-    type_id := fFrmParam.ExtParam^.ClientType;
-   if (fFrmParam.ExtParam^.CallParam <> nil) and
+
+    if fFrmParam.ExtParam <> nil then
+      type_id := fFrmParam.ExtParam^.ClientType;
+
+   if (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
          (fFrmParam.ExtParam^.CallParam.Client_id <> 0) then
      id := fFrmParam.ExtParam^.CallParam.Client_id;
 

@@ -4,7 +4,7 @@ inherited frmIncomeCall: TfrmIncomeCall
   ClientHeight = 225
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
-  ExplicitWidth = 657
+  OnCreate = FormCreate
   ExplicitHeight = 263
   DesignSize = (
     641
@@ -44,6 +44,7 @@ inherited frmIncomeCall: TfrmIncomeCall
       Height = 33
       ModalResult = 1
       Caption = #1054#1090#1082#1088#1099#1090#1100' '#1082#1072#1088#1090#1086#1095#1082#1091' '#1082#1083#1080#1077#1085#1090#1072
+      OnClick = Exit_bntClick
       ExplicitLeft = 145
       ExplicitTop = 6
       ExplicitHeight = 33
@@ -66,6 +67,7 @@ inherited frmIncomeCall: TfrmIncomeCall
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
+      OnClick = btnTransferClick
     end
   end
   object grpBox: TRzGroupBox

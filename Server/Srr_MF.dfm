@@ -470,7 +470,7 @@ object MF: TMF
       ' :CALLEDDID, :CALLEDEXTENSION, :CALLSTATUS, :CALLEREXTENSION,'
       ' :CALLEDNUMBER, :CALLAPIID);'
       '')
-    Left = 385
+    Left = 393
     Top = 143
     ParamData = <
       item

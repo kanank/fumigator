@@ -4,7 +4,6 @@ inherited frmContact: TfrmContact
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitWidth = 657
   ExplicitHeight = 242
   PixelsPerInch = 96
   TextHeight = 13

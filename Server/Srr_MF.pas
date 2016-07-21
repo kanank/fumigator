@@ -12,6 +12,21 @@ uses
   Vcl.IdAntiFreeze, IBX.IBSQL;
 
 type
+  TDbWriter = class(TThread)
+  protected
+    fDb: TIBDatabase;
+    fSql: string;
+    fIBSQL: TIBSQL;
+    fParams: TStringList;
+    fMess: string;
+    procedure Execute; override;
+    procedure Log;
+    function CreateIBSql(ADb: TIBDatabase): TIBSQL;
+  public
+    constructor Create(ADb: TIBDatabase; AParam: TStrings; ASql: string); overload;
+    destructor Destroy; override;
+  end;
+
   TMsgThread = class(TThread)
   protected
     FServer: TIdTCPServer;
@@ -96,6 +111,7 @@ type
     Button6: TButton;
     DebugMode_cb: TCheckBox;
     TCPServer: TIdTCPServer;
+    QPhones: TIBQuery;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -195,11 +211,11 @@ end;
 
 function TMF.AddCallEvent(Params: TStrings): Boolean;
 var
-    Q :TIBSQL;
+    //Q :TIBSQL;
     Cf :Byte;
-    Fld :string;
-    userid, tel: string;
-    p: Integer;
+    //Fld :string;
+    userid, ats, tel, client_type: string;
+    p, client_id: Integer;
 begin
  try
    if Params.indexOfName('CALLFLOW') = -1 then
@@ -209,13 +225,19 @@ begin
    end;
 
   if Params.Values['CALLFLOW'] = 'in' then
-    userid := Params.Values['CalledExtension']
+  begin
+    userid := Params.Values['CalledExtension'];
+    tel    := Params.Values['CallerIdNum'];
+  end
   else
+  begin
     userid := Params.Values['CallerExtension'];
+    tel    := Params.Values['CalledNumber'];
+  end;
   p := Pos('*', userid);
   if p > 0 then
   begin
-    tel := Copy(userid, p + 1, Length(userid));
+    ats := Copy(userid, p + 1, Length(userid));
     userid := Copy(userid, 1, p - 1);
   end;
 
@@ -224,64 +246,83 @@ begin
     if not DB.Connected then
       Exit;
 
-    Q := CreateRWSQL;
-    Q.Transaction.Active := True;
-    Q.SQL.Text := CallEnent_Q.SQL.Text;
-    //Q.Prepare;
-    if Params.Values['CALLFLOW'] = 'in' then
-      cf := 0
-    else
-      cf := 1;
+    with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
+      Start;
+//    Q := CreateRWSQL;
+//    Q.Transaction.Active := True;
+//    Q.SQL.Text := CallEnent_Q.SQL.Text;
+//    //Q.Prepare;
+//    if Params.Values['CALLFLOW'] = 'in' then
+//      cf := 0
+//    else
+//      cf := 1;
+//
+//    Q.Transaction.Active := True;
+//    Q.ParamByName('CALLFLOW').AsInteger       :=  cf;
+//    Q.ParamByName('CALLID').AsString          :=  Params.Values['CallID'];
+//    Q.ParamByName('CALLERIDNUM').AsString     :=  Params.Values['CallerIDNum'];
+//    Q.ParamByName('CALLERIDNAME').AsString    :=  Params.Values['CallerIDName'];
+//    Q.ParamByName('CALLEDDID').AsString       :=  Params.Values['CalledDID'];
+//    Q.ParamByName('CALLEREXTENSION').AsString :=  Params.Values['CallerExtension'];
+//    Q.ParamByName('CALLSTATUS').AsString      :=  Params.Values['CallStatus'];
+//    Q.ParamByName('CALLEDEXTENSION').AsString :=  Params.Values['CalledExtension'];
+//    Q.ParamByName('CALLEDNUMBER').AsString    :=  Params.Values['CalledNumber'];
+//    Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
+//
+//    Try
+//      Q.ExecQuery;
+//      Result := true;
+//
+//    Except
+//    on E : Exception
+//        do begin
+//        AddLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
+//        Result := false;
+//        end;
+//
+//    End;
+//
+//    if Q.Transaction.Active then
+//         Q.Transaction.Commit;
 
-    Q.Transaction.Active := True;
-    Q.ParamByName('CALLFLOW').AsInteger       :=  cf;
-    Q.ParamByName('CALLID').AsString          :=  Params.Values['CallID'];
-    Q.ParamByName('CALLERIDNUM').AsString     :=  Params.Values['CallerIDNum'];
-    Q.ParamByName('CALLERIDNAME').AsString    :=  Params.Values['CallerIDName'];
-    Q.ParamByName('CALLEDDID').AsString       :=  Params.Values['CalledDID'];
-    Q.ParamByName('CALLEREXTENSION').AsString :=  Params.Values['CallerExtension'];
-    Q.ParamByName('CALLSTATUS').AsString      :=  Params.Values['CallStatus'];
-    Q.ParamByName('CALLEDEXTENSION').AsString :=  Params.Values['CalledExtension'];
-    Q.ParamByName('CALLEDNUMBER').AsString    :=  Params.Values['CalledNumber'];
-    Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
-
-    Try
-      Q.ExecQuery;
-      Result := true;
-
-    Except
-    on E : Exception
-        do begin
-        AddLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
-        Result := false;
-        end;
-
-    End;
-
-    if Q.Transaction.Active then
-         Q.Transaction.Commit;
-
-    if Result then
+    //if Result then
     try
-      if (Cf = 1) and (Params.Values['CallStatus'] = 'CALLING') then //посылаем сообщение о звонке
-        MF.SendCommandToUser(tel, '#outcomecall:' + Params.Values['CallID'] +
-          ',' + Params.Values['CallAPIID'] + ',' +
-          Params.Values['CalledNumber'], False)
-      else
-      if (Cf = 0) and (Params.Values['CallStatus'] = 'CALLING') then //посылаем сообщение о звонке
-        MF.SendCommandToUser(tel, '#checkcall:' + Params.Values['CallID'] +
-          ',' + Params.Values['CallAPIID'] + ',' +
-          Params.Values['CallerIDNum'], False)
-      else
-        MF.SendCommandToUser('*', '#checksession:' + Params.Values['CallID'] +
-          ',' + Params.Values['CallAPIID'] + ',' +
-          Params.Values['CallerIDNum'], False);
-    except
+      if Params.Values['CallStatus'] = 'CALLING' then
+      begin
+        if Length(tel) > 4 then
+         begin
+           client_id := 0; client_type := '';
+           if QPhones.Locate('phone', tel, []) then
+           begin
+             client_id   := QPhones.FieldByName('client_id').AsInteger;
+             client_type := QPhones.FieldByName('type_cli').AsString;
+           end;
+           MF.SendCommandToUser(ats, '#startcall:' +
+             Params.Values['CALLFLOW'] + ',' +
+             Params.Values['CallID'] + ',' +
+             Params.Values['CallAPIID'] + ',' +
+             tel + ',' +
+             IntToStr(client_id) + ',' +
+             client_type,
+             False)
+         end;
+
+      end
+      else  //окончание звонка
+      begin
+        MF.SendCommandToUser(ats, '#finishcall:' +
+          Params.Values['CallID'] + ',' +
+          Params.Values['CallAPIID'] + ',' +
+          Params.Values['CallerIDNum'],
+          False);
+      end;
+
+     except
 
     end;
   finally
-      Q.Transaction.Free;
-      FreeAndNil(Q);
+      //Q.Transaction.Free;
+      //FreeAndNil(Q);
   end;
  except
 
@@ -641,9 +682,9 @@ end;
 
 procedure TMF.FormDestroy(Sender: TObject);
 begin
-  MsgThread.Terminate;
-  MsgThread.WaitFor;
-  MsgThread.Free;
+  //MsgThread.Terminate;
+  //MsgThread.WaitFor;
+  //MsgThread.Free;
 
   FreeAndNil(FActiveUsers);
   CSection.Release;
@@ -1020,10 +1061,11 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
         AddLog(LogList.Text);
       finally
         LogList.Free;
+        AddCallEvent(ARequestInfo.Params);
         //if (ServerSocket.Socket.ActiveConnections > 0) then
-          if AddCallEvent(ARequestInfo.Params) = true then
-            AddLog('Записан Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
-               + ARequestInfo.Params.Values['CallStatus']);
+//          if AddCallEvent(ARequestInfo.Params) = true then
+//            AddLog('Записан Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
+//               + ARequestInfo.Params.Values['CallStatus']);
       end
     else
       Addlog('Запрос не содержит данных Call_Events, либо неверный URI.');
@@ -1059,6 +1101,7 @@ begin
     DBStatus_lbl.Font.Color := $00408000;
 
     IBEvents.RegisterEvents;
+    QPhones.Open;
   end;
 
 end;
@@ -1416,6 +1459,110 @@ begin
         end;
       end;
     end;
+end;
+
+{ TDbWriter }
+
+constructor TDbWriter.Create(ADb: TIBDatabase; AParam: TStrings;
+  ASql: string);
+begin
+  inherited Create(true);
+  fDb := ADb;
+  fIBSQL := CreateIBSql(ADb);
+  fIBSQL.SQL.Text := ASql;
+  fParams := TStringList.Create;
+  fParams.Assign(AParam);
+  //self.FreeOnTerminate := True;
+  //Resume;
+end;
+
+function TDbWriter.CreateIBSql(ADB: TIBDatabase): TIBSQL;
+var
+  TR :TIBTransaction;
+begin
+  TR := TIBTransaction.Create(nil);
+  TR.DefaultDatabase := ADB;
+  TR.DefaultAction := TACommit;
+  TR.AutoStopAction := saCommit;
+
+  TR.Params.Add('isc_tpb_read_committed');
+  TR.Params.Add('isc_tpb_rec_version');
+  TR.Params.Add('isc_tpb_wait');
+
+  result := TIBSQL.Create(nil);
+  result.Database := ADB;
+  result.Transaction := TR;
+end;
+
+destructor TDbWriter.Destroy;
+begin
+  fParams.Free;
+  if Assigned(fIBSQL) then
+  begin
+    fIBSQL.Transaction.Free;
+    fIBSQL.Free;
+  end;
+  inherited;
+end;
+
+procedure TDbWriter.Execute;
+var
+  Cf :Byte;
+  p: Integer;
+begin
+  try
+    fIBSQL.Transaction.Active := True;
+    //fIBSQL.SQL.Text := fSQL;
+    if fParams.Values['CALLFLOW'] = 'in' then
+      cf := 0
+    else
+      cf := 1;
+
+    with fIBSQL do
+    begin
+      Transaction.Active := True;
+      ParamByName('CALLFLOW').AsInteger       := cf;
+      ParamByName('CALLID').AsString          := fParams.Values['CallID'];
+      ParamByName('CALLERIDNUM').AsString     := fParams.Values['CallerIDNum'];
+      ParamByName('CALLERIDNAME').AsString    := fParams.Values['CallerIDName'];
+      ParamByName('CALLEDDID').AsString       := fParams.Values['CalledDID'];
+      ParamByName('CALLEREXTENSION').AsString := fParams.Values['CallerExtension'];
+      ParamByName('CALLSTATUS').AsString      := fParams.Values['CallStatus'];
+      ParamByName('CALLEDEXTENSION').AsString := fParams.Values['CalledExtension'];
+      ParamByName('CALLEDNUMBER').AsString    := fParams.Values['CalledNumber'];
+      ParamByName('CALLAPIID').AsString       := fParams.Values['CallAPIID'];
+
+      Try
+        ExecQuery;
+        fMess := 'Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
+             + fParams.Values['CallStatus'];
+        Synchronize(Log);
+      Except
+        on E : Exception do
+        begin
+          if Transaction.Active then
+             Transaction.Rollback;
+          fMess := ('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.');
+          Synchronize(Log);
+        end;
+      End;
+
+      if Transaction.Active then
+        try
+           CSectionMsg.Enter;
+           Transaction.Commit;
+        finally
+           CSectionMsg.Leave;
+        end;
+    end;
+  finally
+    Self.Free;
+  end;
+end;
+
+procedure TDbWriter.Log;
+begin
+  MF.AddLogMemo(fMess);
 end;
 
 initialization

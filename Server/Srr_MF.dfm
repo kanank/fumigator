@@ -546,4 +546,25 @@ object MF: TMF
     Left = 520
     Top = 336
   end
+  object QPhones: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select code||phone phone,  client_id,'
+      'case when c.type_cli = 0 then '#39'F'#39' else '#39'U'#39' end type_cli'
+      
+        'from phones p join clients c on c.id = p.client_id and p."TYPE"=' +
+        '0'
+      'where c.act = 1'
+      'union all'
+      'select code||phone,  client_id, '#39'C'#39
+      
+        'from phones p join contacts c on c.id = p.client_id and p."TYPE"' +
+        '=3')
+    Left = 313
+    Top = 81
+  end
 end

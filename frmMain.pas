@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
-  IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze;
+  IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze,
+  CommonTypes;
 
 const
   WM_SHOWMSG         = WM_USER + 100;
@@ -125,6 +126,7 @@ var
   OutPhone: string;  // телефон из сообщения об исх. звонке
   TimeShift: Integer; //смещение с сервером в секундах
   hMutex: THandle;
+  CallObj: TCallProto;
 
 implementation
 
@@ -133,7 +135,7 @@ implementation
 uses
   System.IniFiles,
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
-  formClientUr, CommonTypes, formLogo, formCalling, formSessions,
+  formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
   CommonVars, CommonFunc, formWorkerShedule;
 
@@ -751,8 +753,10 @@ end;
 initialization
   hMutex := CreateMutex(nil, True,
     Pchar(ExtractFileName((Application.ExeName))));
+  CallObj := TCallProto.Create;
 
 finalization
   CloseHandle(hMutex);
+  FreeAndNil(CallObj);
 
 end.

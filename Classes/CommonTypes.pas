@@ -2,12 +2,41 @@ unit CommonTypes;
 
 interface
 uses
-  System.UITypes, DB;
+  System.UITypes, System.Classes, DB;
 
 type TClientType = (clFiz, clUr);
 type TTrayView =(trayNormal, trayMissed);
 
 type TActionStr = (asCreate,asEdit,asShow);
+
+type
+  TCallProto = class
+  private
+    fCallId: string;
+    fCallApiId: string;
+    fCallFlow: string;
+    fClientId: Integer;
+    fClientType: string;
+    fClientSubType: string;
+    fOnStartCall: TNotifyEvent;
+    fOnFinishCall: TNotifyEvent;
+    fActive: Boolean;
+  public
+    property Active; Boolean read fActive;
+    property CallId: string read fCallId;
+    property CallApiId: string read fCallApiId;
+    property CallFlow: string read fCallFlow;
+    property ClientId: Integer read fClientId write fClientId;
+    property ClientType: string read fClientType write fClientType;
+    property ClientSubType: string read fClientSubType write fClientSubType;
+    property OnStartCall: TNotifyEvent read fOnStartCall write fOnStartCall;
+    property OnFinishCall: TNotifyEvent read fOnFinishCall write fOnFinishCall;
+    constructor Create; overload;
+    procedure StartCall(ACallId, ACallApiId, ACallFlow, AClientId, AClientType: string);
+    procedure FinishCall;
+
+
+end;
 
 type
   CurrentUserRec = record
@@ -161,6 +190,33 @@ begin
   Self.action   := Aaction;
   Self.Dataset  := ADataset;
   Self.ExtParam := AExtParam;
+end;
+
+{ TCallPcroto }
+constructor TCallProto.Create;
+begin
+  inherited Create;
+end;
+
+procedure TCallProto.FinishCall;
+begin
+  if Assigned(fOnFinishCall) then
+    fOnFinishCall(Self);
+  fActive := false;
+end;
+
+procedure TCallProto.StartCall(ACallId, ACallApiId, ACallFlow, AClientId,
+  AClientType: string);
+begin
+  fCallId := ACallId;
+  fCallApiId := ACallApiId;
+  fCallFlow := ACallFlow;
+  fClientId := StrToInt(AClientId);
+  fClientType := AClientType;
+
+  fActive := True;
+  if Assigned(fOnStartCall) then
+    fOnStartCall(Self);
 end;
 
 end.

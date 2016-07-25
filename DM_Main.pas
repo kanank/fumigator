@@ -384,7 +384,7 @@ begin
 
   try
      //получаем параметры звонка
-     CLP := getClientCallParams(APhone);
+     //CLP := getClientCallParams(APhone);
      //CLP.id_call := ACallid;
      ClP.TelNum  := APhone;
 
@@ -400,7 +400,7 @@ begin
     DM.GetDataset(DM.Clients);
     DM.GetDataset(DM.Contacts);
 
-    if clp.Client_Type = '' then
+    if CallObj.CallInfo.ClientType = '' then
       case ShowUnknownCallForm(Aphone, false).ModalRes of
         mrOk: newFiz := true;
         mrYes: NewUr := True;
@@ -409,15 +409,15 @@ begin
       end
     else
     begin
-      if (clp.Client_Type <> 'C') and not DM.Clients.Locate('id', CLP.Client_id, []) then
+      if (CallObj.CallInfo.ClientType <> 'C') and not DM.Clients.Locate('id', CallObj.CallInfo.ClientId, []) then
         Exit;
-      if (clp.Client_Type = 'C') and not DM.Contacts.Locate('id', CLP.Client_id, []) then
+      if (CallObj.CallInfo.ClientType = 'C') and not DM.Contacts.Locate('id', CallObj.CallInfo.ClientId, []) then
         Exit;
     end;
 
-    if not fCancel then
+    if not (fCancel or CallObj.Cancelled) then
     begin
-      isClient := not(newContact or (clp.Client_Type = 'C'));
+      isClient := not(newContact or (CallObj.CallInfo.ClientType = 'C'));
       if isClient then
         DM.GetDataset(DM.Clients)
       else
@@ -477,7 +477,7 @@ begin
         frmClientResult.TypeCli := DM.Clients.FieldByName('type_cli').AsInteger
       else
         frmClientResult.TypeCli := 3;
-      frmClientResult.ClientId  := CLP.Client_id;
+      frmClientResult.ClientId  := CallObj.CallInfo.ClientId;
     end;
     frmClientResult.CallId    := ACallId;
     frmClientResult.CallApiId := ACallApiId;

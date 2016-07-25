@@ -53,7 +53,10 @@ uses
 procedure TBaseForm.CloseAbsolute;
 begin
   CanClose := True;
-  Close;
+  if fsModal in FormState then
+    ModalResult := mrCancel
+  else
+    Close;
 end;
 
 constructor TBaseForm.Create(AOwner: TComponent; ATitle: string=''; AParam: PFrmCreateParam=nil);

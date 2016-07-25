@@ -52,6 +52,7 @@ type
     property CallResult: string read GetCallResult write fCallResult;
     procedure CallFinish;
     procedure CheckSession;
+    procedure doFinishCall; override;
   end;
 
 var
@@ -62,7 +63,7 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, formClientFiz, formClientUr, frmMain,
-  formSessionResult, formContact;
+  formSessionResult, formContact, CommonVars;
 
 
 procedure TfrmClientResult.butOKClick(Sender: TObject);
@@ -87,9 +88,6 @@ begin
   if not Assigned(frmSessionResult) then
     frmSessionResult := TfrmSessionResult.Create(nil);
 
-  if CallResult <> '' then
-    Exit;
-
   if frmSessionResult.Q.Transaction.Active then
     frmSessionResult.Q.Transaction.CommitRetaining;
 
@@ -100,7 +98,7 @@ begin
   frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
   if clientid = 0 then //клиент не был создан
       frmSessionResult.Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
-  Self.CallResult := frmSessionResult.Q.FieldByName('callresult').AsString;
+  Self.CallResult := CallObj.CallInfo.CallResult; //frmSessionResult.Q.FieldByName('callresult').AsString;
 
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
@@ -129,6 +127,11 @@ begin
   if DM.CheckCloseSession(CallId) then
     CallFinish;
 
+end;
+
+procedure TfrmClientResult.doFinishCall;
+begin
+  CallFinish;
 end;
 
 procedure TfrmClientResult.FormCloseQuery(Sender: TObject;

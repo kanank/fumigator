@@ -902,6 +902,7 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from clientslist(null, null)')
+    UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
     GeneratorField.ApplyEvent = gamOnPost
@@ -1321,13 +1322,21 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select * from check_session(:callid)')
+      'select count(*) as cnt  from sessions'
+      'where callid = :callid and'
+      '           callapiid <>:callapiid and '
+      '           endtime is null')
     Left = 320
     Top = 152
     ParamData = <
       item
         DataType = ftUnknown
         Name = 'callid'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'callapiid'
         ParamType = ptUnknown
       end>
   end
@@ -1723,7 +1732,6 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from clientslist(null, null)')
-    UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
     GeneratorField.ApplyEvent = gamOnPost

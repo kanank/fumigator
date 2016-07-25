@@ -3,7 +3,7 @@ unit CommonTypes;
 interface
 uses
   System.UITypes, System.Classes, DB, System.SysUtils, Winapi.Messages,
-  Vcl.Forms, Winapi.Windows;
+  Vcl.Forms, Winapi.Windows, Vcl.ExtCtrls;
 
 const
   WM_STARTCALL  = WM_USER + 200;
@@ -35,20 +35,31 @@ type
     fCallInfo: TCallInfo;
     fOnStartCall: TNotifyEvent;
     fOnFinishCall: TNotifyEvent;
+    fOnAcceptCall: TNotifyEvent;
+    fOnCheckTimer: TNotifyEvent;
     fActive: Boolean; //идет звонок
     fReady: Boolean;  // готов к звонку
+    fAccepted: Boolean; //принят звонок
+    fTimer: TTimer;
     procedure SetActive(AValue: boolean);
     procedure SetReady(AValue: boolean);
     function GetAccepted: Boolean;
+    procedure SetAccepted(AValue: boolean);
     function GetCanceled: Boolean;
+    procedure OnTimerProc(Sender: TObject);
+    procedure DoCheckCall;
+  protected
+
   public
     property Active: Boolean read fActive write SetActive;
     property Ready: Boolean read fReady write SetReady;
-    property Accepted: Boolean read GetAccepted;
+    property Accepted: Boolean read GetAccepted write SetAccepted;
     property Cancelled: Boolean read GetCanceled;
     property CallInfo: TCallInfo read fCallInfo;
     property OnStartCall: TNotifyEvent read fOnStartCall write fOnStartCall;
     property OnFinishCall: TNotifyEvent read fOnFinishCall write fOnFinishCall;
+    property OnAcceptCall: TNotifyEvent read fOnAcceptCall write fOnAcceptCall;
+    property OnCheckTimer: TNotifyEvent read fOnCheckTimer write fOnCheckTimer;
     constructor Create; overload;
     destructor Destroy; overload;
     procedure StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);overload;
@@ -227,13 +238,23 @@ constructor TCallProto.Create;
 begin
   inherited Create;
   fCallInfo := TCallInfo.Create;
+  //fTimer := TTimer.Create;
+  //fTimer.Enabled  := False;
+  //fTimer.Interval := 1000;
+  //fTimer.OnTimer  := onTimerProc;
   fReady := True;
 end;
 
 destructor TCallProto.Destroy;
 begin
   fCallInfo.Free;
+  //fTimer.Free;
   inherited;
+end;
+
+procedure TCallProto.DoCheckCall;
+begin
+
 end;
 
 procedure TCallProto.FinishCall(ACallResult: string);
@@ -249,13 +270,33 @@ end;
 
 function TCallProto.GetAccepted: Boolean;
 begin
-  Result := (CallInfo.CallFlow = 'in') and
-    (CallInfo.CallResult = 'ANSWER');
+  Result := (CallInfo.CallFlow = 'in') and fAccepted;
+    //(CallInfo.CallResult = 'ANSWER');
 end;
 
 function TCallProto.GetCanceled: Boolean;
 begin
-  Result := (CallInfo.CallResult = 'ANSWER');
+  Result := (CallInfo.CallResult = 'CANCEL');
+end;
+
+procedure TCallProto.OnTimerProc(Sender: TObject);
+begin
+  if Assigned(fOnCheckTimer) then
+    fOnCheckTimer(self);
+end;
+
+procedure TCallProto.SetAccepted(AValue: boolean);
+begin
+  if AValue <> fAccepted then
+    fAccepted := AValue;
+
+  if AValue then
+  begin
+    if Assigned(fOnAcceptCall) then
+      fOnAcceptCall(self);
+    //fTimer.Enabled := false;
+  end;
+
 end;
 
 procedure TCallProto.SetActive(AValue: boolean);
@@ -290,15 +331,17 @@ begin
     CallId     := ACallId;
     CallApiId  := ACallApiId;
     CallFlow   := ACallFlow;
+    Phone      := APhone;
     ClientId   := StrToInt(AClientId);
     ClientType := AClientType;
+    CallResult :='';
   end;
 
   fActive := True;
   fReady  := False;
 
   //PostMessage()
-
+  //ftimer.Enabled := true;
 
   if Assigned(fOnStartCall) then
     fOnStartCall(Self);

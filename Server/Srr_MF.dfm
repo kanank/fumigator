@@ -110,7 +110,7 @@ object MF: TMF
         Width = 106
         Height = 25
         Anchors = [akTop, akRight]
-        Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1089#1087#1080#1089#1086#1082
+        Caption = #1050#1086#1084#1072#1085#1076#1072
         TabOrder = 4
         OnClick = Button6Click
       end
@@ -435,7 +435,6 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
-    Active = False
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -445,7 +444,6 @@ object MF: TMF
     Top = 80
   end
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'

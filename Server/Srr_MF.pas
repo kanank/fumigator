@@ -601,7 +601,7 @@ end;
 
 procedure TMF.Button6Click(Sender: TObject);
 begin
-  SendCommand('*', Edi
+  SendCommandToUser('*', Edit1.Text);
 end;
 
 procedure TMF.CallFinished(Sender: TObject);

@@ -33,4 +33,10 @@ inherited frmIncomeCallRoot: TfrmIncomeCallRoot
     Left = 168
     Top = 24
   end
+  object CheckTimer: TTimer
+    Enabled = False
+    OnTimer = CheckTimerTimer
+    Left = 224
+    Top = 24
+  end
 end

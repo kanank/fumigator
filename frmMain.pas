@@ -473,11 +473,10 @@ procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
   //if DM.incomeCalling then
   //  Exit;
-  if not CallObj.Ready then
-    Exit;
 
   CallObj.StartCall(CallInfo);
-  TfrmIncomeCallRoot.ShowIncomeCall;
+  //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
+  TfrmIncomeCallRoot.ShowCall;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
@@ -487,7 +486,8 @@ end;
 
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
 begin
-   DM.ShowOutcomCall(OutCallid, OutCallApiid, OutPhone);
+   CallObj.StartCall(CallInfo);
+   DM.ShowOutcomCall(CallInfo.CallId, CallInfo.CallApiid, CallInfo.Phone);
 end;
 
 procedure LoadOptions(AIniFile: string);
@@ -680,6 +680,9 @@ begin
 
   if (cmd = 'startcall') then //поступил новый звонок
   begin
+    if not CallObj.Ready then
+      Exit;
+
     try
       argList := TStringList.Create;
       arglist.Delimiter := ',';

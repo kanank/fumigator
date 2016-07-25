@@ -12,9 +12,11 @@ type
   TfrmIncomeCallRoot = class(TBaseForm)
     Timer1: TTimer;
     Timer2: TTimer;
+    CheckTimer: TTimer;
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
+    procedure CheckTimerTimer(Sender: TObject);
   private
     fCallId: string;
     fCallApiId: string;
@@ -46,11 +48,11 @@ type
 
     procedure CallFinish;
     procedure CheckSession;
-    procedure CheckAccept;
     procedure DoCallCancel;
 
     class function ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
     class function ShowCall: Boolean;
+    class procedure CheckAccept(Sender: TObject);
   end;
 
 var
@@ -69,7 +71,7 @@ uses
 procedure TfrmIncomeCallRoot.DoCallCancel;
 begin
   fCallCancel := True;
-
+  CallObj.CallInfo.CallResult := 'CANCEL';
     
   if Assigned(frmIncomeCall) then
   begin
@@ -98,12 +100,15 @@ end;
 procedure TfrmIncomeCallRoot.doFinishCall;
 begin
   inherited;
-  frmCallEvent.ModalResult := mrCancel;
+  //frmCallEvent.ModalResult := mrCancel;
+  //if fClose then
+  CallFinish;
+
 end;
 
 procedure TfrmIncomeCallRoot.CallFinish;
 begin
- if fCallCancel or fSessionClose then
+ if not CallObj.Active then //Callobj.Cancelled or fSessionClose then
  begin
      if Assigned(frmCallUnknown) then
     begin
@@ -125,7 +130,7 @@ begin
 
  end;
 
-  if fCallCancel or (fSessionClose and not fCallAccepted) then
+  if Callobj.Cancelled or (fSessionClose and not CallObj.Accepted) then
   begin
     if Assigned(frmCallEvent) then
       frmCallEvent.ModalResult := mrCancel;
@@ -134,29 +139,11 @@ begin
     Exit;
   end;
 
-  if fSessionClose and fClientClose  then
+  if not CallObj.Active and fClientClose  then
   begin
-    fCallResult := DM.FinishSession(CallId, ClientId);
+    fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
     ModalResult := mrOk;
   end;
-end;
-
-procedure TfrmIncomeCallRoot.CheckAccept;
-begin
-  (*if fCallCancel then
-    ModalResult := mrCancel
-  else
-  if Assigned(frmCallEvent) and (frmCallEvent.ModalResult <> mrCancel) then
-  begin
-    if not DM.CheckAcceptCall(CallId) then
-    begin
-      fCallCancel := True;
-      frmCallEvent.ModalResult := mrCancel;
-      Exit;
-    end
-    else
-      fCallAccepted := True;
-  end;  *)
 end;
 
 procedure TfrmIncomeCallRoot.CheckSession;
@@ -195,6 +182,13 @@ begin
   CallFinish;
 end;
 
+procedure TfrmIncomeCallRoot.CheckTimerTimer(Sender: TObject);
+begin
+  CheckAccept(CallObj);
+  if CallObj.Accepted then
+    CheckTimer.Enabled := false;
+end;
+
 procedure TfrmIncomeCallRoot.FormShow(Sender: TObject);
 begin
   Timer1.Enabled := True;
@@ -209,7 +203,7 @@ procedure TfrmIncomeCallRoot.SetCallResult(AValue: string);
 begin
   if AValue <> fCallResult then
     fCallResult := AValue;
-  //CallFinish;
+  CallFinish;
 end;
 
 procedure TfrmIncomeCallRoot.SetClientCallPrm(AValue: ClientCallParams);
@@ -233,10 +227,12 @@ begin
     DM.incomeCalling := True;
     frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
 
-
+    frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
     frmIncomeCallRoot.ClientClose       := false;
     frmIncomeCallRoot.CloseOnCancelCall := true;
+    frmIncomeCallRoot.ModalResult := mrNone;
     frmIncomeCallRoot.ShowModal;
+
 
   finally
     FreeAndNil(frmCallEvent);
@@ -334,9 +330,27 @@ begin
   finally
     //formMain.CallId    := '';
     //formMain.CallApiId := '';
-    //DM.incomeCalling := False;
+    DM.incomeCalling := False;
     FreeAndNil(frmCallEvent);
     FreeAndNil(frmIncomeCallRoot);
+  end;
+end;
+
+class procedure TfrmIncomeCallRoot.CheckAccept(Sender: TObject);
+begin
+  with DM.QSessionCheckAct do
+  begin
+    Close;
+    ParamByName('callid').AsString := TCallProto(Sender).CallInfo.CallId;
+    ParamByName('callapiid').AsString := TCallProto(Sender).CallInfo.CallApiId;
+    Open;
+
+    if FieldByName('cnt').AsInteger = 0 then
+    begin
+      TCallProto(Sender).Accepted := True;
+      if Assigned(frmCallEvent) then
+        frmCallEvent.ModalResult := mrCancel;
+    end
   end;
 end;
 
@@ -393,17 +407,18 @@ end;
 procedure TfrmIncomeCallRoot.Timer2Timer(Sender: TObject);
 begin
   Timer2.Enabled := False;
+  CheckTimer.Enabled := true;
 
   frmCallEvent := TfrmCallEvent.Create(nil);
 
-  if not fCallAccepted then
+  if not CallObj.Accepted then
     frmCallEvent.ShowModal
   else
 
     frmCallEvent.ModalResult := mrOk;
 
-  if frmCallEvent.ModalResult = mrCancel then
-    DoCallCancel
+  //if frmCallEvent.ModalResult = mrCancel then
+  //  DoCallCancel
   //else
   //if frmCallEvent.ModalResult = mrOk then
   //   formMain.ClientSocket.Socket.SendText('#callaccept:' + CallApiId +',' +DM.CurrentUserSets.ATS_Phone_Num);

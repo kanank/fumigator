@@ -313,7 +313,7 @@ begin
         MF.SendCommandToUser(ats, '#finishcall:' +
           Params.Values['CallID'] + ',' +
           Params.Values['CallAPIID'] + ',' +
-          Params.Values['CallerIDNum'],
+          Params.Values['CallStatus'],
           False);
       end;
 
@@ -601,8 +601,7 @@ end;
 
 procedure TMF.Button6Click(Sender: TObject);
 begin
-  FActiveUsers.Clear;
-  //GetUserSocket('755');
+  SendCommand('*', Edi
 end;
 
 procedure TMF.CallFinished(Sender: TObject);

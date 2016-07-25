@@ -105,10 +105,11 @@ type
     procedure WmConnectSocket(var Msg: TMessage); message WM_CONNECTSOCKET;
   public
     ReadThread: TReadingThread;
-    CallId: string;
-    CallApiId: string;
+
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
+
+    procedure OnCallFinish(Sender: TObject);
   end;
 
 procedure LoadOptions(AIniFile: string);
@@ -126,7 +127,6 @@ var
   OutPhone: string;  // телефон из сообщения об исх. звонке
   TimeShift: Integer; //смещение с сервером в секундах
   hMutex: THandle;
-  CallObj: TCallProto;
 
 implementation
 
@@ -354,6 +354,18 @@ begin
   FreeAndNil(frmClientUr);
 end;
 
+procedure TfrmMain.OnCallFinish(Sender: TObject);
+begin
+   if Assigned(frmCalling) then
+      frmCalling.CallFinish
+    else
+    if Assigned(frmIncomeCallRoot) then
+      frmIncomeCallRoot.CallFinish
+    else
+    if Assigned(frmClientResult) then
+      frmClientResult.CallFinish;
+end;
+
 procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
@@ -459,8 +471,13 @@ end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  if not DM.incomeCalling then
-    TfrmIncomeCallRoot.ShowIncomeCall(self.CallId, self.CallApiId);
+  //if DM.incomeCalling then
+  //  Exit;
+  if not CallObj.Ready then
+    Exit;
+
+  CallObj.StartCall(CallInfo);
+  TfrmIncomeCallRoot.ShowIncomeCall;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
@@ -649,14 +666,58 @@ begin
       argList.DelimitedText := arg;
       if argList.Count > 0 then
       begin
-        formMain.CallId := arglist[0];
-        formMain.CallApiId := argList[1];
+        //formMain.CallId := arglist[0];
+        //formMain.CallApiId := argList[1];
       end;
     finally
       argList.free;
     end;
     PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0);
     //DM.Calls_TimerTimer(DM.Calls_Timer);
+  end
+
+  else
+
+  if (cmd = 'startcall') then //поступил новый звонок
+  begin
+    try
+      argList := TStringList.Create;
+      arglist.Delimiter := ',';
+      argList.DelimitedText := arg;
+      if argList.Count > 0 then
+      with CallInfo do
+      begin
+        CallFlow    := argList[0];
+        CallId      := arglist[1];
+        CallApiId   := argList[2];
+        Phone       := argList[3];
+        ClientId    := StrToInt(argList[4]);
+        ClientType  := argList[5];
+      end;
+    finally
+      argList.free;
+    end;
+
+    if Callinfo.CallFlow = 'in' then
+      PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
+    else
+      PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0)
+    //DM.Calls_TimerTimer(DM.Calls_Timer);
+  end;
+
+  if (cmd = 'finishcall') then //завершен звонок
+  begin
+    try
+      s := '';
+      argList := TStringList.Create;
+      arglist.Delimiter := ',';
+      argList.DelimitedText := arg;
+      if argList.Count > 2 then
+       s := argList[2];
+    finally
+      argList.free;
+    end;
+    CallObj.FinishCall(s);
   end
 
   else
@@ -754,9 +815,11 @@ initialization
   hMutex := CreateMutex(nil, True,
     Pchar(ExtractFileName((Application.ExeName))));
   CallObj := TCallProto.Create;
+  CallInfo := TCallInfo.Create;
 
 finalization
   CloseHandle(hMutex);
   FreeAndNil(CallObj);
+  FreeAndNil(CallInfo);
 
 end.

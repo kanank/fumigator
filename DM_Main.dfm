@@ -16,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -901,7 +902,6 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select * from clientslist(null, null)')
-    UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
     GeneratorField.ApplyEvent = gamOnPost
@@ -977,6 +977,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1711,5 +1712,22 @@ object DataModuleMain: TDataModuleMain
       '  ID = :OLD_ID')
     Left = 456
     Top = 443
+  end
+  object QClientExtUR: TIBQuery
+    Database = DB
+    Transaction = Clients_tr
+    ObjectView = True
+    FieldOptions.UpdatePersistent = True
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from clientslist(null, null)')
+    UpdateObject = Clients_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_CLIENTS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 160
+    Top = 72
   end
 end

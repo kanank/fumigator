@@ -18,6 +18,9 @@ var
   ServerPort: integer = 1025;
   ServerHttpPort: integer = 45455;
 
+  CallObj: TCallProto;
+  CallInfo: TCallInfo;
+
 implementation
 
 end.

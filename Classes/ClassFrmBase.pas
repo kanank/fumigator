@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, dxGDIPlusClasses, Vcl.ExtCtrls,
-  CommonTypes, Data.DB;
+  CommonTypes, CommonVars, Data.DB;
 
 const
   AppCaption = 'Первая фумигационная компания';
@@ -17,6 +17,7 @@ type
   private
     procedure SetCaption(AValue: string);
   protected
+    fCloseOnCancelCall: boolean; //закрывать при отмене звонка
     fCanClose: Boolean;
     fTitle: string;
     fFrmParam: TFrmCreateParam;
@@ -24,6 +25,10 @@ type
     fValidateList: TStringList;  //процедуры возвращают поля без признака Required
     procedure SetNonValidate(Alist: string);
     function Validate(ADataSource: TDataSource): Boolean;
+    procedure WmStartCall(var Msg: TMessage); message WM_STARTCALL;
+    procedure WmSFinishCall(var Msg: TMessage); message WM_FINISHCALL;
+    procedure DoStartCall; virtual;
+    procedure DoFinishCall; virtual;
 
   public
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
@@ -31,9 +36,11 @@ type
     destructor Destroy; overload;
     procedure SetValidateList(Alist: string);
     procedure CloseAbsolute; //закрыть, не смотря CanClose
+    procedure PostMessageToAll(AMsg: TMessage);
   published
     property Title: string read fTitle write SetCaption;
     property CanClose: Boolean read fCanClose write fCanClose;
+    property CloseOnCancelCall: Boolean read fCloseOnCancelCall write fCloseOnCancelCall;
   end;
 
 
@@ -69,6 +76,18 @@ begin
   fValidateList.Free;
 end;
 
+procedure TBaseForm.DoFinishCall;
+begin
+  if fCloseOnCancelCall and CallObj.Cancelled then
+    Self.CloseAbsolute;
+
+end;
+
+procedure TBaseForm.DoStartCall;
+begin
+
+end;
+
 procedure TBaseForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   CanClose := fCanClose;
@@ -76,6 +95,14 @@ begin
   begin
     Exit;
   end;
+end;
+
+procedure TBaseForm.PostMessageToAll(AMsg: TMessage);
+var
+  i: Integer;
+begin
+  for I := 0 to Screen.FormCount - 1 do
+    PostMessage(Screen.Forms[i].Handle, AMsg.Msg, 0, 0);
 end;
 
 procedure TBaseForm.SetCaption(AValue: string);
@@ -170,5 +197,15 @@ begin
   Result := resAll;
 end;
 
+
+procedure TBaseForm.WmSFinishCall(var Msg: TMessage);
+begin
+  DoFinishCall;
+end;
+
+procedure TBaseForm.WmStartCall(var Msg: TMessage);
+begin
+  DoStartCall;
+end;
 
 end.

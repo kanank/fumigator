@@ -142,7 +142,7 @@ begin
       begin
          if Q = nil then
          begin
-           Q := DM.CreateRWQuery;
+           Q := CreateRWQuery;
            Q.ParamCheck := True;
            Q.DataSource := DS_rights_list;
            Q.SQL.Text := 'select * from update_rights (:ur_id, :user_id, :right_id, :val)';
@@ -175,7 +175,7 @@ var
   Q: TIBQuery;
 begin
   try
-    Q := DM.CreateRWQuery;
+    Q := CreateRWQuery;
     Q.SQL.Text := 'execute procedure INS_UP_WORKER_TYPE_BY_DATE(:worker_id, :type_id, :date_)';
     Q.ParamByName('worker_id').AsInteger :=
       DM.WorkerTypeByDate.FieldByName('worker_id').AsInteger;

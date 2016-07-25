@@ -2,7 +2,12 @@ unit CommonTypes;
 
 interface
 uses
-  System.UITypes, System.Classes, DB;
+  System.UITypes, System.Classes, DB, System.SysUtils, Winapi.Messages,
+  Vcl.Forms, Winapi.Windows;
+
+const
+  WM_STARTCALL  = WM_USER + 200;
+  WM_FINISHCALL = WM_USER + 201;
 
 type TClientType = (clFiz, clUr);
 type TTrayView =(trayNormal, trayMissed);
@@ -10,30 +15,46 @@ type TTrayView =(trayNormal, trayMissed);
 type TActionStr = (asCreate,asEdit,asShow);
 
 type
+  TCallInfo = class
+  public
+    CallFlow: string;
+    CallId: string;
+    CallApiId: string;
+    Phone:  string;
+    ClientId: Integer;
+    ClientType: string;
+    ClientSubType: string;
+    CallResult: string;
+    procedure Clear;
+    procedure Assign(ASource: TCallInfo);
+end;
+
+type
   TCallProto = class
   private
-    fCallId: string;
-    fCallApiId: string;
-    fCallFlow: string;
-    fClientId: Integer;
-    fClientType: string;
-    fClientSubType: string;
+    fCallInfo: TCallInfo;
     fOnStartCall: TNotifyEvent;
     fOnFinishCall: TNotifyEvent;
-    fActive: Boolean;
+    fActive: Boolean; //идет звонок
+    fReady: Boolean;  // готов к звонку
+    procedure SetActive(AValue: boolean);
+    procedure SetReady(AValue: boolean);
+    function GetAccepted: Boolean;
+    function GetCanceled: Boolean;
   public
-    property Active; Boolean read fActive;
-    property CallId: string read fCallId;
-    property CallApiId: string read fCallApiId;
-    property CallFlow: string read fCallFlow;
-    property ClientId: Integer read fClientId write fClientId;
-    property ClientType: string read fClientType write fClientType;
-    property ClientSubType: string read fClientSubType write fClientSubType;
+    property Active: Boolean read fActive write SetActive;
+    property Ready: Boolean read fReady write SetReady;
+    property Accepted: Boolean read GetAccepted;
+    property Cancelled: Boolean read GetCanceled;
+    property CallInfo: TCallInfo read fCallInfo;
     property OnStartCall: TNotifyEvent read fOnStartCall write fOnStartCall;
     property OnFinishCall: TNotifyEvent read fOnFinishCall write fOnFinishCall;
     constructor Create; overload;
-    procedure StartCall(ACallId, ACallApiId, ACallFlow, AClientId, AClientType: string);
-    procedure FinishCall;
+    destructor Destroy; overload;
+    procedure StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);overload;
+    procedure StartCall(ACallInfo: TCallInfo); overload;
+
+    procedure FinishCall(ACallResult: string);
 
 
 end;
@@ -119,6 +140,7 @@ end;
  end;
 
 function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: PClientParam=nil): TFrmCreateParam;
+procedure PostMessageToAll(AMsg: CArdinal);
 
  implementation
 
@@ -127,6 +149,14 @@ begin
   Result.action := AAction;
   Result.Dataset := ADataSet;
   Result.ExtParam := AExtParam;
+end;
+
+procedure PostMessageToAll(AMsg: Cardinal);
+var
+  i: Integer;
+begin
+  for I := 0 to Screen.FormCount - 1 do
+    PostMessage(Screen.Forms[i].Handle, AMsg, 0, 0);
 end;
 
 { ClientCallParams }
@@ -196,27 +226,105 @@ end;
 constructor TCallProto.Create;
 begin
   inherited Create;
+  fCallInfo := TCallInfo.Create;
+  fReady := True;
 end;
 
-procedure TCallProto.FinishCall;
+destructor TCallProto.Destroy;
 begin
+  fCallInfo.Free;
+  inherited;
+end;
+
+procedure TCallProto.FinishCall(ACallResult: string);
+begin
+  CallInfo.CallResult := ACallResult;
+
   if Assigned(fOnFinishCall) then
     fOnFinishCall(Self);
+
+  PostMessageToAll(WM_FINISHCALL);
   fActive := false;
 end;
 
-procedure TCallProto.StartCall(ACallId, ACallApiId, ACallFlow, AClientId,
-  AClientType: string);
+function TCallProto.GetAccepted: Boolean;
 begin
-  fCallId := ACallId;
-  fCallApiId := ACallApiId;
-  fCallFlow := ACallFlow;
-  fClientId := StrToInt(AClientId);
-  fClientType := AClientType;
+  Result := (CallInfo.CallFlow = 'in') and
+    (CallInfo.CallResult = 'ANSWER');
+end;
+
+function TCallProto.GetCanceled: Boolean;
+begin
+  Result := (CallInfo.CallResult = 'ANSWER');
+end;
+
+procedure TCallProto.SetActive(AValue: boolean);
+begin
+  if AValue <> fActive then
+  begin
+    fActive := AValue;
+    if not AValue then
+      fCallInfo.Clear;
+  end;
+end;
+
+procedure TCallProto.SetReady(AValue: boolean);
+begin
+  if AValue <> fReady then
+  begin
+    if AValue and not Active then
+      fReady := AValue;
+  end;
+end;
+
+procedure TCallProto.StartCall(ACallInfo: TCallInfo);
+begin
+  StartCall(ACallInfo.CallFlow, ACallInfo.CallId, ACallInfo.CallApiId,
+    ACallInfo.Phone, IntToStr(ACallInfo.ClientId), ACallInfo.ClientType);
+end;
+
+procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);
+begin
+  with fCallInfo do
+  begin
+    CallId     := ACallId;
+    CallApiId  := ACallApiId;
+    CallFlow   := ACallFlow;
+    ClientId   := StrToInt(AClientId);
+    ClientType := AClientType;
+  end;
 
   fActive := True;
+  fReady  := False;
+
+  //PostMessage()
+
+
   if Assigned(fOnStartCall) then
     fOnStartCall(Self);
+
+end;
+
+{ TCallInfo }
+
+procedure TCallInfo.Assign(ASource: TCallInfo);
+begin
+    CallId     := ASource.CallId;
+    CallApiId  := ASource.CallApiId;
+    CallFlow   := ASource.CallFlow;
+    ClientId   := ASource.ClientId;
+    ClientType := ASource.ClientType;
+    ClientSubType := ASource.ClientSubType;
+end;
+
+procedure TCallInfo.Clear;
+begin
+  CallId := '';
+  CallApiId := '';
+  CallFlow := '';
+  ClientId := -1;
+  ClientType := '';
+  ClientSubType := '';
 end;
 
 end.

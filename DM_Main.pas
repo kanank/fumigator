@@ -8,6 +8,18 @@ uses
   IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
   CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset, Vcl.Menus;
 
+type
+  TClientExtUr = class
+  private
+    fQuery: TIBQuery;
+    fID: Integer;
+    procedure SetId(AValue: integer);
+  public
+    property ID: integer read fID write SetId;
+    function CF(AName: string): TField;
+    constructor Create; overload;
+    destructor Destroy;
+end;
 
 type
   TDataModuleMain = class(TDataModule)
@@ -93,6 +105,7 @@ type
     IBQuery1: TIBQuery;
     DataSource1: TDataSource;
     IBUpdateSQL1: TIBUpdateSQL;
+    QClientExtUR: TIBQuery;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -107,7 +120,6 @@ type
     procedure AppMessage(var Msg: TMsg; var Handled: Boolean);
 
     //данные
-    function CreateRWQuery: TIBQuery;
     function LoadSpr: boolean; // загрузка вспомогательных справочников
 
     function GetCurrentUser(id: integer): CurrentUserRec; //установка текущего пользователя
@@ -156,17 +168,20 @@ type
     incomeCalling: Boolean;
     incomeCallId: string;
     DateStart: TDateTime; //время запуска программы
-  end;
+end;
+
 
   function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
-
+  function CreateRWQuery: TIBQuery;
+  function ClientExtUr(Aid: integer): TClientExtUr;
 var
   DM: TDataModuleMain;
+  _ClientExtUr: TClientExtUr;
 
 
 implementation
 
-{%CLASSGROUP 'Vcl.Controls.TControl'}
+//{%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
 
@@ -194,6 +209,46 @@ begin
     ds.Cancel;
     Result := False;
   end;
+end;
+function CreateRWQuery: TIBQuery;
+var
+  TR: TIBTransaction;
+begin
+  TR := TIBTransaction.Create(nil);
+  TR.DefaultDatabase := DM.DB;
+  TR.DefaultAction := TACommit;
+  TR.AutoStopAction := saCommit;
+
+  TR.Params.Add('isc_tpb_read_committed');
+  //TR.Params.Add('isc_tpb_no_rec_version');
+  TR.Params.Add('isc_tpb_rec_version');
+  TR.Params.Add('isc_tpb_wait');
+
+  // Только для чтения
+  //TR.Params.Add('read');
+  //TR.Params.Add('nowait');
+  //TR.Params.Add('rec_version');
+  //TR.Params.Add('read_committed');
+
+  // Для записи
+  //TR.AllowAutoStart := False;
+  //TR.DefaultDatabase := DB;
+  //TR.DefaultAction := TACommit;
+  //TR.Params.Add('write');
+  //TR.Params.Add('nowait');
+  //TR.Params.Add('read_committed');
+  //TR.Params.Add('rec_version');
+
+  result := TIBQuery.Create(nil);
+  result.Database := DM.DB;
+  result.Transaction := TR;
+
+end;
+
+function ClientExtUr(Aid: integer): TClientExtUr;
+begin
+  Result := _ClientExtUr;
+  Result.ID := Aid;
 end;
 
 function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
@@ -268,8 +323,9 @@ begin
   //prm := NewFrmCreateParam(asEdit, DM.Contacts);
   frmContact:= TfrmContact.Create(nil, 'Входящий звонок. Контакт');
   try
+    frmContact.CloseOnCancelCall := True;
     frmContact.Caption := 'Входящий звонок. Контакт';
-    frmContact.FrameContact.OpenData(CLP.Client_id);
+    frmContact.FrameContact.OpenData(CallObj.CallInfo.ClientId);
     frmContact.ShowModal;
     (*if frmContact.ModalResult = mrOk then
     begin
@@ -288,18 +344,21 @@ function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
 var
   prm: TClientParam;
 begin
+  DM.GetDataset(DM.Clients);
+  DM.Clients.Locate('ID', CallObj.CallInfo.ClientId, []);
+
   frmIncomeCall := TfrmIncomeCall.Create(nil);
   try
-    frmIncomeCall.edtPhone.Text := RightStr(CLP.TelNum, 10);
-    frmIncomeCall.FramePerson.OpenData(CLP.PERSON_ID);
-    frmIncomeCall.cmbFormat.EditValue := CLP.Format_Id;
-    frmIncomeCall.cmbStatus.EditValue := CLP.Status_Id;
-    frmIncomeCall.lblWorker.Caption   := CLP.Author;
+    frmIncomeCall.CloseOnCancelCall := True;
+    frmIncomeCall.edtPhone.Text := RightStr(CallObj.CallInfo.Phone, 10);
+    frmIncomeCall.FramePerson.OpenData(DM.Clients.FieldByName('PERSON_ID').AsInteger);
+    frmIncomeCall.cmbFormat.EditValue := DM.Clients.FieldByName('FORMAT_ID').AsInteger;
+    frmIncomeCall.cmbStatus.EditValue := DM.Clients.FieldByName('STATUS_ID').AsInteger;
+    frmIncomeCall.lblWorker.Caption   := DM.Clients.FieldByName('WORKER_NAME').AsString;
     frmIncomeCall.ShowModal;
     if frmIncomeCall.ModalResult = mrOk then
     begin
-      DM.GetDataset(DM.Clients);
-      DM.Clients.Locate('ID', CLP.Client_id, []);
+
       ShowClientFiz(asEdit, prm);
     end;
 
@@ -415,9 +474,9 @@ begin
 
       frmClientResult.frmCli    := frm;
       if isClient then
-        frmClientResult.TypeCli   := DM.Clients.FieldByName('type_cli').AsInteger
+        frmClientResult.TypeCli := DM.Clients.FieldByName('type_cli').AsInteger
       else
-        frmClientResult.TypeCli   := 3;
+        frmClientResult.TypeCli := 3;
       frmClientResult.ClientId  := CLP.Client_id;
     end;
     frmClientResult.CallId    := ACallId;
@@ -438,6 +497,7 @@ function TDataModuleMain.ShowUnknownCallForm(APhone: string; AFreeForm: boolean=
 begin
   frmCallUnknown := TfrmCallUnknown.Create(nil);
   try
+    frmCallUnknown.CloseOnCancelCall := True;
     frmCallUnknown.edtPhone.Text := RightStr(APhone, 10);
     frmCallUnknown.ShowModal;
     Result.ModalRes := frmCallUnknown.ModalResult;
@@ -450,24 +510,30 @@ end;
 function TDataModuleMain.ShowUrCallForm(CLP: ClientCallParams): FormResult;
 var
   prm: TClientParam;
+  client_id: Integer;
 begin
+  client_id := CallObj.CallInfo.ClientId;
+  DM.GetDataset(DM.Clients);
+  DM.Clients.Locate('ID', client_id, []);
+  ClientExtUr(CallObj.CallInfo.ClientId);
+
   frmIncomeCallUr := TfrmIncomeCallUr.Create(nil);
   try
-    frmIncomeCallUr.edtPhone.Text := RightStr(CLP.TelNum, 10);
-    frmIncomeCallUr.FramePerson.OpenData(CLP.PERSON_ID);
-    frmIncomeCallUr.cmbForma.EditValue  := CLP.FORMA_ID;
-    frmIncomeCallUr.cmbFormat.EditValue := CLP.Format_Id;
-    frmIncomeCallUr.cmbStatus.EditValue := CLP.Status_Id;
-    frmIncomeCallUr.lblWorker.Caption   := CLP.Author;
-    frmIncomeCallUr.edtINN.Text         := CLP.INN;
-    frmIncomeCallUr.edtName.Text        := CLP.ClientName;
+    frmIncomeCallUr.CloseOnCancelCall := True;
+    frmIncomeCallUr.edtPhone.Text := RightStr(CallObj.CallInfo.Phone, 10);
+    frmIncomeCallUr.FramePerson.OpenData(DM.Clients.FieldByName('PERSON_ID').AsInteger);
+    frmIncomeCallUr.cmbForma.EditValue  := ClientExtUr(Client_Id).CF('FORMA_ID').AsInteger;
+    frmIncomeCallUr.cmbFormat.EditValue := DM.Clients.FieldByName('Format_Id').AsInteger;
+    frmIncomeCallUr.cmbStatus.EditValue := DM.Clients.FieldByName('Status_Id').AsInteger;
+    frmIncomeCallUr.lblWorker.Caption   := DM.Clients.FieldByName('WORKER_NAME').AsString;
+    frmIncomeCallUr.edtINN.Text         := ClientExtUr(Client_Id).CF('INN').AsString;
+    frmIncomeCallUr.edtName.Text        := DM.Clients.FieldByName('NAME').AsString;
     frmIncomeCallUr.ShowModal;
 
     if frmIncomeCallUr.ModalResult = mrOk then
     begin
       //prm.CallParam := CLP;
-      DM.GetDataset(DM.Clients);
-      DM.Clients.Locate('ID', CLP.Client_id, []);
+
       ShowClientUr(asEdit, prm);
     end;
 
@@ -1058,40 +1124,6 @@ begin
   end;
 end;
 
-function TDataModuleMain.CreateRWQuery: TIBQuery;
-var
-  TR: TIBTransaction;
-begin
-  TR := TIBTransaction.Create(self);
-  TR.DefaultDatabase := DB;
-  TR.DefaultAction := TACommit;
-  TR.AutoStopAction := saCommit;
-
-  TR.Params.Add('isc_tpb_read_committed');
-  //TR.Params.Add('isc_tpb_no_rec_version');
-  TR.Params.Add('isc_tpb_rec_version');
-  TR.Params.Add('isc_tpb_wait');
-
-  // Только для чтения
-  //TR.Params.Add('read');
-  //TR.Params.Add('nowait');
-  //TR.Params.Add('rec_version');
-  //TR.Params.Add('read_committed');
-
-  // Для записи
-  //TR.AllowAutoStart := False;
-  //TR.DefaultDatabase := DB;
-  //TR.DefaultAction := TACommit;
-  //TR.Params.Add('write');
-  //TR.Params.Add('nowait');
-  //TR.Params.Add('read_committed');
-  //TR.Params.Add('rec_version');
-
-  result := TIBQuery.Create(self);
-  result.Database := DB;
-  result.Transaction := TR;
-
-end;
 
 procedure TDataModuleMain.DsWorkerDataChange(Sender: TObject; Field: TField);
 var
@@ -1334,6 +1366,37 @@ begin
       FreeAndNil(Q);
   end;
 
+end;
+
+
+{ TClientExtUr }
+
+function TClientExtUr.CF(AName: string): TField;
+begin
+  Result := fQuery.FindField(Aname);
+end;
+
+constructor TClientExtUr.Create;
+begin
+  inherited Create;
+  fQuery := CreateRWQuery;
+  fQuery.SQL.Text := 'select* from clients_ext_ur where  id = :id'
+
+end;
+
+destructor TClientExtUr.Destroy;
+begin
+  fQuery.Free;
+end;
+
+procedure TClientExtUr.SetId(AValue: integer);
+begin
+  if fID = AValue then
+    exit;
+  fID := AValue;
+  fQuery.Close;
+  fQuery.ParamByName('id').AsInteger := fId;
+  fQuery.Open;
 end;
 
 

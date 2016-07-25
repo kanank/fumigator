@@ -50,7 +50,7 @@ begin
 
   try
     try
-      Q := DM.CreateRWQuery;
+      Q := CreateRWQuery;
       Q.SQL.Text := 'SELECT * from login('
         + QuotedStr(Edt1.Text) + ', ' + QuotedStr(Edt2.Text) + ')';
       Q.Open;

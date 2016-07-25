@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, dxGDIPlusClasses,
   Vcl.ExtCtrls,
-  CommonTypes;
+  CommonTypes, CommonVars ;
 
 type
   TfrmIncomeCallRoot = class(TBaseForm)
@@ -30,6 +30,7 @@ type
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
     procedure SetClientCallPrm(AValue: ClientCallParams);
+    procedure doFinishCall; override;
   public
     property CallResult: string read fCallResult write SetCallResult;
     property CallId: string read fCallId write fCallId;
@@ -41,6 +42,7 @@ type
     property ClientCallPrm: ClientCallParams read fClientCallPrm write SetClientCallPrm;
     property ClientForm: TForm read fClientForm write fClientForm;
     property CallCancel: Boolean read fCallCancel write fCallCancel;
+    property CallAccept: Boolean read fCallAccepted write  fCallAccepted;
 
     procedure CallFinish;
     procedure CheckSession;
@@ -48,6 +50,7 @@ type
     procedure DoCallCancel;
 
     class function ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
+    class function ShowCall: Boolean;
   end;
 
 var
@@ -59,7 +62,7 @@ implementation
 uses
   DM_Main, IBX.IBQuery, formClientFiz, formClientUr,
   formIncomeCalls, formIncomeCallsUr, formCallUnknown,
-  formCallEvent, frmMain;
+  formCallEvent, frmMain, formContact;
 
 { TfrmIncomeCallRoot }
 
@@ -92,6 +95,12 @@ begin
     Self.CloseModal;*)
 end;
 
+procedure TfrmIncomeCallRoot.doFinishCall;
+begin
+  inherited;
+  frmCallEvent.ModalResult := mrCancel;
+end;
+
 procedure TfrmIncomeCallRoot.CallFinish;
 begin
  if fCallCancel or fSessionClose then
@@ -111,6 +120,9 @@ begin
       frmIncomeCallUr.CloseAbsolute;
       //frmIncomeCallUr.Free;
     end;
+    if Assigned(frmContact) then
+      frmContact.CloseAbsolute;
+
  end;
 
   if fCallCancel or (fSessionClose and not fCallAccepted) then
@@ -121,8 +133,6 @@ begin
     ModalResult := mrCancel;
     Exit;
   end;
-
-
 
   if fSessionClose and fClientClose  then
   begin
@@ -214,6 +224,27 @@ begin
   CallFinish;
 end;
 
+class function TfrmIncomeCallRoot.ShowCall: Boolean;
+begin
+ if DM.Db.Connected = false then
+    Exit;
+
+  try
+    DM.incomeCalling := True;
+    frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
+
+
+    frmIncomeCallRoot.ClientClose       := false;
+    frmIncomeCallRoot.CloseOnCancelCall := true;
+    frmIncomeCallRoot.ShowModal;
+
+  finally
+    FreeAndNil(frmCallEvent);
+    FreeAndNil(frmIncomeCallRoot);
+    CallObj.Ready := True;
+  end;
+end;
+
 class function TfrmIncomeCallRoot.ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
 var Q : TIBQuery;
     tel :string;
@@ -301,9 +332,9 @@ begin
          end;
 
   finally
-    formMain.CallId    := '';
-    formMain.CallApiId := '';
-    DM.incomeCalling := False;
+    //formMain.CallId    := '';
+    //formMain.CallApiId := '';
+    //DM.incomeCalling := False;
     FreeAndNil(frmCallEvent);
     FreeAndNil(frmIncomeCallRoot);
   end;
@@ -321,10 +352,10 @@ begin
  DM.GetDataset(DM.Clients);
  try
   Timer2.Enabled := True;
-  if fClientCallPrm.Client_Type = '' then
+  if CallObj.CallInfo.ClientType = '' then
   try  // Вызываем неизвестный звонок.
-   ExtPrm.CallParam := @fClientCallPrm;
-   case DM.ShowUnknownCallForm(fClientCallPrm.TelNum, false).ModalRes of
+   ExtPrm.CallParam.TelNum := CallObj.CallInfo.Phone;
+   case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
      mrOk:  formRes := DM.ShowClientFiz(asCreate, ExtPrm);
      mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
      mrAll:
@@ -338,7 +369,8 @@ begin
   end
   else
   begin
-    if fClientCallPrm.Client_Type = 'F' then
+
+    if CallObj.CallInfo.ClientType = 'F' then
     begin
       DM.ShowFizCallForm(fClientCallPrm);
     end
@@ -367,6 +399,7 @@ begin
   if not fCallAccepted then
     frmCallEvent.ShowModal
   else
+
     frmCallEvent.ModalResult := mrOk;
 
   if frmCallEvent.ModalResult = mrCancel then

@@ -127,6 +127,7 @@ type
     function GetPersonShortName(f, i, o: string): string;
     function GetPersonFullName(f, i, o: string): string;
     function isWorkersRegion(ARegion_Id: integer): Boolean; //регион пользователя или нет
+    function isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean; // проверка клиента по сотруднику и региону
 
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
@@ -489,8 +490,9 @@ begin
     Result := frmClientResult.CallResult;
     frmClientResult.Free;
   finally
-    inCalling := False;
-    waitCalling := False;
+    inCalling     := False;
+    waitCalling   := False;
+    CallObj.Ready := true;
   end;
 
   //end;
@@ -1253,9 +1255,20 @@ begin
   end;
 end;
 
+function TDataModuleMain.isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean;
+begin
+   if Clients.Locate('id', AClient_id, []) then
+   begin
+     result := (Clients.FieldByName('worker_id').AsInteger =
+                   DM.CurrentUserSets.ID);
+     if Result and AWithRegion then
+       Result := (DM.isWorkersRegion(Clients.FieldByName('region_id').AsInteger));
+   end;
+end;
+
 function TDataModuleMain.isWorkersRegion(ARegion_Id: integer): Boolean;
 begin
-  Result := (ARegion_Id = 0) or (WorkerRegions.RecordCount = 0 );
+  Result := (WorkerRegions.RecordCount = 0 );
   if not Result then
     result := WorkerRegions.Locate('REGION_ID', ARegion_Id, []);
 end;

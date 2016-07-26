@@ -10,7 +10,20 @@ uses
   RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses, Data.DB, frameBase,
   frPersonSmall, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox, frPhones,
   frPasport, frListBase, frPersonFull, frUslugi, frKladrAll, FrKladrAdrFull,
-  IBX.IBCustomDataSet, IBX.IBQuery, frGoods;
+  IBX.IBCustomDataSet, IBX.IBQuery, frGoods, dxSkinsCore, dxSkinBlack,
+  dxSkinBlue, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
+  dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+  frClientCalls;
 
 type
   TfrmClientFiz = class(TSimpleForm)
@@ -42,6 +55,7 @@ type
     Label4: TLabel;
     cxDBMemo1: TcxDBMemo;
     Label8: TLabel;
+    frameClientCalls: TframeClientCalls;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);
@@ -265,6 +279,11 @@ begin
   FrameAddress.AddParam('ID', DS.DataSet.FindField('ADRES_ID'));
   FrameAddress.OpenData;
   FrameAddress.Visible := true;
+
+  FrameClientCalls.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
+  FrameClientCalls.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
+  FrameClientCalls.OpenData;
+  FrameClientCalls.Visible := true;
 end;
 
 procedure TfrmClientFiz.FramePersoncmbDateBirthPropertiesInitPopup(

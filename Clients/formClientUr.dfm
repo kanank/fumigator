@@ -1,16 +1,16 @@
 inherited frmClientUr: TfrmClientUr
   Caption = #1050#1072#1088#1090#1086#1095#1082#1072' '#1082#1083#1080#1077#1085#1090#1072'. '#1070#1088#1080#1076#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
-  ClientHeight = 480
+  ClientHeight = 664
   ClientWidth = 768
   Position = poDesktopCenter
   OnCreate = FormCreate
   ExplicitWidth = 784
-  ExplicitHeight = 518
+  ExplicitHeight = 702
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 583
-    Top = 61
+    Top = 245
     Visible = False
     ExplicitLeft = 596
     ExplicitTop = 8
@@ -30,8 +30,8 @@ inherited frmClientUr: TfrmClientUr
     WordWrap = True
   end
   object Label6: TLabel [2]
-    Left = 523
-    Top = 125
+    Left = 506
+    Top = 128
     Width = 38
     Height = 13
     Caption = #1058#1086#1074#1072#1088#1099
@@ -156,10 +156,10 @@ inherited frmClientUr: TfrmClientUr
     end
   end
   inherited RzPanel1: TRzPanel
-    Top = 436
+    Top = 620
     Width = 768
     TabOrder = 6
-    ExplicitTop = 436
+    ExplicitTop = 584
     ExplicitWidth = 768
     inherited Image2: TImage
       Left = 50
@@ -211,7 +211,7 @@ inherited frmClientUr: TfrmClientUr
         Top = 2
         Height = 116
         ExplicitTop = 2
-        ExplicitHeight = 132
+        ExplicitHeight = 116
         inherited Label11: TLabel
           Left = 3
           ExplicitLeft = 3
@@ -319,7 +319,7 @@ inherited frmClientUr: TfrmClientUr
     object Label14: TLabel
       Left = 1
       Top = 11
-      Width = 84
+      Width = 67
       Height = 13
       Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
       Font.Charset = DEFAULT_CHARSET
@@ -409,15 +409,15 @@ inherited frmClientUr: TfrmClientUr
       Width = 187
       Height = 129
       ExplicitTop = -3
-      ExplicitWidth = 214
-      ExplicitHeight = 107
+      ExplicitWidth = 187
+      ExplicitHeight = 129
       inherited grdPhone: TcxGrid
         Top = 14
         Width = 178
         Height = 87
         ExplicitTop = 14
-        ExplicitWidth = 205
-        ExplicitHeight = 65
+        ExplicitWidth = 178
+        ExplicitHeight = 87
         inherited grdPhoneDBTableView1: TcxGridDBTableView
           OptionsView.Header = False
           inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
@@ -433,8 +433,8 @@ inherited frmClientUr: TfrmClientUr
         Top = 101
         Width = 185
         Height = 27
-        ExplicitTop = 79
-        ExplicitWidth = 212
+        ExplicitTop = 101
+        ExplicitWidth = 185
         ExplicitHeight = 27
         inherited btnAdd: TRzBitBtn
           Left = 3
@@ -450,7 +450,7 @@ inherited frmClientUr: TfrmClientUr
           Left = 148
           Top = -1
           Width = 32
-          ExplicitLeft = 175
+          ExplicitLeft = 148
           ExplicitTop = -1
           ExplicitWidth = 32
         end
@@ -725,7 +725,7 @@ inherited frmClientUr: TfrmClientUr
         Height = 91
         ExplicitLeft = 5
         ExplicitTop = 15
-        ExplicitWidth = 225
+        ExplicitWidth = 219
         ExplicitHeight = 91
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
@@ -742,14 +742,15 @@ inherited frmClientUr: TfrmClientUr
       inherited RzPanel2: TRzPanel
         Left = 224
         Height = 108
-        ExplicitLeft = 230
-        ExplicitHeight = 110
+        ExplicitLeft = 224
+        ExplicitHeight = 108
         inherited btnAdd: TRzBitBtn
           Top = -1
+          ExplicitTop = -1
         end
         inherited btnEdit: TRzBitBtn
           Top = 30
-          ExplicitTop = 32
+          ExplicitTop = 30
         end
         inherited btnDel: TRzBitBtn
           Top = 64
@@ -760,11 +761,11 @@ inherited frmClientUr: TfrmClientUr
   end
   object cxDBMemo1: TcxDBMemo
     Left = 502
-    Top = 140
+    Top = 142
     DataBinding.DataField = 'goods'
     DataBinding.DataSource = DS
     TabOrder = 11
-    Height = 116
+    Height = 123
     Width = 256
   end
   object RzPanel3: TRzPanel
@@ -773,7 +774,7 @@ inherited frmClientUr: TfrmClientUr
     Width = 466
     Height = 24
     BorderSides = []
-    TabOrder = 2
+    TabOrder = 12
     object Label3: TLabel
       Left = 0
       Top = 7
@@ -808,6 +809,45 @@ inherited frmClientUr: TfrmClientUr
       StyleHot.LookAndFeel.NativeStyle = True
       TabOrder = 0
       Width = 264
+    end
+  end
+  object pnlCalls: TRzPanel
+    Left = 0
+    Top = 439
+    Width = 768
+    Height = 181
+    Align = alBottom
+    BorderOuter = fsNone
+    TabOrder = 2
+    ExplicitTop = 403
+    inline frameClientCalls: TframeClientCalls
+      Left = -2
+      Top = 0
+      Width = 765
+      Height = 190
+      TabOrder = 0
+      ExplicitLeft = -2
+      inherited grpPhone: TRzGroupBox
+        Width = 764
+        ExplicitWidth = 764
+        inherited RzPanel2: TRzPanel
+          Left = 732
+          ExplicitLeft = 732
+        end
+        inherited grdPhone: TcxGrid
+          Left = 5
+          Top = 17
+          Width = 758
+          ExplicitLeft = 5
+          ExplicitTop = 17
+          ExplicitWidth = 758
+          inherited grdPhoneDBTableView1: TcxGridDBTableView
+            inherited GridViewColumn11: TcxGridDBColumn
+              IsCaptionAssigned = True
+            end
+          end
+        end
+      end
     end
   end
   object DS: TDataSource

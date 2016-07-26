@@ -1,16 +1,16 @@
 inherited frmClientFiz: TfrmClientFiz
   Caption = #1050#1072#1088#1090#1086#1095#1082#1072' '#1082#1083#1080#1077#1085#1090#1072'. '#1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
-  ClientHeight = 455
+  ClientHeight = 636
   ClientWidth = 786
   Position = poDesktopCenter
   OnCreate = FormCreate
   ExplicitWidth = 802
-  ExplicitHeight = 493
+  ExplicitHeight = 674
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 652
-    Top = 366
+    Top = 547
     Width = 126
     Height = 40
     Visible = False
@@ -60,10 +60,10 @@ inherited frmClientFiz: TfrmClientFiz
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 411
+    Top = 592
     Width = 786
     TabOrder = 6
-    ExplicitTop = 411
+    ExplicitTop = 537
     ExplicitWidth = 786
     inherited Image2: TImage
       Left = 58
@@ -118,7 +118,7 @@ inherited frmClientFiz: TfrmClientFiz
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfFlat
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 2
+    TabOrder = 10
     Visible = False
     Width = 73
   end
@@ -751,6 +751,46 @@ inherited frmClientFiz: TfrmClientFiz
     TabOrder = 9
     Height = 89
     Width = 185
+  end
+  object pnlCalls: TRzPanel
+    Left = 0
+    Top = 411
+    Width = 786
+    Height = 181
+    Align = alBottom
+    BorderOuter = fsNone
+    TabOrder = 2
+    ExplicitTop = 356
+    inline frameClientCalls: TframeClientCalls
+      Left = -2
+      Top = 0
+      Width = 765
+      Height = 160
+      TabOrder = 0
+      ExplicitLeft = -2
+      ExplicitHeight = 160
+      inherited grpPhone: TRzGroupBox
+        Width = 772
+        ExplicitWidth = 772
+        inherited RzPanel2: TRzPanel
+          Left = 740
+          ExplicitLeft = 732
+        end
+        inherited grdPhone: TcxGrid
+          Left = 5
+          Top = 17
+          Width = 757
+          ExplicitLeft = 5
+          ExplicitTop = 17
+          ExplicitWidth = 757
+          inherited grdPhoneDBTableView1: TcxGridDBTableView
+            inherited GridViewColumn11: TcxGridDBColumn
+              IsCaptionAssigned = True
+            end
+          end
+        end
+      end
+    end
   end
   object DS: TDataSource
     AutoEdit = False

@@ -91,6 +91,15 @@ inherited frmSessions: TfrmSessions
       TabOrder = 2
       Width = 136
     end
+    object chkWorkerClients: TcxCheckBox
+      Left = 632
+      Top = 6
+      Caption = #1058#1086#1083#1100#1082#1086' '#1082#1083#1080#1077#1085#1090#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
+      State = cbsChecked
+      TabOrder = 3
+      OnClick = chkWorkerClientsClick
+      Width = 189
+    end
   end
   inherited RzPanel1: TRzPanel
     Top = 468

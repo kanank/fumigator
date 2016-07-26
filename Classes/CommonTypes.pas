@@ -260,12 +260,12 @@ end;
 procedure TCallProto.FinishCall(ACallResult: string);
 begin
   CallInfo.CallResult := ACallResult;
+  fActive := false;
 
   if Assigned(fOnFinishCall) then
     fOnFinishCall(Self);
 
   PostMessageToAll(WM_FINISHCALL);
-  fActive := false;
 end;
 
 function TCallProto.GetAccepted: Boolean;
@@ -335,6 +335,7 @@ begin
     ClientId   := StrToInt(AClientId);
     ClientType := AClientType;
     CallResult :='';
+    Accepted   := false;
   end;
 
   fActive := True;
@@ -346,6 +347,7 @@ begin
   if Assigned(fOnStartCall) then
     fOnStartCall(Self);
 
+  PostMessageToAll(WM_FINISHCALL);
 end;
 
 { TCallInfo }

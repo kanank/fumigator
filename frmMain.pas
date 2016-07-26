@@ -640,39 +640,39 @@ begin
   end
   else
 
-  if cmd = 'callid' then //создан исходящий звонок с CallId
+  if cmd = 'callid' then //создан исходящий звонок с CallId (теперь через CallEvent)
   begin
-    if Assigned(frmCalling) then
-      frmCalling.CallId := arg;
-    if Assigned(frmClientResult) then
-      frmClientResult.CallId := arg;
+    //if Assigned(frmCalling) then
+    //  frmCalling.CallId := arg;
+    //if Assigned(frmClientResult) then
+    //  frmClientResult.CallId := arg;
   end
   else
   if cmd = 'callfinish' then  //в варианте c CallListener
   begin
-    if Assigned(frmCalling) and (frmCalling.CallId = arg) then
-      frmCalling.CallFinish;
-    if Assigned(frmClientResult) and (frmClientResult.CallId = arg) then
-      frmClientResult.CallFinish;
+//    if Assigned(frmCalling) and (frmCalling.CallId = arg) then
+//      frmCalling.CallFinish;
+//    if Assigned(frmClientResult) and (frmClientResult.CallId = arg) then
+//      frmClientResult.CallFinish;
   end
 
   else
 
   if cmd = 'checkcall' then //поступил новый звонок
   begin
-    try
-      argList := TStringList.Create;
-      arglist.Delimiter := ',';
-      argList.DelimitedText := arg;
-      if argList.Count > 0 then
-      begin
-        //formMain.CallId := arglist[0];
-        //formMain.CallApiId := argList[1];
-      end;
-    finally
-      argList.free;
-    end;
-    PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0);
+//    try
+//      argList := TStringList.Create;
+//      arglist.Delimiter := ',';
+//      argList.DelimitedText := arg;
+//      if argList.Count > 0 then
+//      begin
+//        //formMain.CallId := arglist[0];
+//        //formMain.CallApiId := argList[1];
+//      end;
+//    finally
+//      argList.free;
+//    end;
+//    PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0);
     //DM.Calls_TimerTimer(DM.Calls_Timer);
   end
 
@@ -704,7 +704,7 @@ begin
     if Callinfo.CallFlow = 'in' then
       PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
     else
-      PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0)
+      PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
     //DM.Calls_TimerTimer(DM.Calls_Timer);
   end;
 
@@ -726,34 +726,34 @@ begin
   else
   if cmd = 'checksession' then //завершен звонок
   begin
-    if Assigned(frmCalling) then
-      frmCalling.CheckSession
-    else
-    if Assigned(frmIncomeCallRoot) then
-      frmIncomeCallRoot.CheckSession
-    else
-    if Assigned(frmClientResult) then
-      frmClientResult.CheckSession;
+//    if Assigned(frmCalling) then
+//      frmCalling.CheckSession
+//    else
+//    if Assigned(frmIncomeCallRoot) then
+//      frmIncomeCallRoot.CheckSession
+//    else
+//    if Assigned(frmClientResult) then
+//      frmClientResult.CheckSession;
 
   end
 
   else
   if cmd = 'outcomecall' then //исходящий звонок
   begin
-    if Assigned(frmClientResult) then
-      Exit;
-    try
-      argList := TStringList.Create;
-      argList.Delimiter := ',';
-      argList.DelimitedText := arg;
-      OutCallId    := argList[0];
-      OutCallApiId := argList[1];
-      OutPhone     := argList[2];
-    finally
-      FreeAndNil(argList);
-    end;
-    PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
-      //Application.ProcessMessages;
+//    if Assigned(frmClientResult) then
+//      Exit;
+//    try
+//      argList := TStringList.Create;
+//      argList.Delimiter := ',';
+//      argList.DelimitedText := arg;
+//      OutCallId    := argList[0];
+//      OutCallApiId := argList[1];
+//      OutPhone     := argList[2];
+//    finally
+//      FreeAndNil(argList);
+//    end;
+//    PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
+//      //Application.ProcessMessages;
   end
   
   else

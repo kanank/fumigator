@@ -103,15 +103,17 @@ begin
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
   frmSessionResult.Position := poDefault;
-  frmSessionResult.Top := 3;
+  frmSessionResult.Height := frmSessionResult.Cancel_btn.Top - 2;
   frmSessionResult.Parent   := frmClientResult.pnlResult;
-
+  frmSessionResult.Top := 2;
   Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
   Self.pnlResult.Height := frmSessionResult.Height;
 
   frmSessionResult.Cancel_btn.Visible := False;
   frmSessionResult.Show;
 
+  btnTransferCall.Enabled := false;
+  btnDeleteCall.Enabled   := false;
 end;
 
 function TfrmClientResult.CheckFinish: boolean;

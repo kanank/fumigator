@@ -112,6 +112,7 @@ type
     DebugMode_cb: TCheckBox;
     TCPServer: TIdTCPServer;
     QPhones: TIBQuery;
+    Button7: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -128,6 +129,7 @@ type
     procedure TCPServerConnect(AContext: TIdContext);
     procedure TCPServerDisconnect(AContext: TIdContext);
     procedure TCPServerExecute(AContext: TIdContext);
+    procedure Button7Click(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string; ALock: boolean=True);
@@ -142,6 +144,7 @@ type
     function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
+    function FindClientByPhone(APhone: string; var AclientId: Integer; var AClientType: string): Integer;
 
     function GetUserSocket(ATelNum: string): TCustomWinSocket;
  //  function CreateRWProc :TIBStoredProc;
@@ -228,11 +231,13 @@ begin
   begin
     userid := Params.Values['CalledExtension'];
     tel    := Params.Values['CallerIdNum'];
+    cf := 0;
   end
   else
   begin
     userid := Params.Values['CallerExtension'];
     tel    := Params.Values['CalledNumber'];
+    Cf := 1
   end;
   p := Pos('*', userid);
   if p > 0 then
@@ -248,55 +253,19 @@ begin
 
     with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
       Start;
-//    Q := CreateRWSQL;
-//    Q.Transaction.Active := True;
-//    Q.SQL.Text := CallEnent_Q.SQL.Text;
-//    //Q.Prepare;
-//    if Params.Values['CALLFLOW'] = 'in' then
-//      cf := 0
-//    else
-//      cf := 1;
-//
-//    Q.Transaction.Active := True;
-//    Q.ParamByName('CALLFLOW').AsInteger       :=  cf;
-//    Q.ParamByName('CALLID').AsString          :=  Params.Values['CallID'];
-//    Q.ParamByName('CALLERIDNUM').AsString     :=  Params.Values['CallerIDNum'];
-//    Q.ParamByName('CALLERIDNAME').AsString    :=  Params.Values['CallerIDName'];
-//    Q.ParamByName('CALLEDDID').AsString       :=  Params.Values['CalledDID'];
-//    Q.ParamByName('CALLEREXTENSION').AsString :=  Params.Values['CallerExtension'];
-//    Q.ParamByName('CALLSTATUS').AsString      :=  Params.Values['CallStatus'];
-//    Q.ParamByName('CALLEDEXTENSION').AsString :=  Params.Values['CalledExtension'];
-//    Q.ParamByName('CALLEDNUMBER').AsString    :=  Params.Values['CalledNumber'];
-//    Q.ParamByName('CALLAPIID').AsString       :=  Params.Values['CallAPIID'];
-//
-//    Try
-//      Q.ExecQuery;
-//      Result := true;
-//
-//    Except
-//    on E : Exception
-//        do begin
-//        AddLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
-//        Result := false;
-//        end;
-//
-//    End;
-//
-//    if Q.Transaction.Active then
-//         Q.Transaction.Commit;
 
-    //if Result then
     try
       if Params.Values['CallStatus'] = 'CALLING' then
       begin
         if pos('*', tel) = 0 then
          begin
            client_id := 0; client_type := '';
-           if QPhones.Locate('phone', tel, []) then
-           begin
-             client_id   := QPhones.FieldByName('client_id').AsInteger;
-             client_type := QPhones.FieldByName('type_cli').AsString;
-           end;
+           FindClientByPhone(tel, client_id, client_type);
+//           if QPhones.Locate('phone', tel, []) then
+//           begin
+//             client_id   := QPhones.FieldByName('client_id').AsInteger;
+//             client_type := QPhones.FieldByName('type_cli').AsString;
+//           end;
            MF.SendCommandToUser(ats, '#startcall:' +
              Params.Values['CALLFLOW'] + ',' +
              Params.Values['CallID'] + ',' +
@@ -310,7 +279,7 @@ begin
       end
       else  //окончание звонка
       begin
-        if pos('*', tel) > 4 then
+        if (Cf = 0) or ((Cf = 1) and (pos('*', tel) = 0)) then
           MF.SendCommandToUser(ats, '#finishcall:' +
             Params.Values['CallID'] + ',' +
             Params.Values['CallAPIID'] + ',' +
@@ -605,6 +574,18 @@ begin
   SendCommandToUser('*', Edit1.Text);
 end;
 
+procedure TMF.Button7Click(Sender: TObject);
+begin
+  if LockMutex(EventsMutex, 2000) then
+  try
+    QPhones.Close;
+    QPhones.Open;
+    AddLogMemo('#Обновлен список телефонов');
+  finally
+    UnLockMutex(EventsMutex);
+  end;
+end;
+
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
@@ -660,6 +641,20 @@ begin
   result.Database := DB;
   result.Transaction := TR;
 
+end;
+
+function TMF.FindClientByPhone(APhone: string; var AclientId: Integer; var AClientType: string): Integer;
+begin
+  if LockMutex(EventsMutex, 2000) then
+  try
+    if QPhones.Locate('phone', Aphone, []) then
+    begin
+      AClientId   := QPhones.FieldByName('client_id').AsInteger;
+      AClientType := QPhones.FieldByName('type_cli').AsString;
+    end;
+  finally
+    UnlockMutex(EventsMutex);
+  end;
 end;
 
 procedure TMF.FormCreate(Sender: TObject);
@@ -1094,7 +1089,8 @@ begin
     end;
   end;
 
-  if Db.Connected then  begin
+  if Db.Connected then
+  begin
     AddLog('#Соединение с БД установлено.');
 
     DBStatus_lbl.Caption := 'Установлено';

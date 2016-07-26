@@ -108,7 +108,7 @@ end;
 
 procedure TfrmIncomeCallRoot.CallFinish;
 begin
- if not CallObj.Active then //Callobj.Cancelled or fSessionClose then
+ if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
  begin
      if Assigned(frmCallUnknown) then
     begin
@@ -130,7 +130,7 @@ begin
 
  end;
 
-  if Callobj.Cancelled or (fSessionClose and not CallObj.Accepted) then
+  if Callobj.Cancelled and not CallObj.Accepted then
   begin
     if Assigned(frmCallEvent) then
       frmCallEvent.ModalResult := mrCancel;
@@ -139,7 +139,7 @@ begin
     Exit;
   end;
 
-  if not CallObj.Active and fClientClose  then
+  if not CallObj.Active and CallObj.Accepted and fClientClose  then
   begin
     fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
     ModalResult := mrOk;
@@ -357,6 +357,7 @@ end;
 procedure TfrmIncomeCallRoot.Timer1Timer(Sender: TObject);
 var
   extPrm: TClientParam;
+  callPrm: ClientCallParams;
   formRes: FormResult;
   newCli: Boolean;
 begin
@@ -368,7 +369,9 @@ begin
   Timer2.Enabled := True;
   if CallObj.CallInfo.ClientType = '' then
   try  // Вызываем неизвестный звонок.
-   ExtPrm.CallParam.TelNum := CallObj.CallInfo.Phone;
+   CallPrm.Setup;
+   CallPrm.TelNum := CallObj.CallInfo.Phone;
+   ExtPrm.CallParam := @CallPrm;
    case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
      mrOk:  formRes := DM.ShowClientFiz(asCreate, ExtPrm);
      mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);

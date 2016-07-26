@@ -55,6 +55,8 @@ inherited FrameWorkerRegions: TFrameWorkerRegions
     InsertSQL.Strings = (
       'insert into worker_regions(worker_id, region_id) '
       'values(:worker_id, :region_id)')
+    DeleteSQL.Strings = (
+      'delete from worker_regions where id = :id')
   end
   inherited Query: TIBQuery
     SQL.Strings = (

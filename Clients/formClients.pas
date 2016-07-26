@@ -230,7 +230,7 @@ end;
 procedure TfrmClients.FilterRecord(DataSet: TDataSet; var Accept: Boolean);
 begin
   Accept := (DataSet.FieldByName('ACT').AsInteger = 1) and
-             DM.isWorkersRegion(DataSet.FieldByName('id').AsInteger) and
+             DM.isWorkersRegion(DataSet.FieldByName('region_id').AsInteger) and
             (((isUr >= 0) and (DataSet.FieldByName('type_cli').AsInteger = isUr)) or
              ((isUr < 0) and  (DataSet.FieldByName('type_cli').AsInteger >= 0 ))) and
             (DataSet.FieldByName('status_id').AsInteger = status);

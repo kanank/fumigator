@@ -9,12 +9,18 @@ inherited frameClientCalls: TframeClientCalls
     Caption = #1047#1074#1086#1085#1082#1080' '#1082#1083#1080#1077#1085#1090#1072
     ExplicitWidth = 760
     ExplicitHeight = 185
+    DesignSize = (
+      760
+      185)
     inherited RzPanel2: TRzPanel [0]
       Left = 728
       Height = 170
       Visible = False
-      ExplicitLeft = 624
+      ExplicitLeft = 728
       ExplicitHeight = 170
+      DesignSize = (
+        31
+        170)
       inherited btnAdd: TRzBitBtn
         Top = 66
         ExplicitTop = 66

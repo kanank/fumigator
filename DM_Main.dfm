@@ -1,7 +1,6 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
-  Height = 516
-  VerticalOffset = 4
+  Height = 536
   Width = 816
   object DB: TIBDatabase
     Connected = True
@@ -978,6 +977,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1135,6 +1135,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1321,20 +1322,20 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select count(*) as cnt  from sessions'
-      'where callid = :callid and'
-      '           callapiid <>:callapiid and '
+      'where callapiid = :callapiid and'
+      '           callid <>:callid and '
       '           endtime is null')
     Left = 320
     Top = 152
     ParamData = <
       item
         DataType = ftUnknown
-        Name = 'callid'
+        Name = 'callapiid'
         ParamType = ptUnknown
       end
       item
         DataType = ftUnknown
-        Name = 'callapiid'
+        Name = 'callid'
         ParamType = ptUnknown
       end>
   end

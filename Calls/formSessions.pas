@@ -11,7 +11,20 @@ uses
   cxGridDBTableView, cxGrid, RzButton, Vcl.ExtCtrls, RzPanel, dxGDIPlusClasses,
   cxContainer, Vcl.ComCtrls, dxCore, cxDateUtils, cxTextEdit, cxMaskEdit,
   cxDropDownEdit, cxCalendar, Vcl.StdCtrls, IBX.IBCustomDataSet, IBX.IBQuery,
-  cxDBLookupComboBox, dxmdaset, Vcl.Menus;
+  cxDBLookupComboBox, dxmdaset, Vcl.Menus, dxSkinsCore, dxSkinBlack, dxSkinBlue,
+  dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom, dxSkinDarkSide,
+  dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+  dxSkinscxPCPainter, cxCheckBox;
 
 type
   TfrmSessions = class(TSprForm)
@@ -59,6 +72,7 @@ type
     miFilterDuration: TMenuItem;
     miFilterOff: TMenuItem;
     cmbFilter: TcxComboBox;
+    chkWorkerClients: TcxCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -70,6 +84,7 @@ type
     procedure miFilterDurationClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
     procedure cmbFilterPropertiesChange(Sender: TObject);
+    procedure chkWorkerClientsClick(Sender: TObject);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -135,6 +150,12 @@ begin
 
 end;
 
+
+procedure TfrmSessions.chkWorkerClientsClick(Sender: TObject);
+begin
+  inherited;
+  SetFilter;
+end;
 
 procedure TfrmSessions.cmbFilterPropertiesChange(Sender: TObject);
 begin
@@ -308,23 +329,27 @@ end;
 
 procedure TfrmSessions.QFilterRecord(DataSet: TDataSet; var Accept: Boolean);
 var
-  ff, f1, f2: Boolean;
+  ff, f0, f1, f2: Boolean;
 begin
   f1 := True; f2 := True;
+  f0 := not chkWorkerClients.Checked  or
+        (chkWorkerClients.Checked and
+           DM.isWorkerClient(DataSet.FieldByName('Client_id').asInteger));
+  if f0 then
+  begin
+    if miFilterAccepted.Checked then
+      f1 := DataSet.FieldByName('ISHOD').AsString <> '';
+    if miFilterDuration.Checked then
+      f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
 
-  if miFilterAccepted.Checked then
-    f1 := DataSet.FieldByName('ISHOD').AsString <> '';
-  if miFilterDuration.Checked then
-    f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
-
-   case cmbFilter.ItemIndex of
-     0: ff := DataSet.FieldByName('ID').AsInteger > 0;
-     1: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 0;
-     2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
-     3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
-   end;
-
-  Accept := ff and f1 and f2;
+     case cmbFilter.ItemIndex of
+       0: ff := DataSet.FieldByName('ID').AsInteger > 0;
+       1: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 0;
+       2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
+       3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
+     end;
+  end;
+  Accept := f0 and ff and f1 and f2;
 end;
 
 procedure TfrmSessions.RzButton1Click(Sender: TObject);

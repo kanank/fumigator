@@ -67,10 +67,10 @@ end;
 
 function TfrmSessionResult.CheckFields: Boolean;
 begin
+  Result := false;
   if (cmbIshod.Text = '') or (Length(edtResult.Text) < 5)  then
   begin
     Application.MessageBox('Необходимо заполнить поля! Комментарий - не менее 5 символов ', 'Результат сессии', MB_ICONSTOP);
-    Exit;
     Result := False;
   end
   else

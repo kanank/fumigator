@@ -414,6 +414,16 @@ object MF: TMF
         TabOrder = 4
         OnClick = TestDb_btnClick
       end
+      object Button7: TButton
+        Left = 47
+        Top = 98
+        Width = 169
+        Height = 25
+        Anchors = [akRight, akBottom]
+        Caption = #1054#1073#1085#1086#1074#1080#1090#1100' '#1089#1087#1080#1089#1086#1082' '#1090#1077#1083#1077#1092#1086#1085#1086#1074
+        TabOrder = 5
+        OnClick = Button7Click
+      end
     end
   end
   object Log_memo: TMemo

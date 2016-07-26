@@ -289,7 +289,7 @@ begin
     try
       if Params.Values['CallStatus'] = 'CALLING' then
       begin
-        if Length(tel) > 4 then
+        if pos('*', tel) = 0 then
          begin
            client_id := 0; client_type := '';
            if QPhones.Locate('phone', tel, []) then
@@ -310,11 +310,12 @@ begin
       end
       else  //окончание звонка
       begin
-        MF.SendCommandToUser(ats, '#finishcall:' +
-          Params.Values['CallID'] + ',' +
-          Params.Values['CallAPIID'] + ',' +
-          Params.Values['CallStatus'],
-          False);
+        if pos('*', tel) > 4 then
+          MF.SendCommandToUser(ats, '#finishcall:' +
+            Params.Values['CallID'] + ',' +
+            Params.Values['CallAPIID'] + ',' +
+            Params.Values['CallStatus'],
+            False);
       end;
 
      except

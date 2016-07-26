@@ -1,7 +1,8 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
   Height = 516
-  Width = 790
+  VerticalOffset = 4
+  Width = 816
   object DB: TIBDatabase
     Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
@@ -55,7 +56,6 @@ object DataModuleMain: TDataModuleMain
     ParamCheck = True
     SQL.Strings = (
       'select *  from DIC_WORKER_PROFS')
-    UpdateObject = DicWorkerProfs_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_WORKER_PROFS_ID'
     GeneratorField.ApplyEvent = gamOnPost
@@ -94,7 +94,7 @@ object DataModuleMain: TDataModuleMain
     AutoEdit = False
     DataSet = Workers
     Left = 730
-    Top = 269
+    Top = 277
   end
   object Worker_upd: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -978,7 +978,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1136,7 +1135,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1688,40 +1686,6 @@ object DataModuleMain: TDataModuleMain
     Left = 416
     Top = 467
   end
-  object IBQuery1: TIBQuery
-    Database = DB
-    Transaction = DefTr
-    BufferChunks = 1000
-    CachedUpdates = True
-    ParamCheck = True
-    SQL.Strings = (
-      'select *  from DIC_UNITS')
-    UpdateObject = IBUpdateSQL1
-    GeneratorField.Field = 'ID'
-    GeneratorField.Generator = 'GEN_DIC_AREA_VOLUME_ID'
-    GeneratorField.ApplyEvent = gamOnPost
-    Left = 452
-    Top = 358
-  end
-  object DataSource1: TDataSource
-    DataSet = IBQuery1
-    Left = 453
-    Top = 409
-  end
-  object IBUpdateSQL1: TIBUpdateSQL
-    RefreshSQL.Strings = (
-      'Select * from DIC_UNITS where  ID = :ID')
-    ModifySQL.Strings = (
-      'update  DIC_UNITS set NAME = :NAME where id = :OLD_ID')
-    InsertSQL.Strings = (
-      'INSERT INTO DIC_UNITS (id, NAME) Values(:id, :NAME)'#9)
-    DeleteSQL.Strings = (
-      'delete from DIC_UNITS'
-      'where'
-      '  ID = :OLD_ID')
-    Left = 456
-    Top = 443
-  end
   object QClientExtUR: TIBQuery
     Database = DB
     Transaction = Clients_tr
@@ -1737,5 +1701,32 @@ object DataModuleMain: TDataModuleMain
     GeneratorField.ApplyEvent = gamOnPost
     Left = 160
     Top = 72
+  end
+  object WorkerRegions: TIBQuery
+    Database = DB
+    Transaction = DefTr
+    BufferChunks = 1000
+    CachedUpdates = True
+    ParamCheck = True
+    SQL.Strings = (
+      'select *  from WORKER_REGIONS where worker_id = :worker_id')
+    UpdateObject = DicWorkerProfs_upd
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_DIC_WORKER_PROFS_ID'
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 740
+    Top = 342
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'worker_id'
+        ParamType = ptUnknown
+      end>
+  end
+  object DsWorkerRegions: TDataSource
+    AutoEdit = False
+    DataSet = WorkerRegions
+    Left = 746
+    Top = 389
   end
 end

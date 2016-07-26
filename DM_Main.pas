@@ -102,10 +102,9 @@ type
     DicUnits: TIBQuery;
     DsDicUnits: TDataSource;
     DicUnits_upd: TIBUpdateSQL;
-    IBQuery1: TIBQuery;
-    DataSource1: TDataSource;
-    IBUpdateSQL1: TIBUpdateSQL;
     QClientExtUR: TIBQuery;
+    WorkerRegions: TIBQuery;
+    DsWorkerRegions: TDataSource;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -127,6 +126,7 @@ type
       ActionStr: TActionStr; ParentForm: TForm; ShowModal: Boolean=true): FormResult;
     function GetPersonShortName(f, i, o: string): string;
     function GetPersonFullName(f, i, o: string): string;
+    function isWorkersRegion(ARegion_Id: integer): Boolean; //регион пользователя или нет
 
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
@@ -465,7 +465,11 @@ begin
       frm.BorderStyle := bsNone;
       frm.Parent      := frmClientResult.pnlForm;
       frmClientResult.pnlForm.Height := frm.Height + 10;
-      frmClientResult.pnlForm.Width  := frm.Width;
+      if frm.Width > frmClientResult.pnlForm.Width then
+      begin
+        frmClientResult.ClientWidth := frm.Width;
+      end;
+
       frmClientResult.Height := frmClientResult.pnlForm.Height +
         frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
 
@@ -635,6 +639,8 @@ begin
     DicUnits.Open;
    // DicWorkerStatus.Open;
     Workers.Open;
+    WorkerRegions.ParamByName('worker_id').AsInteger := CurrentUserSets.ID;
+    WorkerRegions.Open;
 
     with DicCallTypes do
     begin
@@ -1245,6 +1251,13 @@ begin
       result := result + ' ' + LeftStr(o, 1) + '. ';
     end;
   end;
+end;
+
+function TDataModuleMain.isWorkersRegion(ARegion_Id: integer): Boolean;
+begin
+  Result := (ARegion_Id = 0) or (WorkerRegions.RecordCount = 0 );
+  if not Result then
+    result := WorkerRegions.Locate('REGION_ID', ARegion_Id, []);
 end;
 
 procedure TDataModuleMain.MakeTopForm(Form: TForm);

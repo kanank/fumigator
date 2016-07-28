@@ -191,6 +191,9 @@ end;
 
 procedure TfrmIncomeCallRoot.FormShow(Sender: TObject);
 begin
+  if not CallObj.Active then
+    ModalResult := mrCancel;
+
   Timer1.Enabled := True;
 end;
 
@@ -231,8 +234,8 @@ begin
     frmIncomeCallRoot.ClientClose       := false;
     frmIncomeCallRoot.CloseOnCancelCall := true;
     frmIncomeCallRoot.ModalResult := mrNone;
-    frmIncomeCallRoot.ShowModal;
-
+    if CallObj.Active then
+      frmIncomeCallRoot.ShowModal;
 
   finally
     FreeAndNil(frmCallEvent);

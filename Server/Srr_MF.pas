@@ -113,6 +113,7 @@ type
     TCPServer: TIdTCPServer;
     QPhones: TIBQuery;
     Button7: TButton;
+    Button8: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -130,6 +131,7 @@ type
     procedure TCPServerDisconnect(AContext: TIdContext);
     procedure TCPServerExecute(AContext: TIdContext);
     procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
   private
     FActiveUsers: TStringList;
     procedure AddLog (Logstr :string; ALock: boolean=True);
@@ -257,7 +259,7 @@ begin
     try
       if Params.Values['CallStatus'] = 'CALLING' then
       begin
-        if pos('*', tel) = 0 then
+        if pos(edtUserId.Text + '*', tel) = 0 then
          begin
            client_id := 0; client_type := '';
            FindClientByPhone(tel, client_id, client_type);
@@ -279,7 +281,7 @@ begin
       end
       else  //окончание звонка
       begin
-        if (Cf = 0) or ((Cf = 1) and (pos('*', tel) = 0)) then
+        if (Cf = 0) or ((Cf = 1) and (pos(edtUserId.Text + '*', tel) = 0)) then
           MF.SendCommandToUser(ats, '#finishcall:' +
             Params.Values['CallID'] + ',' +
             Params.Values['CallAPIID'] + ',' +
@@ -454,6 +456,8 @@ begin
     Log_memo.Lines.EndUpdate;
     if ALock then
       UnLockMutex(LogMutex);
+    if not Log_memo.Focused then
+      SendMessage(Log_memo.Handle, WM_VSCROLL, SB_BOTTOM, 0);
   end;
 end;
 
@@ -584,6 +588,11 @@ begin
   finally
     UnLockMutex(EventsMutex);
   end;
+end;
+
+procedure TMF.Button8Click(Sender: TObject);
+begin
+  ShowMessage('Кол-во соединений: ' + IntToStr(TCPServer.Contexts.Count));
 end;
 
 procedure TMF.CallFinished(Sender: TObject);
@@ -1055,12 +1064,12 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
         LogList.Add(ARequestInfo.Params.Text);
         AddLog(LogList.Text);
       finally
-        LogList.Free;
         AddCallEvent(ARequestInfo.Params);
         //if (ServerSocket.Socket.ActiveConnections > 0) then
 //          if AddCallEvent(ARequestInfo.Params) = true then
 //            AddLog('Записан Call Events с ID: '+ ARequestInfo.Params.Values['CallID']+ ' - '
 //               + ARequestInfo.Params.Values['CallStatus']);
+        LogList.Free;
       end
     else
       Addlog('Запрос не содержит данных Call_Events, либо неверный URI.');
@@ -1504,7 +1513,8 @@ end;
 procedure TDbWriter.Execute;
 var
   Cf :Byte;
-  p: Integer;
+  p, step: Integer;
+  fOk: Boolean;
 begin
   try
     fIBSQL.Transaction.Active := True;
@@ -1528,10 +1538,12 @@ begin
       ParamByName('CALLEDNUMBER').AsString    := fParams.Values['CalledNumber'];
       ParamByName('CALLAPIID').AsString       := fParams.Values['CallAPIID'];
 
+      while not fOk and (step < 10) do
       Try
         ExecQuery;
         fMess := 'Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
              + fParams.Values['CallStatus'];
+        fOk := True;
         Synchronize(Log);
       Except
         on E : Exception do
@@ -1540,6 +1552,12 @@ begin
              Transaction.Rollback;
           fMess := ('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.');
           Synchronize(Log);
+          fOk := Pos('deadlock', LowerCase(fMess)) = 0;
+          if not fOk then
+          begin
+            Inc(Step);
+            Sleep(200);
+          end;
         end;
       End;
 

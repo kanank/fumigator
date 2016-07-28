@@ -131,6 +131,16 @@ object MF: TMF
         State = cbChecked
         TabOrder = 5
       end
+      object Button8: TButton
+        Left = 184
+        Top = 7
+        Width = 106
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1050#1083#1080#1077#1085#1090#1099
+        TabOrder = 6
+        OnClick = Button8Click
+      end
     end
     object GroupBox2: TGroupBox
       Left = 1

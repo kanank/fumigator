@@ -474,7 +474,7 @@ begin
   //if DM.incomeCalling then
   //  Exit;
 
-  CallObj.StartCall(CallInfo);
+  CallObj.StartCall(nil);
   //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
   TfrmIncomeCallRoot.ShowCall;
 end;
@@ -542,40 +542,41 @@ begin
   try
     Stream := TStringStream.Create;
     url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastversion';
-    try HTTP.Get(url, Stream); except end;
-//    if HTTP.ResponseCode = 200 then
-    verServer := Stream.DataString;
-    verLocal  := FileVersion(Application.ExeName);
-    if (HTTP.ResponseCode = 200) and (verLocal <> verServer) then
     try
-      frmLogo.ProgressBar.Visible := True;
-      HTTP.OnWork      := frmLogo.HTTPWork;
-      HTTP.OnWorkBegin := frmLogo.HTTPWorkBegin;
-      HTTP.OnWorkEnd   := frmLogo.HTTPWorkEnd;
-
-      fStream := TMemoryStream.Create;
-      url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastfile';
+      HTTP.Get(url, Stream); except end;
+  //    if HTTP.ResponseCode = 200 then
+      verServer := Stream.DataString;
+      verLocal  := FileVersion(Application.ExeName);
+      if (HTTP.ResponseCode = 200) and (verLocal <> verServer) then
       try
-        fGet := False;
-        HTTP.Get(url, fStream);
-        if HTTP.Response.ContentLength = fStream.Size then
-          fGet := True;
-      except
-        fGet := false;
-      end;
-      if fGet and (HTTP.ResponseCode = 200) then
-      begin
-        if FileExists(Application.ExeName + '_') then
-          DeleteFile(Application.ExeName + '_');
+        frmLogo.ProgressBar.Visible := True;
+        HTTP.OnWork      := frmLogo.HTTPWork;
+        HTTP.OnWorkBegin := frmLogo.HTTPWorkBegin;
+        HTTP.OnWorkEnd   := frmLogo.HTTPWorkEnd;
 
-        RenameFile(Application.ExeName, Application.ExeName + '_');
-        fStream.SaveToFile(ExtractFilePath(Application.ExeName)+ 'fumigator.exe');
-        Result := True;
-      end;
+        fStream := TMemoryStream.Create;
+        url := 'http://' + ServerHost + ':' + IntToStr(ServerHttpPort) + '/fumigator?action=getlastfile';
+        try
+          fGet := False;
+          HTTP.Get(url, fStream);
+          if HTTP.Response.ContentLength = fStream.Size then
+            fGet := True;
+        except
+          fGet := false;
+        end;
+        if fGet and (HTTP.ResponseCode = 200) then
+        begin
+          if FileExists(Application.ExeName + '_') then
+            DeleteFile(Application.ExeName + '_');
 
-    finally
-      fStream.Free;
-    end;
+          RenameFile(Application.ExeName, Application.ExeName + '_');
+          fStream.SaveToFile(ExtractFilePath(Application.ExeName)+ 'fumigator.exe');
+          Result := True;
+        end;
+
+      finally
+        fStream.Free;
+      end;
   finally
      Stream.Free;
      HTTP.Free;
@@ -683,8 +684,8 @@ begin
     if not CallObj.Ready then
       Exit;
 
+    argList := TStringList.Create;
     try
-      argList := TStringList.Create;
       arglist.Delimiter := ',';
       argList.DelimitedText := arg;
       if argList.Count > 0 then
@@ -701,25 +702,32 @@ begin
       argList.free;
     end;
 
-    if Callinfo.CallFlow = 'in' then
+    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
+      exit;
+
+    if CallObj.Callinfo.CallFlow = 'in' then
       PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
     else
       PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
+    Application.ProcessMessages;
     //DM.Calls_TimerTimer(DM.Calls_Timer);
   end;
 
   if (cmd = 'finishcall') then //завершен звонок
   begin
+    argList := TStringList.Create;
     try
       s := '';
-      argList := TStringList.Create;
       arglist.Delimiter := ',';
       argList.DelimitedText := arg;
       if argList.Count > 2 then
        s := argList[2];
     finally
+      if CallObj.CallInfo.CallId <> argList[0] then
+        CallObj.CallInfo.CallId := argList[0];
       argList.free;
     end;
+
     CallObj.FinishCall(s);
   end
 

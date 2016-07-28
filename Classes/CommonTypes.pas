@@ -326,6 +326,8 @@ end;
 
 procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);
 begin
+  if CallInfo <> nil then
+
   with fCallInfo do
   begin
     CallId     := ACallId;

@@ -19,8 +19,10 @@ type
     fIBSQL: TIBSQL;
     fParams: TStringList;
     fMess: string;
+    fMessLock: Boolean;
     procedure Execute; override;
     procedure Log;
+    procedure WriteLog(Amess: string; Ablock: Boolean = True);
     function CreateIBSql(ADb: TIBDatabase): TIBSQL;
   public
     constructor Create(ADb: TIBDatabase; AParam: TStrings; ASql: string); overload;
@@ -29,28 +31,16 @@ type
 //                 http://127.0.0.1:45455/calls?callflow=in&CallStatus=CALLING&callid=9467988721.test2&callapiid=5nl3euxysfbpiqavs2zj&CalledExtension=9738*755&CallerIdNum=%2B79104579648
   TCallSession = class(TThread)
   protected
-    procedure Excecute: override;
+    fSeconds: Integer;
+    fList: TStringList;
+    procedure Execute; override;
+    procedure DeleteSession;
   public
     CallApiId: string;
     Str: string;
-    constructor Create(ACallApiId, AStr: string); overload;
+    constructor Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer); overload;
   end;
 
-  TMsgThread = class(TThread)
-  protected
-    FServer: TIdTCPServer;
-    FMsgList: TStringList;
-    FContList: TList;
-    fAddMsg: Boolean;
-    fExecute: Boolean;
-    procedure Execute; override;
-  public
-    procedure AddMsg(Ato: string; AMsg: string);
-    constructor Create(AServer: TIdTCPServer); overload;
-    destructor Destroy; override;
-    function SendMsg(const ANick: String; const AMsg: String) : Boolean;
-    function BroadcastMsg(const bmsg: String): boolean;
-  end;
 
   //TCallWriter = class(TThread)
    // protected
@@ -64,18 +54,7 @@ type
       function SendMsg(const ANick: String; const AMsg: String) : Boolean;
       procedure BroadcastMsg(const bmsg: String);
       procedure BroadcastMsgAll(const ANick: String; const bmsg: String);
-      procedure SendNicks;
-      procedure SendFile(const ANick,Fn:string);
   end;
-
-  (*TLog = class(TIdSync)
-    protected
-        FMsg: String;
-    public
-        constructor Create(const AMsg: String);
-        class procedure AddMsg(const AMsg: String);
-
-    end;*)
 
   TMF = class(TForm)
     Panel1: TPanel;
@@ -173,9 +152,9 @@ type
     function BroadcastMsg(const bmsg: String): boolean;
   end;
 
-  const
-       LogFile = 'Srv_Log.txt';
-       MutexDelay = 500;
+const
+   LogFile = 'Srv_Log.txt';
+   MutexDelay = 500;
 var
   MF: TMF;
   LogMutex: THandle;
@@ -190,7 +169,8 @@ uses
   System.DateUtils, CommonFunc;
 
 function TMF.AcceptCall(ACallId, APhone: string): boolean;
-var Q :TIBQuery;
+var
+  Q :TIBQuery;
 begin
   try
     if not DB.Connected then
@@ -228,7 +208,6 @@ var
     userid, ats, tel, client_type: string;
     p, client_id: Integer;
 begin
- try
    if Params.indexOfName('CALLFLOW') = -1 then
    begin
      Result := False;
@@ -253,59 +232,53 @@ begin
     ats := Copy(userid, p + 1, Length(userid));
     userid := Copy(userid, 1, p - 1);
   end;
+  AddLogMemo('user_id = ' + userid);
 
-  if userid = edtUserId.Text then //только нужную АТС отсекаем
-  try
-    if not DB.Connected then
-      Exit;
+  if userid <> edtUserId.Text then //только нужную АТС отсекаем
+    Exit;
 
-    with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
-      Start;
+  if not DB.Connected then
+    Exit;
 
-    try
-      if Params.Values['CallStatus'] = 'CALLING' then
-      begin
-        if pos(edtUserId.Text + '*', tel) = 0 then
-         begin
-           client_id := 0; client_type := '';
-           FindClientByPhone(Params.Values['CALLAPIID'], tel, client_type);
-//           if QPhones.Locate('phone', tel, []) then
-//           begin
-//             client_id   := QPhones.FieldByName('client_id').AsInteger;
-//             client_type := QPhones.FieldByName('type_cli').AsString;
-//           end;
-           MF.SendCommandToUser(ats, '#startcall:' +
-             Params.Values['CALLFLOW'] + ',' +
-             Params.Values['CallID'] + ',' +
-             Params.Values['CallAPIID'] + ',' +
-             tel + ',' +
-             //IntToStr(client_id) + ',' +
-             client_type,
-             False)
-         end;
+  with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
+    Start;
 
-      end
-      else  //окончание звонка
-      begin
-        if (Cf = 0) or ((Cf = 1) and (pos(edtUserId.Text + '*', tel) = 0)) then
-          MF.SendCommandToUser(ats, '#finishcall:' +
-            Params.Values['CallID'] + ',' +
-            Params.Values['CallAPIID'] + ',' +
-            Params.Values['CallStatus'],
-            False);
-      end;
+    if Params.Values['CallStatus'] = 'CALLING' then
+    begin
+      if pos(edtUserId.Text + '*', tel) = 0 then
+       begin
+         client_id := 0; client_type := '';
+         FindClientByPhone(Params.Values['CALLAPIID'], tel, client_type);
+  //           if QPhones.Locate('phone', tel, []) then
+  //           begin
+  //             client_id   := QPhones.FieldByName('client_id').AsInteger;
+  //             client_type := QPhones.FieldByName('type_cli').AsString;
+  //           end;
+         MF.SendCommandToUser(ats, '#startcall:' +
+           Params.Values['CALLFLOW'] + ',' +
+           Params.Values['CallID'] + ',' +
+           Params.Values['CallAPIID'] + ',' +
+           tel + ',' +
+           //IntToStr(client_id) + ',' +
+           client_type,
+           False)
+       end;
 
-     except
-
+    end
+    else  //окончание звонка
+    begin
+      if (Cf = 0) or ((Cf = 1) and (pos(edtUserId.Text + '*', tel) = 0)) then
+        MF.SendCommandToUser(ats, '#finishcall:' +
+          Params.Values['CallID'] + ',' +
+          Params.Values['CallAPIID'] + ',' +
+          Params.Values['CallStatus'],
+          False);
     end;
-  finally
-      //Q.Transaction.Free;
-      //FreeAndNil(Q);
-  end;
- except
 
- end;
+
+
 end;
+
 
 (*function TMF.AddCallEvent(Params: TStrings): Boolean;
 var
@@ -449,8 +422,6 @@ end;
 
 
 procedure TMF.AddLogMemo(Logstr: string; ALock: Boolean=true);
-var
-  fLock: Boolean;
 begin
   if (ALock and LockMutex(LogMutex, MutexDelay)) or not ALock then
   try
@@ -608,7 +579,8 @@ begin
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
-var TR :TIBTransaction;
+var
+  TR :TIBTransaction;
 begin
   TR := TIBTransaction.Create(self);
   TR.DefaultDatabase := DB;
@@ -641,7 +613,8 @@ begin
 end;
 
 function TMF.CreateRWSQL: TIBSQL;
-var TR :TIBTransaction;
+var
+  TR :TIBTransaction;
 begin
   TR := TIBTransaction.Create(self);
   TR.DefaultDatabase := DB;
@@ -664,21 +637,23 @@ var
 begin
   if LockMutex(EventsMutex, 2000) then
   try
-    ind := fSessions.IndexOfName(ACallApiId);
+    ind := fSessions.IndexOf(ACallApiId);
     if ind > -1 then
     begin
-      AclientIDType := fSessions.ValueFromIndex[ind];
+      AclientIDType := TCallSession(fSessions.Objects[ind]).Str;
       Exit;
     end;
 
     if QPhones.Locate('phone', Aphone, []) then
     begin
-      AClientIDType   := QPhones.FieldByName('client_id').AsString + ',' +
+      AClientIDType   := //QPhones.FieldByName('client_id').AsString + ',' +
         QPhones.FieldByName('type_cli').AsString;
-      fSessions.Add(ACallApiId + '=' + AClientIdType);
+      fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AClientIDType, fSessions, 30));
     end
     else
-      fSessions.Add(ACallApiId + '=0,');
+      AClientIDType := '0,';
+
+    fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AclientIdType, fSessions, 30));
   finally
     UnlockMutex(EventsMutex);
   end;
@@ -1148,55 +1123,6 @@ begin
   end;
 end;
 
-procedure TMyContext.SendFile(const ANick,Fn:string);
-var
-        List: TList;
-        Context: TMyContext;
-        I: Integer;
-        FStream: TFileStream;
-//IdStream : TIdStreamVCL;
-begin
- (*  // FContextList is inherited from TIdContext
-    List := FContextList.LockList;
-    try
-        for I := 0 to List.Count-1 do
-        begin
-            Context := TMyContext(List[I]);
-            if Context.Nick = ANick then
-            begin
-                try
-   // Context.Connection.IOHandler.WriteLn(AMsg+'@'+ANick+':'+fromNick );
-   //Self.Connection.IOHandler.WriteLn('Msg sent to ' + ANick + '>>' + AMsg);
-    //showmessage('Reach that bit');
-    FStream := TFileStream.Create(fn, fmOpenRead or fmShareDenyWrite);
-    //showmessage('FStream created');
-    try
-        //IdStream := TIdStreamVCL.Create(fstream);
-       // showmessage('IDStream created');
-        try
-
-            Context.Connection.IOHandler.WriteLn('pic@'+fn+';Sending file...');
-            Context.Connection.IOHandler.Write(IdStream, 0, True);
-            Context.Connection.IOHandler.WriteLn('done!');
-        finally
-            IdStream.Free;
-        end;
-    finally
-        FStream.Free;
-    end;
-
-
-   except
-                end;
-                Exit;
-            end;
-        end;
-    finally
-        FContextList.UnlockList;
-    end;
-    Self.Connection.IOHandler.WriteLn('msg from SendFile Procedure : The name you send the message to does not exist. Please click on ''Get list of Names on Chat'' button to get a full list of names.');*)
-end;
-
 
 //******broadcast procedures *******//
 procedure TMycontext.BroadcastMsgAll(const ANick: String; const bmsg: String);
@@ -1245,203 +1171,6 @@ begin
   end;
 end;
 
-procedure TMyContext.SendNicks;
-begin
-
-end;
-(*var
-  List: TList;
-  Context: TMyContext;
-  I: Integer;
-  ServerSettingsFile : TINIFile;
-  strings : TStringlist;
-begin
-  List := FContextList.LockList;
-  try
-    Connection.IOHandler.WriteLn('list|clear');
-
-    //gee lys terug
-    if List.Count > 1 then
-    begin
-      for I := 0 to List.Count -1 do
-      begin
-        Context := TMyContext(List[I]);
-        if Context <> Self then
-          Connection.IOHandler.WriteLn('list|'+ Context.Nick);
-      end;
-    end;
-
-    //groups
-    ServerSettingsFile := TINIFile.Create(MainDir(True) + 'ServerSettings.ini');
-    Strings := TStringlist.Create;
-    ServerSettingsFile.ReadSection('groups', Strings);
-    if Strings.Count <> 0 then
-      for i := 0 to strings.Count -1 do
-        Connection.IOHandler.WriteLn('list|' + Strings[i]);
-
-  finally
-    FContextList.UnlockList;
-  end;
-end;*)
-
-{ TMsgThread }
-
-procedure TMsgThread.AddMsg(Ato, AMsg: string);
-begin
-  if not Assigned(FServer.Contexts) or
-    (Assigned(FServer.Contexts) and (FServer.Contexts.Count = 0)) then
-    Exit;
-
-  if LockMutex(MsgMutex, MutexDelay) then
-  try
-
-    try
-      fAddMsg := True;
-      FMsgList.BeginUpdate;
-      FMsgList.Add(Ato + '=' + AMsg);
-    finally
-      FMsgList.EndUpdate;
-      fAddMsg := false;
-    end;
-  finally
-    //CSectionMsg.Leave;
-    UnlockMutex(MsgMutex);
-  end
-  else
-    MF.AddLogMemo('Ошибка мьютекса AddMsg');
-end;
-
-function TMsgThread.BroadcastMsg(const bmsg: String): boolean;
-var
-  i: Integer;
-  Context: TMyContext;
-begin
-  if not Assigned(FContList) then
-    Exit;
-   for I := 0 to FContList.Count-1 do
-    begin
-      Context := TMyContext(FContList[I]);
-
-      //TMF(FServer.Owner).Log_memo.Lines.Add('Посылаем сообщение для ' + Context.Nick + ': ' + bmsg);
-      try
-        Context.Connection.IOHandler.WriteLn(bmsg);
-      except
-        TMF(FServer.Owner).AddLogMemo('Ошибка отправки сообщения: ' +
-          Context.Nick + ': ' + bmsg + #13#10 +
-          Exception(ExceptObject).Message);
-          Context.Connection.IOHandler.Close;
-      end;
-      TMF(FServer.Owner).AddLogMemo('Послали сообщение для ' + Context.Nick + ': ' + bmsg);
-    end;
-end;
-
-constructor TMsgThread.Create(AServer: TIdTCPServer);
-begin
-  FServer := AServer;
-  FMsgList := TStringList.Create;
-  inherited Create(true);
-end;
-
-destructor TMsgThread.Destroy;
-begin
-  FMsgList.Free;
-  inherited;
-end;
-
-procedure TMsgThread.Execute;
-var
-  List: TList;
-  cnt, step, cur: Integer;
-  f: Boolean;
-  s: string;
-  flock: Boolean;
-  fList: TStringList;
-begin
- try
-   fList := TStringList.Create;
-
-  while not Terminated do
-  begin
-    if not (Terminated or not Assigned(FServer.Contexts) or
-      (Assigned(FServer.Contexts) and (FServer.Contexts.Count = 0)) or
-           (FMsgList.Count = 0) or fAddMsg) then
-
-    //if LockMutex(MsgMutex, 5000) then
-    try
-      try
-        fExecute := True;
-        fList.Assign(FMsgList);
-        FMsgList.Clear;
-      finally
-        fExecute := False;
-      end;
-      cnt := fList.Count;
-
-      cur := 0; step := 0;
-
-        FContList := FServer.Contexts.LockList;
-        fList.BeginUpdate;
-        while (step < cnt) and Assigned(FContList) do
-        begin
-          f := False;
-          if fList.Names[cur] = '*' then
-            f := BroadcastMsg(fList.ValueFromIndex[cur])
-          else
-            f := SendMsg(fList.Names[cur], fList.ValueFromIndex[cur]);
-
-          Inc(step);
-          if f then
-            fList.Delete(cur)
-          else
-             Inc(cur);
-        end;
-
-      finally
-        fList.EndUpdate;
-        FServer.Contexts.UnLockList;
-        fExecute := False;
-        //UnlockMutex(MsgMutex);
-      end;
-     // else
-     //   MF.AddLogMemo('Ошибка мьютекса Execute');
-
-      Sleep(200);
-    end;
- finally
-    fList.Free;
- end;
-end;
-
-
-function TMsgThread.SendMsg(const ANick, AMsg: String): Boolean;
-var
-  List: TList;
-  Context: TMyContext;
-  I: Integer;
-begin
-  Result := False;
-  if not Assigned(FContList) then
-    Exit;
-
-    for I := 0 to FContList.Count-1 do
-    begin
-      Context := TMyContext(FContList[I]);
-      if lowercase(Context.Nick) = lowercase(ANick) then
-      begin
-        try
-          Context.Connection.IOHandler.WriteLn(AMsg);
-          MF.AddLogMemo('Послали сообщение для ' + ANick + ':' + AMsg);
-          Result := True;
-        except
-          Context.Connection.IOHandler.Close;
-          Result := False;
-          TMF(FServer.Owner).AddLogMemo('Ошибка отправки сообщения: ' +
-          ANick + ': ' + AMsg + #13#10 +
-          Exception(ExceptObject).Message);
-        end;
-      end;
-    end;
-end;
 
 { TDbWriter }
 
@@ -1449,12 +1178,15 @@ constructor TDbWriter.Create(ADb: TIBDatabase; AParam: TStrings;
   ASql: string);
 begin
   inherited Create(true);
-  fDb := ADb;
-  fIBSQL := CreateIBSql(ADb);
-  fIBSQL.SQL.Text := ASql;
   fParams := TStringList.Create;
   fParams.Assign(AParam);
-  //self.FreeOnTerminate := True;
+
+  fDb := ADb;
+  fIBSQL := CreateIBSql(ADb);
+  fSql := ASql;
+ // fIBSQL.SQL.Text := ASql;
+
+  FreeOnTerminate := True;
   //Resume;
 end;
 
@@ -1494,6 +1226,7 @@ var
   fOk: Boolean;
 begin
   try
+    //WriteLog('Execute', False);
     fIBSQL.Transaction.Active := True;
     //fIBSQL.SQL.Text := fSQL;
     if fParams.Values['CALLFLOW'] = 'in' then
@@ -1501,35 +1234,54 @@ begin
     else
       cf := 1;
 
-    with fIBSQL do
-    begin
-      Transaction.Active := True;
-      ParamByName('CALLFLOW').AsInteger       := cf;
-      ParamByName('CALLID').AsString          := fParams.Values['CallID'];
-      ParamByName('CALLERIDNUM').AsString     := fParams.Values['CallerIDNum'];
-      ParamByName('CALLERIDNAME').AsString    := fParams.Values['CallerIDName'];
-      ParamByName('CALLEDDID').AsString       := fParams.Values['CalledDID'];
-      ParamByName('CALLEREXTENSION').AsString := fParams.Values['CallerExtension'];
-      ParamByName('CALLSTATUS').AsString      := fParams.Values['CallStatus'];
-      ParamByName('CALLEDEXTENSION').AsString := fParams.Values['CalledExtension'];
-      ParamByName('CALLEDNUMBER').AsString    := fParams.Values['CalledNumber'];
-      ParamByName('CALLAPIID').AsString       := fParams.Values['CallAPIID'];
+    //
+    fSql := StringReplace(fSql, ':CALLFLOW', IntToStr(Cf),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLID', QuotedStr(fParams.Values['CallID']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLERIDNUM', QuotedStr(fParams.Values['CALLERIDNUM']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLERIDNAME', QuotedStr(fParams.Values['CALLERIDNAME']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDDID', QuotedStr(fParams.Values['CALLEDDID']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEREXTENSION', QuotedStr(fParams.Values['CALLEREXTENSION']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLSTATUS', QuotedStr(fParams.Values['CALLSTATUS']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDEXTENSION', QuotedStr(fParams.Values['CALLEDEXTENSION']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDNUMBER', QuotedStr(fParams.Values['CALLEDNUMBER']),[rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLAPIID', QuotedStr(fParams.Values['CALLAPIID']),[rfReplaceAll, rfIgnoreCase]);
+    WriteLog('Sql: ' + fSql, false);
 
+    with fIBSQL do
+    try
+      SQL.Text := fSql;
+      Transaction.Active := True;
+      //ParamByName('CALLFLOW').AsInteger       := cf;
+      //ParamByName('CALLID').AsString          := fParams.Values['CallID'];
+      //ParamByName('CALLERIDNUM').AsString     := fParams.Values['CallerIDNum'];
+      //ParamByName('CALLERIDNAME').AsString    := fParams.Values['CallerIDName'];
+      //ParamByName('CALLEDDID').AsString       := fParams.Values['CalledDID'];
+      //ParamByName('CALLEREXTENSION').AsString := fParams.Values['CallerExtension'];
+      //ParamByName('CALLSTATUS').AsString      := fParams.Values['CallStatus'];
+      //ParamByName('CALLEDEXTENSION').AsString := fParams.Values['CalledExtension'];
+      //ParamByName('CALLEDNUMBER').AsString    := fParams.Values['CalledNumber'];
+      //ParamByName('CALLAPIID').AsString       := fParams.Values['CallAPIID'];
+
+      Sleep(100);
+      // WriteLog('Установили Params', False);
+      fOk := False; step := 0;
       while not fOk and (step < 10) do
       Try
+        //WriteLog('Исполняем ' + fibSql.SQL.Text + #13#10 + fParams.Text);
         ExecQuery;
-        fMess := 'Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
-             + fParams.Values['CallStatus'];
+        if Transaction.Active then
+           Transaction.Commit;
+        WriteLog('Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
+             + fParams.Values['CallStatus'], False);
         fOk := True;
-        Synchronize(Log);
       Except
         on E : Exception do
         begin
           if Transaction.Active then
              Transaction.Rollback;
-          fMess := ('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.');
-          Synchronize(Log);
-          fOk := Pos('deadlock', LowerCase(fMess)) = 0;
+          WriteLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.', false);
+
+          fOk := Pos('deadlock', LowerCase(E.Message)) = 0;
           if not fOk then
           begin
             Inc(Step);
@@ -1538,22 +1290,63 @@ begin
         end;
       End;
 
-      if Transaction.Active then
-        try
-           CSectionMsg.Enter;
-           Transaction.Commit;
-        finally
-           CSectionMsg.Leave;
-        end;
+    except
+      WriteLog('Ошибка:' + Exception(ExceptObject).Message, false);
+      //Synchronize(Log);
+
     end;
   finally
     Self.Free;
   end;
+
 end;
 
 procedure TDbWriter.Log;
 begin
-  MF.AddLogMemo(fMess);
+  MF.AddLogMemo(fMess, fMessLock);
+end;
+
+procedure TDbWriter.WriteLog(Amess: string; Ablock: Boolean);
+begin
+  fMess := Amess;
+  fMessLock := Ablock;
+  Synchronize(Log);
+end;
+
+{ TCallSession }
+
+constructor TCallSession.Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer);
+begin
+  inherited Create(false);
+  CallApiId := ACallApiId;
+  Str := AStr;
+  fList := AList;
+  fSeconds := ASecond;
+  FreeOnTerminate := True;
+end;
+
+procedure TCallSession.DeleteSession;
+var
+  ind: Integer;
+begin
+  if LockMutex(EventsMutex, 2000) then
+  try
+    fList.BeginUpdate;
+    ind := fList.IndexOf(CallApiId);
+    if ind > - 1 then
+      fList.Delete(ind);
+  finally
+    fList.EndUpdate;
+    UnLockMutex(EventsMutex);
+  end;
+
+end;
+
+procedure TCallSession.Execute;
+begin
+  Sleep(fSeconds * 1000);
+  DeleteSession;
+  Terminate;
 end;
 
 initialization
@@ -1568,4 +1361,5 @@ finalization
   CloseHandle(LogMutex);
   CloseHandle(MsgMutex);
   CloseHandle(EventsMutex);
+
 end.

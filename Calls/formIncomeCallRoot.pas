@@ -341,14 +341,19 @@ end;
 
 class procedure TfrmIncomeCallRoot.CheckAccept(Sender: TObject);
 begin
+  if not TCallProto(Sender).Active then
+    exit;
+
   with DM.QSessionCheckAct do
   begin
     Close;
-    ParamByName('callid').AsString := TCallProto(Sender).CallInfo.CallId;
+    //ParamByName('callid').AsString := TCallProto(Sender).CallInfo.CallId;
     ParamByName('callapiid').AsString := TCallProto(Sender).CallInfo.CallApiId;
     Open;
 
-    if FieldByName('cnt').AsInteger = 0 then
+    if (RecordCount = 1) and
+       (FieldByName('callid').AsString =
+         TCallProto(Sender).CallInfo.CallId) then
     begin
       TCallProto(Sender).Accepted := True;
       if Assigned(frmCallEvent) then

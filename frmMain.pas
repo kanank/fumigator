@@ -474,7 +474,7 @@ begin
   //if DM.incomeCalling then
   //  Exit;
 
-  CallObj.StartCall(nil);
+  CallObj.StartCall(CallInfo);
   //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
   TfrmIncomeCallRoot.ShowCall;
 end;
@@ -705,11 +705,11 @@ begin
     if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
       exit;
 
-    if CallObj.Callinfo.CallFlow = 'in' then
+    if Callinfo.CallFlow = 'in' then
       PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
     else
       PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
     //DM.Calls_TimerTimer(DM.Calls_Timer);
   end;
 

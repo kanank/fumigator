@@ -349,7 +349,7 @@ begin
   if Assigned(fOnStartCall) then
     fOnStartCall(Self);
 
-  PostMessageToAll(WM_FINISHCALL);
+  PostMessageToAll(WM_STARTCALL);
 end;
 
 { TCallInfo }

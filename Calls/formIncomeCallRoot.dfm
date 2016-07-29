@@ -35,7 +35,6 @@ inherited frmIncomeCallRoot: TfrmIncomeCallRoot
   end
   object CheckTimer: TTimer
     Enabled = False
-    Interval = 500
     OnTimer = CheckTimerTimer
     Left = 224
     Top = 24

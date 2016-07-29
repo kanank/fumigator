@@ -1321,10 +1321,12 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select count(*) as cnt  from sessions'
-      'where callapiid = :callapiid and'
-      '           callid <>:callid and '
-      '           endtime is null')
+      'select distinct callid'
+      'from sessions'
+      'where callapiid=:callapiid and endtime is null and'
+      
+        'exists(select * from sessions where callapiid=:callapiid and end' +
+        'time is not null)')
     Left = 320
     Top = 152
     ParamData = <
@@ -1335,7 +1337,7 @@ object DataModuleMain: TDataModuleMain
       end
       item
         DataType = ftUnknown
-        Name = 'callid'
+        Name = 'callapiid'
         ParamType = ptUnknown
       end>
   end

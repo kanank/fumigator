@@ -88,7 +88,7 @@ begin
   if WaitForSingleObject(hMutex, 0) <> 0 then
   begin
     Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
-    Application.terminate;
+    Application.Terminate;
   end;
 
   Application.CreateForm(TDataModuleMain, DM);

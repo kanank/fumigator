@@ -26,6 +26,15 @@ type
     constructor Create(ADb: TIBDatabase; AParam: TStrings; ASql: string); overload;
     destructor Destroy; override;
   end;
+//                 http://127.0.0.1:45455/calls?callflow=in&CallStatus=CALLING&callid=9467988721.test2&callapiid=5nl3euxysfbpiqavs2zj&CalledExtension=9738*755&CallerIdNum=%2B79104579648
+  TCallSession = class(TThread)
+  protected
+    procedure Excecute: override;
+  public
+    CallApiId: string;
+    Str: string;
+    constructor Create(ACallApiId, AStr: string); overload;
+  end;
 
   TMsgThread = class(TThread)
   protected
@@ -133,7 +142,7 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
   private
-    FActiveUsers: TStringList;
+    fSessions: TStringList;
     procedure AddLog (Logstr :string; ALock: boolean=True);
     Function AddCallEvent(Params :TStrings) :Boolean;
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
@@ -146,10 +155,7 @@ type
     function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
-    function FindClientByPhone(APhone: string; var AclientId: Integer; var AClientType: string): Integer;
-
-    function GetUserSocket(ATelNum: string): TCustomWinSocket;
- //  function CreateRWProc :TIBStoredProc;
+    function FindClientByPhone(ACallApiId: string; APhone: string; var AclientIdType: string): Integer;
 
   public
     CSection: TCriticalSection;
@@ -160,7 +166,7 @@ type
 
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
-    MsgThread: TMsgThread;
+    //MsgThread: TMsgThread;
 
     procedure AddLogMemo(Logstr :string; ALock: Boolean=True);
     function SendMsg(const ANick: String; const AMsg: String) : Boolean;
@@ -262,7 +268,7 @@ begin
         if pos(edtUserId.Text + '*', tel) = 0 then
          begin
            client_id := 0; client_type := '';
-           FindClientByPhone(tel, client_id, client_type);
+           FindClientByPhone(Params.Values['CALLAPIID'], tel, client_type);
 //           if QPhones.Locate('phone', tel, []) then
 //           begin
 //             client_id   := QPhones.FieldByName('client_id').AsInteger;
@@ -273,7 +279,7 @@ begin
              Params.Values['CallID'] + ',' +
              Params.Values['CallAPIID'] + ',' +
              tel + ',' +
-             IntToStr(client_id) + ',' +
+             //IntToStr(client_id) + ',' +
              client_type,
              False)
          end;
@@ -652,15 +658,27 @@ begin
 
 end;
 
-function TMF.FindClientByPhone(APhone: string; var AclientId: Integer; var AClientType: string): Integer;
+function TMF.FindClientByPhone(ACallApiId: string; APhone: string; var AclientIdType: string): Integer;
+var
+  ind: Integer;
 begin
   if LockMutex(EventsMutex, 2000) then
   try
+    ind := fSessions.IndexOfName(ACallApiId);
+    if ind > -1 then
+    begin
+      AclientIDType := fSessions.ValueFromIndex[ind];
+      Exit;
+    end;
+
     if QPhones.Locate('phone', Aphone, []) then
     begin
-      AClientId   := QPhones.FieldByName('client_id').AsInteger;
-      AClientType := QPhones.FieldByName('type_cli').AsString;
-    end;
+      AClientIDType   := QPhones.FieldByName('client_id').AsString + ',' +
+        QPhones.FieldByName('type_cli').AsString;
+      fSessions.Add(ACallApiId + '=' + AClientIdType);
+    end
+    else
+      fSessions.Add(ACallApiId + '=0,');
   finally
     UnlockMutex(EventsMutex);
   end;
@@ -674,7 +692,7 @@ begin
   CSectionCommand   := TCriticalSection.Create;
   CSectionLog       := TCriticalSection.Create;
   CSectionMsg       := TCriticalSection.Create;
-  FActiveUsers      := TStringList.Create;
+  fSessions         := TStringList.Create;
 
   AccessToken := TTelphinToken.Create;
   AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
@@ -690,7 +708,7 @@ begin
   //MsgThread.WaitFor;
   //MsgThread.Free;
 
-  FreeAndNil(FActiveUsers);
+  FreeAndNil(fSessions);
   CSection.Release;
   CSectionFumigator.Release;
   CSectionSocket.Release;
@@ -700,47 +718,6 @@ begin
 
   FreeAndNil(AccessToken);
   FreeAndNil(Caller);
-end;
-
-function TMF.GetUserSocket(ATelNum: string): TCustomWinSocket;
-var
-  i: Integer;
-  f: Boolean;
-  o: TObject;
-begin
-  i := -2;
-  Result := nil;
-  if not Assigned(FActiveUsers) then
-    Exit;
-
-  while i <> -1 do
-  begin
-    Result := nil;
-    i := FActiveUsers.IndexOf(ATelNum);
-    if i = -1 then
-      Break;
-
-    o := FActiveUsers.Objects[i];
-    if Assigned(o) then
-    begin
-      try
-        Result := TCustomWinSocket(o);
-        f := Assigned(Result) and Result.Connected;
-      except
-        f := False;
-      end;
-
-      if f then
-        break
-      else
-        try
-          Result := nil;
-          FActiveUsers.Delete(i);
-        except
-          Result := nil;
-        end;
-    end;
-  end;
 end;
 
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;

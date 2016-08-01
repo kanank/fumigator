@@ -169,9 +169,27 @@ inherited frmMain: TfrmMain
     OnClick = RzMenuButton4Click
     ShowArrow = False
   end
+  object btnReports: TRzMenuButton
+    Left = 205
+    Top = 45
+    Width = 170
+    Height = 31
+    Caption = #1054#1090#1095#1077#1090' 1'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clInactiveCaption
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 7
+    ThemeAware = False
+    ShowArrow = False
+  end
   object NewClientBtn_PUM: TPopupMenu
-    Left = 288
-    Top = 48
+    Left = 120
+    Top = 152
     object NewFizClnt_mi: TMenuItem
       Caption = #1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
       OnClick = NewFizClnt_miClick
@@ -182,8 +200,8 @@ inherited frmMain: TfrmMain
     end
   end
   object Clients_PUM: TPopupMenu
-    Left = 208
-    Top = 48
+    Left = 40
+    Top = 152
     object AllCli_mi: TMenuItem
       Caption = #1054#1073#1097#1080#1081' '#1089#1087#1080#1089#1086#1082
       OnClick = AllCli_miClick

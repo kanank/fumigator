@@ -71,6 +71,7 @@ type
     XPManifest1: TXPManifest;
     Timer1: TTimer;
     mExceptList: TPopupMenu;
+    btnReports: TRzMenuButton;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -777,8 +778,13 @@ begin
     TimeShift := StrToInt(arg) - SecondOfTheDay(DM.DateStart);
     DM.DateStart := IncSecond(DM.DateStart, TimeShift);
     DM.CallS_Q.ParamByName('date_start').AsDateTime := DM.DateStart;
-  end;
+  end
 
+  else
+  if cmd = 'recordinfo' then
+  begin
+    //:argList[0], %s', [Answer]
+  end;
 
 end;
 

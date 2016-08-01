@@ -292,8 +292,8 @@ object MF: TMF
         OnClick = btnPhoneClick
       end
       object Button5: TButton
-        Left = 279
-        Top = 71
+        Left = 275
+        Top = 72
         Width = 130
         Height = 25
         Anchors = [akTop, akRight]

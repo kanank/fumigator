@@ -309,6 +309,22 @@
             <Form>frmEditRegion</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Report\formReportSessions.pas">
+            <Form>frmReportSessions</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\formDbBase.pas">
+            <Form>frmDbBaseForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Report\formCallReport.pas">
+            <Form>frmCallReport</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\formRecordPlay.pas">
+            <Form>frmRecordPlay</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

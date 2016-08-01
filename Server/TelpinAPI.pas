@@ -78,6 +78,7 @@ type
     function TransferCall(Callid, APhone: string): Boolean;
     function PickUpCall(Callid, APhone: string): Boolean;
     function DeleteCall(Callid: string): Boolean;
+    function GetRecordInfo(ACallApiId: string; AExt: string): string;
   end;
 
   TCallListener = class (TTelphinAPIElement)
@@ -237,6 +238,42 @@ begin
   finally
     sStream.Free;
   end;
+end;
+
+function TPhoneCalls.GetRecordInfo(ACallApiId, AExt: string): string;
+var
+  sStream: TStringStream;
+  url: string;
+  json: TJSONObject;
+  json1: TJSONArray;
+begin
+  sStream := TStringStream.Create;
+  try
+    fHttp.Request.Method := 'GET';
+    //fHttp.Request.ContentType := 'application/json';
+    fhttp.Request.CustomHeaders.Clear;
+    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+    url := Format(fBaseUrl + '/uapiext/getrecordinfo/?extension=%s&id=%s', [AExt, ACallApiId]);
+    try
+      fHttp.Get(url, sStream);
+      json := TJSONObject.Create;
+      json.Parse(BytesOf(sStream.DataString), 0);
+      //json1 := TJSONObject.Create;
+      json1 := TJSONObject.ParseJSONValue(json.GetValue('entry').ToString) as TJSONArray;
+      json   := TJSONObject.ParseJSONValue(json1.Items[0].ToString) as TJSONObject;
+      Result := json.GetValue('filename').Value;
+      Result := AnsiDequotedStr(Result, '"');
+    except
+      Result := '#error';
+    end;
+
+  finally
+    sStream.Free;
+    json.Free;
+    json1.Free;
+  end;
+
 end;
 
 function TPhoneCalls.GetStatusCall: Integer;

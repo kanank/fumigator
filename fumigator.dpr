@@ -68,7 +68,11 @@ uses
   formContact in 'Clients\formContact.pas' {frmContact},
   frGoods in 'Frames\frGoods.pas' {FrameGoods: TFrame},
   frWorkerRegions in 'Frames\frWorkerRegions.pas' {FrameWorkerRegions: TFrame},
-  formEditRegion in 'Frames\formEditRegion.pas' {frmEditRegion};
+  formEditRegion in 'Frames\formEditRegion.pas' {frmEditRegion},
+  formReportSessions in 'Report\formReportSessions.pas' {frmReportSessions},
+  formDbBase in 'Classes\formDbBase.pas' {frmDbBaseForm},
+  formCallReport in 'Report\formCallReport.pas' {frmCallReport},
+  formRecordPlay in 'Classes\formRecordPlay.pas' {frmRecordPlay};
 
 {$R *.res}
 var
@@ -91,7 +95,11 @@ begin
     Application.Terminate;
   end;
 
-  Application.CreateForm(TDataModuleMain, DM);
+  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TfrmReportSessions, frmReportSessions);
+  Application.CreateForm(TfrmDbBaseForm, frmDbBaseForm);
+  Application.CreateForm(TfrmCallReport, frmCallReport);
+  Application.CreateForm(TfrmRecordPlay, frmRecordPlay);
   LoadOptions(CfgFileName);
 
   if CheckUpdates then

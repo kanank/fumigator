@@ -125,7 +125,7 @@ type
     procedure AddLog (Logstr :string; ALock: boolean=True);
     Function AddCallEvent(Params :TStrings) :Boolean;
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
-    function SocketCommand(cmd, arg: string): Boolean;
+    function SocketCommand(AContext: TIdContext; cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
     function CreateRWSql :TIBSQL;
 
@@ -145,6 +145,8 @@ type
 
     AccessToken: TTelphinToken;
     Caller: TPhoneCalls;
+
+    AtsUserPrefix: string;
     //MsgThread: TMsgThread;
 
     procedure AddLogMemo(Logstr :string; ALock: Boolean=True);
@@ -474,6 +476,7 @@ end;
 
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
+  AtsUserPrefix := Trim(edtUserId.Text) + '*';
   AccessToken.GetToken;
   AddLogMemo('Получен токен доступа');
 end;
@@ -488,7 +491,7 @@ begin
     Tel_SRV.Bindings[Tel_SRV.Bindings.Count - 1].Port        := TelPort_spin.Value ;
     Tel_SRV.Bindings.DefaultPort := TelPort_spin.Value;
     Tel_SRV.Active := true;
-
+    AtsUserPrefix := Trim(edtUserId.Text) + '*';
   Except
      on  E: Exception do begin
         AddLog('Ошибка запуска службы Call_Events : "' +e.Message+'"');
@@ -542,12 +545,12 @@ end;
 procedure TMF.Button5Click(Sender: TObject);
 var
   i: Integer;
+  s: string;
 begin
-  if not Assigned(Caller) then
-    Exit;
-  i:= Caller.StatusCall;
-  //  Caller := TPhoneCalls.Create(AccessToken);
-  //Caller.SimpleCall('755', '+79104579648');
+  //i:= Caller.StatusCall;
+  if  not Assigned(Caller) then
+    Caller := TPhoneCalls.Create(AccessToken);
+    s := Caller.GetRecordInfo('vs6thtxwkeg4c2dto5wj', AtsUserPrefix + '103');
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
@@ -675,6 +678,7 @@ begin
 
   TCPServer.ContextClass := TMyContext;
 
+  AtsUserPrefix := Trim(edtUserId.Text) + '*';
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -869,10 +873,11 @@ begin
   end;
 end;
 
-function TMF.SocketCommand(cmd, arg: string): Boolean;
+function TMF.SocketCommand(AContext: TIdContext; cmd, arg: string): Boolean;
 var
   p: Integer;
   argList: TStringList;
+  answer: string;
 begin
   argList := TStringList.Create;
   try
@@ -914,6 +919,23 @@ begin
       end;
       Caller.PickUpCall(argList[0], argList[1]);
     end
+
+    else
+    if cmd = 'getrecordinfo' then
+    begin
+      if not Assigned(Caller) then
+        Caller := TPhoneCalls.Create(AccessToken);
+        answer := argList[1];
+        if answer = '' then
+          answer := AtsUserPrefix + TMyContext(AContext).Nick;
+        if (Length(answer) > 0) and (pos('*', answer) = 0) then
+          answer := AtsUserPrefix + answer;
+
+      answer := Caller.GetRecordInfo(argList[0], answer);
+      AContext.Connection.IOHandler.WriteLn(Format('#RecordInfo:argList[0], %s', [Answer]); //номера атс может не быть, поэтому  не SendCommandToUser
+      //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
+    end;
+
   finally
     argList.Free;
   end;
@@ -977,9 +999,11 @@ begin
         end;
       end
       else
-        SocketCommand(cmd, arg);
+        SocketCommand(AContext, cmd, arg);
 
     end;
+
+
   except
 
   end;

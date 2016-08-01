@@ -167,7 +167,7 @@ begin
      (frmCallEvent.ModalResult = mrCancel)) then
     Exit;*)
   //fSessionClose := DM.CheckCloseSession(CallId);
-  if callid = ''  then
+(*  if callid = ''  then
     exit;
 
   DM.CheckSession(CallId, fSessionClose, accept);
@@ -179,7 +179,7 @@ begin
     else
       DoCallCancel;
   end;
-  CallFinish;
+  CallFinish;*)
 end;
 
 procedure TfrmIncomeCallRoot.CheckTimerTimer(Sender: TObject);

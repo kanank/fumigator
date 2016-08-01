@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
@@ -185,6 +187,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 7
     ThemeAware = False
+    OnClick = btnReportsClick
     ShowArrow = False
   end
   object NewClientBtn_PUM: TPopupMenu

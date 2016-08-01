@@ -932,7 +932,7 @@ begin
           answer := AtsUserPrefix + answer;
 
       answer := Caller.GetRecordInfo(argList[0], answer);
-      AContext.Connection.IOHandler.WriteLn(Format('#RecordInfo:argList[0], %s', [Answer]); //номера атс может не быть, поэтому  не SendCommandToUser
+      AContext.Connection.IOHandler.WriteLn(Format('#RecordInfo:%s,%s', [argList[0], Answer])); //номера атс может не быть, поэтому  не SendCommandToUser
       //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
     end;
 

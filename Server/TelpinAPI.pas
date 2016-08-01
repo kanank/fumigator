@@ -260,10 +260,18 @@ begin
       json := TJSONObject.Create;
       json.Parse(BytesOf(sStream.DataString), 0);
       //json1 := TJSONObject.Create;
-      json1 := TJSONObject.ParseJSONValue(json.GetValue('entry').ToString) as TJSONArray;
-      json   := TJSONObject.ParseJSONValue(json1.Items[0].ToString) as TJSONObject;
-      Result := json.GetValue('filename').Value;
-      Result := AnsiDequotedStr(Result, '"');
+      if json.Values['totalResults'].ToString <> '0' then
+      begin
+        json1 := TJSONObject.ParseJSONValue(json.GetValue('entry').ToString) as TJSONArray;
+        if json1 <> nil then
+        begin
+          json   := TJSONObject.ParseJSONValue(json1.Items[0].ToString) as TJSONObject;
+          Result := json.GetValue('filename').Value;
+          Result := AnsiDequotedStr(Result, '"');
+        end;
+      end;
+      if Result = '' then
+        Result := '#not found';
     except
       Result := '#error';
     end;

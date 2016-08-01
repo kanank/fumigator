@@ -95,11 +95,8 @@ begin
     Application.Terminate;
   end;
 
-  Application.CreateForm(TDM, DM);
-  Application.CreateForm(TfrmReportSessions, frmReportSessions);
-  Application.CreateForm(TfrmDbBaseForm, frmDbBaseForm);
-  Application.CreateForm(TfrmCallReport, frmCallReport);
-  Application.CreateForm(TfrmRecordPlay, frmRecordPlay);
+  Application.CreateForm(TDataModuleMain, DM);
+
   LoadOptions(CfgFileName);
 
   if CheckUpdates then

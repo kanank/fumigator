@@ -13,7 +13,7 @@ type
     _DS: TDataSource;
   protected
     function ReadSql: string; virtual;
-    procedure SetSql(Value: string); virtual;
+    procedure SetSql(AValue: string); virtual;
   public
     property Sql: string read ReadSql write SetSql;
   end;

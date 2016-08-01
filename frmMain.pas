@@ -98,6 +98,7 @@ type
     procedure TCPClientConnected(Sender: TObject);
     procedure TCPClientDisconnected(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnReportsClick(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
@@ -138,7 +139,8 @@ uses
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
-  CommonVars, CommonFunc, formWorkerShedule;
+  CommonVars, CommonFunc, formWorkerShedule, formCallReport,
+  formRecordPlay;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -451,6 +453,18 @@ begin
   FreeAndNil(frmClients);
 end;
 
+procedure TfrmMain.btnReportsClick(Sender: TObject);
+begin
+  frmCallReport := TfrmCallReport.Create(nil);
+  if Assigned(frmCallReport) then
+  try
+    frmCallReport.ShowModal;
+  finally
+    frmCallReport.Free;
+  end;
+
+end;
+
 procedure TfrmMain.UrClients_miClick(Sender: TObject);
 begin
   if not DM.Clients.Active then
@@ -630,7 +644,7 @@ begin
   if Copy(s, 1, 1) = '#' then
   begin
     p := Pos(':', s);
-    cmd := Copy(s, 2, p - 2);
+    cmd := LowerCase(Copy(s, 2, p - 2));
     arg := Copy(s, p + 1, Length(s));
   end;
 
@@ -783,7 +797,21 @@ begin
   else
   if cmd = 'recordinfo' then
   begin
-    //:argList[0], %s', [Answer]
+    if Assigned(frmRecordPlay) then
+    begin
+      argList := TStringList.Create;
+      try
+        s := '';
+        arglist.Delimiter := ',';
+        argList.DelimitedText := arg;
+        if frmRecordPlay.CallApiId = argList[0] then
+          frmRecordPlay.FileName := argList[1];
+      finally
+        argList.free;
+      end;
+    end;
+
+
   end;
 
 end;

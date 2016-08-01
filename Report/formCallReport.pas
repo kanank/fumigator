@@ -53,11 +53,20 @@ type
     GridViewColumn5: TcxGridDBColumn;
     GridViewColumn11: TcxGridDBColumn;
     GridLevel1: TcxGridLevel;
+    GridViewColumn12: TcxGridDBColumn;
+    pnlForm: TPanel;
+    GridViewColumn13: TcxGridDBColumn;
     procedure RzButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure _QueryFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+    procedure cmbRegionPropertiesChange(Sender: TObject);
+    procedure GridViewFocusedRecordChanged(Sender: TcxCustomGridTableView;
+      APrevFocusedRecord, AFocusedRecord: TcxCustomGridRecord;
+      ANewItemRecordFocusingChanged: Boolean);
   private
-    { Private declarations }
+    fInQuery: Boolean;
+    procedure SetFilter;
   public
     frmPlay: TfrmRecordPlay;
   end;
@@ -72,10 +81,21 @@ implementation
 uses
   DM_Main;
 
+procedure TfrmCallReport.cmbRegionPropertiesChange(Sender: TObject);
+begin
+  inherited;
+  SetFilter;
+end;
+
 procedure TfrmCallReport.FormCreate(Sender: TObject);
 begin
   inherited;
-  frmPlay := TfrmRecordPlay.Create(nil);
+  frmRecordPlay := TfrmRecordPlay.Create(nil);
+  frmPlay := frmRecordPlay;
+  frmPlay.parent := pnlForm;
+  pnlForm.Visible := False;
+  edtTimeStart.Date := Date;
+  edtTimeEnd.Date   := edtTimeStart.Date;
 end;
 
 procedure TfrmCallReport.FormDestroy(Sender: TObject);
@@ -85,9 +105,41 @@ begin
 
 end;
 
+procedure TfrmCallReport.GridViewFocusedRecordChanged(
+  Sender: TcxCustomGridTableView; APrevFocusedRecord,
+  AFocusedRecord: TcxCustomGridRecord; ANewItemRecordFocusingChanged: Boolean);
+var
+  ColumnId: Integer;
+  Cellvalue : variant;
+begin
+  if fInQuery or not GridView.Focused then
+    Exit;
+  pnlForm.Top  := Grid.Top + GridViewColumn5.FocusedCellViewInfo.RealBounds.Top + 1;
+  pnlForm.Left := GridViewColumn5.FocusedCellViewInfo.RealBounds.Left + 1;
+  ColumnID     := GridView.GetColumnByFieldName('CALLAPIID').Index;
+  Cellvalue    := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnID];
+  frmPlay.CallApiId := GridViewColumn5 .FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
+  frmPlay.ext  := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  frmPlay.FileName  := '';
+  frmPlay.Width  := GridViewColumn5.Width;
+  frmPlay.Height := GridViewColumn5.FocusedCellViewInfo.Height-2;
+  pnlForm.Width  := frmPlay.Width;
+  pnlForm.Height := frmPlay.Height;
+  frmPlay.Top := 0;
+  frmPlay.Left := 0;
+  frmPlay.Visible := True;
+  pnlForm.Visible := True;
+  pnlForm.BringToFront;
+  frmPlay.BringToFront;
+end;
+
 procedure TfrmCallReport.RzButton1Click(Sender: TObject);
 begin
+  fInQuery := True;
   _Query.Close;
+  _Query.Filtered := False;
+
   DM.GetDataset(DM.Clients);
 
   if _Query.Transaction.Active then
@@ -95,7 +147,38 @@ begin
 
   _Query.ParamByName('date1').AsDateTime := edtTimeStart.Date;
   _Query.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
-  _Query.Open;
+   try
+     _Query.Open;
+     SetFilter;
+     frmPlay.BorderIcons := [];
+     frmPlay.BorderStyle := bsNone;
+     //frmPlay.Visible := True;
+     fInQuery := False;
+     GridViewColumn1.Selected := True;
+     pnlForm.Visible := (_Query.RecordCount > 0);
+   except
+     frmPlay.Hide;
+     fInQuery := False;
+   end;
+
+end;
+
+procedure TfrmCallReport.SetFilter;
+begin
+  _Query.Filtered := False;
+  _Query.Filtered := True;
+end;
+
+procedure TfrmCallReport._QueryFilterRecord(DataSet: TDataSet;
+  var Accept: Boolean);
+begin
+  Accept := cmbRegion.EditValue = null;
+  if not Accept then
+    Accept := DataSet.FieldByName('region_id').AsInteger =
+        cmbRegion.EditValue;
+
+
+
 end;
 
 end.

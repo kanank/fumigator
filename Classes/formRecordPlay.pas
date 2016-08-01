@@ -20,19 +20,22 @@ uses
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  dxGDIPlusClasses, cxImage;
+  dxGDIPlusClasses, cxImage, Vcl.MPlayer, RzButton, Vcl.ExtCtrls;
 
 type
   TfrmRecordPlay = class(TForm)
-    WavePlayer: TJvWavePlayer;
+    MediaPlayer: TMediaPlayer;
+    Image1: TImage;
     FtpClient: TIdFTP;
-    cxImage1: TcxImage;
-    procedure cxImage1Click(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
   private
-    fFileName:string;
 
   public
-    { Public declarations }
+    CallApiId: string;
+    ext: string;
+    FileName: string;
+    procedure GetFileName;
+    function  GetFileFromFtp: Boolean;
   end;
 
 var
@@ -41,11 +44,95 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  frmMain, IdFTPCommon;
 
-procedure TfrmRecordPlay.cxImage1Click(Sender: TObject);
+
+function TfrmRecordPlay.GetFileFromFtp: Boolean;
+var
+  dir: string;
+  p: Integer;
+  err0: WideString;
+  err: string;
 begin
-  //WavePlayer.FileName
-  WavePlayer.Play;
+  try
+    dir := ext;
+    p := Pos('*', dir);
+    if p > 0 then
+      dir := Copy(dir, p+1, Length(dir));
+
+    if FileExists(ExtractFilePath(Application.ExeName) + FileName + '.wav') then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    FtpClient.Username := 'NOE02497';
+    FtpClient.Password := 'passuxah0xohBe';
+    FtpClient.Connect;
+    FtpClient.TransferType := ftASCII;
+    FtpClient.ChangeDir(dir);
+    FtpClient.TransferType := ftBinary;
+    FtpClient.Get(FileName + '.WAV', ExtractFilePath(Application.ExeName) + FileName + '.WAV', True);
+    Result := True;
+  except
+    err0 :=  (Exception(ExceptObject).Message);
+    err := WideCharToString(PWideChar(err0));
+    Result := false;
+    if FtpClient.Connected then
+      FtpClient.Disconnect;
+  end;
+end;
+
+procedure TfrmRecordPlay.GetFileName;
+var
+  cnt: Integer;
+begin
+  formMain.TCPClient.IOHandler.WriteLn(Format('#getrecordinfo:%s,%s', [CallApiId, ext]));
+
+  while (FileName = '') and (cnt < 50) do
+  begin
+    Sleep(200);
+    Application.ProcessMessages;
+    Inc(cnt);
+  end;
+
+  if cnt = 50 then
+  begin
+    FileName := '#no response';
+    ShowMessage('Не удалось получить параметры звукового файла');
+  end;
+
+  if FileName = '#not found' then
+    ShowMessage('Не найдена запись');
+  if FileName = '#error' then
+    ShowMessage('Ошибка получения записи');
+
+end;
+
+procedure TfrmRecordPlay.Image1Click(Sender: TObject);
+begin
+  if Assigned(Self.Parent) then
+    TForm(Parent.Owner).Enabled := False;
+  try
+    GetFileName;
+
+    if GetFileFromFtp then
+    begin
+      MediaPlayer.FileName := ExtractFilePath(Application.ExeName) + FileName + '.wav';
+      MediaPlayer.Open;
+      MediaPlayer.Play;
+      MediaPlayer.Close;
+    end
+    else
+    begin
+      MessageBox(0, 'Произошла ошибка получения звукового файла', 'Фумигатор', MB_ICONERROR);
+    end;
+
+  finally
+    if Assigned(Self.Parent) then
+      TForm(Parent.Owner).Enabled := true;
+  end;
 end;
 
 end.

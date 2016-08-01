@@ -34,22 +34,6 @@ type
     edtTimeEnd: TcxDateEdit;
     cmbRegion: TcxLookupComboBox;
     Label2: TLabel;
-    DS: TDataSource;
-    Q: TIBQuery;
-    Grid: TcxGrid;
-    GridView: TcxGridDBTableView;
-    GridViewColumn1: TcxGridDBColumn;
-    GridViewColumn2: TcxGridDBColumn;
-    GridViewColumn8: TcxGridDBColumn;
-    GridViewColumn3: TcxGridDBColumn;
-    GridViewColumn7: TcxGridDBColumn;
-    GridViewColumn9: TcxGridDBColumn;
-    GridViewColumn10: TcxGridDBColumn;
-    GridViewColumn6: TcxGridDBColumn;
-    GridViewColumn4: TcxGridDBColumn;
-    GridViewColumn5: TcxGridDBColumn;
-    GridViewColumn11: TcxGridDBColumn;
-    GridLevel1: TcxGridLevel;
   private
     { Private declarations }
   public

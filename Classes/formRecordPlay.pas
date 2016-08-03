@@ -25,9 +25,11 @@ uses
 type
   TfrmRecordPlay = class(TForm)
     MediaPlayer: TMediaPlayer;
-    Image1: TImage;
+    btnPlay: TImage;
     FtpClient: TIdFTP;
-    procedure Image1Click(Sender: TObject);
+    btnStop: TImage;
+    procedure btnPlayClick(Sender: TObject);
+    procedure btnStopClick(Sender: TObject);
   private
 
   public
@@ -110,7 +112,7 @@ begin
 
 end;
 
-procedure TfrmRecordPlay.Image1Click(Sender: TObject);
+procedure TfrmRecordPlay.btnPlayClick(Sender: TObject);
 begin
   if Assigned(Self.Parent) then
     TForm(Parent.Owner).Enabled := False;
@@ -119,10 +121,11 @@ begin
 
     if GetFileFromFtp then
     begin
+      MediaPlayer.Close;
       MediaPlayer.FileName := ExtractFilePath(Application.ExeName) + FileName + '.wav';
       MediaPlayer.Open;
       MediaPlayer.Play;
-      MediaPlayer.Close;
+      btnStop.Visible := True;
     end
     else
     begin
@@ -133,6 +136,12 @@ begin
     if Assigned(Self.Parent) then
       TForm(Parent.Owner).Enabled := true;
   end;
+end;
+
+procedure TfrmRecordPlay.btnStopClick(Sender: TObject);
+begin
+  MediaPlayer.Stop;
+  btnStop.Visible := False;
 end;
 
 end.

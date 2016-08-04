@@ -33,6 +33,8 @@ type
     procedure SetCallResult(AValue: string);
     procedure SetClientCallPrm(AValue: ClientCallParams);
     procedure doFinishCall; override;
+    procedure doAcceptCall; override;
+
   public
     property CallResult: string read fCallResult write SetCallResult;
     property CallId: string read fCallId write fCallId;
@@ -107,13 +109,23 @@ begin
 end;
 
 procedure TfrmIncomeCallRoot.CallFinish;
+var
+  mr: TModalResult;
 begin
- if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
- begin
-     if Assigned(frmCallUnknown) then
+  if CallObj.Accepted then
+    mr := mrOk
+  else
+    mr := mrCancel;
+  if Assigned(frmCallEvent) then
+    frmCallEvent.ModalResult := mr;
+
+
+  if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
+  begin
+    if Assigned(frmCallUnknown) then
     begin
-      frmCallUnknown.CloseAbsolute;
-      //frmCallUnknown.Free;
+      //frmCallUnknown.CloseAbsolute;
+      frmCallUnknown.HideAbsolute;
     end;
     if Assigned(frmIncomeCall) then
     begin
@@ -128,12 +140,14 @@ begin
     if Assigned(frmContact) then
       frmContact.CloseAbsolute;
 
+    ModalResult := mrCancel;
+    Exit;
  end;
 
   if Callobj.Cancelled and not CallObj.Accepted then
   begin
-    if Assigned(frmCallEvent) then
-      frmCallEvent.ModalResult := mrCancel;
+   // if Assigned(frmCallEvent) then
+   //   frmCallEvent.ModalResult := mrCancel;
 
     ModalResult := mrCancel;
     Exit;
@@ -189,6 +203,13 @@ begin
     CheckTimer.Enabled := false;
 end;
 
+procedure TfrmIncomeCallRoot.doAcceptCall;
+begin
+  inherited;
+  if Assigned(frmCallEvent) then
+    frmCallEvent.ModalResult := mrOk;
+end;
+
 procedure TfrmIncomeCallRoot.FormShow(Sender: TObject);
 begin
   if not CallObj.Active then
@@ -218,7 +239,8 @@ procedure TfrmIncomeCallRoot.SetClientClose(AValue: boolean);
 begin
   if AValue <> fClientClose then
     fClientClose := AValue;
-  CallFinish;
+  if AValue then
+    CallFinish;
 end;
 
 class function TfrmIncomeCallRoot.ShowCall: Boolean;
@@ -390,7 +412,8 @@ begin
        end;
    end;
   finally
-    frmCallUnknown.Free;
+    //frmCallUnknown.Free;
+    frmCallUnknown.Hide;
   end
   else
   begin
@@ -418,7 +441,7 @@ end;
 procedure TfrmIncomeCallRoot.Timer2Timer(Sender: TObject);
 begin
   Timer2.Enabled := False;
-  CheckTimer.Enabled := true;
+  //CheckTimer.Enabled := true;
 
   frmCallEvent := TfrmCallEvent.Create(nil);
 

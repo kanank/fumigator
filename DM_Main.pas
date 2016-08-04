@@ -501,6 +501,7 @@ end;
 
 function TDataModuleMain.ShowUnknownCallForm(APhone: string; AFreeForm: boolean=True): FormResult;
 begin
+  if not Assigned(frmCallUnknown) then
   frmCallUnknown := TfrmCallUnknown.Create(nil);
   try
     frmCallUnknown.CloseOnCancelCall := True;
@@ -509,7 +510,9 @@ begin
     Result.ModalRes := frmCallUnknown.ModalResult;
   finally
     if AFreeForm then
-      FreeAndNil(frmCallUnknown);
+      FreeAndNil(frmCallUnknown)
+    else
+      frmCallUnknown.Hide;
   end;
 end;
 

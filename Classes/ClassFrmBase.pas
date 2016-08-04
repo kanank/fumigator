@@ -11,6 +11,8 @@ const
   AppCaption = 'Первая фумигационная компания';
 
 type
+  TBooleanFunc = function(Sender: TObject): boolean;
+type
   TBaseForm = class(TForm)
     img1: TImage;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -19,6 +21,8 @@ type
   protected
     fCloseOnCancelCall: boolean; //закрывать при отмене звонка
     fCanClose: Boolean;
+    fHideOnClose: boolean; //скрывать при закрытии
+    fOnCalcHideOnClose: TBooleanFunc; //событие
     fTitle: string;
     fFrmParam: TFrmCreateParam;
     fNonValidateList: TStringList;
@@ -26,21 +30,28 @@ type
     procedure SetNonValidate(Alist: string);
     function Validate(ADataSource: TDataSource): Boolean;
     procedure WmStartCall(var Msg: TMessage); message WM_STARTCALL;
-    procedure WmSFinishCall(var Msg: TMessage); message WM_FINISHCALL;
+    procedure WmFinishCall(var Msg: TMessage); message WM_FINISHCALL;
+    procedure WmAcceptCall(var Msg: TMessage); message WM_ACCEPTCALL;
     procedure DoStartCall; virtual;
     procedure DoFinishCall; virtual;
+    procedure DoAcceptCall; virtual;
 
+    function CalcHideOnClose: boolean; virtual;
   public
+    property OnCalcHideOnClose: TBooleanFunc read fOnCalcHideOnClose write fOnCalcHideOnClose;
+
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
     class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil; AValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
     destructor Destroy; overload;
     procedure SetValidateList(Alist: string);
     procedure CloseAbsolute; //закрыть, не смотря CanClose
+    procedure HideAbsolute; //скрыть
     procedure PostMessageToAll(AMsg: TMessage);
   published
     property Title: string read fTitle write SetCaption;
     property CanClose: Boolean read fCanClose write fCanClose;
     property CloseOnCancelCall: Boolean read fCloseOnCancelCall write fCloseOnCancelCall;
+    property HideOnClose: boolean read CalcHideOnClose;
   end;
 
 
@@ -49,6 +60,14 @@ implementation
 {$R *.dfm}
 uses
   System.TypInfo, IBX.IBQuery, cxDBEdit, cxDBLookupComboBox, frameBase;
+
+function TBaseForm.CalcHideOnClose: boolean;
+begin
+  if Assigned(fOnCalcHideOnClose)then
+    Result := fOnCalcHideOnClose(self)
+  else
+    Result := fHideOnClose;
+end;
 
 procedure TBaseForm.CloseAbsolute;
 begin
@@ -79,6 +98,11 @@ begin
   fValidateList.Free;
 end;
 
+procedure TBaseForm.DoAcceptCall;
+begin
+
+end;
+
 procedure TBaseForm.DoFinishCall;
 begin
   if fCloseOnCancelCall and CallObj.Cancelled then
@@ -95,9 +119,19 @@ procedure TBaseForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   CanClose := fCanClose;
   if not CanClose then
-  begin
     Exit;
-  end;
+
+  CanClose := not HideOnClose;
+
+  if HideOnClose then
+    Hide;
+end;
+
+procedure TBaseForm.HideAbsolute;
+begin
+  Hide;
+  if fsModal in FormState then
+    ModalResult := mrCancel;
 end;
 
 procedure TBaseForm.PostMessageToAll(AMsg: TMessage);
@@ -201,7 +235,12 @@ begin
 end;
 
 
-procedure TBaseForm.WmSFinishCall(var Msg: TMessage);
+procedure TBaseForm.WmAcceptCall(var Msg: TMessage);
+begin
+  DoAcceptCall;
+end;
+
+procedure TBaseForm.WmFinishCall(var Msg: TMessage);
 begin
   DoFinishCall;
 end;

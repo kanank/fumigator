@@ -112,6 +112,8 @@ type
     procedure AppException(Sender: TObject; E: Exception);
 
     procedure OnCallFinish(Sender: TObject);
+
+    function GetHideOnCloseForAll(Sender: tObject): Boolean; // для расчета HideOnClose
   end;
 
 procedure LoadOptions(AIniFile: string);
@@ -140,7 +142,7 @@ uses
   formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
   CommonVars, CommonFunc, formWorkerShedule, formCallReport,
-  formRecordPlay;
+  formRecordPlay, formCallUnknown;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -295,6 +297,11 @@ begin
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')' + ' [вер.: ' + FileVersion(Application.ExeName) + ']';
   DoSocketConnect;
+end;
+
+function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
+begin
+  Result := CanClose;
 end;
 
 procedure TfrmMain.miExitClick(Sender: TObject);
@@ -726,8 +733,9 @@ begin
       PostMessage(formMain.Handle, WM_SHOWOUTCOMECALL, 0,0);
     //Application.ProcessMessages;
     //DM.Calls_TimerTimer(DM.Calls_Timer);
-  end;
+  end
 
+  else
   if (cmd = 'finishcall') then //завершен звонок
   begin
     argList := TStringList.Create;
@@ -738,12 +746,20 @@ begin
       if argList.Count > 2 then
        s := argList[2];
     finally
-      if CallObj.CallInfo.CallId <> argList[0] then
+      if CallObj.Ready and
+        (CallObj.CallInfo.CallId <> argList[0]) then
         CallObj.CallInfo.CallId := argList[0];
       argList.free;
     end;
 
     CallObj.FinishCall(s);
+  end
+
+  else
+  if (cmd = 'callaccepted') then //завершен звонок
+  begin
+    if CallObj.CallInfo.CallId = arg then
+      CallObj.Accepted := True;
   end
 
   else
@@ -862,9 +878,12 @@ initialization
   CallObj := TCallProto.Create;
   CallInfo := TCallInfo.Create;
 
+  frmCallUnknown := TfrmCallUnknown.Create(nil);
+
 finalization
   CloseHandle(hMutex);
   FreeAndNil(CallObj);
   FreeAndNil(CallInfo);
 
+  FreeAndNil(frmCallUnknown);
 end.

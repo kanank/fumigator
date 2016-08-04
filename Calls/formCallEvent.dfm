@@ -77,5 +77,6 @@ object frmCallEvent: TfrmCallEvent
     Font.Style = []
     ParentFont = False
     TabOrder = 1
+    OnClick = btnDeclineClick
   end
 end

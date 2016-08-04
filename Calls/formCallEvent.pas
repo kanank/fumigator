@@ -14,6 +14,7 @@ type
     btnDecline: TRzButton;
     Shape1: TShape;
     procedure FormShow(Sender: TObject);
+    procedure btnDeclineClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,7 +29,14 @@ implementation
 {$R *.dfm}
 
 uses
-  formIncomeCallRoot, formIncomeCalls;
+  formIncomeCallRoot, formIncomeCalls, frmMain, CommonVars,
+  DM_Main;
+
+procedure TfrmCallEvent.btnDeclineClick(Sender: TObject);
+begin
+  formMain.TCPClient.IOHandler.WriteLn(Format('#calldelete:%s,%s',
+     [CallObj.CallInfo.CallApiId, DM.CurrentUserSets.ATS_Phone_Num]));
+end;
 
 procedure TfrmCallEvent.FormShow(Sender: TObject);
 begin

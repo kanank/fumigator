@@ -39,6 +39,10 @@ type
     fCallIdList: TStringList;
     fCallId: string;
     fAts: string;
+    fMess: string;
+    fMessLock: Boolean;
+    procedure Log;
+    procedure WriteLog(Amess: string; Ablock: Boolean = True);
     procedure Execute; override;
     procedure DeleteSession;
     procedure StartCall(CallId: string; ats: string);
@@ -252,11 +256,11 @@ begin
   if userid <> edtUserId.Text then //только нужную АТС отсекаем
     Exit;
 
-  (*0408 if not DB.Connected then
-    Exit;
+  //if not DB.Connected then
+  //  Exit;
 
   with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
-    Start; *)
+    Start;
 
     if Params.Values['CallStatus'] = 'CALLING' then
     begin
@@ -655,7 +659,7 @@ function TMF.EndCall(ACallApiId, ACallId: string): boolean;
 var
   ind: Integer;
 begin
- if LockMutex(EventsMutex, 2000) then
+ if LockMutex(EventsMutex, 1000) then
   try
     ind := fSessions.IndexOf(ACallApiId);
     if ind > -1 then
@@ -943,7 +947,10 @@ begin
         Caller.OnAfterCall  := AfterOutcomCall;
        // Caller.OnCallFinish := CallFinished;
       end;
-      Caller.DeleteCall(argList[0]);
+      answer := argList[1];
+      if (Length(answer) > 0) and (pos('*', answer) = 0) then
+        answer := AtsUserPrefix + answer;
+      Caller.DeleteCall(argList[0], answer);
     end
 
     else
@@ -1122,7 +1129,7 @@ begin
     DBStatus_lbl.Caption := 'Установлено';
     DBStatus_lbl.Font.Color := $00408000;
 
-    IBEvents.RegisterEvents;
+    //IBEvents.RegisterEvents;
     QPhones.Open;
   end;
 
@@ -1310,7 +1317,7 @@ begin
     fSql := StringReplace(fSql, ':CALLEDEXTENSION', QuotedStr(fParams.Values['CALLEDEXTENSION']),[rfReplaceAll, rfIgnoreCase]);
     fSql := StringReplace(fSql, ':CALLEDNUMBER', QuotedStr(fParams.Values['CALLEDNUMBER']),[rfReplaceAll, rfIgnoreCase]);
     fSql := StringReplace(fSql, ':CALLAPIID', QuotedStr(fParams.Values['CALLAPIID']),[rfReplaceAll, rfIgnoreCase]);
-    WriteLog('Sql: ' + fSql, false);
+    //WriteLog('Sql: ' + fSql, false);
 
     with fIBSQL do
     try
@@ -1336,8 +1343,8 @@ begin
         ExecQuery;
         if Transaction.Active then
            Transaction.Commit;
-        WriteLog('Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
-             + fParams.Values['CallStatus'], False);
+        //WriteLog('Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
+        //     + fParams.Values['CallStatus'], False);
         fOk := True;
       Except
         on E : Exception do
@@ -1419,7 +1426,7 @@ var
   ind: Integer;
   ats: string;
 begin
-  if LockMutex(CallMutex, 1000) then
+  //if LockMutex(CallMutex, 1000) then
   try
     ind := fCallIdList.IndexOfName(CallId);
     if ind = -1 then
@@ -1429,7 +1436,7 @@ begin
     if not fStarted then
       fStarted := True;
   finally
-    UnlockMutex(CallMutex);
+    //UnlockMutex(CallMutex);
   end;
 end;
 
@@ -1440,37 +1447,52 @@ begin
 
     while not Terminated and (fCallIdList.Count > 0) do
     begin
-      if not fAcceepted and (fCallIdList.Count = 1) then //остался один звонок
+      if not fAccepted and (fCallIdList.Count = 1) then //остался один звонок
       begin
         Sleep(300); //контрольное ожидание
         if fCallIdList.Count = 0 then
           exit;
+        fAccepted := True;
         fCallId := fCallIdList.Names[0];
         fAts := fCallIdList.ValueFromIndex[0];
         Synchronize(SendMess);
       end;
 
-      if fCallIdList.Count = 0 then
-      begin
-        DeleteSession;
-        Terminate;
-      end;
+  end;
+
+  if fCallIdList.Count = 0 then
+  begin
+    DeleteSession;
+    Terminate;
   end;
 end;
 
 procedure TCallSession.SendMess;
 begin
-   MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]));
+   WriteLog(Format('Accepted: %s %s', [fCallId, fats]), false);
+   MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]), False);
 end;
 
 procedure TCallSession.StartCall(CallId, ats: string);
 begin
-  if LockMutex(CallMutex, 1000) then
+  //if LockMutex(CallMutex, 1000) then
   try
     fCallIdList.Add(CallId + '=' + ats);
   finally
-    UnlockMutex(CallMutex);
+    //UnlockMutex(CallMutex);
   end;
+end;
+
+procedure TCallSession.Log;
+begin
+  MF.AddLogMemo(fMess, fMessLock);
+end;
+
+procedure TCallSession.WriteLog(Amess: string; Ablock: Boolean);
+begin
+  fMess := Amess;
+  fMessLock := Ablock;
+  Synchronize(Log);
 end;
 
 initialization

@@ -8,6 +8,7 @@ uses
 const
   WM_STARTCALL  = WM_USER + 200;
   WM_FINISHCALL = WM_USER + 201;
+  WM_ACCEPTCALL = WM_USER + 202;
 
 type TClientType = (clFiz, clUr);
 type TTrayView =(trayNormal, trayMissed);
@@ -66,6 +67,7 @@ type
     procedure StartCall(ACallInfo: TCallInfo); overload;
 
     procedure FinishCall(ACallResult: string);
+    procedure AcceptCall(ACallId: string);
 
 
 end;
@@ -234,6 +236,13 @@ begin
 end;
 
 { TCallPcroto }
+procedure TCallProto.AcceptCall(ACallId: string);
+begin
+  if ACallId <> Self.CallInfo.CallId then
+    Exit;
+
+end;
+
 constructor TCallProto.Create;
 begin
   inherited Create;
@@ -294,7 +303,7 @@ begin
   begin
     if Assigned(fOnAcceptCall) then
       fOnAcceptCall(self);
-    //fTimer.Enabled := false;
+      PostMessageToAll(WM_ACCEPTCALL);
   end;
 
 end;

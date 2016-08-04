@@ -77,7 +77,7 @@ type
     function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
     function TransferCall(Callid, APhone: string): Boolean;
     function PickUpCall(Callid, APhone: string): Boolean;
-    function DeleteCall(Callid: string): Boolean;
+    function DeleteCall(ACallApiId: string; APhone: string): Boolean;
     function GetRecordInfo(ACallApiId: string; AExt: string): string;
   end;
 
@@ -212,7 +212,7 @@ end;
 
 { TPhoneCalls }
 
-function TPhoneCalls.DeleteCall(Callid: string): Boolean;
+function TPhoneCalls.DeleteCall(ACallApiId: string; APhone: string): Boolean;
 var
   sStream: TStringStream;
   sResponse: string;
@@ -227,7 +227,7 @@ begin
     fhttp.Request.CustomHeaders.Clear;
     fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
-    url := fBaseUrl + '/uapi/phoneCalls/@me/@self/' + CallId;
+    url := fBaseUrl + Format('/uapi/phoneCalls/@me/%s/%s', [APhone, ACallApiId]);
     try
       fHttp.Delete(url, sStream);
     except

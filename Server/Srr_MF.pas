@@ -31,14 +31,24 @@ type
 //                 http://127.0.0.1:45455/calls?callflow=in&CallStatus=CALLING&callid=9467988721.test2&callapiid=5nl3euxysfbpiqavs2zj&CalledExtension=9738*755&CallerIdNum=%2B79104579648
   TCallSession = class(TThread)
   protected
+    fStartTime: TDateTime;
+    fStarted: Boolean;
+    fAccepted: Boolean;
     fSeconds: Integer;
     fList: TStringList;
+    fCallIdList: TStringList;
+    fCallId: string;
+    fAts: string;
     procedure Execute; override;
     procedure DeleteSession;
+    procedure StartCall(CallId: string; ats: string);
+    procedure EndCall(CallId: string);
+    procedure SendMess;
   public
     CallApiId: string;
     Str: string;
     constructor Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer); overload;
+    destructor Destroy; overload;
   end;
 
 
@@ -102,6 +112,7 @@ type
     QPhones: TIBQuery;
     Button7: TButton;
     Button8: TButton;
+    Button9: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -120,6 +131,7 @@ type
     procedure TCPServerExecute(AContext: TIdContext);
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
   private
     fSessions: TStringList;
     procedure AddLog (Logstr :string; ALock: boolean=True);
@@ -134,8 +146,8 @@ type
     function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
-    function FindClientByPhone(ACallApiId: string; APhone: string; var AclientIdType: string): Integer;
-
+    function FindClientByPhone(ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+    function EndCall(ACallApiId, ACallId: string): boolean;
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -162,6 +174,7 @@ var
   LogMutex: THandle;
   MsgMutex: THandle;
   EventsMutex: THandle;
+  CallMutex: THandle;
   CSectionMsg: TCriticalSection;
 
 implementation
@@ -239,23 +252,19 @@ begin
   if userid <> edtUserId.Text then //только нужную АТС отсекаем
     Exit;
 
-  if not DB.Connected then
+  (*0408 if not DB.Connected then
     Exit;
 
   with TDbWriter.Create(DB, Params, CallEnent_Q.SQL.Text) do
-    Start;
+    Start; *)
 
     if Params.Values['CallStatus'] = 'CALLING' then
     begin
       if pos(edtUserId.Text + '*', tel) = 0 then
        begin
          client_id := 0; client_type := '';
-         FindClientByPhone(Params.Values['CALLAPIID'], tel, client_type);
-  //           if QPhones.Locate('phone', tel, []) then
-  //           begin
-  //             client_id   := QPhones.FieldByName('client_id').AsInteger;
-  //             client_type := QPhones.FieldByName('type_cli').AsString;
-  //           end;
+         FindClientByPhone(Params.Values['CALLID'], Params.Values['CALLAPIID'], tel, ats, client_type);
+
          MF.SendCommandToUser(ats, '#startcall:' +
            Params.Values['CALLFLOW'] + ',' +
            Params.Values['CallID'] + ',' +
@@ -270,11 +279,14 @@ begin
     else  //окончание звонка
     begin
       if (Cf = 0) or ((Cf = 1) and (pos(edtUserId.Text + '*', tel) = 0)) then
+      begin
         MF.SendCommandToUser(ats, '#finishcall:' +
           Params.Values['CallID'] + ',' +
           Params.Values['CallAPIID'] + ',' +
           Params.Values['CallStatus'],
           False);
+        EndCall(Params.Values['CallAPIID'], Params.Values['CallID']);
+      end;
     end;
 
 
@@ -575,6 +587,11 @@ begin
   ShowMessage('Кол-во соединений: ' + IntToStr(TCPServer.Contexts.Count));
 end;
 
+procedure TMF.Button9Click(Sender: TObject);
+begin
+  Log_memo.Clear;
+end;
+
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
@@ -634,29 +651,53 @@ begin
 
 end;
 
-function TMF.FindClientByPhone(ACallApiId: string; APhone: string; var AclientIdType: string): Integer;
+function TMF.EndCall(ACallApiId, ACallId: string): boolean;
 var
   ind: Integer;
+begin
+ if LockMutex(EventsMutex, 2000) then
+  try
+    ind := fSessions.IndexOf(ACallApiId);
+    if ind > -1 then
+    begin
+      TCallSession(fSessions.Objects[ind]).EndCall(ACallId);
+      Exit;
+    end;
+  finally
+    UnLockMutex(EventsMutex);
+  end;
+end;
+
+function TMF.FindClientByPhone(ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+var
+  ind: Integer;
+  CallObj: TCallSession;
 begin
   if LockMutex(EventsMutex, 2000) then
   try
     ind := fSessions.IndexOf(ACallApiId);
     if ind > -1 then
     begin
-      AclientIDType := TCallSession(fSessions.Objects[ind]).Str;
-      Exit;
-    end;
-
-    if QPhones.Locate('phone', Aphone, []) then
-    begin
-      AClientIDType   := //QPhones.FieldByName('client_id').AsString + ',' +
-        QPhones.FieldByName('type_cli').AsString;
-      fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AClientIDType, fSessions, 30));
+      CallObj := TCallSession(fSessions.Objects[ind]);
+      AclientIDType := CallObj.Str;
+      //Exit;
     end
-    else
-      AClientIDType := '0,';
 
-    fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AclientIdType, fSessions, 30));
+    else
+    begin
+      if QPhones.Locate('phone', Aphone, []) then
+      begin
+        AClientIDType   := //QPhones.FieldByName('client_id').AsString + ',' +
+          QPhones.FieldByName('type_cli').AsString;
+        //fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AClientIDType, fSessions, 30));
+      end
+      else
+        AClientIDType := '0,';
+
+      CallObj := TCallSession.Create(ACallApiId, AclientIdType, fSessions, 7200);
+      fSessions.AddObject(ACallApiId, CallObj);
+    end;
+    CallObj.StartCall(ACallId, Aats);
   finally
     UnlockMutex(EventsMutex);
   end;
@@ -1347,6 +1388,8 @@ begin
   fList := AList;
   fSeconds := ASecond;
   FreeOnTerminate := True;
+  fCallIdList := TStringList.Create;
+  fStartTime := Now;
 end;
 
 procedure TCallSession.DeleteSession;
@@ -1366,11 +1409,68 @@ begin
 
 end;
 
+destructor TCallSession.Destroy;
+begin
+  fCallIdList.Free;
+end;
+
+procedure TCallSession.EndCall(CallId: string);
+var
+  ind: Integer;
+  ats: string;
+begin
+  if LockMutex(CallMutex, 1000) then
+  try
+    ind := fCallIdList.IndexOfName(CallId);
+    if ind = -1 then
+      Exit;
+    ats := fCallIdList.ValueFromIndex[ind];
+    fCallIdList.Delete(ind);
+    if not fStarted then
+      fStarted := True;
+  finally
+    UnlockMutex(CallMutex);
+  end;
+end;
+
 procedure TCallSession.Execute;
 begin
-  Sleep(fSeconds * 1000);
-  DeleteSession;
-  Terminate;
+  while not fStarted do
+    Sleep(200);
+
+    while not Terminated and (fCallIdList.Count > 0) do
+    begin
+      if not fAcceepted and (fCallIdList.Count = 1) then //остался один звонок
+      begin
+        Sleep(300); //контрольное ожидание
+        if fCallIdList.Count = 0 then
+          exit;
+        fCallId := fCallIdList.Names[0];
+        fAts := fCallIdList.ValueFromIndex[0];
+        Synchronize(SendMess);
+      end;
+
+      if fCallIdList.Count = 0 then
+      begin
+        DeleteSession;
+        Terminate;
+      end;
+  end;
+end;
+
+procedure TCallSession.SendMess;
+begin
+   MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]));
+end;
+
+procedure TCallSession.StartCall(CallId, ats: string);
+begin
+  if LockMutex(CallMutex, 1000) then
+  try
+    fCallIdList.Add(CallId + '=' + ats);
+  finally
+    UnlockMutex(CallMutex);
+  end;
 end;
 
 initialization
@@ -1380,10 +1480,12 @@ initialization
     Pchar(ExtractFileName((Application.ExeName)) + '_' + 'msg'));
   EventsMutex := CreateMutex(nil, False,
     Pchar(ExtractFileName((Application.ExeName)) + '_' + 'events'));
+  CallMutex := CreateMutex(nil, False,
+    Pchar(ExtractFileName((Application.ExeName)) + '_' + 'calls'));
 
 finalization
   CloseHandle(LogMutex);
   CloseHandle(MsgMutex);
   CloseHandle(EventsMutex);
-
+  CloseHandle(CallMutex);
 end.

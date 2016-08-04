@@ -23,6 +23,9 @@ object MF: TMF
     Align = alTop
     BevelKind = bkFlat
     TabOrder = 0
+    DesignSize = (
+      623
+      317)
     object GroupBox1: TGroupBox
       Left = 1
       Top = 223
@@ -435,6 +438,16 @@ object MF: TMF
         OnClick = Button7Click
       end
     end
+    object Button9: TButton
+      Left = 505
+      Top = 290
+      Width = 106
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+      TabOrder = 3
+      OnClick = Button9Click
+    end
   end
   object Log_memo: TMemo
     Left = 0
@@ -455,7 +468,6 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
-    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -465,7 +477,6 @@ object MF: TMF
     Top = 80
   end
   object DB: TIBDatabase
-    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'

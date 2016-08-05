@@ -746,7 +746,7 @@ begin
       if argList.Count > 2 then
        s := argList[2];
     finally
-      if CallObj.Ready and
+      if //CallObj.Ready and
         (CallObj.CallInfo.CallId <> argList[0]) then
         CallObj.CallInfo.CallId := argList[0];
       argList.free;

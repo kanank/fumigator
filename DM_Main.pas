@@ -486,6 +486,11 @@ begin
     end;
     frmClientResult.CallId    := ACallId;
     frmClientResult.CallApiId := ACallApiId;
+    if not CallObj.Active or  frmClientResult.CallFinished then
+    begin
+      frmClientResult.CallFinish;
+    end;
+
     frmClientResult.ShowModal;
     Result := frmClientResult.CallResult;
     frmClientResult.Free;

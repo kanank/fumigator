@@ -31,6 +31,7 @@ type
     fClientSaved: Boolean;
     fResultSaved: Boolean;
     fCallResult: string;
+    fCallFinished: Boolean;
 
     procedure SetCallId(AValue: string);
     function GetCallFinished: boolean;
@@ -63,7 +64,7 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, formClientFiz, formClientUr, frmMain,
-  formSessionResult, formContact, CommonVars;
+  formSessionResult, formContact, CommonVars, formCallUnknown;
 
 
 procedure TfrmClientResult.butOKClick(Sender: TObject);
@@ -84,15 +85,32 @@ end;
 
 procedure TfrmClientResult.CallFinish;
 begin
-  //DM.FinishSession(CallId, ClientId);
+  fCallFinished := True;
+
+  if frmCallUnknown.Visible then
+  begin
+    frmCallUnknown.ModalResult := mrCancel;
+    Exit;
+  end;
+
   if not Assigned(frmSessionResult) then
     frmSessionResult := TfrmSessionResult.Create(nil);
 
-  if frmSessionResult.Q.Transaction.Active then
-    frmSessionResult.Q.Transaction.CommitRetaining;
+  try
+    if frmSessionResult.Q.Transaction.Active then
+      frmSessionResult.Q.Transaction.CommitRetaining;
+  except
+  end;
 
-  frmSessionResult.Q.ParamByName('callid').AsString := Callid;
-  frmSessionResult.Q.Open;
+  frmSessionResult.Q.ParamByName('callid').AsString := CallObj.CallInfo.CallId;
+  while 1=1 do
+  begin
+    frmSessionResult.Q.Close;
+    frmSessionResult.Q.Open;
+    if frmSessionResult.Q.RecordCount > 0 then
+      Break;
+    Sleep(200);
+  end;
   frmSessionResult.Q.Edit;
   frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
   frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
@@ -114,6 +132,9 @@ begin
 
   btnTransferCall.Enabled := false;
   btnDeleteCall.Enabled   := false;
+
+  fCallFinished := True;
+
 end;
 
 function TfrmClientResult.CheckFinish: boolean;
@@ -157,7 +178,8 @@ end;
 
 function TfrmClientResult.GetCallFinished: boolean;
 begin
-  Result := (CallResult <> '');
+  Result := fCallFinished;
+  //Result := (CallResult <> '');
 end;
 
 function TfrmClientResult.GetCallResult: string;

@@ -120,7 +120,7 @@ begin
     frmCallEvent.ModalResult := mr;
 
 
-  if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
+  if (*not CallObj.Active and*) not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
   begin
     if Assigned(frmCallUnknown) then
     begin
@@ -153,7 +153,7 @@ begin
     Exit;
   end;
 
-  if not CallObj.Active and CallObj.Accepted and fClientClose  then
+  if (*not CallObj.Active and*) CallObj.Accepted and fClientClose  then
   begin
     fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
     ModalResult := mrOk;

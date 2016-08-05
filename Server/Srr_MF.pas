@@ -55,7 +55,29 @@ type
     destructor Destroy; overload;
   end;
 
+  TEventWriter = class(TThread)
+  protected
+    fParams: TStringList;
+    fUri: string;
+    fUserId: string;
+    fSql: string;
+    fMess: string;
+    fMessLock: Boolean;
+    fAts: string;
+    fMsg: string;
+    procedure Execute; override;
+    procedure Log;
+    procedure SendCommand;
+    procedure WriteLog(Amess: string; Ablock: Boolean = True);
+    procedure SendCommandToUser(ats, msg: string);
 
+    function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+    procedure StartCall(CallId: string; ats: string);
+    function EndCall(ACallApiId, ACallId: string): boolean;
+  public
+    constructor Create(AParam: TStrings; AURI, AUserId, ASql: string); overload;
+    destructor Destroy; override;
+  end;
   //TCallWriter = class(TThread)
    // protected
   //end;
@@ -150,7 +172,7 @@ type
     function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
-    function FindClientByPhone(ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+    function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
     function EndCall(ACallApiId, ACallId: string): boolean;
   public
     CSection: TCriticalSection;
@@ -267,7 +289,7 @@ begin
       if pos(edtUserId.Text + '*', tel) = 0 then
        begin
          client_id := 0; client_type := '';
-         FindClientByPhone(Params.Values['CALLID'], Params.Values['CALLAPIID'], tel, ats, client_type);
+         FindClientByPhone(Params.Values['CALLFLOW'], Params.Values['CALLID'], Params.Values['CALLAPIID'], tel, ats, client_type);
 
          MF.SendCommandToUser(ats, '#startcall:' +
            Params.Values['CALLFLOW'] + ',' +
@@ -562,11 +584,17 @@ procedure TMF.Button5Click(Sender: TObject);
 var
   i: Integer;
   s: string;
+  cl: TCallListener;
 begin
   //i:= Caller.StatusCall;
-  if  not Assigned(Caller) then
-    Caller := TPhoneCalls.Create(AccessToken);
-    s := Caller.GetRecordInfo('vs6thtxwkeg4c2dto5wj', AtsUserPrefix + '103');
+  //if  not Assigned(Caller) then
+  //  Caller := TPhoneCalls.Create(AccessToken);
+   cl := TCallListener.Create(AccessToken, Edit1.Text, '@self');
+   cl.ExtIgnored := '099,200';
+   cl.OnCallAccept := AfterOutcomCall;
+   cl.Start;
+
+
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
@@ -599,7 +627,7 @@ end;
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
-  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallId);
+  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallApiId);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -672,22 +700,33 @@ begin
   end;
 end;
 
-function TMF.FindClientByPhone(ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+function TMF.FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
 var
   ind: Integer;
   CallObj: TCallSession;
+  fIn: Boolean;
+  lMutex: boolean;
 begin
-  if LockMutex(EventsMutex, 2000) then
-  try
-    ind := fSessions.IndexOf(ACallApiId);
-    if ind > -1 then
-    begin
-      CallObj := TCallSession(fSessions.Objects[ind]);
-      AclientIDType := CallObj.Str;
-      //Exit;
-    end
+  fIn := ACallFlow = 'in';
+  if fIn then
+    lMutex := LockMutex(EventsMutex, 2000);
 
+  if (fIn and lMutex) or not fIn then
+  try
+    if fIn then
+    begin
+      ind := fSessions.IndexOf(ACallApiId);
+      if ind > -1 then
+      begin
+        CallObj := TCallSession(fSessions.Objects[ind]);
+        AclientIDType := CallObj.Str;
+        //Exit;
+      end
+    end
     else
+      ind := -1;
+
+    if ind = -1 then
     begin
       if QPhones.Locate('phone', Aphone, []) then
       begin
@@ -698,12 +737,16 @@ begin
       else
         AClientIDType := '0,';
 
-      CallObj := TCallSession.Create(ACallApiId, AclientIdType, fSessions, 7200);
-      fSessions.AddObject(ACallApiId, CallObj);
+      if fIn then
+      begin
+        CallObj := TCallSession.Create(ACallApiId, AclientIdType, fSessions, 600);
+        fSessions.AddObject(ACallApiId, CallObj);
+        CallObj.StartCall(ACallId, Aats);
+      end;
     end;
-    CallObj.StartCall(ACallId, Aats);
   finally
-    UnlockMutex(EventsMutex);
+    if lMutex then
+      UnlockMutex(EventsMutex);
   end;
 end;
 
@@ -775,51 +818,56 @@ var
   fumigatorFileName: string;
   Stream: TMemoryStream;
 begin
-  //обязательный параметр action
-  if ARequestInfo.Params.IndexOfName('action') < 0 then
-    exit;
+  CSectionFumigator.Enter;
+  try
+    //обязательный параметр action
+    if ARequestInfo.Params.IndexOfName('action') < 0 then
+      exit;
 
-  fumigatorFileName := ExtractFilePath(Application.ExeName) + 'fumigator.exe';
-  // получить версию fumigator.exe
-  if ARequestInfo.Params.Values['action'] = 'getlastversion' then
-  begin
-    if not FileExists(fumigatorFileName) then
+    fumigatorFileName := ExtractFilePath(Application.ExeName) + 'fumigator.exe';
+    // получить версию fumigator.exe
+    if ARequestInfo.Params.Values['action'] = 'getlastversion' then
     begin
-      AResponseInfo.ResponseNo := 404;
-      Exit;
-    end;
+      if not FileExists(fumigatorFileName) then
+      begin
+        AResponseInfo.ResponseNo := 404;
+        Exit;
+      end;
 
-    s := FileVersion(fumigatorFileName);
-    AResponseInfo.ContentText := s;
-    AResponseInfo.ResponseNo := 200;
-  end
+      s := FileVersion(fumigatorFileName);
+      AResponseInfo.ContentText := s;
+      AResponseInfo.ResponseNo := 200;
+    end
 
-  else
-  // получить файл fumigator.exe
-  if ARequestInfo.Params.Values['action'] = 'getlastfile' then
-  begin
-    if not FileExists(fumigatorFileName) then
+    else
+    // получить файл fumigator.exe
+    if ARequestInfo.Params.Values['action'] = 'getlastfile' then
     begin
-      AResponseInfo.ResponseNo := 404;
-      Exit;
-    end;
+      if not FileExists(fumigatorFileName) then
+      begin
+        AResponseInfo.ResponseNo := 404;
+        Exit;
+      end;
 
-    Stream := TMemoryStream.Create;
-    try
-      Stream.LoadFromFile(fumigatorFileName);
-      Stream.Position := 0;
-      AResponseInfo.ContentStream := Stream;
-      AResponseInfo.ContentLength := Stream.Size;
-      AResponseInfo.ContentDisposition := 'attachment; filename=' + ExtractFileName(fumigatorFileName);
-      AResponseInfo.ContentType   := 'application/octet-stream';
-      AResponseInfo.ResponseNo    := 200;
+      Stream := TMemoryStream.Create;
+      try
+        Stream.LoadFromFile(fumigatorFileName);
+        Stream.Position := 0;
+        AResponseInfo.ContentStream := Stream;
+        AResponseInfo.ContentLength := Stream.Size;
+        AResponseInfo.ContentDisposition := 'attachment; filename=' + ExtractFileName(fumigatorFileName);
+        AResponseInfo.ContentType   := 'application/octet-stream';
+        AResponseInfo.ResponseNo    := 200;
 
-      AResponseInfo.WriteHeader;
-      AResponseInfo.WriteContent;
-    finally
-      //Stream.Free;
-    end;
-  end
+        AResponseInfo.WriteHeader;
+        AResponseInfo.WriteContent;
+      finally
+        //Stream.Free;
+      end;
+    end
+  finally
+    CSectionFumigator.Leave;
+  end;
 
 end;
 
@@ -1064,20 +1112,17 @@ var
   LogList: TStringList;
 begin
   if ARequestInfo.URI = '/fumigator' then
-  try
-    CSectionFumigator.Enter;
     FumigatorCommand(ARequestInfo, AResponseInfo);
-  finally
-    CSectionFumigator.Leave;
-  end;
 
 // новое Вхождение
 if ARequestInfo.URI = Trim(TelURI_edt.Text) then
+   TEventWriter.Create(ARequestInfo.Params, ARequestInfo.URI,
+     edtUserId.Text, CallEnent_Q.SQL.Text);
 
     //Addlog('#Поступление события на службы Call_Events');
     //AddLogMemo(ARequestInfo.URI);
     //AddLogMemo(ARequestInfo.Params.Text);
-    try
+    (*try
       CSection.Enter;
     if (ARequestInfo.URI = Trim(TelURI_edt.Text)) then
 
@@ -1099,7 +1144,7 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
       Addlog('Запрос не содержит данных Call_Events, либо неверный URI.');
   finally
     CSection.Leave;
-  end;
+  end;*)
 
 end;
 
@@ -1368,7 +1413,7 @@ begin
 
     end;
   finally
-    Self.Free;
+    Terminate;
   end;
 
 end;
@@ -1426,7 +1471,7 @@ var
   ind: Integer;
   ats: string;
 begin
-  //if LockMutex(CallMutex, 1000) then
+  if LockMutex(CallMutex, 2000) then
   try
     ind := fCallIdList.IndexOfName(CallId);
     if ind = -1 then
@@ -1436,7 +1481,7 @@ begin
     if not fStarted then
       fStarted := True;
   finally
-    //UnlockMutex(CallMutex);
+    UnlockMutex(CallMutex);
   end;
 end;
 
@@ -1465,6 +1510,7 @@ begin
     DeleteSession;
     Terminate;
   end;
+  Terminate;
 end;
 
 procedure TCallSession.SendMess;
@@ -1489,6 +1535,198 @@ begin
 end;
 
 procedure TCallSession.WriteLog(Amess: string; Ablock: Boolean);
+begin
+  fMess := Amess;
+  fMessLock := Ablock;
+  Synchronize(Log);
+end;
+
+{ TEventWriter }
+
+constructor TEventWriter.Create(AParam: TStrings; AURI, AUserId, ASql: string);
+begin
+  inherited Create(False);
+  fParams := TStringList.Create;
+  fParams.Assign(AParam);
+  fUri := AUri;
+  fUserId := AUserId;
+  fSql := ASql;
+  FreeOnTerminate := True;
+end;
+
+destructor TEventWriter.Destroy;
+begin
+  fParams.Free;
+  inherited;
+end;
+
+function TEventWriter.EndCall(ACallApiId, ACallId: string): boolean;
+var
+  ind: Integer;
+begin
+ if LockMutex(EventsMutex, 1000) then
+  try
+    ind := MF.fSessions.IndexOf(ACallApiId);
+    if ind > -1 then
+    begin
+      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallId);
+      Exit;
+    end;
+  finally
+    UnLockMutex(EventsMutex);
+  end;
+end;
+
+procedure TEventWriter.Execute;
+var
+  s: string;
+  Cf :Byte;
+  userid, ats, tel, client_type: string;
+  p, client_id: Integer;
+begin
+  s := '#Поступление события на службы Call_Events' + #13#10 +
+       fUri + #13#10 +
+       fParams.Text;
+  WriteLog(s);
+
+  begin
+   if fParams.indexOfName('CALLFLOW') = -1 then
+     Exit;
+
+  if fParams.Values['CALLFLOW'] = 'in' then
+  begin
+    userid := fParams.Values['CalledExtension'];
+    tel    := fParams.Values['CallerIdNum'];
+    cf := 0;
+  end
+  else
+  begin
+    userid := fParams.Values['CallerExtension'];
+    tel    := fParams.Values['CalledNumber'];
+    Cf := 1
+  end;
+  p := Pos('*', userid);
+  if p > 0 then
+  begin
+    ats := Copy(userid, p + 1, Length(userid));
+    userid := Copy(userid, 1, p - 1);
+  end;
+  WriteLog('user_id = ' + userid);
+
+  if userid <> fUserId then //только нужную АТС отсекаем
+    Exit;
+
+
+  with TDbWriter.Create(MF.DB, fParams, fSql) do
+    Start;
+
+    if fParams.Values['CallStatus'] = 'CALLING' then
+    begin
+      if pos(fUserId + '*', tel) = 0 then
+       begin
+         client_id := 0; client_type := '';
+         FindClientByPhone(fParams.Values['CALLFLOW'], fParams.Values['CALLID'], fParams.Values['CALLAPIID'], tel, ats, client_type);
+
+         SendCommandToUser(ats, '#startcall:' +
+           fParams.Values['CALLFLOW'] + ',' +
+           fParams.Values['CallID'] + ',' +
+           fParams.Values['CallAPIID'] + ',' +
+           tel + ',' +
+           //IntToStr(client_id) + ',' +
+           client_type)
+       end;
+
+    end
+    else  //окончание звонка
+    begin
+      if (Cf = 0) or ((Cf = 1) and (pos(fUserId + '*', tel) = 0)) then
+      begin
+        SendCommandToUser(ats, '#finishcall:' +
+          fParams.Values['CallID'] + ',' +
+          fParams.Values['CallAPIID'] + ',' +
+          fParams.Values['CallStatus']);
+        if cf = 0 then
+        EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID']);
+      end;
+    end;
+
+  end;
+end;
+
+function TEventWriter.FindClientByPhone(ACallFlow, ACallId, ACallApiId, APhone,
+  Aats: string; var AclientIdType: string): Integer;
+var
+  ind: Integer;
+  CallObj: TCallSession;
+  fIn: Boolean;
+  lMutex: boolean;
+begin
+  fIn := ACallFlow = 'in';
+  if fIn then
+    lMutex := LockMutex(EventsMutex, 2000);
+
+  if (fIn and lMutex) or not fIn then
+  try
+    if fIn then
+    begin
+      ind := MF.fSessions.IndexOf(ACallApiId);
+      if ind > -1 then
+      begin
+        CallObj := TCallSession(MF.fSessions.Objects[ind]);
+        AclientIDType := CallObj.Str;
+        //Exit;
+      end
+    end
+    else
+      ind := -1;
+
+    if ind = -1 then
+    begin
+      if MF.QPhones.Locate('phone', Aphone, []) then
+      begin
+        AClientIDType   := //QPhones.FieldByName('client_id').AsString + ',' +
+          MF.QPhones.FieldByName('type_cli').AsString;
+        //fSessions.AddObject(ACallApiId, TCallSession.Create(ACallApiId, AClientIDType, fSessions, 30));
+      end
+      else
+        AClientIDType := '0,';
+
+      if fIn then
+      begin
+        CallObj := TCallSession.Create(ACallApiId, AclientIdType, MF.fSessions, 600);
+        MF.fSessions.AddObject(ACallApiId, CallObj);
+        CallObj.StartCall(ACallId, Aats);
+      end;
+    end;
+  finally
+    if lMutex then
+      UnlockMutex(EventsMutex);
+  end;
+end;
+
+procedure TEventWriter.Log;
+begin
+  MF.AddLog(fMess, fMessLock);
+end;
+
+procedure TEventWriter.SendCommand;
+begin
+  MF.SendCommandToUser(fAts, fMsg, false);
+end;
+
+procedure TEventWriter.SendCommandToUser(ats, msg: string);
+begin
+  fAts := ats;
+  fMsg := msg;
+  Synchronize(SendCommand);
+end;
+
+procedure TEventWriter.StartCall(CallId, ats: string);
+begin
+
+end;
+
+procedure TEventWriter.WriteLog(Amess: string; Ablock: Boolean);
 begin
   fMess := Amess;
   fMessLock := Ablock;

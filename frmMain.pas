@@ -758,7 +758,7 @@ begin
   else
   if (cmd = 'callaccepted') then //завершен звонок
   begin
-    if CallObj.CallInfo.CallId = arg then
+    if CallObj.CallInfo.CallApiId = arg then
       CallObj.Accepted := True;
   end
 

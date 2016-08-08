@@ -1,24 +1,24 @@
 inherited frmSessionResult: TfrmSessionResult
   BorderIcons = [biSystemMenu]
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
-  ClientHeight = 207
+  ClientHeight = 241
   ClientWidth = 233
   Position = poDesktopCenter
   ExplicitWidth = 249
-  ExplicitHeight = 245
+  ExplicitHeight = 279
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 228
-    Top = 21
+    Top = 170
     Width = 194
     Height = 62
     AutoSize = True
     Proportional = True
     Stretch = True
     Visible = False
-    ExplicitLeft = 304
-    ExplicitTop = 8
+    ExplicitLeft = 228
+    ExplicitTop = 170
     ExplicitWidth = 194
     ExplicitHeight = 62
   end
@@ -38,8 +38,8 @@ inherited frmSessionResult: TfrmSessionResult
     ParentFont = False
   end
   object Cancel_btn: TRzButton
-    Left = 63
-    Top = 168
+    Left = 55
+    Top = 205
     Width = 124
     Height = 29
     Anchors = [akTop, akRight]
@@ -56,11 +56,9 @@ inherited frmSessionResult: TfrmSessionResult
     ThemeAware = False
     OnClick = Cancel_btnClick
   end
-  object edtComment: TcxMemo
+  object edtResult: TcxMemo
     Left = 8
     Top = 15
-    Lines.Strings = (
-      'edtComment')
     TabOrder = 1
     Height = 65
     Width = 217
@@ -93,7 +91,6 @@ inherited frmSessionResult: TfrmSessionResult
       TabOrder = 0
       ThemeAware = False
       OnClick = btnConsultClick
-      ExplicitLeft = 3
     end
     object btnNonConsult: TRzButton
       Left = 6
@@ -113,12 +110,11 @@ inherited frmSessionResult: TfrmSessionResult
       TabOrder = 1
       ThemeAware = False
       OnClick = btnConsultClick
-      ExplicitLeft = 3
     end
     object btnOther: TRzButton
-      Left = 6
-      Top = 82
-      Width = 208
+      Left = 3
+      Top = 84
+      Width = 211
       Height = 29
       Anchors = [akTop, akRight]
       Caption = #1044#1088#1091#1075#1086#1077
@@ -133,17 +129,14 @@ inherited frmSessionResult: TfrmSessionResult
       TabOrder = 2
       ThemeAware = False
       OnClick = btnOtherClick
-      ExplicitLeft = 3
     end
     object edtIshod: TcxMemo
       Left = 3
       Top = 17
-      Lines.Strings = (
-        'edtComment')
       TabOrder = 3
       Visible = False
       Height = 63
-      Width = 212
+      Width = 210
     end
   end
   object DS: TDataSource

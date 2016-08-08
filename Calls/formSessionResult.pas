@@ -31,7 +31,7 @@ type
     Cancel_btn: TRzButton;
     QApi: TIBQuery;
     Label1: TLabel;
-    edtComment: TcxMemo;
+    edtResult: TcxMemo;
     grpIshod: TcxGroupBox;
     btnConsult: TRzButton;
     btnNonConsult: TRzButton;
@@ -71,6 +71,12 @@ begin
     edtIshod.Text := '';
     edtIshod.Visible := True;
     btnOther.Caption := 'Отменить "другое"'
+  end
+  else
+  begin
+    edtIshod.Text := '';
+    edtIshod.Visible := false;
+    btnOther.Caption := 'Другое'
   end;
 end;
 
@@ -83,13 +89,17 @@ begin
   end
   else*)
   if CheckFields then
+  begin
+    Q.FieldByName('RESULT').AsString := edtResult.Text;
+    Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
     ModalResult := mrOk;
+  end;
 end;
 
 function TfrmSessionResult.CheckFields: Boolean;
 begin
   Result := false;
-  if (cmbIshod.Text = '') or (Length(edtResult.Text) < 5)  then
+  if (edtIshod.Text = '') or (Length(edtResult.Text) < 5)  then
   begin
     Application.MessageBox('Необходимо заполнить поля! Комментарий - не менее 5 символов ', 'Результат сессии', MB_ICONSTOP);
     Result := False;
@@ -101,7 +111,6 @@ end;
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  inherited;
   if not CheckFields then
     CanClose := False;
 
@@ -109,8 +118,8 @@ end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);
 begin
-  cmbIshod.Text  := '';
-  edtResult.Text := '';
+  //cmbIshod.Text  := '';
+  //edtResult.Text := '';
 end;
 
 end.

@@ -1445,8 +1445,9 @@ begin
   fCallIdList := TStringList.Create;
   fStartTime := Now;
 
-  fListener := TCallListener(MF.AccessToken, aCallApiId, '@self');
+  fListener := TCallListener.Create(MF.AccessToken, aCallApiId, '@self');
   fListener.ExtIgnored := '099,200';
+  fListener.StopOnAccept := True;
 end;
 
 procedure TCallSession.DeleteSession;
@@ -1494,13 +1495,13 @@ end;
 
 procedure TCallSession.Execute;
 begin
-  fLitener.Start;
+  fListener.Start;
     while not Terminated and not fAccepted and not fFinished do
     begin
       if not fAccepted and (fListener.Accepted) then //остался один звонок
       begin
         fAccepted := True;
-        fCallId := fListener.AcceptedCallId;
+        fCallId := fListener.CallApiId;
         fAts := fListener.AcceptedExt;
         Synchronize(SendMess);
         fFinished := True;
@@ -1509,7 +1510,7 @@ begin
         fFinished := fListener.Finished;
   end;
 
-  if fFinished = 0 then
+  if fFinished then
   begin
     DeleteSession;
     Terminate;
@@ -1520,7 +1521,7 @@ end;
 procedure TCallSession.SendMess;
 begin
    WriteLog(Format('Accepted: %s %s', [fCallId, fats]), false);
-   MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]), False);
+   MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]), false);
 end;
 
 procedure TCallSession.StartCall(CallId, ats: string);

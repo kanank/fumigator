@@ -81,16 +81,30 @@ type
     function GetRecordInfo(ACallApiId: string; AExt: string): string;
   end;
 
+  TThreadTimer = class(TThread)
+  private
+    fInterval: Integer;
+    fProc: TNotifyEvent;
+    fStop: Boolean;
+  public
+    property Interval: Integer read fInterval write fInterval;
+    property OnTimer: TNotifyEvent read fProc write fProc;
+    procedure Stop;
+    procedure Execute; override;
+  end;
+
   TCallListener = class (TTelphinAPIElement)
   private
     fOnCallFinish: TNotifyEvent; // событие после окончания звонка
     fOnCallAccept: TNotifyEvent; // событие после принятия звонка
     fAccepted: boolean;
     fFinished: Boolean;
+    fStop: Boolean;
     fCallId: string;
     fExtension: string;
     fStatusCall: Integer;
-    fTimer: TTimer;
+    fTimer: TThreadTimer;
+    //fTimer: TTimer;
     fExtIgnored: TStringList; //список номеров для игнорирования (очередь, автоответчик)
     fAcceptedExt: string; // номер, кто принял звонок
     fAcceptedCallId: string; // CallId принявшего звонок
@@ -113,7 +127,7 @@ type
     property Accepted: Boolean read fAccepted write SetAccepted;
     property AcceptedExt: string read fAcceptedExt;
     property AcceptedCallId: string read fAcceptedCallId;
-    property fStopOnAccept: Boolean read fStopOnAccept write fStopOnAccept;
+    property StopOnAccept: Boolean read fStopOnAccept write fStopOnAccept;
 
     property Extension: string read fExtension write fExtension;
     property AutoDestroy: Boolean read fAutoDestroy write fAutoDestroy;
@@ -452,17 +466,20 @@ begin
     fOnCallFinish   := TNotifyEvent(AOnCallFinish^);
   if AOnCallAccept <> nil then
     fOnCallAccept   := TNotifyEvent(AOnCallAccept^);
-  fTimer          := TTimer.Create(nil);
-  fTimer.Enabled  := False;
-  fTimer.OnTimer  := TimerProc;
-  fTimerInterval  := 500;
-  fTimer.Interval := fTimerInterval;
+  fTimer := TThreadTimer.Create(True);
+  fTimer.Interval  := 500;
+  fTimer.OnTimer := TimerProc;
+  //fTimer          := TTimer.Create(nil);
+  //fTimer.OnTimer  := TimerProc;
+  //fTimerInterval  := 500;
+  //fTimer.Interval := fTimerInterval;
+  //fTimer.Enabled  := False;
   fExtIgnored := TStringList.Create;
 end;
 
 destructor TCallListener.Destroy;
 begin
-  FreeAndNil(fTimer);
+  //FreeAndNil(fTimer);
   FreeAndNil(fExtIgnored);
   inherited;
 end;
@@ -478,11 +495,11 @@ var
   url,ext: string;
   json: TJSONObject;
   json1: TJSONArray;
-  cnt, i: Integer;
+  cnt, i, status: Integer;
 begin
   sStream := TStringStream.Create;
   try
-    fTimer.Interval := 0;
+    //fTimer.Interval := 0;
     fHttp.Request.Method := 'GET';
     //fHttp.Request.ContentType := 'application/json';
     fhttp.Request.CustomHeaders.Clear;
@@ -510,13 +527,17 @@ begin
           ext := AnsiDequotedStr(json.GetValue('extension').Value, '"');
           if fExtIgnored.IndexOf(ext) > - 1 then
             Continue;
-          if AnsiDequotedStr(json.GetValue('status').Value, '"') = '5' then
+          status := StrToIntDef(AnsiDequotedStr(json.GetValue('status').Value, '"'), 0);
+          if (status = 5) then
           begin
             fAcceptedExt := ext;
             fAcceptedCallId := AnsiDequotedStr(json.GetValue('id').Value, '"');
             Accepted := True;
             if fStopOnAccept then
-              fTimer.Enabled := False;
+            begin
+              fStop := True;//fTimer.Enabled := False;
+              fTimer.Stop;
+            end;
           end;
 
         end;
@@ -526,7 +547,8 @@ begin
     else
     begin
       Finished := True;
-      fTimer.Enabled := False;
+      fStop := True;
+      //fTimer.Enabled := False;
     end;
   finally
     sStream.Free;
@@ -534,9 +556,9 @@ begin
     json1.free;
 
     if Finished and fAutoDestroy then
-      Destroy
-    else
-      fTimer.Interval := fTimerInterval;
+      Destroy;
+//    else
+//      fTimer.Interval := fTimerInterval;
   end;
 end;
 
@@ -544,8 +566,11 @@ procedure TCallListener.SetAccepted(AValue: boolean);
 begin
   if fAccepted <> AValue then
     fAccepted := AValue;
-  if AValue and Assigned(fOnCallAccept) then
-    fOnCallAccept(Self);
+  if AValue then
+  begin
+    if Assigned(fOnCallAccept) then
+      fOnCallAccept(Self);
+  end;
 end;
 
 procedure TCallListener.SetExtIgnored(AValue: string);
@@ -557,20 +582,37 @@ procedure TCallListener.SetFinished(AValue: boolean);
 begin
   if fFinished <> AValue then
     fFinished := AValue;
-  if AValue and Assigned(fOnCallFinished) then
-    fOnCallFinished(Self);
+  if AValue and Assigned(fOnCallFinish) then
+    fOnCallFinish(Self);
 end;
 
 procedure TCallListener.Start(AInterval: integer = 0);
 begin
   if AInterval > 0 then
     fTimer.Interval := AInterval;
-  fTimer.Enabled := True;
+  fTimer.Start;
 end;
 
 procedure TCallListener.TimerProc(Sender: TObject);
 begin
   GetStatusCall;
+end;
+
+{ TThreadTimer }
+
+procedure TThreadTimer.Execute;
+begin
+   while not (Terminated or fStop) do
+   begin
+     Sleep(fInterval);
+     if Assigned(fProc) then
+       fProc(Self);
+   end;
+end;
+
+procedure TThreadTimer.Stop;
+begin
+  fStop := True;
 end;
 
 end.

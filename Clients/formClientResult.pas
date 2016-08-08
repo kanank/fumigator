@@ -115,7 +115,7 @@ begin
   frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
   frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
   if clientid = 0 then //клиент не был создан
-      frmSessionResult.Q.FieldByName('ishod').AsString := 'Карточка клиента не создана';
+      frmSessionResult.edtIshod.Text := (*.Q.FieldByName('ishod').AsString*) 'Карточка клиента не создана';
   Self.CallResult := CallObj.CallInfo.CallResult; //frmSessionResult.Q.FieldByName('callresult').AsString;
 
   frmSessionResult.BorderIcons := [];
@@ -230,8 +230,10 @@ begin
   Result := False;
   with frmSessionResult do
   begin
-    if (Q.FieldByName('ISHOD').AsString = '') or
-       (Length(Q.FieldByName('RESULT').AsString) < 5)  then
+    if (*(Q.FieldByName('ISHOD').AsString = '') or
+       (Length(Q.FieldByName('RESULT').AsString) < 5)  then *)
+       (edtResult.Text = '') or
+       (Length(edtIshod.Text) < 5)  then
     begin
       Application.MessageBox('Не заполнены все поля результата сессии!',
        'Исходящий звонок', MB_ICONSTOP);

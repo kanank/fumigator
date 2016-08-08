@@ -86,28 +86,37 @@ type
     fOnCallFinish: TNotifyEvent; // событие после окончания звонка
     fOnCallAccept: TNotifyEvent; // событие после принятия звонка
     fAccepted: boolean;
+    fFinished: Boolean;
     fCallId: string;
     fExtension: string;
     fStatusCall: Integer;
     fTimer: TTimer;
     fExtIgnored: TStringList; //список номеров для игнорирования (очередь, автоответчик)
     fAcceptedExt: string; // номер, кто принял звонок
+    fAcceptedCallId: string; // CallId принявшего звонок
+    fStopOnAccept: Boolean; //останов после принятия звонка
     fTimerInterval: Integer;
+    fAutoDestroy: Boolean; //автоматически уничтожаться после окончания звонка
     function GetStatusCall: Integer;
     procedure TimerProc(Sender: TObject);
     function GetExtIgnored: string;
     procedure SetExtIgnored(AValue: string);
     procedure SetAccepted(AValue: boolean);
+    procedure SetFinished(AValue: boolean);
   public
     property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
     property OnCallAccept: TNotifyEvent read fOnCallAccept write fOnCallAccept;
     property CallApiId: string read fCallId write fCallId;
     property TimerInterval: Integer read fTimerInterval write fTimerInterval;
     property ExtIgnored: string read GetExtIgnored write SetExtIgnored; //через запятую
+    property Finished: Boolean read fFinished write SetFinished;
     property Accepted: Boolean read fAccepted write SetAccepted;
     property AcceptedExt: string read fAcceptedExt;
+    property AcceptedCallId: string read fAcceptedCallId;
+    property fStopOnAccept: Boolean read fStopOnAccept write fStopOnAccept;
 
     property Extension: string read fExtension write fExtension;
+    property AutoDestroy: Boolean read fAutoDestroy write fAutoDestroy;
     constructor Create(ATokenObject: TTelphinToken; ACallApiId, AExtension: string; AOnCallAccept: Pointer = nil; AOnCallFinish: Pointer = nil); overload;
     destructor Destroy; overload;
     procedure Start(AInterval: integer = 0); //запускает таймер
@@ -485,6 +494,7 @@ begin
     json.Parse(BytesOf(sStream.DataString), 0);
     cnt := StrToInt(AnsiDequotedStr(json.Values['totalResults'].ToString, '"'));
 
+
     if cnt > 0 then
     begin
       json1 := TJSONObject.ParseJSONValue(json.GetValue('entry').ToString) as TJSONArray;
@@ -503,28 +513,28 @@ begin
           if AnsiDequotedStr(json.GetValue('status').Value, '"') = '5' then
           begin
             fAcceptedExt := ext;
+            fAcceptedCallId := AnsiDequotedStr(json.GetValue('id').Value, '"');
             Accepted := True;
+            if fStopOnAccept then
+              fTimer.Enabled := False;
           end;
 
         end;
 
-        //s := json1.Items[0].GetValue('id').value;
-        //json1  :=
-        //Result := json.GetValue('filename').Value;
-        //Result := AnsiDequotedStr(Result, '"');
       end;
+    end
+    else
+    begin
+      Finished := True;
+      fTimer.Enabled := False;
     end;
   finally
     sStream.Free;
     json.Free;
     json1.free;
 
-    if cnt = 0 then
-    begin
-      if Assigned(fOnCallFinish) then
-        fOnCallFinish(self);
-      Destroy;
-    end
+    if Finished and fAutoDestroy then
+      Destroy
     else
       fTimer.Interval := fTimerInterval;
   end;
@@ -541,6 +551,14 @@ end;
 procedure TCallListener.SetExtIgnored(AValue: string);
 begin
   fExtIgnored.DelimitedText := AValue;
+end;
+
+procedure TCallListener.SetFinished(AValue: boolean);
+begin
+  if fFinished <> AValue then
+    fFinished := AValue;
+  if AValue and Assigned(fOnCallFinished) then
+    fOnCallFinished(Self);
 end;
 
 procedure TCallListener.Start(AInterval: integer = 0);

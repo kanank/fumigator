@@ -34,6 +34,7 @@ type
     fStartTime: TDateTime;
     fStarted: Boolean;
     fAccepted: Boolean;
+    fFinished: Boolean;
     fSeconds: Integer;
     fList: TStringList;
     fCallIdList: TStringList;
@@ -41,6 +42,7 @@ type
     fAts: string;
     fMess: string;
     fMessLock: Boolean;
+    fListener: TCallListener;
     procedure Log;
     procedure WriteLog(Amess: string; Ablock: Boolean = True);
     procedure Execute; override;
@@ -1442,6 +1444,9 @@ begin
   FreeOnTerminate := True;
   fCallIdList := TStringList.Create;
   fStartTime := Now;
+
+  fListener := TCallListener(MF.AccessToken, aCallApiId, '@self');
+  fListener.ExtIgnored := '099,200';
 end;
 
 procedure TCallSession.DeleteSession;
@@ -1464,6 +1469,8 @@ end;
 destructor TCallSession.Destroy;
 begin
   fCallIdList.Free;
+  fListener.Free;
+  inherited;
 end;
 
 procedure TCallSession.EndCall(CallId: string);
@@ -1487,25 +1494,22 @@ end;
 
 procedure TCallSession.Execute;
 begin
-  while not fStarted do
-    Sleep(200);
-
-    while not Terminated and (fCallIdList.Count > 0) do
+  fLitener.Start;
+    while not Terminated and not fAccepted and not fFinished do
     begin
-      if not fAccepted and (fCallIdList.Count = 1) then //остался один звонок
+      if not fAccepted and (fListener.Accepted) then //остался один звонок
       begin
-        Sleep(300); //контрольное ожидание
-        if fCallIdList.Count = 0 then
-          exit;
         fAccepted := True;
-        fCallId := fCallIdList.Names[0];
-        fAts := fCallIdList.ValueFromIndex[0];
+        fCallId := fListener.AcceptedCallId;
+        fAts := fListener.AcceptedExt;
         Synchronize(SendMess);
+        fFinished := True;
       end;
-
+      if not fFinished then
+        fFinished := fListener.Finished;
   end;
 
-  if fCallIdList.Count = 0 then
+  if fFinished = 0 then
   begin
     DeleteSession;
     Terminate;

@@ -84,7 +84,7 @@ inherited frmSessions: TfrmSessions
       Top = 5
       Properties.Items.Strings = (
         #1042#1089#1077
-        #1042#1093#1086#1076#1103#1097#1080#1077
+        #1055#1088#1080#1085#1103#1090#1099#1077
         #1048#1089#1093#1086#1076#1103#1097#1080#1077
         #1055#1088#1086#1087#1091#1097#1077#1085#1085#1099#1077)
       Properties.OnChange = cmbFilterPropertiesChange

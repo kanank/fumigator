@@ -20,22 +20,28 @@ uses
   dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
-  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue;
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+  cxGroupBox;
 
 type
   TfrmSessionResult = class(TBaseForm)
-    Label11: TLabel;
-    edtResult: TcxDBMemo;
-    Label1: TLabel;
     DS: TDataSource;
     Q: TIBQuery;
     Q_upd: TIBUpdateSQL;
     Cancel_btn: TRzButton;
     QApi: TIBQuery;
-    cmbIshod: TcxDBComboBox;
+    Label1: TLabel;
+    edtComment: TcxMemo;
+    grpIshod: TcxGroupBox;
+    btnConsult: TRzButton;
+    btnNonConsult: TRzButton;
+    btnOther: TRzButton;
+    edtIshod: TcxMemo;
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure Cancel_btnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnConsultClick(Sender: TObject);
+    procedure btnOtherClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -52,6 +58,21 @@ implementation
 uses
   DM_Main;
 
+
+procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
+begin
+  edtIshod.Text := TRzButton(Sender).Caption;
+end;
+
+procedure TfrmSessionResult.btnOtherClick(Sender: TObject);
+begin
+  if not edtIshod.Visible then
+  begin
+    edtIshod.Text := '';
+    edtIshod.Visible := True;
+    btnOther.Caption := 'Отменить "другое"'
+  end;
+end;
 
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
 begin

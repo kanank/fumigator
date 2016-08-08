@@ -1,45 +1,30 @@
 inherited frmSessionResult: TfrmSessionResult
   BorderIcons = [biSystemMenu]
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
-  ClientHeight = 159
-  ClientWidth = 309
+  ClientHeight = 207
+  ClientWidth = 233
   Position = poDesktopCenter
-  ExplicitWidth = 325
-  ExplicitHeight = 197
+  ExplicitWidth = 249
+  ExplicitHeight = 245
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
-    Left = 111
-    Top = 52
+    Left = 228
+    Top = 21
     Width = 194
     Height = 62
     AutoSize = True
     Proportional = True
     Stretch = True
     Visible = False
-    ExplicitLeft = 319
-    ExplicitTop = 83
+    ExplicitLeft = 304
+    ExplicitTop = 8
     ExplicitWidth = 194
     ExplicitHeight = 62
   end
-  object Label11: TLabel
-    Left = 8
-    Top = 8
-    Width = 67
-    Height = 13
-    Caption = #1048#1089#1093#1086#1076' '#1089#1077#1089#1089#1080#1080
-    Color = clBtnShadow
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentColor = False
-    ParentFont = False
-  end
   object Label1: TLabel
     Left = 8
-    Top = 41
+    Top = 1
     Width = 112
     Height = 13
     Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
@@ -52,18 +37,9 @@ inherited frmSessionResult: TfrmSessionResult
     ParentColor = False
     ParentFont = False
   end
-  object edtResult: TcxDBMemo
-    Left = 8
-    Top = 55
-    DataBinding.DataField = 'RESULT'
-    DataBinding.DataSource = DS
-    TabOrder = 0
-    Height = 50
-    Width = 289
-  end
   object Cancel_btn: TRzButton
-    Left = 91
-    Top = 126
+    Left = 63
+    Top = 168
     Width = 124
     Height = 29
     Anchors = [akTop, akRight]
@@ -76,29 +52,104 @@ inherited frmSessionResult: TfrmSessionResult
     HotTrack = True
     HotTrackColor = 16625984
     ParentFont = False
-    TabOrder = 1
+    TabOrder = 0
     ThemeAware = False
     OnClick = Cancel_btnClick
   end
-  object cmbIshod: TcxDBComboBox
-    Left = 91
-    Top = 5
-    DataBinding.DataField = 'ISHOD'
-    DataBinding.DataSource = DS
-    Properties.DropDownSizeable = True
-    Properties.Items.Strings = (
-      #1087#1088#1086#1074#1077#1076#1077#1085#1072' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1103
-      #1073#1077#1079' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1080
-      ' '#1074#1099#1079#1086#1074' '#1087#1077#1088#1077#1074#1077#1076#1077#1085
-      #1074#1099#1079#1086#1074' '#1089#1086#1088#1074#1072#1083#1089#1103
-      #1085#1086#1084#1077#1088' '#1079#1072#1085#1103#1090'/'#1085#1077#1076#1086#1089#1090#1091#1087#1077#1085)
+  object edtComment: TcxMemo
+    Left = 8
+    Top = 15
+    Lines.Strings = (
+      'edtComment')
+    TabOrder = 1
+    Height = 65
+    Width = 217
+  end
+  object grpIshod: TcxGroupBox
+    Left = 8
+    Top = 86
+    Caption = #1048#1089#1093#1086#1076
     TabOrder = 2
-    Width = 206
+    DesignSize = (
+      217
+      116)
+    Height = 116
+    Width = 217
+    object btnConsult: TRzButton
+      Left = 6
+      Top = 18
+      Width = 208
+      Height = 29
+      Anchors = [akTop, akRight]
+      Caption = #1055#1088#1086#1074#1077#1076#1077#1085#1072' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1103
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 0
+      ThemeAware = False
+      OnClick = btnConsultClick
+      ExplicitLeft = 3
+    end
+    object btnNonConsult: TRzButton
+      Left = 6
+      Top = 49
+      Width = 208
+      Height = 29
+      Anchors = [akTop, akRight]
+      Caption = #1041#1077#1079' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1080
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 1
+      ThemeAware = False
+      OnClick = btnConsultClick
+      ExplicitLeft = 3
+    end
+    object btnOther: TRzButton
+      Left = 6
+      Top = 82
+      Width = 208
+      Height = 29
+      Anchors = [akTop, akRight]
+      Caption = #1044#1088#1091#1075#1086#1077
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 2
+      ThemeAware = False
+      OnClick = btnOtherClick
+      ExplicitLeft = 3
+    end
+    object edtIshod: TcxMemo
+      Left = 3
+      Top = 17
+      Lines.Strings = (
+        'edtComment')
+      TabOrder = 3
+      Visible = False
+      Height = 63
+      Width = 212
+    end
   end
   object DS: TDataSource
     DataSet = Q
-    Left = 24
-    Top = 88
+    Left = 56
+    Top = 16
   end
   object Q: TIBQuery
     Database = DataModuleMain.DB
@@ -114,8 +165,8 @@ inherited frmSessionResult: TfrmSessionResult
       'from sessions'
       'where callid = :callid')
     UpdateObject = Q_upd
-    Left = 72
-    Top = 80
+    Left = 88
+    Top = 15
     ParamData = <
       item
         DataType = ftUnknown
@@ -133,8 +184,8 @@ inherited frmSessionResult: TfrmSessionResult
       'result = :result,'
       'localnum = :localnum'
       'where id=:id')
-    Left = 160
-    Top = 80
+    Left = 56
+    Top = 65500
   end
   object QApi: TIBQuery
     Database = DataModuleMain.DB
@@ -149,8 +200,8 @@ inherited frmSessionResult: TfrmSessionResult
         't, localnum'
       'from sessions'
       'where callapiid = :callid')
-    Left = 112
-    Top = 80
+    Left = 120
+    Top = 16
     ParamData = <
       item
         DataType = ftUnknown

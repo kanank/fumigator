@@ -344,7 +344,8 @@ begin
 
      case cmbFilter.ItemIndex of
        0: ff := DataSet.FieldByName('ID').AsInteger > 0;
-       1: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 0;
+       1: ff := (DataSet.FieldByName('CALLTYPE').AsInteger = 0) and
+                (DataSet.FieldByName('ISHOD').AsString <> '');
        2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
        3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
      end;

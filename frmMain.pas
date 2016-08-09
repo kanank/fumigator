@@ -130,7 +130,6 @@ var
   OutCallApiId: string;
   OutPhone: string;  // телефон из сообщения об исх. звонке
   TimeShift: Integer; //смещение с сервером в секундах
-  hMutex: THandle;
 
 implementation
 
@@ -873,15 +872,15 @@ begin
 end;
 
 initialization
-  hMutex := CreateMutex(nil, True,
-    Pchar(ExtractFileName((Application.ExeName))));
+  //hMutex := CreateMutex(nil, True,
+  //  Pchar(ExtractFileName((Application.ExeName))));
   CallObj := TCallProto.Create;
   CallInfo := TCallInfo.Create;
 
   frmCallUnknown := TfrmCallUnknown.Create(nil);
 
 finalization
-  CloseHandle(hMutex);
+  //CloseHandle(hMutex);
   FreeAndNil(CallObj);
   FreeAndNil(CallInfo);
 

@@ -72,7 +72,8 @@ uses
   formReportSessions in 'Report\formReportSessions.pas' {frmReportSessions},
   formDbBase in 'Classes\formDbBase.pas' {frmDbBaseForm},
   formCallReport in 'Report\formCallReport.pas' {frmCallReport},
-  formRecordPlay in 'Classes\formRecordPlay.pas' {frmRecordPlay};
+  formRecordPlay in 'Classes\formRecordPlay.pas' {frmRecordPlay},
+  MappedFunc in 'Classes\MappedFunc.pas';
 
 {$R *.res}
 var
@@ -81,6 +82,25 @@ begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
 
+  // проверяем запущенную программу
+//  if WaitForSingleObject(hMutex, 0) <> 0 then
+//  begin
+//    Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
+//    Application.Terminate;
+//  end;
+  //if LockMutex(hMutex, 1000) then
+  try
+    if CheckStartRepeat(CheckAppName) then  //проверяем повторный запуск
+    begin
+      UnlockMutex(hMutex);
+      Application.Terminate;
+    end
+    else
+      WriteToMapped(CheckAppName, IntToStr(Application.Handle));
+  finally
+    //UnlockMutex(hMutex);
+  end;
+
   frmLogo := TFrmLogo.Create(nil);
   frmLogo.Info.Caption := 'Проверка новой версии';
   frmLogo.Show;
@@ -88,15 +108,7 @@ begin
   //BringWindowToTop(frmLogo.Handle);
   //frmLogo.Repaint;
 
-  // пароверяем запущенную программу
-  if WaitForSingleObject(hMutex, 0) <> 0 then
-  begin
-    Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
-    Application.Terminate;
-  end;
-
   Application.CreateForm(TDataModuleMain, DM);
-
   LoadOptions(CfgFileName);
 
   if CheckUpdates then
@@ -127,6 +139,7 @@ begin
 
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmMain, formMain);
+
   Application.OnException := formMain.AppException;
 
   try

@@ -22,14 +22,16 @@ uses
   dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus, dxSkinSilver,
   dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008, dxSkinTheAsphaltWorld,
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint,
-  dxSkinXmas2008Blue, dxSkinscxPCPainter;
+  dxSkinXmas2008Blue, dxSkinscxPCPainter, cxButtonEdit,
+  formRecordPlay;
 
 type
   TframeClientCalls = class(TFrameListBase)
     grdPhoneDBTableView1: TcxGridDBTableView;
     grdPhoneDBTableView1Column1: TcxGridDBColumn;
+    pnlForm: TPanel;
   private
-    { Private declarations }
+    fPlay: TfrmRecordPlay;
   public
     { Public declarations }
   end;

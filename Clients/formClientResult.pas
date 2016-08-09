@@ -49,11 +49,12 @@ type
     property CallId: string read fCallId write SetCallId;
     property CallApiId: string read fCallApiId write fCallApiId;
 
-    property CallFinished: boolean read GetCallFinished;
-    property CallResult: string read GetCallResult write fCallResult;
+    property  CallFinished: boolean read GetCallFinished;
+    property  CallResult: string read GetCallResult write fCallResult;
     procedure CallFinish;
     procedure CheckSession;
     procedure doFinishCall; override;
+    destructor Destroy; overload;
   end;
 
 var
@@ -152,6 +153,12 @@ begin
 
 end;
 
+destructor TfrmClientResult.Destroy;
+begin
+  CallObj.Ready := true;
+  inherited;
+end;
+
 procedure TfrmClientResult.doFinishCall;
 begin
   CallFinish;
@@ -160,7 +167,6 @@ end;
 procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  inherited;
   if not (fClientSaved and fResultSaved) then
     CanClose := False;
 end;
@@ -239,6 +245,11 @@ begin
        'Исходящий звонок', MB_ICONSTOP);
       Exit;
     end;
+
+    if Q.FieldByName('ISHOD').AsString <> edtIshod.Text then
+      Q.FieldByName('ISHOD').AsString := edtIshod.Text;
+    if Q.FieldByName('RESULT').AsString <> edtResult.Text then
+      Q.FieldByName('RESULT').AsString := edtResult.Text;
 
     if Q.Modified then
     try

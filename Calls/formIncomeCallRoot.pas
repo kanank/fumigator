@@ -51,6 +51,7 @@ type
     procedure CallFinish;
     procedure CheckSession;
     procedure DoCallCancel;
+    destructor Destroy; overload;
 
     class function ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
     class function ShowCall: Boolean;
@@ -201,6 +202,12 @@ begin
   CheckAccept(CallObj);
   if CallObj.Accepted then
     CheckTimer.Enabled := false;
+end;
+
+destructor TfrmIncomeCallRoot.Destroy;
+begin
+  CallObj.Ready := true;
+  inherited;
 end;
 
 procedure TfrmIncomeCallRoot.doAcceptCall;

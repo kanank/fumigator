@@ -37,7 +37,7 @@ inherited frameClientCalls: TframeClientCalls
     inherited grdPhone: TcxGrid [1]
       Width = 754
       Height = 167
-      ExplicitWidth = 650
+      ExplicitWidth = 754
       ExplicitHeight = 167
       object grdPhoneDBTableView1: TcxGridDBTableView [0]
         Navigator.Buttons.CustomButtons = <>
@@ -116,12 +116,28 @@ inherited frameClientCalls: TframeClientCalls
         end
         object grdPhoneDBTableView1Column1: TcxGridDBColumn
           Caption = #1047#1072#1087#1080#1089#1100' '#1088#1072#1079#1075#1086#1074#1086#1088#1072
+          PropertiesClassName = 'TcxButtonEditProperties'
+          Properties.Buttons = <
+            item
+              Default = True
+              Kind = bkEllipsis
+            end>
           Width = 103
         end
       end
       inherited grdPhoneLevel1: TcxGridLevel
         GridView = grdPhoneDBTableView1
       end
+    end
+    object pnlForm: TPanel
+      Left = 513
+      Top = 48
+      Width = 137
+      Height = 25
+      AutoSize = True
+      BevelEdges = []
+      TabOrder = 2
+      Visible = False
     end
   end
   inherited Query: TIBQuery

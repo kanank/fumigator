@@ -1,7 +1,5 @@
 unit MappedFunc;
 
-
-
 interface
 uses
   classes, windows, sysutils, forms,
@@ -137,25 +135,27 @@ var
   SL:TStringList;
   i, len:integer;
   s:string;
+  p: pAnsiChar;
 begin
  try
-  SL:=nil;
-  Result:=false;
+  SL := nil;
+  Result := false;
   ReadMappedFile(SL);
-  i:=SL.IndexOfName(key);
-  if i=-1 then
+  i := SL.IndexOfName(key);
+  if i = -1 then
   begin
-    len:=0;
-    i:=Sl.Count-1;
-    while i>-1 do
+    len := 0;
+    i := Sl.Count - 1;
+    while i > -1 do
     begin
-      len:=len+Length(SL[i])+1;
+      len := len + Length(SL[i]) + 1;
       Dec(i)
     end;
-    s:=key +'='+val;
-    CopyMemory(pchar(pFileContent)+len, pchar(s), length(s));
+    s := key + '=' + val;
+    //CopyMemory(pFileContent, p, Length(s));
+    StrPCopy(pFileContent, s);
   end;
-  Result:=true;
+  Result := true;
  finally
    FreeAndNil(SL);
  end;
@@ -218,11 +218,7 @@ initialization
 
 finalization
   CloseHandle(hMutex);
-
-  if DelFromMapped(CheckAppName) = 0 then
-  begin
-    UnmapViewOfFile(pFileContent);
-    CloseHandle(hFile);
-  end;
+  UnmapViewOfFile(pFileContent);
+  CloseHandle(hFile);
 
 end.

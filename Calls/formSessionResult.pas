@@ -47,6 +47,7 @@ type
   public
     CallResult: string;
     function CheckFields: Boolean;
+    destructor Destroy; overload;
   end;
 
 var
@@ -56,7 +57,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, CommonVars;
 
 
 procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
@@ -106,6 +107,12 @@ begin
   end
   else
     Result := true;
+end;
+
+destructor TfrmSessionResult.Destroy;
+begin
+  CallObj.Ready := true;
+  inherited;
 end;
 
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;

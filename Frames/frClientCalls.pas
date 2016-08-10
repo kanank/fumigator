@@ -27,13 +27,22 @@ uses
 
 type
   TframeClientCalls = class(TFrameListBase)
-    grdPhoneDBTableView1: TcxGridDBTableView;
-    grdPhoneDBTableView1Column1: TcxGridDBColumn;
+    GridView: TcxGridDBTableView;
+    ColumnRecord: TcxGridDBColumn;
     pnlForm: TPanel;
+    GridViewColumn2: TcxGridDBColumn;
+    GridViewColumn3: TcxGridDBColumn;
+    procedure GridViewFocusedRecordChanged(
+      Sender: TcxCustomGridTableView; APrevFocusedRecord,
+      AFocusedRecord: TcxCustomGridRecord;
+      ANewItemRecordFocusingChanged: Boolean);
   private
     fPlay: TfrmRecordPlay;
+    fInQuery: Boolean;
   public
-    { Public declarations }
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function OpenData(Aid: integer = 0): Boolean; override;
   end;
 
 var
@@ -42,5 +51,60 @@ var
 implementation
 
 {$R *.dfm}
+
+{ TframeClientCalls }
+
+constructor TframeClientCalls.Create(AOwner: TComponent);
+begin
+  inherited;
+  fPlay := TfrmRecordPlay.Create(nil);
+  fPlay.Parent := pnlForm;
+  pnlForm.Visible := False;
+end;
+
+destructor TframeClientCalls.Destroy;
+begin
+  fPlay.Free;
+  inherited;
+end;
+
+procedure TframeClientCalls.GridViewFocusedRecordChanged(
+  Sender: TcxCustomGridTableView; APrevFocusedRecord,
+  AFocusedRecord: TcxCustomGridRecord; ANewItemRecordFocusingChanged: Boolean);
+var
+  ColumnId: Integer;
+  Cellvalue : variant;
+begin
+  if fInQuery or not GridView.Focused then
+    Exit;
+  pnlForm.Top  := GrdPhone.Top + ColumnRecord.FocusedCellViewInfo.RealBounds.Top + 1;
+  pnlForm.Left := ColumnRecord.FocusedCellViewInfo.RealBounds.Left + 1;
+  ColumnID     := GridView.GetColumnByFieldName('CALLAPIID').Index;
+  Cellvalue    := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnID];
+  fPlay.CallApiId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
+  fPlay.ext  := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  fPlay.FileName  := '';
+  fPlay.Width  := ColumnRecord.Width;
+  fPlay.Height := ColumnRecord.FocusedCellViewInfo.Height-2;
+  pnlForm.Width  := fPlay.Width;
+  pnlForm.Height := fPlay.Height;
+  fPlay.Top := 0;
+  fPlay.Left := 0;
+  fPlay.Visible := True;
+  pnlForm.Visible := True;
+  pnlForm.BringToFront;
+  fPlay.BringToFront;
+end;
+
+function TframeClientCalls.OpenData(Aid: integer): Boolean;
+begin
+  fInQuery := True;
+  try
+    inherited OpenData(AId);
+  finally
+    fInQuery := False;
+  end;
+end;
 
 end.

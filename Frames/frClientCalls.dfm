@@ -39,8 +39,9 @@ inherited frameClientCalls: TframeClientCalls
       Height = 167
       ExplicitWidth = 754
       ExplicitHeight = 167
-      object grdPhoneDBTableView1: TcxGridDBTableView [0]
+      object GridView: TcxGridDBTableView [0]
         Navigator.Buttons.CustomButtons = <>
+        OnFocusedRecordChanged = GridViewFocusedRecordChanged
         DataController.DataSource = DS
         DataController.Summary.DefaultGroupSummaryItems = <>
         DataController.Summary.FooterSummaryItems = <>
@@ -114,7 +115,7 @@ inherited frameClientCalls: TframeClientCalls
           Width = 20
           IsCaptionAssigned = True
         end
-        object grdPhoneDBTableView1Column1: TcxGridDBColumn
+        object ColumnRecord: TcxGridDBColumn
           Caption = #1047#1072#1087#1080#1089#1100' '#1088#1072#1079#1075#1086#1074#1086#1088#1072
           PropertiesClassName = 'TcxButtonEditProperties'
           Properties.Buttons = <
@@ -124,9 +125,17 @@ inherited frameClientCalls: TframeClientCalls
             end>
           Width = 103
         end
+        object GridViewColumn2: TcxGridDBColumn
+          DataBinding.FieldName = 'CALLAPIID'
+          Visible = False
+        end
+        object GridViewColumn3: TcxGridDBColumn
+          DataBinding.FieldName = 'LOCALNUM'
+          Visible = False
+        end
       end
       inherited grdPhoneLevel1: TcxGridLevel
-        GridView = grdPhoneDBTableView1
+        GridView = GridView
       end
     end
     object pnlForm: TPanel

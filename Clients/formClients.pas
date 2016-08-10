@@ -203,27 +203,37 @@ procedure TfrmClients.Edit_btnClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
   mres: TModalResult;
+  id: integer;
 begin
-  DM.GetDataset(DM.Clients);
+  try
+    id := DS.DataSet.FieldByName('id').AsInteger;
+    DS.DataSet.Filtered := False;
+    if not DS.DataSet.Locate('id', id, []) then
+      Exit;
 
-  prm := NewFrmCreateParam(asEdit, DM.Clients);
-  if DS.DataSet.FieldByName('isur').AsInteger = 0 then
-  begin
-    frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
-    mres := frmClientFiz.ShowModal;
-    FreeAndNil(frmClientFiz);
-  end
-  else
-  begin
-    frmClientUr := TfrmClientUr.Create(self, '', @prm);
-    mres := frmClientUr.ShowModal;
-    FreeAndNil(frmClientUr);
-  end;
+    DM.GetDataset(DM.Clients);
 
-  if mres <> mrCancel then
-  begin
-    //DM.Clients.Transaction.CommitRetaining;
-    DM.Clients.Refresh;
+    prm := NewFrmCreateParam(asEdit, DM.Clients);
+    if DS.DataSet.FieldByName('isur').AsInteger = 0 then
+    begin
+      frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
+      mres := frmClientFiz.ShowModal;
+      FreeAndNil(frmClientFiz);
+    end
+    else
+    begin
+      frmClientUr := TfrmClientUr.Create(self, '', @prm);
+      mres := frmClientUr.ShowModal;
+      FreeAndNil(frmClientUr);
+    end;
+
+    if mres <> mrCancel then
+    begin
+      //DM.Clients.Transaction.CommitRetaining;
+      DM.Clients.Refresh;
+    end;
+  finally
+    DM.Clients.Filtered := True;
   end;
 end;
 

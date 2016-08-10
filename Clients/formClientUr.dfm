@@ -159,7 +159,7 @@ inherited frmClientUr: TfrmClientUr
     Top = 620
     Width = 768
     TabOrder = 6
-    ExplicitTop = 584
+    ExplicitTop = 620
     ExplicitWidth = 768
     inherited Image2: TImage
       Left = 50
@@ -819,7 +819,6 @@ inherited frmClientUr: TfrmClientUr
     Align = alBottom
     BorderOuter = fsNone
     TabOrder = 2
-    ExplicitTop = 403
     inline frameClientCalls: TframeClientCalls
       Left = -2
       Top = 0
@@ -841,7 +840,7 @@ inherited frmClientUr: TfrmClientUr
           ExplicitLeft = 5
           ExplicitTop = 17
           ExplicitWidth = 758
-          inherited grdPhoneDBTableView1: TcxGridDBTableView
+          inherited GridView: TcxGridDBTableView
             inherited GridViewColumn11: TcxGridDBColumn
               IsCaptionAssigned = True
             end

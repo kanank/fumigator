@@ -63,7 +63,7 @@ inherited frmClientFiz: TfrmClientFiz
     Top = 592
     Width = 786
     TabOrder = 6
-    ExplicitTop = 537
+    ExplicitTop = 592
     ExplicitWidth = 786
     inherited Image2: TImage
       Left = 58
@@ -760,7 +760,6 @@ inherited frmClientFiz: TfrmClientFiz
     Align = alBottom
     BorderOuter = fsNone
     TabOrder = 2
-    ExplicitTop = 356
     inline frameClientCalls: TframeClientCalls
       Left = -2
       Top = 0
@@ -774,7 +773,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitWidth = 772
         inherited RzPanel2: TRzPanel
           Left = 740
-          ExplicitLeft = 732
+          ExplicitLeft = 740
         end
         inherited grdPhone: TcxGrid
           Left = 5
@@ -783,7 +782,7 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 5
           ExplicitTop = 17
           ExplicitWidth = 757
-          inherited grdPhoneDBTableView1: TcxGridDBTableView
+          inherited GridView: TcxGridDBTableView
             inherited GridViewColumn11: TcxGridDBColumn
               IsCaptionAssigned = True
             end

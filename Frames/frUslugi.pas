@@ -61,6 +61,12 @@ function TFrameUslugi.SaveData: Boolean;
 var
   client_id, ind: Integer;
 begin
+  if not Query.Modified then
+  begin
+    Result := True;
+    Exit;
+  end;
+
   ind := QueryParams.IndexOf('CLIENT_ID');
   if ind > -1 then
     client_id := TField(QueryParams.Objects[ind]).AsInteger;

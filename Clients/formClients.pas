@@ -24,6 +24,7 @@ uses
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint,
   dxSkinXmas2008Blue, dxSkinscxPCPainter;
 
+
 type
   TfrmClients = class(TSprForm)
     Fiz_btn: TRzButton;
@@ -85,6 +86,7 @@ type
     procedure RzButton1Click(Sender: TObject);
     procedure btnAllClick(Sender: TObject);
     procedure NewFizClnt_miClick(Sender: TObject);
+    procedure Add_btn1Click(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -93,6 +95,8 @@ type
     procedure SetStatus(AValue: integer);
     procedure FilterRecord(DataSet: TDataSet; var Accept: Boolean);
     procedure SetButton(AButton: TRzButton);
+  protected
+    procedure SetFormRegim(AValue: TSprFormRegim); override;
   public
     constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0); overload;
     property isUr: Integer read FisUr write SetIsUr;
@@ -110,6 +114,12 @@ uses
   DM_Main, frmMain, formClientFiz, formClientUr, CommonTypes,
   formClientResult;
 
+
+procedure TfrmClients.Add_btn1Click(Sender: TObject);
+begin
+  if fFormRegim = sfrSelect then
+    ModalResult := mrOk;
+end;
 
 procedure TfrmClients.Add_btnClick(Sender: TObject);
 var
@@ -363,6 +373,23 @@ begin
   Add_btn1.Visible := isUr = -1;
 
   Grid.Refresh;
+end;
+
+procedure TfrmClients.SetFormRegim(AValue: TSprFormRegim);
+var
+  f: Boolean;
+begin
+  inherited;
+  f := fFormRegim = sfrSelect;
+
+  if f then
+  begin
+    Add_btn1.Caption := 'Œ ';
+    Add_btn1.DropDownMenu := nil;
+  end;
+
+  Edit_btn.Visible := not f;
+  Del_btn.Visible  := not f;
 end;
 
 procedure TfrmClients.SetIsUr(AValue: integer);

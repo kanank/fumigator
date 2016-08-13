@@ -602,7 +602,7 @@ end;
 
 procedure TThreadTimer.Execute;
 begin
-   while not (Terminated or fStop) do
+   while not Terminated or not fStop do
    begin
      Sleep(fInterval);
      if Assigned(fProc) then

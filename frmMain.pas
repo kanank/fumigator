@@ -497,7 +497,8 @@ begin
 
   CallObj.StartCall(CallInfo);
   //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
-  TfrmIncomeCallRoot.ShowCall;
+  //TfrmIncomeCallRoot.ShowCall;
+  DM.ShowCall;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);

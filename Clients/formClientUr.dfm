@@ -4,6 +4,7 @@ inherited frmClientUr: TfrmClientUr
   ClientWidth = 768
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -32
   ExplicitWidth = 784
   ExplicitHeight = 702
   PixelsPerInch = 96
@@ -190,6 +191,26 @@ inherited frmClientUr: TfrmClientUr
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
+    end
+    object btnHide: TRzButton
+      Left = 638
+      Top = 8
+      Width = 124
+      Height = 29
+      Anchors = [akTop, akRight]
+      Caption = #1057#1082#1088#1099#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 2
+      ThemeAware = False
+      Visible = False
+      OnClick = btnHideClick
     end
   end
   object RzGroupBox1: TRzGroupBox
@@ -430,7 +451,7 @@ inherited frmClientUr: TfrmClientUr
         end
       end
       inherited RzPanel2: TRzPanel
-        Top = 101
+        Top = 109
         Width = 185
         Height = 27
         ExplicitTop = 101

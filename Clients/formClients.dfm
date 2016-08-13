@@ -5,6 +5,7 @@ inherited frmClients: TfrmClients
   Position = poDesktopCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
+  ExplicitLeft = -186
   ExplicitWidth = 938
   ExplicitHeight = 473
   PixelsPerInch = 96
@@ -114,7 +115,9 @@ inherited frmClients: TfrmClients
       OnClick = Edit_btnClick
     end
     inherited Del_btn: TRzButton
+      Top = 5
       OnClick = Del_btnClick
+      ExplicitTop = 5
     end
     inherited Add_btn: TRzButton
       Top = 5
@@ -157,6 +160,7 @@ inherited frmClients: TfrmClients
       ParentFont = False
       TabOrder = 5
       ThemeAware = False
+      OnClick = Add_btn1Click
       DropDownMenu = NewClientBtn_PUM
       ShowArrow = False
     end

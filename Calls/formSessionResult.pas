@@ -37,6 +37,8 @@ type
     btnNonConsult: TRzButton;
     btnOther: TRzButton;
     edtIshod: TcxMemo;
+    btnCardNoCreated: TRzButton;
+    btnBack: TRzButton;
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure Cancel_btnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -63,22 +65,26 @@ uses
 procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
 begin
   edtIshod.Text := TRzButton(Sender).Caption;
+  edtIshod.Properties.ReadOnly := True;
+  //TRzButton(Sender).Down := True;
 end;
 
 procedure TfrmSessionResult.btnOtherClick(Sender: TObject);
 begin
-  if not edtIshod.Visible then
-  begin
+  //if not edtIshod.Visible then
+  //begin
     edtIshod.Text := '';
-    edtIshod.Visible := True;
-    btnOther.Caption := 'Отменить "другое"'
-  end
-  else
-  begin
-    edtIshod.Text := '';
-    edtIshod.Visible := false;
-    btnOther.Caption := 'Другое'
-  end;
+    edtIshod.Properties.ReadOnly := False;
+    //btnOther.Caption := 'Отменить "другое"';
+    //TRzButton(Sender).Down := True;
+  //end
+//  else
+//  begin
+//    edtIshod.Text := '';
+//    edtIshod.Visible := false;
+//    btnOther.Caption := 'Другое';
+//    TRzButton(Sender).Down := False;
+//  end;
 end;
 
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
@@ -89,6 +95,13 @@ begin
     Exit;
   end
   else*)
+  if not Q.Active then
+    Q.ParamByName('CALLID').AsString := CallObj.CallInfo.CallId;
+    Q.Open;
+
+  if Q.State <> dsEdit then
+    Q.Edit;
+
   if CheckFields then
   begin
     Q.FieldByName('RESULT').AsString := edtResult.Text;
@@ -102,7 +115,7 @@ begin
   Result := false;
   if (edtIshod.Text = '') or (Length(edtResult.Text) < 5)  then
   begin
-    Application.MessageBox('Необходимо заполнить поля! Комментарий - не менее 5 символов ', 'Результат сессии', MB_ICONSTOP);
+    Application.MessageBox('Необходимо заполнить поля! (Комментарий - не менее 5 символов) ', 'Результат сессии', MB_ICONSTOP);
     Result := False;
   end
   else

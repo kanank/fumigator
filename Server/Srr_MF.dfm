@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 493
+      Left = 489
       Top = 290
       Width = 106
       Height = 25
@@ -447,7 +447,6 @@ object MF: TMF
       Caption = #1054#1095#1080#1089#1090#1080#1090#1100
       TabOrder = 3
       OnClick = Button9Click
-      ExplicitLeft = 497
     end
   end
   object Log_memo: TMemo

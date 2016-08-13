@@ -2,7 +2,6 @@ inherited frmSessionEdit: TfrmSessionEdit
   Caption = #1057#1077#1089#1089#1080#1103' ['#1088#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1077']'
   ClientHeight = 601
   ClientWidth = 830
-  ExplicitTop = -126
   ExplicitWidth = 846
   ExplicitHeight = 639
   PixelsPerInch = 96
@@ -17,14 +16,14 @@ inherited frmSessionEdit: TfrmSessionEdit
     Top = 557
     Width = 830
     ExplicitTop = 557
-    ExplicitWidth = 763
+    ExplicitWidth = 830
     inherited Image2: TImage
       Left = 195
       ExplicitLeft = 128
     end
     inherited Exit_bnt: TRzButton
       Left = 696
-      ExplicitLeft = 629
+      ExplicitLeft = 696
     end
     object RzButton1: TRzButton
       Left = 560
@@ -44,7 +43,6 @@ inherited frmSessionEdit: TfrmSessionEdit
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
-      ExplicitLeft = 493
     end
   end
   object pnlResult: TRzPanel
@@ -56,7 +54,6 @@ inherited frmSessionEdit: TfrmSessionEdit
     BorderOuter = fsFlat
     BorderSides = [sdBottom]
     TabOrder = 1
-    ExplicitWidth = 763
   end
   object pnlCalls: TRzPanel
     Left = 0
@@ -66,7 +63,6 @@ inherited frmSessionEdit: TfrmSessionEdit
     Align = alBottom
     BorderOuter = fsNone
     TabOrder = 2
-    ExplicitWidth = 763
     inline frameClientCalls: TframeClientCalls
       Left = -2
       Top = 0
@@ -79,6 +75,7 @@ inherited frmSessionEdit: TfrmSessionEdit
         ExplicitWidth = 764
         inherited RzPanel2: TRzPanel
           Left = 732
+          ExplicitLeft = 732
         end
         inherited grdPhone: TcxGrid
           Left = 5
@@ -86,8 +83,8 @@ inherited frmSessionEdit: TfrmSessionEdit
           Width = 758
           ExplicitLeft = 5
           ExplicitTop = 17
-          ExplicitWidth = 754
-          inherited grdPhoneDBTableView1: TcxGridDBTableView
+          ExplicitWidth = 758
+          inherited GridView: TcxGridDBTableView
             inherited GridViewColumn11: TcxGridDBColumn
               IsCaptionAssigned = True
             end
@@ -105,6 +102,5 @@ inherited frmSessionEdit: TfrmSessionEdit
     BorderOuter = fsFlat
     BorderSides = [sdBottom]
     TabOrder = 3
-    ExplicitWidth = 763
   end
 end

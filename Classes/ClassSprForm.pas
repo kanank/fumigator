@@ -25,6 +25,8 @@ uses
   dxSkinscxPCPainter;
 
 type
+  TSprFormRegim =(sfrEdit, sfrSelect); //режим формы обычный или выбор
+type
   TSprForm = class(TBaseForm)
     RzPanel2: TRzPanel;
     RzPanel1: TRzPanel;
@@ -41,9 +43,12 @@ type
       AShift: TShiftState; var AHandled: Boolean);
   private
     { Private declarations }
+  protected
+    fFormRegim: TSprFormRegim;
+    procedure SetFormRegim(AValue: TSprFormRegim); virtual;
   public
-//    constructor Create(AOwner: TComponent; ATitle: string=''); override;
-  end;
+    property FormRegim: TSprFormRegim read fFormRegim write SetFormRegim;
+end;
 
 
 implementation
@@ -57,6 +62,12 @@ procedure TSprForm.GridViewCellDblClick(Sender: TcxCustomGridTableView;
 begin
   inherited;
   Edit_btn.Click;
+end;
+
+procedure TSprForm.SetFormRegim(AValue: TSprFormRegim);
+begin
+  if AValue <> fFormRegim then
+    fFormRegim := AValue;
 end;
 
 end.

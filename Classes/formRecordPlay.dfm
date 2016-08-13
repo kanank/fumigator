@@ -5,6 +5,8 @@ object frmRecordPlay: TfrmRecordPlay
   ClientHeight = 21
   ClientWidth = 116
   Color = clBtnFace
+  TransparentColor = True
+  TransparentColorValue = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

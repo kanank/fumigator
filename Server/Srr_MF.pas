@@ -570,8 +570,6 @@ begin
       Exception(ExceptObject).Message);
   end;
 
-  //Caller := TPhoneCalls.Create(AccessToken);
-  //Caller.SimpleCall('104', '+79104579648');
 end;
 
 procedure TMF.Button4Click(Sender: TObject);
@@ -588,13 +586,10 @@ var
   s: string;
   cl: TCallListener;
 begin
-  //i:= Caller.StatusCall;
-  //if  not Assigned(Caller) then
-  //  Caller := TPhoneCalls.Create(AccessToken);
-   cl := TCallListener.Create(AccessToken, Edit1.Text, '@self');
-   cl.ExtIgnored := '099,200';
-   cl.OnCallAccept := AfterOutcomCall;
-   cl.Start;
+   //cl := TCallListener.Create(AccessToken, Edit1.Text, '@self');
+   //cl.ExtIgnored := '099,200';
+   //cl.OnCallAccept := AfterOutcomCall;
+   //cl.Start;
 
 
 end;
@@ -741,7 +736,7 @@ begin
 
       if fIn then
       begin
-        CallObj := TCallSession.Create(ACallApiId, AclientIdType, fSessions, 600);
+        CallObj := TCallSession.Create(ACallApiId, AclientIdType, fSessions, 60);
         fSessions.AddObject(ACallApiId, CallObj);
         CallObj.StartCall(ACallId, Aats);
       end;
@@ -1096,6 +1091,11 @@ begin
           AddLogMemo('#Ошибка записи: ' +Exception(ExceptObject).Message);
         end;
       end
+      else
+
+      if cmd = 'terminate' then
+        Application.Terminate
+
       else
         SocketCommand(AContext, cmd, arg);
 
@@ -1496,7 +1496,7 @@ end;
 procedure TCallSession.Execute;
 begin
   fListener.Start;
-    while not Terminated and not fAccepted and not fFinished do
+    while not Terminated do
     begin
       if not fAccepted and (fListener.Accepted) then //остался один звонок
       begin
@@ -1508,6 +1508,11 @@ begin
       end;
       if not fFinished then
         fFinished := fListener.Finished;
+      if SecondOfTheDay(Now) - SecondOfTheDay(fStartTime) >
+         fSeconds then
+        Terminate
+      else
+        Sleep(300);
   end;
 
   if fFinished then
@@ -1679,7 +1684,7 @@ begin
       begin
         CallObj := TCallSession(MF.fSessions.Objects[ind]);
         AclientIDType := CallObj.Str;
-        //Exit;
+        //Exit;        ommand
       end
     end
     else
@@ -1698,7 +1703,7 @@ begin
 
       if fIn then
       begin
-        CallObj := TCallSession.Create(ACallApiId, AclientIdType, MF.fSessions, 600);
+        CallObj := TCallSession.Create(ACallApiId, AclientIdType, MF.fSessions, 60);
         MF.fSessions.AddObject(ACallApiId, CallObj);
         CallObj.StartCall(ACallId, Aats);
       end;

@@ -123,6 +123,7 @@ inherited frameClientCalls: TframeClientCalls
               Default = True
               Kind = bkEllipsis
             end>
+          Options.AutoWidthSizable = False
           Width = 103
         end
         object GridViewColumn2: TcxGridDBColumn
@@ -143,7 +144,6 @@ inherited frameClientCalls: TframeClientCalls
       Top = 48
       Width = 137
       Height = 25
-      AutoSize = True
       BevelEdges = []
       TabOrder = 2
       Visible = False

@@ -1,16 +1,16 @@
 inherited frmSessionResult: TfrmSessionResult
   BorderIcons = [biSystemMenu]
   Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1089#1077#1089#1089#1080#1080
-  ClientHeight = 241
+  ClientHeight = 317
   ClientWidth = 233
   Position = poDesktopCenter
   ExplicitWidth = 249
-  ExplicitHeight = 279
+  ExplicitHeight = 355
   PixelsPerInch = 96
   TextHeight = 13
   inherited img1: TImage
     Left = 228
-    Top = 170
+    Top = 246
     Width = 194
     Height = 62
     AutoSize = True
@@ -38,9 +38,9 @@ inherited frmSessionResult: TfrmSessionResult
     ParentFont = False
   end
   object Cancel_btn: TRzButton
-    Left = 55
-    Top = 205
-    Width = 124
+    Left = 126
+    Top = 283
+    Width = 95
     Height = 29
     Anchors = [akTop, akRight]
     Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
@@ -70,14 +70,15 @@ inherited frmSessionResult: TfrmSessionResult
     TabOrder = 2
     DesignSize = (
       217
-      116)
-    Height = 116
+      191)
+    Height = 191
     Width = 217
     object btnConsult: TRzButton
-      Left = 6
-      Top = 18
-      Width = 208
+      Left = 2
+      Top = 89
+      Width = 211
       Height = 29
+      GroupIndex = 1
       Anchors = [akTop, akRight]
       Caption = #1055#1088#1086#1074#1077#1076#1077#1085#1072' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1103
       Font.Charset = DEFAULT_CHARSET
@@ -93,10 +94,11 @@ inherited frmSessionResult: TfrmSessionResult
       OnClick = btnConsultClick
     end
     object btnNonConsult: TRzButton
-      Left = 6
-      Top = 49
-      Width = 208
+      Left = 2
+      Top = 122
+      Width = 211
       Height = 29
+      GroupIndex = 1
       Anchors = [akTop, akRight]
       Caption = #1041#1077#1079' '#1082#1086#1085#1089#1091#1083#1100#1090#1072#1094#1080#1080
       Font.Charset = DEFAULT_CHARSET
@@ -112,10 +114,11 @@ inherited frmSessionResult: TfrmSessionResult
       OnClick = btnConsultClick
     end
     object btnOther: TRzButton
-      Left = 3
-      Top = 84
+      Left = 2
+      Top = 155
       Width = 211
       Height = 29
+      GroupIndex = 1
       Anchors = [akTop, akRight]
       Caption = #1044#1088#1091#1075#1086#1077
       Font.Charset = DEFAULT_CHARSET
@@ -132,12 +135,52 @@ inherited frmSessionResult: TfrmSessionResult
     end
     object edtIshod: TcxMemo
       Left = 3
-      Top = 17
+      Top = 13
+      Properties.ReadOnly = True
       TabOrder = 3
-      Visible = False
-      Height = 63
+      Height = 40
       Width = 210
     end
+    object btnCardNoCreated: TRzButton
+      Left = 2
+      Top = 56
+      Width = 211
+      Height = 29
+      GroupIndex = 1
+      Anchors = [akTop, akRight]
+      Caption = #1050#1072#1088#1090#1086#1095#1082#1072' '#1082#1083#1080#1077#1085#1090#1072' '#1085#1077' '#1089#1086#1079#1076#1072#1085#1072
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 4
+      ThemeAware = False
+      OnClick = btnConsultClick
+    end
+  end
+  object btnBack: TRzButton
+    Left = 11
+    Top = 283
+    Width = 95
+    Height = 29
+    ModalResult = 8
+    Anchors = [akTop, akRight]
+    Caption = #1042#1077#1088#1085#1091#1090#1100#1089#1103
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 2960640
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HotTrack = True
+    HotTrackColor = 16625984
+    ParentFont = False
+    TabOrder = 3
+    ThemeAware = False
+    Visible = False
   end
   object DS: TDataSource
     DataSet = Q

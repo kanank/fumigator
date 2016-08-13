@@ -7,29 +7,52 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassSimpleForm, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, RzLabel,
   cxTextEdit, cxMaskEdit, cxDBEdit, Vcl.StdCtrls, RzButton, Vcl.ExtCtrls,
-  RzPanel, dxGDIPlusClasses, Data.DB, Vcl.Menus;
+  RzPanel, dxGDIPlusClasses, Data.DB, Vcl.Menus, dxSkinsCore, dxSkinBlack,
+  dxSkinBlue, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
+  dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue;
 
 type
   TfrmCallUnknown = class(TSimpleForm)
-    Label11: TLabel;
     RzLabel1: TRzLabel;
-    btnNewFizCli: TRzButton;
-    btnNewUrCli: TRzButton;
+    btnPost: TRzButton;
     DS: TDataSource;
     edtPhone: TcxMaskEdit;
-    RzButton1: TRzButton;
-    btnContacts: TRzMenuButton;
+    btnLID: TRzMenuButton;
+    btnCorporate: TRzButton;
+    btnErrorCall: TRzButton;
+    pmNewClient: TPopupMenu;
+    NewFizClnt_mi: TMenuItem;
+    NewURClnt_mi: TMenuItem;
+    pmExistsClient: TPopupMenu;
+    mExistsClient: TMenuItem;
+    mExistsContact: TMenuItem;
+    btnAddToExist: TRzMenuButton;
     procedure FormCreate(Sender: TObject);
-    procedure btnNewFizCliClick(Sender: TObject);
-    procedure btnNewUrCliClick(Sender: TObject);
-    procedure btnContactsClick(Sender: TObject);
-    procedure RzButton1Click(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
+    procedure btnClick(Sender: TObject);
+    procedure NewFizClnt_miClick(Sender: TObject);
+    procedure NewURClnt_miClick(Sender: TObject);
+    procedure mExistsClientClick(Sender: TObject);
   private
     fOutcomeCall: Boolean;
     procedure SetOutcomeCall(AValue: boolean);
+  protected
+    procedure doFinishCall; override;
   public
+    TypeBtnClick: string; //нажатая кнопка
+    SubTypeBtnClick: string; //подтип
     ContactType: integer;
+    SelectId: Integer;
     property OutcomeCall: Boolean read fOutcomeCall write SetOutcomeCall;
   end;
 
@@ -41,26 +64,41 @@ implementation
 {$R *.dfm}
 
 uses
-  DM_Main, formClientFiz, formClientUr, CommonTypes, frmMain;
-
-
+  DM_Main, formClientFiz, formClientUr, CommonTypes, frmMain,
+  formClients, formSessionResult, CommonVars;
 
 
 { TfrmCallUnknown }
 
-procedure TfrmCallUnknown.btnContactsClick(Sender: TObject);
+procedure TfrmCallUnknown.btnClick(Sender: TObject);
 begin
+  TypeBtnClick := TComponent(Sender).Name;
   CanClose := True;
+
+  if not Assigned(frmSessionResult) then
+  frmSessionResult := TfrmSessionResult.Create(nil);
+  with frmSessionResult do
+  begin
+    btnBack.Visible := True;
+    btnCardNoCreated.Enabled := False;
+    btnConsult.Enabled := False;
+    btnNonConsult.Enabled := False;
+    btnOther.Enabled := False;
+    edtIshod.Text := TRzButton(Sender).Caption;
+    frmSessionResult.FormStyle := fsStayOnTop;
+    frmSessionResult.ShowModal;
+    if ModalResult = mrClose then
+      Exit;
+  end;
+
+  ModalResult := mrOk;
 end;
 
-procedure TfrmCallUnknown.btnNewFizCliClick(Sender: TObject);
-begin
-  CanClose := True;
-end;
 
-procedure TfrmCallUnknown.btnNewUrCliClick(Sender: TObject);
+procedure TfrmCallUnknown.doFinishCall;
 begin
-  CanClose := True;
+  //if not CallObj.Accepted then
+  //  ModalResult := mrCancel;
 end;
 
 procedure TfrmCallUnknown.Exit_bntClick(Sender: TObject);
@@ -74,9 +112,37 @@ begin
   CanClose := false;
 end;
 
-procedure TfrmCallUnknown.RzButton1Click(Sender: TObject);
+procedure TfrmCallUnknown.mExistsClientClick(Sender: TObject);
+var
+  fSpr: TfrmClients;
 begin
-  CanClose := True;
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  fSpr := TfrmClients.Create(self);
+  try
+    fSpr.ShowModal;
+    if fSpr.ModalResult = mrOk then //выбран клиент
+    begin
+      TypeBtnClick := btnAddToExist.Name;
+      SelectId := fSpr.DS.DataSet.FieldByName('id').AsInteger;
+    end;
+
+  finally
+    FreeAndNil(fSpr);
+  end;
+end;
+
+procedure TfrmCallUnknown.NewFizClnt_miClick(Sender: TObject);
+begin
+  SubTypeBtnClick := 'FIZ';
+  btnClick(btnLID);
+end;
+
+procedure TfrmCallUnknown.NewURClnt_miClick(Sender: TObject);
+begin
+  SubTypeBtnClick := 'UR';
+  btnClick(btnLID);
 end;
 
 procedure TfrmCallUnknown.SetOutcomeCall(AValue: boolean);
@@ -84,7 +150,9 @@ begin
   fOutcomeCall := AValue;
 
   if AValue then
-    Caption := 'Исходящий звонок. Клиент не найден';
+    Caption := 'Исходящий звонок. Клиент не найден'
+  else
+    Caption := 'Входящий звонок. Клиент не найден';
 
 end;
 

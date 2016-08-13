@@ -3,6 +3,7 @@ object DataModuleMain: TDataModuleMain
   Height = 536
   Width = 816
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -15,6 +16,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -975,6 +977,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1050,7 +1053,9 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
-      'select region_id, name,  socr, code, actual from kladr'
+      
+        'select region_id, trim(name) name,  trim(socr) socr, code, actua' +
+        'l from kladr'
       
         'where region_id > 0 and area_id = 0 and city_id = 0 and site_id ' +
         '= 0')
@@ -1132,6 +1137,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

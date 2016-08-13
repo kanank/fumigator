@@ -69,6 +69,26 @@ inherited frmClientFiz: TfrmClientFiz
       Left = 58
       ExplicitLeft = 58
     end
+    object btnHide: TRzButton [1]
+      Left = 652
+      Top = 8
+      Width = 124
+      Height = 29
+      Anchors = [akTop, akRight]
+      Caption = #1057#1082#1088#1099#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 2
+      ThemeAware = False
+      Visible = False
+      OnClick = btnHideClick
+    end
     inherited Exit_bnt: TRzButton
       Left = 652
       OnClick = Exit_bntClick
@@ -204,6 +224,9 @@ inherited frmClientFiz: TfrmClientFiz
       Width = 287
       ExplicitTop = 6
       ExplicitWidth = 287
+      DesignSize = (
+        287
+        142)
       inherited Label10: TLabel [0]
       end
       inherited Label9: TLabel [1]
@@ -344,6 +367,9 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitLeft = 3
       ExplicitWidth = 201
       ExplicitHeight = 128
+      DesignSize = (
+        201
+        128)
       inherited grdPhone: TcxGrid
         Width = 191
         Height = 81

@@ -322,8 +322,7 @@ procedure TCallProto.SetReady(AValue: boolean);
 begin
   if AValue <> fReady then
   begin
-    if AValue and not Active then
-      fReady := AValue;
+    fReady := AValue;
   end;
 end;
 

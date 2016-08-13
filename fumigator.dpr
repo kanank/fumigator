@@ -73,7 +73,10 @@ uses
   formDbBase in 'Classes\formDbBase.pas' {frmDbBaseForm},
   formCallReport in 'Report\formCallReport.pas' {frmCallReport},
   formRecordPlay in 'Classes\formRecordPlay.pas' {frmRecordPlay},
-  MappedFunc in 'Classes\MappedFunc.pas';
+  MappedFunc in 'Classes\MappedFunc.pas',
+  ClassFormSmallCard in 'Classes\ClassFormSmallCard.pas' {frmSmallCard},
+  formSmallClientFiz in 'Clients\formSmallClientFiz.pas' {frmSmallCardFiz},
+  formSmallClientUr in 'Clients\formSmallClientUr.pas' {frmSmallCardUr};
 
 {$R *.res}
 var

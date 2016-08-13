@@ -64,12 +64,14 @@ type
     Label6: TLabel;
     cxDBMemo1: TcxDBMemo;
     frameClientCalls: TframeClientCalls;
+    btnHide: TRzButton;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure DSDataChange(Sender: TObject; Field: TField);
     procedure Exit_bntClick(Sender: TObject);
     procedure cmbWorkerPropertiesPopup(Sender: TObject);
     procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
+    procedure btnHideClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -84,6 +86,11 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, CommonTypes, System.StrUtils, formIncomeCallRoot;
+
+procedure TfrmClientUr.btnHideClick(Sender: TObject);
+begin
+  Self.ModalResult := mrOk;
+end;
 
 procedure TfrmClientUr.butOKClick(Sender: TObject);
 var
@@ -303,6 +310,23 @@ begin
     FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
     FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
     FramePhones.DS.DataSet.Post;
+  end;
+
+  //добавление телефона в существующий
+  if (fFrmParam.action = asEdit) and
+     (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
+      (fFrmParam.ExtParam^.CallParam.TelNum <> '') then
+  begin
+    if not FramePhones.DS.DataSet.Locate('phone',
+       RightStr(TClientParam(fFrmParam.ExtParam^).CallParam.TelNum, 10), []) then
+    begin
+      FramePhones.DS.DataSet.Append;
+      FramePhones.DS.DataSet.FieldByName('phone').AsString :=
+        RightStr(TClientParam(fFrmParam.ExtParam^).CallParam.TelNum, 10);
+      //FramePhones.DS.DataSet.FieldByName('ismain').AsInteger := 1;
+      FramePhones.DS.DataSet.FieldByName('phone_type_id').AsInteger := 1;
+      FramePhones.DS.DataSet.Post;
+    end;
   end;
 
   FrameUslugi.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;

@@ -55,6 +55,7 @@ type
     procedure CheckSession;
     procedure doFinishCall; override;
     destructor Destroy; overload;
+    procedure CreateFormResult;
   end;
 
 var
@@ -95,10 +96,11 @@ begin
   end;
 
   if not Assigned(frmSessionResult) then
-    frmSessionResult := TfrmSessionResult.Create(nil);
+    CreateFormResult;
 
   try
-    if frmSessionResult.Q.Transaction.Active then
+    if Assigned(frmSessionResult.Q.Transaction) and
+        frmSessionResult.Q.Transaction.Active then
       frmSessionResult.Q.Transaction.CommitRetaining;
   except
   end;
@@ -119,17 +121,6 @@ begin
       frmSessionResult.edtIshod.Text := (*.Q.FieldByName('ishod').AsString*) 'Карточка клиента не создана';
   Self.CallResult := CallObj.CallInfo.CallResult; //frmSessionResult.Q.FieldByName('callresult').AsString;
 
-  frmSessionResult.BorderIcons := [];
-  frmSessionResult.BorderStyle := bsNone;
-  frmSessionResult.Position := poDefault;
-  frmSessionResult.Height := frmSessionResult.Cancel_btn.Top - 2;
-  frmSessionResult.Parent   := frmClientResult.pnlResult;
-  frmSessionResult.Top := 2;
-  Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
-  Self.pnlResult.Height := frmSessionResult.Height;
-
-  frmSessionResult.Cancel_btn.Visible := False;
-  frmSessionResult.Show;
 
   btnTransferCall.Enabled := false;
   btnDeleteCall.Enabled   := false;
@@ -151,6 +142,24 @@ begin
   if DM.CheckCloseSession(CallId) then
     CallFinish;
 
+end;
+
+procedure TfrmClientResult.CreateFormResult;
+begin
+  if not Assigned(frmSessionResult) then
+    frmSessionResult := TfrmSessionResult.Create(nil);
+
+  frmSessionResult.BorderIcons := [];
+  frmSessionResult.BorderStyle := bsNone;
+  frmSessionResult.Position := poDefault;
+  frmSessionResult.Height := frmSessionResult.Cancel_btn.Top - 2;
+  frmSessionResult.Parent   := frmClientResult.pnlResult;
+  frmSessionResult.Top := 3;
+  Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
+  Self.pnlResult.Height := frmSessionResult.Height;
+
+  frmSessionResult.Cancel_btn.Visible := False;
+  frmSessionResult.Show;
 end;
 
 destructor TfrmClientResult.Destroy;

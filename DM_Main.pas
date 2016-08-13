@@ -130,10 +130,15 @@ type
     function isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean; // проверка клиента по сотруднику и региону
 
     function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientFizForCall(AAction: TActionStr; AExtPrm: TClientParam): FormResult; // при звонке вместе с краткой формой
+
     function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientUrForCall(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientsForCall: FormResult;
+
     function SetReadedCall(id: integer): boolean;
-    function ShowUnknownCallForm(APhone: string; AFreeForm: boolean=true): FormResult;
+    function ShowCall: Boolean;
+    function ShowUnknownCallForm(APhone: string; AFreeForm: boolean=true; AOutcome: Boolean = True): FormResult;
     function ShowFizCallForm(CLP: ClientCallParams): FormResult;
     function ShowUrCallForm(CLP: ClientCallParams): FormResult;
     function ShowContact(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
@@ -190,7 +195,8 @@ uses
   frmWorker, System.StrUtils, formCallUnknown, formClientFiz,
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
   frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult,
-  formClientResult, formContact, formLogo;
+  formClientResult, formContact, formLogo,
+  formSmallClientFiz, formSmallClientUr, formCallEvent;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -271,6 +277,35 @@ begin
   end;
 end;
 
+function TDataModuleMain.ShowClientFizForCall(AAction: TActionStr;
+  AExtPrm: TClientParam): FormResult;
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  prm :=  TFrmCreateParam.Init(AACtion, DM.Clients, @AExtPrm);  //NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
+  with frmClientFiz do
+  begin
+    btnHide.Visible := True;
+    Exit_bnt.Visible := False;
+    butOK.Visible := False;
+  end;
+
+  frmSmallCardFiz := TfrmSmallCardFiz.Create(frmClientFiz);
+  with frmSmallCardFiz do
+  begin
+    edtName.DataBinding.DataSource   := frmClientFiz.FramePerson.DS;
+    edtFamily.DataBinding.DataSource := frmClientFiz.FramePerson.DS;
+    edtPhone.Text          := RightStr(AExtPrm.CallParam.TelNum, 10);
+    FrameUslugi.Query      := frmClientFiz.FrameUslugi.Query;
+    FrameUslugi.DS.DataSet := frmClientFiz.FrameUslugi.Query;
+    ShowModal;
+  end;
+end;
+
 function TDataModuleMain.ShowClientsForCall: FormResult;
 begin
   frmClientsForCall := TfrmClientsForCall.Create(nil);
@@ -299,6 +334,35 @@ begin
     Result.ModalRes := frmClientUr.ModalResult;
   finally
     FreeAndNil(frmClientUr);
+  end;
+end;
+
+function TDataModuleMain.ShowClientUrForCall(AAction: TActionStr;
+  AExtPrm: TClientParam): FormResult;
+var
+  prm: TFrmCreateParam;
+begin
+  if not DM.Clients.Active then
+    DM.Clients.Open;
+
+  prm :=  TFrmCreateParam.Init(AACtion, DM.Clients, @AExtPrm);  //NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
+  frmClientUr := TfrmClientUr.Create(nil, '', @prm);
+  with frmClientUr do
+  begin
+    btnHide.Visible := True;
+    Exit_bnt.Visible := False;
+    butOK.Visible := False;
+  end;
+
+  frmSmallCardUr := TfrmSmallCardUr.Create(frmClientUr);
+  with frmSmallCardUr do
+  begin
+    edtName.DataBinding.DataSource   := frmClientUr.FramePerson.DS;
+    edtFamily.DataBinding.DataSource := frmClientUr.FramePerson.DS;
+    edtPhone.Text          := RightStr(AExtPrm.CallParam.TelNum, 10);
+    FrameUslugi.Query      := frmClientUr.FrameUslugi.Query;
+    FrameUslugi.DS.DataSet := frmClientUr.FrameUslugi.Query;
+    ShowModal;
   end;
 end;
 
@@ -392,9 +456,6 @@ begin
      extParam.Init(0, 0, @CLP);
      prm.action := asEdit;
 
-    //if not DM.Clients.Locate('id', CLP.Client_id, []) then
-    //  Exit;
-
     frmClientResult := TfrmClientResult.Create(nil);
 
     inCalling := True;
@@ -403,10 +464,32 @@ begin
 
     if CallObj.CallInfo.ClientType = '' then
       case ShowUnknownCallForm(Aphone, false).ModalRes of
-        mrOk: newFiz := true;
-        mrYes: NewUr := True;
-        mrAll: newContact := True;
-        mrCancel: fCancel := True;
+       mrOk:
+       begin
+         // новый лид
+         if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnLID.Name then
+         begin
+           ExtParam.CallParam.Status_Id := 2; //Ћид
+           if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
+             newFiz := True//DM.ShowClientFizForCall(asCreate, ExtPrm)
+           else
+             newUr := True;//DM.ShowClientURForCall(asCreate, ExtPrm);
+         end
+         else //добавить к существующему
+         if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
+         begin
+           if frmCallUnknown.SelectId > 0 then
+           begin
+             DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
+             CallObj.CallInfo.ClientId := frmCallUnknown.SelectId;
+             isClient := True;
+             if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+                CallObj.CallInfo.ClientType := 'F'
+             else
+                CallObj.CallInfo.ClientType := 'U';
+           end;
+         end;
+       end;
       end
     else
     begin
@@ -416,8 +499,10 @@ begin
         Exit;
     end;
 
-    if not (fCancel or CallObj.Cancelled) then
+    if not fCancel and not CallObj.Cancelled then
     begin
+      frmClientResult.CreateFormResult;
+
       isClient := not(newContact or (CallObj.CallInfo.ClientType = 'C'));
       if isClient then
         DM.GetDataset(DM.Clients)
@@ -494,21 +579,24 @@ begin
     frmClientResult.ShowModal;
     Result := frmClientResult.CallResult;
     frmClientResult.Free;
+
   finally
-    inCalling     := False;
-    waitCalling   := False;
-    CallObj.Ready := true;
+    inCalling      := False;
+    waitCalling    := False;
+    CallObj.Active := False;
+    CallObj.Ready  := true;
   end;
 
   //end;
 
 end;
 
-function TDataModuleMain.ShowUnknownCallForm(APhone: string; AFreeForm: boolean=True): FormResult;
+function TDataModuleMain.ShowUnknownCallForm(APhone: string; AFreeForm: boolean=True; AOutcome: Boolean = True): FormResult;
 begin
   if not Assigned(frmCallUnknown) then
   frmCallUnknown := TfrmCallUnknown.Create(nil);
   try
+    frmCallUnknown.OutcomeCall := AOutcome;
     frmCallUnknown.CloseOnCancelCall := True;
     frmCallUnknown.edtPhone.Text := RightStr(APhone, 10);
     frmCallUnknown.ShowModal;
@@ -1100,7 +1188,8 @@ begin
     _Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
     _Q.FieldByName('client_id').AsInteger := client_id;
     if client_id = 0 then //клиент не был создан
-      _Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
+      //_Q.FieldByName('ishod').AsString := ' арточка клиента не создана';
+      btnCardNoCreated.Click;
 
     Result := _Q.FieldByName('callresult').AsString;
     if not f then
@@ -1400,6 +1489,30 @@ begin
       FreeAndNil(Q);
   end;
 
+end;
+
+function TDataModuleMain.ShowCall: Boolean;
+begin
+ if DM.Db.Connected = false then
+    Exit;
+
+  try
+    DM.incomeCalling := True;
+    frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
+
+    frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
+    frmIncomeCallRoot.ClientClose       := false;
+    frmIncomeCallRoot.CloseOnCancelCall := true;
+    frmIncomeCallRoot.ModalResult := mrNone;
+    if CallObj.Active then
+      frmIncomeCallRoot.ShowModal;
+
+  finally
+    FreeAndNil(frmCallEvent);
+    FreeAndNil(frmIncomeCallRoot);
+    CallObj.Active := False;
+    CallObj.Ready := True;
+  end;
 end;
 
 

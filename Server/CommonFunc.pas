@@ -2,7 +2,7 @@ unit CommonFunc;
 
 interface
 
-function  FileVersion ( fName : string ) : string;
+function FileVersion ( fName : string ) : string;
 function UrlEncode(Str: Ansistring): Ansistring;
 function UrlDecode(Str: Ansistring): Ansistring;
 function LockMutex(AHandle: THandle; ATimeout: integer): Boolean;

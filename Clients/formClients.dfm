@@ -5,7 +5,6 @@ inherited frmClients: TfrmClients
   Position = poDesktopCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
-  ExplicitLeft = -186
   ExplicitWidth = 938
   ExplicitHeight = 473
   PixelsPerInch = 96

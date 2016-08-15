@@ -119,6 +119,7 @@ procedure TfrmClients.Add_btn1Click(Sender: TObject);
 begin
   if fFormRegim = sfrSelect then
     ModalResult := mrOk;
+  inherited;
 end;
 
 procedure TfrmClients.Add_btnClick(Sender: TObject);
@@ -294,7 +295,10 @@ procedure TfrmClients.GridViewUrCellDblClick(Sender: TcxCustomGridTableView;
   ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
   AShift: TShiftState; var AHandled: Boolean);
 begin
-  Edit_btn.Click;
+  if fFormRegim = sfrSelect then
+    Add_btn1.Click
+  else
+    Edit_btn.Click;
 end;
 
 procedure TfrmClients.NewFizClnt_miClick(Sender: TObject);
@@ -369,8 +373,8 @@ begin
   else
     GridLevel1.GridView := GridViewAll;
 
-  Add_btn.Visible := isUr > -1;
-  Add_btn1.Visible := isUr = -1;
+  //Add_btn.Visible := isUr > -1;
+  //Add_btn1.Visible := isUr = -1;
 
   Grid.Refresh;
 end;

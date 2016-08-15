@@ -86,6 +86,9 @@ begin
 end;
 
 procedure TfrmClientResult.CallFinish;
+var
+  f: Boolean; //для отладки
+  step: integer;
 begin
   fCallFinished := True;
 
@@ -110,8 +113,9 @@ begin
   begin
     frmSessionResult.Q.Close;
     frmSessionResult.Q.Open;
-    if frmSessionResult.Q.RecordCount > 0 then
+    if (frmSessionResult.Q.RecordCount > 0) or f or (step > 20) then
       Break;
+    inc(step);
     Sleep(200);
   end;
   frmSessionResult.Q.Edit;

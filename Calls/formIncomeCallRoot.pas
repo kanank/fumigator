@@ -28,6 +28,7 @@ type
     fClientForm: TForm;
     fCallCancel: Boolean;
     fCallAccepted: Boolean;
+    fNeedFinish: Boolean;
     function  GetCallFinished: boolean;
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
@@ -104,6 +105,7 @@ end;
 procedure TfrmIncomeCallRoot.doFinishCall;
 begin
   inherited;
+
   //frmCallEvent.ModalResult := mrCancel;
   //if fClose then
   CallFinish;
@@ -163,8 +165,24 @@ begin
 
   if not CallObj.Active and CallObj.Accepted and fClientClose  then
   begin
+    if not fNeedFinish then //не закрывались модальные окна
+    begin
+      if Assigned(frmIncomeCall) then
+      begin
+        fNeedFinish := true;
+        frmIncomeCall.CloseAbsolute;
+        Exit;
+      end;
+      if Assigned(frmIncomeCallUr) then
+      begin
+        fNeedFinish := true;
+        frmIncomeCallUr.CloseAbsolute;
+        Exit;
+      end;
+    end;
+
     fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
-    ModalResult := mrOk;
+
   end;
 end;
 
@@ -274,7 +292,7 @@ begin
     frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
 
     frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
-    frmIncomeCallRoot.ClientClose       := false;
+    frmIncomeCallRoot.ClientClose       := true;
     frmIncomeCallRoot.CloseOnCancelCall := true;
     frmIncomeCallRoot.ModalResult := mrNone;
     //if CallObj.Active then
@@ -423,7 +441,7 @@ begin
    CallPrm.Setup;
    CallPrm.TelNum := CallObj.CallInfo.Phone;
    ExtPrm.CallParam := @CallPrm;
-
+   fClientClose := False;
    case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
      mrOk:
      begin
@@ -442,7 +460,7 @@ begin
          if frmCallUnknown.SelectId > 0 then
          begin
            DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
-           fClientCallPrm.Client_id := frmCallUnknown.SelectId;
+           extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
            if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
               DM.ShowClientFizForCall(asEdit, ExtPrm)
            else
@@ -484,6 +502,7 @@ begin
     if CallObj.CallInfo.ClientType = 'F' then
     begin
       DM.ShowFizCallForm(fClientCallPrm);
+
     end
     else
     if fClientCallPrm.Client_Type = 'U' then
@@ -494,10 +513,17 @@ begin
     if fClientCallPrm.Client_Type = 'C' then
     begin
       DM.ShowContactCallForm(fClientCallPrm);
-    end
+    end;
+
+    if fNeedFinish then
+      CallFinish;
+      //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
+
+    CanClose := True;
+    ModalResult := mrOk;
   end;
  finally
-   ClientClose := True;
+   fClientClose := True;
  end;
 end;
 

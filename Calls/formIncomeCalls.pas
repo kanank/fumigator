@@ -54,7 +54,8 @@ type
   private
     { Private declarations }
   public
-
+    finished: Boolean;
+    function CallFinish(ACallId: string; AClientId: Integer): string;
   end;
 
 var
@@ -64,7 +65,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main;
+  DM_Main, formIncomeCallRoot;
 
 
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
@@ -72,9 +73,16 @@ begin
   CanClose := True;
 end;
 
+function TfrmIncomeCall.CallFinish(ACallId: string; AClientId: Integer): string;
+begin
+  finished := True;
+  ModalResult := mrOk;
+end;
+
 procedure TfrmIncomeCall.Exit_bntClick(Sender: TObject);
 begin
   CanClose := True;
+  frmIncomeCallRoot.ClientClose := False;
 end;
 
 procedure TfrmIncomeCall.FormCreate(Sender: TObject);

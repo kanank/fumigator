@@ -495,6 +495,7 @@ begin
   //if DM.incomeCalling then
   //  Exit;
 
+  //CallObj.OnFinishCall := OnCallFinish;
   CallObj.StartCall(CallInfo);
   //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
   //TfrmIncomeCallRoot.ShowCall;
@@ -508,6 +509,7 @@ end;
 
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
 begin
+   //CallObj.OnFinishCall := OnCallFinish;
    CallObj.StartCall(CallInfo);
    DM.ShowOutcomCall(CallInfo.CallId, CallInfo.CallApiid, CallInfo.Phone);
 end;
@@ -724,7 +726,7 @@ begin
       argList.free;
     end;
 
-    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
+    if CallObj.CallInfo.CallApiId = CallInfo.CallApiId then //уже завершился звонок
       exit;
 
     if Callinfo.CallFlow = 'in' then
@@ -747,8 +749,8 @@ begin
        s := argList[2];
     finally
       if //CallObj.Ready and
-        (CallObj.CallInfo.CallId <> argList[0]) then
-        CallObj.CallInfo.CallId := argList[0];
+        (CallObj.CallInfo.CallApiId <> argList[0]) then
+        CallObj.CallInfo.CallApiId := argList[0];
       argList.free;
     end;
 

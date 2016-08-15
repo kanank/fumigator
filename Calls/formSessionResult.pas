@@ -44,8 +44,9 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure btnConsultClick(Sender: TObject);
     procedure btnOtherClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
   private
-    { Private declarations }
+    fBack: Boolean; //нажат возврат
   public
     CallResult: string;
     function CheckFields: Boolean;
@@ -61,6 +62,11 @@ implementation
 uses
   DM_Main, CommonVars;
 
+
+procedure TfrmSessionResult.btnBackClick(Sender: TObject);
+begin
+  fBack := True;
+end;
 
 procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
 begin
@@ -106,7 +112,9 @@ begin
   begin
     Q.FieldByName('RESULT').AsString := edtResult.Text;
     Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
-    ModalResult := mrOk;
+    Q.Post;
+
+    Self.ModalResult := mrOk;
   end;
 end;
 
@@ -120,6 +128,7 @@ begin
   end
   else
     Result := true;
+  CanClose := Result;
 end;
 
 destructor TfrmSessionResult.Destroy;
@@ -131,9 +140,8 @@ end;
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  if not CheckFields then
+  if not fBack and not CheckFields then
     CanClose := False;
-
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

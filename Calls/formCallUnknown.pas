@@ -19,7 +19,8 @@ uses
   dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
-  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue;
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+  System.Actions, Vcl.ActnList;
 
 type
   TfrmCallUnknown = class(TSimpleForm)
@@ -37,6 +38,8 @@ type
     mExistsClient: TMenuItem;
     mExistsContact: TMenuItem;
     btnAddToExist: TRzMenuButton;
+    ActionList: TActionList;
+    acExistClient: TAction;
     procedure FormCreate(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
     procedure btnClick(Sender: TObject);
@@ -65,10 +68,12 @@ implementation
 
 uses
   DM_Main, formClientFiz, formClientUr, CommonTypes, frmMain,
-  formClients, formSessionResult, CommonVars;
+  formClients, formSessionResult, CommonVars, ClassSprForm;
 
 
 { TfrmCallUnknown }
+
+
 
 procedure TfrmCallUnknown.btnClick(Sender: TObject);
 begin
@@ -89,6 +94,7 @@ begin
     frmSessionResult.ShowModal;
     if ModalResult = mrClose then
       Exit;
+    CanClose := True;
   end;
 
   ModalResult := mrOk;
@@ -115,21 +121,29 @@ end;
 procedure TfrmCallUnknown.mExistsClientClick(Sender: TObject);
 var
   fSpr: TfrmClients;
+  f: Boolean;
 begin
   if not DM.Clients.Active then
     DM.Clients.Open;
 
   fSpr := TfrmClients.Create(self);
   try
+    fSpr.FormRegim := sfrSelect;
+    fSpr.FormStyle := fsStayOnTop;
     fSpr.ShowModal;
-    if fSpr.ModalResult = mrOk then //выбран клиент
+    f := fSpr.ModalResult = mrOk;
+    if f then //выбран клиент
     begin
       TypeBtnClick := btnAddToExist.Name;
       SelectId := fSpr.DS.DataSet.FieldByName('id').AsInteger;
     end;
-
   finally
     FreeAndNil(fSpr);
+    if f then
+    begin
+      CanClose := True;
+      frmCallUnknown.ModalResult := mrOk;
+    end;
   end;
 end;
 

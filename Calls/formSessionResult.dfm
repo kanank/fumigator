@@ -181,6 +181,7 @@ inherited frmSessionResult: TfrmSessionResult
     TabOrder = 3
     ThemeAware = False
     Visible = False
+    OnClick = btnBackClick
   end
   object DS: TDataSource
     DataSet = Q
@@ -190,7 +191,6 @@ inherited frmSessionResult: TfrmSessionResult
   object Q: TIBQuery
     Database = DataModuleMain.DB
     Transaction = DataModuleMain.Calls_Tr
-    BeforeOpen = QBeforeOpen
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True
@@ -220,8 +220,8 @@ inherited frmSessionResult: TfrmSessionResult
       'result = :result,'
       'localnum = :localnum'
       'where id=:id')
-    Left = 56
-    Top = 65500
+    Left = 160
+    Top = 12
   end
   object QApi: TIBQuery
     Database = DataModuleMain.DB
@@ -236,8 +236,8 @@ inherited frmSessionResult: TfrmSessionResult
         't, localnum'
       'from sessions'
       'where callapiid = :callid')
-    Left = 120
-    Top = 16
+    Left = 112
+    Top = 48
     ParamData = <
       item
         DataType = ftUnknown

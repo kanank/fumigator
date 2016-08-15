@@ -392,12 +392,6 @@ begin
     frmContact.Caption := 'Входящий звонок. Контакт';
     frmContact.FrameContact.OpenData(CallObj.CallInfo.ClientId);
     frmContact.ShowModal;
-    (*if frmContact.ModalResult = mrOk then
-    begin
-      DM.GetDataset(DM.Contacts);
-      DM.Clients.Locate('ID', CLP.Client_id, []);
-      ShowClientFiz(asEdit, prm);
-    end;*)
 
     Result.ModalRes := frmContact.ModalResult;
   finally
@@ -423,8 +417,10 @@ begin
     frmIncomeCall.ShowModal;
     if frmIncomeCall.ModalResult = mrOk then
     begin
-
-      ShowClientFiz(asEdit, prm);
+      //if frmIncomeCall.finished and Assigned(frmIncomeCallRoot) then
+      //  frmIncomeCallRoot.CallFinish
+      //else
+        ShowClientFiz(asEdit, prm);
     end;
 
     Result.ModalRes := frmIncomeCall.ModalResult;
@@ -462,7 +458,7 @@ begin
     DM.GetDataset(DM.Clients);
     DM.GetDataset(DM.Contacts);
 
-    if CallObj.CallInfo.ClientType = '' then
+    (*if CallObj.CallInfo.ClientType = '' then
       case ShowUnknownCallForm(Aphone, false).ModalRes of
        mrOk:
        begin
@@ -490,7 +486,66 @@ begin
            end;
          end;
        end;
-      end
+      end *)
+  try  // Вызываем неизвестный звонок.
+   CallPrm.Setup;
+   CallPrm.TelNum := CallObj.CallInfo.Phone;
+   ExtPrm.CallParam := @CallPrm;
+   fClientClose := False;
+   case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
+     mrOk:
+     begin
+       // новый лид
+       if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnLID.Name then
+       begin
+         ExtPrm.CallParam.Status_Id := 2; //Лид
+         if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
+           DM.ShowClientFizForCall(asCreate, ExtPrm)
+         else
+           DM.ShowClientURForCall(asCreate, ExtPrm);
+       end
+       else //добавить к существующему
+       if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
+       begin
+         if frmCallUnknown.SelectId > 0 then
+         begin
+           DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
+           extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
+           if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+              DM.ShowClientFizForCall(asEdit, ExtPrm)
+           else
+              DM.ShowClientURForCall(asEdit, ExtPrm);
+         end;
+       end
+
+       else  //корпоративный и др
+       begin
+//       if not Assigned(frmSessionResult) then
+//         frmSessionResult := TfrmSessionResult.Create(nil);
+//         with frmSessionResult do
+//         begin
+//           btnBack.Visible := True;
+//           btnCardNoCreated.Enabled := False;
+//           btnConsult.Enabled := False;
+//           btnNonConsult.Enabled := False;
+//           btnOther.Enabled := False;
+//         end;
+//       end;
+     end;
+
+     (*mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
+     mrAll:
+       begin
+        extPrm.ClientType := frmCallUnknown.ContactType;
+        formRes := DM.ShowContact(asCreate, ExtPrm);
+       end;*)
+     end;
+   end;
+  finally
+    //frmCallUnknown.Free;
+    fClientClose := True;
+    frmCallUnknown.HideAbsolute;
+  end
     else
     begin
       if (CallObj.CallInfo.ClientType <> 'C') and not DM.Clients.Locate('id', CallObj.CallInfo.ClientId, []) then
@@ -1159,7 +1214,6 @@ end;
 
 function TDataModuleMain.FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
 var
-  _Q: TIBQuery;
   f: boolean;
 begin
   f := Assigned(frmSessionResult);
@@ -1168,45 +1222,46 @@ begin
 
   with frmSessionResult do
   try
-    if callapiid = '' then
-      _Q := Q
-    else
-      _Q := QApi;
-    _Q.UpdateObject := Q_upd;
-    DS.DataSet := _Q;
-
-    if _Q.Transaction.Active then
-      _Q.Transaction.CommitRetaining;
-
-    if callapiid = '' then
-      _Q.ParamByName('callid').AsString := Callid
-    else
-      _Q.ParamByName('callid').AsString := callapiid;
-
-    _Q.Open;
-    _Q.Edit;
-    _Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-    _Q.FieldByName('client_id').AsInteger := client_id;
-    if client_id = 0 then //клиент не был создан
-      //_Q.FieldByName('ishod').AsString := 'Карточка клиента не создана';
-      btnCardNoCreated.Click;
-
-    Result := _Q.FieldByName('callresult').AsString;
-    if not f then
-      ShowModal;
-    if _Q.Modified then
     try
-      _Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
-      _Q.Post;
-      if _Q.Transaction.Active then
-         _Q.Transaction.CommitRetaining;
+      Q.ParamByName('callid').AsString := callid;
+
+      if Q.Active then
+       Q.Close;
+
+      if Assigned(Q.Transaction) and Q.Transaction.Active then
+        Q.Transaction.CommitRetaining;
+
+      Q.Open;
+      Q.Edit;
+      Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+      Q.FieldByName('client_id').AsInteger := client_id;
+      if client_id = 0 then //клиент не был создан
+        //_Q.FieldByName('ishod').AsString := 'Карточка клиента не создана';
+        btnCardNoCreated.Click;
+
+      Result := Q.FieldByName('callresult').AsString;
+      if not f then
+      begin
+        //FormStyle := fsStayOnTop;
+        frmSessionResult.ShowModal;
+      end;
+
+      if Q.Modified then
+      try
+      Q.FieldByName('localnum').AsString := DM.CurrentUserSets.ATS_Phone_Num;
+        Q.Post;
+        if Q.Transaction.Active then
+        Q.Transaction.CommitRetaining;
+      except
+         if Q.Transaction.Active then
+           Q.Transaction.RollbackRetaining;
+      end;
     except
-       if _Q.Transaction.Active then
-         _Q.Transaction.RollbackRetaining;
+       MsgBoxError(Exception(ExceptObject).Message, 'Результат сессии');
     end;
   finally
-    if not f then
-      FreeAndNil(frmSessionResult);
+    //if not f then
+    //  frmSessionResult);
   end;
 end;
 
@@ -1501,7 +1556,7 @@ begin
     frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
 
     frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
-    frmIncomeCallRoot.ClientClose       := false;
+    frmIncomeCallRoot.ClientClose       := true;
     frmIncomeCallRoot.CloseOnCancelCall := true;
     frmIncomeCallRoot.ModalResult := mrNone;
     if CallObj.Active then

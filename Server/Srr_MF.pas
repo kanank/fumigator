@@ -1369,7 +1369,7 @@ begin
     with fIBSQL do
     try
       SQL.Text := fSql;
-      Transaction.Active := True;
+
       //ParamByName('CALLFLOW').AsInteger       := cf;
       //ParamByName('CALLID').AsString          := fParams.Values['CallID'];
       //ParamByName('CALLERIDNUM').AsString     := fParams.Values['CallerIDNum'];
@@ -1387,6 +1387,7 @@ begin
       while not fOk and (step < 10) do
       Try
         //WriteLog('Исполняем ' + fibSql.SQL.Text + #13#10 + fParams.Text);
+        Transaction. Active := True;
         ExecQuery;
         if Transaction.Active then
            Transaction.Commit;
@@ -1672,10 +1673,10 @@ var
   lMutex: boolean;
 begin
   fIn := ACallFlow = 'in';
-  if fIn then
-    lMutex := LockMutex(EventsMutex, 2000);
+  //if fIn then
+    lMutex := LockMutex(EventsMutex, 1000);
 
-  if (fIn and lMutex) or not fIn then
+  if lMutex then//(fIn and lMutex) or not fIn then
   try
     if fIn then
     begin

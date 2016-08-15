@@ -29,7 +29,6 @@ type
     Q: TIBQuery;
     Q_upd: TIBUpdateSQL;
     Cancel_btn: TRzButton;
-    QApi: TIBQuery;
     Label1: TLabel;
     edtResult: TcxMemo;
     grpIshod: TcxGroupBox;

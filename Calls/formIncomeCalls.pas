@@ -53,6 +53,8 @@ type
     procedure btnTransferClick(Sender: TObject);
   private
     { Private declarations }
+  protected
+    procedure doAcceptCall; override;
   public
     finished: Boolean;
     function CallFinish(ACallId: string; AClientId: Integer): string;
@@ -65,7 +67,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, formIncomeCallRoot;
+  DM_Main, formIncomeCallRoot, formCallEvent;
 
 
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
@@ -77,6 +79,13 @@ function TfrmIncomeCall.CallFinish(ACallId: string; AClientId: Integer): string;
 begin
   finished := True;
   ModalResult := mrOk;
+end;
+
+procedure TfrmIncomeCall.doAcceptCall;
+begin
+  inherited;
+  if Assigned(frmCallEvent) then
+    frmCallEvent.ModalResult := mrOk;
 end;
 
 procedure TfrmIncomeCall.Exit_bntClick(Sender: TObject);

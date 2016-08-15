@@ -223,26 +223,4 @@ inherited frmSessionResult: TfrmSessionResult
     Left = 160
     Top = 12
   end
-  object QApi: TIBQuery
-    Database = DataModuleMain.DB
-    Transaction = DataModuleMain.Calls_Tr
-    BeforeOpen = QBeforeOpen
-    BufferChunks = 1000
-    CachedUpdates = False
-    ParamCheck = True
-    SQL.Strings = (
-      
-        'select id,worker_id, client_id, callid, ishod, result, callresul' +
-        't, localnum'
-      'from sessions'
-      'where callapiid = :callid')
-    Left = 112
-    Top = 48
-    ParamData = <
-      item
-        DataType = ftUnknown
-        Name = 'callid'
-        ParamType = ptUnknown
-      end>
-  end
 end

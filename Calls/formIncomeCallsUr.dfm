@@ -1,7 +1,6 @@
 inherited frmIncomeCallUr: TfrmIncomeCallUr
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1070#1088#1080#1076#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
   ClientHeight = 248
-  ExplicitWidth = 657
   ExplicitHeight = 286
   PixelsPerInch = 96
   TextHeight = 13

@@ -487,65 +487,65 @@ begin
          end;
        end;
       end *)
-  try  // Вызываем неизвестный звонок.
-   CallPrm.Setup;
-   CallPrm.TelNum := CallObj.CallInfo.Phone;
-   ExtPrm.CallParam := @CallPrm;
-   fClientClose := False;
-   case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
-     mrOk:
-     begin
-       // новый лид
-       if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnLID.Name then
-       begin
-         ExtPrm.CallParam.Status_Id := 2; //Лид
-         if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
-           DM.ShowClientFizForCall(asCreate, ExtPrm)
-         else
-           DM.ShowClientURForCall(asCreate, ExtPrm);
-       end
-       else //добавить к существующему
-       if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
-       begin
-         if frmCallUnknown.SelectId > 0 then
+    if CallObj.CallInfo.ClientType = '' then
+      try  // Вызываем неизвестный звонок.
+       CLP.Setup;
+       CLP.TelNum := CallObj.CallInfo.Phone;
+       ExtParam.CallParam := @CLP;
+
+       case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of
+         mrOk:
          begin
-           DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
-           extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
-           if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
-              DM.ShowClientFizForCall(asEdit, ExtPrm)
-           else
-              DM.ShowClientURForCall(asEdit, ExtPrm);
+           // новый лид
+           if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnLID.Name then
+           begin
+             ExtParam.CallParam.Status_Id := 2; //Лид
+             if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
+               DM.ShowClientFizForCall(asCreate, ExtParam)
+             else
+               DM.ShowClientURForCall(asCreate, ExtParam);
+           end
+           else //добавить к существующему
+           if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
+           begin
+             if frmCallUnknown.SelectId > 0 then
+             begin
+               DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
+               ExtParam.CallParam.Client_id := frmCallUnknown.SelectId;
+               if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+                  DM.ShowClientFizForCall(asEdit, ExtParam)
+               else
+                  DM.ShowClientURForCall(asEdit, ExtParam);
+             end;
+           end
+
+           else  //корпоративный и др
+           begin
+    //       if not Assigned(frmSessionResult) then
+    //         frmSessionResult := TfrmSessionResult.Create(nil);
+    //         with frmSessionResult do
+    //         begin
+    //           btnBack.Visible := True;
+    //           btnCardNoCreated.Enabled := False;
+    //           btnConsult.Enabled := False;
+    //           btnNonConsult.Enabled := False;
+    //           btnOther.Enabled := False;
+    //         end;
+    //       end;
          end;
-       end
 
-       else  //корпоративный и др
-       begin
-//       if not Assigned(frmSessionResult) then
-//         frmSessionResult := TfrmSessionResult.Create(nil);
-//         with frmSessionResult do
-//         begin
-//           btnBack.Visible := True;
-//           btnCardNoCreated.Enabled := False;
-//           btnConsult.Enabled := False;
-//           btnNonConsult.Enabled := False;
-//           btnOther.Enabled := False;
-//         end;
-//       end;
-     end;
-
-     (*mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
-     mrAll:
-       begin
-        extPrm.ClientType := frmCallUnknown.ContactType;
-        formRes := DM.ShowContact(asCreate, ExtPrm);
-       end;*)
-     end;
-   end;
-  finally
-    //frmCallUnknown.Free;
-    fClientClose := True;
-    frmCallUnknown.HideAbsolute;
-  end
+         (*mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
+         mrAll:
+           begin
+            extPrm.ClientType := frmCallUnknown.ContactType;
+            formRes := DM.ShowContact(asCreate, ExtPrm);
+           end;*)
+         end;
+       end;
+      finally
+        //frmCallUnknown.Free;
+        frmCallUnknown.HideAbsolute;
+      end
     else
     begin
       if (CallObj.CallInfo.ClientType <> 'C') and not DM.Clients.Locate('id', CallObj.CallInfo.ClientId, []) then
@@ -1563,10 +1563,10 @@ begin
       frmIncomeCallRoot.ShowModal;
 
   finally
-    FreeAndNil(frmCallEvent);
-    FreeAndNil(frmIncomeCallRoot);
     CallObj.Active := False;
     CallObj.Ready := True;
+    FreeAndNil(frmCallEvent);
+    FreeAndNil(frmIncomeCallRoot);
   end;
 end;
 

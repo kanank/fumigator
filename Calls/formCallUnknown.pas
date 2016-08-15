@@ -51,6 +51,7 @@ type
     procedure SetOutcomeCall(AValue: boolean);
   protected
     procedure doFinishCall; override;
+    procedure doAcceptCall; override;
   public
     TypeBtnClick: string; //нажатая кнопка
     SubTypeBtnClick: string; //подтип
@@ -68,7 +69,7 @@ implementation
 
 uses
   DM_Main, formClientFiz, formClientUr, CommonTypes, frmMain,
-  formClients, formSessionResult, CommonVars, ClassSprForm;
+  formClients, formSessionResult, CommonVars, ClassSprForm, formCallEvent;
 
 
 { TfrmCallUnknown }
@@ -80,26 +81,34 @@ begin
   TypeBtnClick := TComponent(Sender).Name;
   CanClose := True;
 
-  if not Assigned(frmSessionResult) then
-  frmSessionResult := TfrmSessionResult.Create(nil);
-  with frmSessionResult do
+  if (TypeBtnClick <> btnLID.Name) and  not Assigned(frmSessionResult) then
   begin
-    btnBack.Visible := True;
-    btnCardNoCreated.Enabled := False;
-    btnConsult.Enabled := False;
-    btnNonConsult.Enabled := False;
-    btnOther.Enabled := False;
-    edtIshod.Text := TRzButton(Sender).Caption;
-    frmSessionResult.FormStyle := fsStayOnTop;
-    frmSessionResult.ShowModal;
-    if ModalResult = mrClose then
-      Exit;
-    CanClose := True;
+    frmSessionResult := TfrmSessionResult.Create(nil);
+    with frmSessionResult do
+    begin
+      btnBack.Visible := True;
+      btnCardNoCreated.Enabled := False;
+      btnConsult.Enabled := False;
+      btnNonConsult.Enabled := False;
+      btnOther.Enabled := False;
+      edtIshod.Text := TRzButton(Sender).Caption;
+      frmSessionResult.FormStyle := fsStayOnTop;
+      frmSessionResult.ShowModal;
+      if ModalResult = mrClose then
+        Exit;
+      CanClose := True;
+    end;
   end;
 
   ModalResult := mrOk;
 end;
 
+procedure TfrmCallUnknown.doAcceptCall;
+begin
+  inherited;
+  if Assigned(frmCallEvent) then
+    frmCallEvent.ModalResult := mrOk;
+end;
 
 procedure TfrmCallUnknown.doFinishCall;
 begin

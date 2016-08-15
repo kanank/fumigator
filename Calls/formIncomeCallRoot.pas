@@ -183,6 +183,9 @@ begin
 
     fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
 
+
+    CanClose := True;
+    ModalResult := mrOk;
   end;
 end;
 
@@ -519,8 +522,6 @@ begin
       CallFinish;
       //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
 
-    CanClose := True;
-    ModalResult := mrOk;
   end;
  finally
    fClientClose := True;

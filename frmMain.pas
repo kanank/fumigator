@@ -494,12 +494,16 @@ procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
   //if DM.incomeCalling then
   //  Exit;
-
+  try
   //CallObj.OnFinishCall := OnCallFinish;
-  CallObj.StartCall(CallInfo);
+    CallObj.StartCall(CallInfo);
   //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
   //TfrmIncomeCallRoot.ShowCall;
-  DM.ShowCall;
+
+    DM.ShowCall;
+  finally
+    CallObj.Ready := True;
+  end;
 end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
@@ -510,8 +514,12 @@ end;
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
 begin
    //CallObj.OnFinishCall := OnCallFinish;
-   CallObj.StartCall(CallInfo);
-   DM.ShowOutcomCall(CallInfo.CallId, CallInfo.CallApiid, CallInfo.Phone);
+   try
+     CallObj.StartCall(CallInfo);
+     DM.ShowOutcomCall(CallInfo.CallId, CallInfo.CallApiid, CallInfo.Phone);
+   finally
+     CallObj.Ready := True;
+   end;
 end;
 
 procedure LoadOptions(AIniFile: string);

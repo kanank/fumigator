@@ -5,6 +5,7 @@ inherited frmIncomeCall: TfrmIncomeCall
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitWidth = 657
   ExplicitHeight = 263
   DesignSize = (
     641

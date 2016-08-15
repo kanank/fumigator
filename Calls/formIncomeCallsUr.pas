@@ -41,6 +41,8 @@ type
     procedure btnTransferClick(Sender: TObject);
   private
     { Private declarations }
+  protected
+    procedure doAcceptCall; override;
   public
     { Public declarations }
   end;
@@ -52,12 +54,19 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, formIncomeCallRoot;
+  DM_Main, formIncomeCallRoot, formCallEvent;
 
 
 procedure TfrmIncomeCallUr.btnTransferClick(Sender: TObject);
 begin
   CanClose := True;
+end;
+
+procedure TfrmIncomeCallUr.doAcceptCall;
+begin
+  inherited;
+  if Assigned(frmCallEvent) then
+    frmCallEvent.ModalResult := mrOk;
 end;
 
 procedure TfrmIncomeCallUr.Exit_bntClick(Sender: TObject);

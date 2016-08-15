@@ -34,8 +34,9 @@ type
     Label10: TLabel;
     procedure RzBitBtn1Click(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
-    { Private declarations }
+    function CheckFields: Boolean;
   public
     { Public declarations }
   end;
@@ -47,12 +48,40 @@ implementation
 
 {$R *.dfm}
 uses
-  formClientUr;
+  formClientUr, CommonVars;
+
+function TfrmSmallCardUr.CheckFields: Boolean;
+begin
+   if (edtName.Text = '') or (edtFamily.Text = '') or
+    (cmbRegion.EditValue = 0) or
+    (FrameUslugi.DS.DataSet.RecordCount = 0) or
+    (cxDBMemo1.Text = '') then
+   begin
+     MsgBoxWarning('Не заполнены все необходимые поля!');
+     Result := False;
+   end
+   else
+     Result := true;
+end;
 
 procedure TfrmSmallCardUr.Exit_bntClick(Sender: TObject);
 begin
   frmClientUr.butOK.Click;
   ModalResult := mrOk;
+end;
+
+procedure TfrmSmallCardUr.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  inherited;
+  if (txtName.Text = '') or (edtFamily.Text = '') or (edtName.Text = '') or
+     (cmbRegion.EditValue = 0) or
+     (FrameUslugi.DS.DataSet.RecordCount = 0) or
+     (cxDBMemo1.Text = '') then
+  begin
+    MsgBoxWarning('Не заполнены все необходимые поля!');
+    CanClose := False;
+  end;
 end;
 
 procedure TfrmSmallCardUr.RzBitBtn1Click(Sender: TObject);

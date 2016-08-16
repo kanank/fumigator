@@ -49,7 +49,7 @@ type
     procedure Execute; override;
     procedure DeleteSession;
     procedure StartCall(CallId: string; ats: string);
-    procedure EndCall(CallId: string);
+    procedure EndCall(CallId, CallStatus: string);
     procedure SendMess;
   public
     CallApiId: string;
@@ -76,7 +76,7 @@ type
 
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
     procedure StartCall(CallId: string; ats: string);
-    function EndCall(ACallApiId, ACallId: string): boolean;
+    function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
   public
     constructor Create(AParam: TStrings; AURI, AUserId, ASql: string); overload;
     destructor Destroy; override;
@@ -176,7 +176,7 @@ type
     function UpdateSession(ACallId: string): Boolean;
     function AcceptCall(ACallId, APhone: string): boolean;
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
-    function EndCall(ACallApiId, ACallId: string): boolean;
+    function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -314,7 +314,7 @@ begin
           Params.Values['CallAPIID'] + ',' +
           Params.Values['CallStatus'],
           False);
-        EndCall(Params.Values['CallAPIID'], Params.Values['CallID']);
+        EndCall(Params.Values['CallAPIID'], Params.Values['CallID'], Params.Values['CallStatus']);
       end;
     end;
 
@@ -681,7 +681,7 @@ begin
 
 end;
 
-function TMF.EndCall(ACallApiId, ACallId: string): boolean;
+function TMF.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
 var
   ind: Integer;
 begin
@@ -690,7 +690,7 @@ begin
     ind := fSessions.IndexOf(ACallApiId);
     if ind > -1 then
     begin
-      TCallSession(fSessions.Objects[ind]).EndCall(ACallId);
+      TCallSession(fSessions.Objects[ind]).EndCall(ACallId, AcallStatus);
       Exit;
     end;
   finally
@@ -1450,6 +1450,7 @@ begin
   fListener := TCallListener.Create(MF.AccessToken, aCallApiId, '@self');
   fListener.ExtIgnored := '099,200';
   fListener.StopOnAccept := True;
+  fListener.AutoDestroy := True;
 end;
 
 procedure TCallSession.DeleteSession;
@@ -1476,7 +1477,7 @@ begin
   inherited;
 end;
 
-procedure TCallSession.EndCall(CallId: string);
+procedure TCallSession.EndCall(CallId, CallStatus: string);
 var
   ind: Integer;
   ats: string;
@@ -1488,7 +1489,7 @@ begin
       Exit;
     ats := fCallIdList.ValueFromIndex[ind];
     fCallIdList.Delete(ind);
-    if not fNeedCheckStatus then
+    if not fNeedCheckStatus and (CallStatus <> 'UNKNOWN') then
       fNeedCheckStatus := True;
   finally
     UnlockMutex(CallMutex);
@@ -1574,7 +1575,7 @@ begin
   inherited;
 end;
 
-function TEventWriter.EndCall(ACallApiId, ACallId: string): boolean;
+function TEventWriter.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
 var
   ind: Integer;
 begin
@@ -1583,7 +1584,7 @@ begin
     ind := MF.fSessions.IndexOf(ACallApiId);
     if ind > -1 then
     begin
-      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallId);
+      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallId, ACallStatus);
       Exit;
     end;
   finally
@@ -1660,7 +1661,7 @@ begin
           fParams.Values['CallAPIID'] + ',' +
           fParams.Values['CallStatus']);
         if cf = 0 then
-        EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID']);
+        EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID'], fParams.Values['CallStatus']);
       end;
     end;
 

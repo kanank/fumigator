@@ -488,7 +488,7 @@ end;
 
 destructor TCallListener.Destroy;
 begin
-  //FreeAndNil(fTimer);
+  FreeAndNil(fTimer);
   FreeAndNil(fExtIgnored);
   inherited;
 end;
@@ -545,6 +545,7 @@ begin
             if fStopOnAccept then
             begin
               fStop := True;//fTimer.Enabled := False;
+              fFinished := True;
               fTimer.Stop;
             end;
           end;
@@ -556,7 +557,8 @@ begin
     else
     begin
       Finished := True;
-      fStop := True;
+      fStop    := True;
+      fTimer.Stop;
       //fTimer.Enabled := False;
     end;
   finally
@@ -564,8 +566,10 @@ begin
     json.Free;
     json1.free;
 
-    if Finished and fAutoDestroy then
+    if (Finished or fStop) and fAutoDestroy then
+    begin
       Destroy;
+    end;
 //    else
 //      fTimer.Interval := fTimerInterval;
   end;
@@ -613,6 +617,7 @@ end;
 constructor TThreadTimer.Create(AActive, AFirstJobOnStart: Boolean);
 begin
   fFirstJobOnStarting := AFirstJobOnStart;
+  FreeOnTerminate := True;
   inherited Create(not AActive);
 end;
 

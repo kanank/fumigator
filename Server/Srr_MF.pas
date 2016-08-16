@@ -42,6 +42,7 @@ type
     fAts: string;
     fMess: string;
     fMessLock: Boolean;
+    fNeedCheckStatus: Boolean; //нужно поверять статус
     fListener: TCallListener;
     procedure Log;
     procedure WriteLog(Amess: string; Ablock: Boolean = True);
@@ -1487,8 +1488,8 @@ begin
       Exit;
     ats := fCallIdList.ValueFromIndex[ind];
     fCallIdList.Delete(ind);
-    if not fStarted then
-      fStarted := True;
+    if not fNeedCheckStatus then
+      fNeedCheckStatus := True;
   finally
     UnlockMutex(CallMutex);
   end;
@@ -1496,9 +1497,11 @@ end;
 
 procedure TCallSession.Execute;
 begin
-  fListener.Start;
     while not Terminated do
     begin
+      if fNeedCheckStatus and not fListener.Started then
+        fListener.Start;
+
       if not fAccepted and (fListener.Accepted) then //остался один звонок
       begin
         fAccepted := True;

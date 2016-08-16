@@ -85,12 +85,19 @@ type
   private
     fInterval: Integer;
     fProc: TNotifyEvent;
+    fActive: Boolean;
     fStop: Boolean;
+    fFirstJobOnStarting: Boolean;
+    procedure DoJob;
+    procedure SetActive(AValue: Boolean);
   public
+    property Active: Boolean read fActive write SetActive; //перевод в активное состояние
     property Interval: Integer read fInterval write fInterval;
     property OnTimer: TNotifyEvent read fProc write fProc;
+    property FirstJobOnStarting: Boolean read fFirstJobOnStarting write fFirstJobOnStarting;
     procedure Stop;
     procedure Execute; override;
+    constructor Create(AActive: Boolean=False; AFirstJobOnStart: Boolean = false); overload;
   end;
 
   TCallListener = class (TTelphinAPIElement)
@@ -111,6 +118,7 @@ type
     fStopOnAccept: Boolean; //останов после принятия звонка
     fTimerInterval: Integer;
     fAutoDestroy: Boolean; //автоматически уничтожаться после окончания звонка
+    fStarted: Boolean; //признак запущенности
     function GetStatusCall: Integer;
     procedure TimerProc(Sender: TObject);
     function GetExtIgnored: string;
@@ -118,6 +126,7 @@ type
     procedure SetAccepted(AValue: boolean);
     procedure SetFinished(AValue: boolean);
   public
+    property Started: Boolean read fStarted;
     property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
     property OnCallAccept: TNotifyEvent read fOnCallAccept write fOnCallAccept;
     property CallApiId: string read fCallId write fCallId;
@@ -466,7 +475,7 @@ begin
     fOnCallFinish   := TNotifyEvent(AOnCallFinish^);
   if AOnCallAccept <> nil then
     fOnCallAccept   := TNotifyEvent(AOnCallAccept^);
-  fTimer := TThreadTimer.Create(True);
+  fTimer := TThreadTimer.Create(False, true);
   fTimer.Interval  := 500;
   fTimer.OnTimer := TimerProc;
   //fTimer          := TTimer.Create(nil);
@@ -590,7 +599,8 @@ procedure TCallListener.Start(AInterval: integer = 0);
 begin
   if AInterval > 0 then
     fTimer.Interval := AInterval;
-  fTimer.Start;
+  fTimer.Active := True;
+  fStarted := True;
 end;
 
 procedure TCallListener.TimerProc(Sender: TObject);
@@ -600,19 +610,41 @@ end;
 
 { TThreadTimer }
 
+constructor TThreadTimer.Create(AActive, AFirstJobOnStart: Boolean);
+begin
+  fFirstJobOnStarting := AFirstJobOnStart;
+  inherited Create(not AActive);
+end;
+
+procedure TThreadTimer.DoJob;
+begin
+  if Assigned(fProc) then
+   fProc(Self);
+end;
+
 procedure TThreadTimer.Execute;
 begin
+  fActive := True;
+  if fFirstJobOnStarting then
+    DoJob;
+
    while not Terminated or not fStop do
    begin
      Sleep(fInterval);
-     if Assigned(fProc) then
-       fProc(Self);
+     DoJob;
    end;
+end;
+
+procedure TThreadTimer.SetActive(AValue: Boolean);
+begin
+  if AValue and not fActive then
+    Start;
 end;
 
 procedure TThreadTimer.Stop;
 begin
   fStop := True;
+  fActive := False;
 end;
 
 end.

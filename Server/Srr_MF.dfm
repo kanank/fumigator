@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 473
+      Left = 469
       Top = 290
       Width = 106
       Height = 25
@@ -468,7 +468,6 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
-    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -495,13 +494,21 @@ object MF: TMF
     Transaction = DefTr
     BufferChunks = 1000
     CachedUpdates = False
-    ParamCheck = True
+    ParamCheck = False
     SQL.Strings = (
       
         'execute procedure CALL_EVENT_CREATE(:CALLFLOW, :CALLID, :CALLERI' +
         'DNUM, :CALLERIDNAME,'
-      ' :CALLEDDID, :CALLEDEXTENSION, :CALLSTATUS, :CALLEREXTENSION,'
-      ' :CALLEDNUMBER, :CALLAPIID);'
+      
+        '     :CALLEDDID, :CALLEDEXTENSION, :CALLSTATUS, :CALLEREXTENSION' +
+        ','
+      '     :CALLEDNUMBER, :CALLAPIID,'
+      '     :EVENTTYPE        ,'
+      '     :CALLEDEXTENSIONID,'
+      '     :CALLEREXTENSIONID,'
+      '     :RECID            ,'
+      '     :EVENTTIME        ,'
+      '     :DURATION);'
       '')
     Left = 393
     Top = 143
@@ -554,6 +561,36 @@ object MF: TMF
       item
         DataType = ftUnknown
         Name = 'CALLAPIID'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'EVENTTYPE'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'CALLEDEXTENSIONID'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'CALLEREXTENSIONID'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'RECID'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'EVENTTIME'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'DURATION'
         ParamType = ptUnknown
       end>
   end

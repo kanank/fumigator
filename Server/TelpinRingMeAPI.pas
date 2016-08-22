@@ -116,50 +116,6 @@ type
     constructor Create(AActive: Boolean=False; AFirstJobOnStart: Boolean = false); overload;
   end;
 
-  TCallListener = class (TTelphinRingMeAPIElement)
-  private
-    fOnCallFinish: TNotifyEvent; // событие после окончания звонка
-    fOnCallAccept: TNotifyEvent; // событие после принятия звонка
-    fAccepted: boolean;
-    fFinished: Boolean;
-    fStop: Boolean;
-    fCallId: string;
-    fExtension: string;
-    fStatusCall: Integer;
-    fTimer: TThreadTimer;
-    //fTimer: TTimer;
-    fExtIgnored: TStringList; //список номеров для игнорирования (очередь, автоответчик)
-    fAcceptedExt: string; // номер, кто принял звонок
-    fAcceptedCallId: string; // CallId принявшего звонок
-    fStopOnAccept: Boolean; //останов после принятия звонка
-    fTimerInterval: Integer;
-    fAutoDestroy: Boolean; //автоматически уничтожаться после окончания звонка
-    fStarted: Boolean; //признак запущенности
-    function GetStatusCall: Integer;
-    procedure TimerProc(Sender: TObject);
-    function GetExtIgnored: string;
-    procedure SetExtIgnored(AValue: string);
-    procedure SetAccepted(AValue: boolean);
-    procedure SetFinished(AValue: boolean);
-  public
-    property Started: Boolean read fStarted;
-    property OnCallFinish: TNotifyEvent read fOnCallFinish write fOnCallFinish;
-    property OnCallAccept: TNotifyEvent read fOnCallAccept write fOnCallAccept;
-    property CallApiId: string read fCallId write fCallId;
-    property TimerInterval: Integer read fTimerInterval write fTimerInterval;
-    property ExtIgnored: string read GetExtIgnored write SetExtIgnored; //через запятую
-    property Finished: Boolean read fFinished write SetFinished;
-    property Accepted: Boolean read fAccepted write SetAccepted;
-    property AcceptedExt: string read fAcceptedExt;
-    property AcceptedCallId: string read fAcceptedCallId;
-    property StopOnAccept: Boolean read fStopOnAccept write fStopOnAccept;
-
-    property Extension: string read fExtension write fExtension;
-    property AutoDestroy: Boolean read fAutoDestroy write fAutoDestroy;
-    constructor Create(ATokenObject: TTelphinRingMeToken; ACallApiId, AExtension: string; AOnCallAccept: Pointer = nil; AOnCallFinish: Pointer = nil); overload;
-    destructor Destroy; overload;
-    procedure Start(AInterval: integer = 0); //запускает таймер
-  end;
 
 implementation
 
@@ -177,6 +133,7 @@ begin
   fTimer := TTimer.Create(nil);
   fTimer.Interval := 0;
   fTimer.OnTimer := GetTokenProc;
+  fBaseUrl := 'https://apiproxy.telphin.ru';
 
 end;
 
@@ -286,7 +243,7 @@ begin
     fHttp.Get(url, sStream);
     Result := sStream.DataString;
   except
-   fHttpErr. := Exception(ExceptObject).Message;
+   fHttpErr := Exception(ExceptObject).Message;
   end;
   sStream.Free;
 end;
@@ -489,7 +446,7 @@ begin
   fHttp := TIdHTTP.Create(nil);
   fSSL:=TIdSSLIOHandlerSocketOpenSSL.Create;
   fHttp.IOHandler:=fSSL;
-  fBaseUrl := 'https://apiproxy.telphin.ru';
+  fBaseUrl := 'https://apiproxy.telphin.ru/api/ver1.0';
 end;
 
 destructor TTelphinRingMeAPIBaseElement.Destroy;
@@ -498,155 +455,6 @@ begin
     fHttp.Free;
   if Assigned(fSSL) then
     fSSL.Free;
-end;
-
-{ TCallListener }
-
-constructor TCallListener.Create(ATokenObject: TTelphinRingMeToken; ACallApiId,
-  AExtension: string; AOnCallAccept: Pointer = nil; AOnCallFinish: Pointer = nil);
-begin
-  inherited Create(ATokenObject);
-  fCallId         := ACallApiId;
-  fExtension      := AExtension;
-  if AOnCallFinish <> nil then
-    fOnCallFinish   := TNotifyEvent(AOnCallFinish^);
-  if AOnCallAccept <> nil then
-    fOnCallAccept   := TNotifyEvent(AOnCallAccept^);
-  fTimer := TThreadTimer.Create(False, true);
-  fTimer.Interval  := 500;
-  fTimer.OnTimer := TimerProc;
-  //fTimer          := TTimer.Create(nil);
-  //fTimer.OnTimer  := TimerProc;
-  //fTimerInterval  := 500;
-  //fTimer.Interval := fTimerInterval;
-  //fTimer.Enabled  := False;
-  fExtIgnored := TStringList.Create;
-end;
-
-destructor TCallListener.Destroy;
-begin
-  FreeAndNil(fTimer);
-  FreeAndNil(fExtIgnored);
-  inherited;
-end;
-
-function TCallListener.GetExtIgnored: string;
-begin
-  Result := fExtIgnored.DelimitedText;
-end;
-
-function TCallListener.GetStatusCall: Integer;
-var
-  sStream: TStringStream;
-  url,ext: string;
-  json: TJSONObject;
-  json1: TJSONArray;
-  cnt, i, status: Integer;
-begin
-  sStream := TStringStream.Create;
-  try
-    //fTimer.Interval := 0;
-    fHttp.Request.Method := 'GET';
-    //fHttp.Request.ContentType := 'application/json';
-    fhttp.Request.CustomHeaders.Clear;
-    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
-
-    url := fBaseUrl + '/uapi/phoneCalls/@me/' + fExtension +'/' + fCallId;
-    fHttp.Get(url, sStream);
-    json := TJSONObject.Create;
-    json.Parse(BytesOf(sStream.DataString), 0);
-    cnt := StrToInt(AnsiDequotedStr(json.Values['totalResults'].ToString, '"'));
-
-
-    if cnt > 0 then
-    begin
-      json1 := TJSONObject.ParseJSONValue(json.GetValue('entry').ToString) as TJSONArray;
-      if json1 <> nil then
-      begin
-        json   := TJSONObject.ParseJSONValue(json1.Items[0].ToString) as TJSONObject;
-        json1   := TJSONObject.ParseJSONValue(json.GetValue('phoneCallView').ToString) as TJSONArray;
-
-        for i := 0 to json1.Count - 1 do
-        begin
-          json := TJSONObject.ParseJSONValue(json1.Items[i].ToString) as TJSONObject;
-
-          ext := AnsiDequotedStr(json.GetValue('extension').Value, '"');
-          if fExtIgnored.IndexOf(ext) > - 1 then
-            Continue;
-          status := StrToIntDef(AnsiDequotedStr(json.GetValue('status').Value, '"'), 0);
-          if (status = 5) then
-          begin
-            fAcceptedExt := ext;
-            fAcceptedCallId := AnsiDequotedStr(json.GetValue('id').Value, '"');
-            Accepted := True;
-            if fStopOnAccept then
-            begin
-              fStop := True;//fTimer.Enabled := False;
-              fFinished := True;
-              fTimer.Stop;
-            end;
-          end;
-
-        end;
-
-      end;
-    end
-    else
-    begin
-      Finished := True;
-      fStop    := True;
-      fTimer.Stop;
-      //fTimer.Enabled := False;
-    end;
-  finally
-    sStream.Free;
-    json.Free;
-    json1.free;
-
-    if (Finished or fStop) and fAutoDestroy then
-    begin
-      Destroy;
-    end;
-//    else
-//      fTimer.Interval := fTimerInterval;
-  end;
-end;
-
-procedure TCallListener.SetAccepted(AValue: boolean);
-begin
-  if fAccepted <> AValue then
-    fAccepted := AValue;
-  if AValue then
-  begin
-    if Assigned(fOnCallAccept) then
-      fOnCallAccept(Self);
-  end;
-end;
-
-procedure TCallListener.SetExtIgnored(AValue: string);
-begin
-  fExtIgnored.DelimitedText := AValue;
-end;
-
-procedure TCallListener.SetFinished(AValue: boolean);
-begin
-  if fFinished <> AValue then
-    fFinished := AValue;
-  if AValue and Assigned(fOnCallFinish) then
-    fOnCallFinish(Self);
-end;
-
-procedure TCallListener.Start(AInterval: integer = 0);
-begin
-  if AInterval > 0 then
-    fTimer.Interval := AInterval;
-  fTimer.Active := True;
-  fStarted := True;
-end;
-
-procedure TCallListener.TimerProc(Sender: TObject);
-begin
-  GetStatusCall;
 end;
 
 { TThreadTimer }

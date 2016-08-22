@@ -37,19 +37,20 @@ type
     fFinished: Boolean;
     fSeconds: Integer;
     fList: TStringList;
-    fCallIdList: TStringList;
+    //fCallIdList: TStringList;
     fCallId: string;
     fAts: string;
     fMess: string;
     fMessLock: Boolean;
-    fNeedCheckStatus: Boolean; //нужно поверять статус
-    fListener: TCallListener;
+    //fNeedCheckStatus: Boolean; //нужно поверять статус
+    //fListener: TCallListener;
     procedure Log;
     procedure WriteLog(Amess: string; Ablock: Boolean = True);
     procedure Execute; override;
     procedure DeleteSession;
     procedure StartCall(CallId: string; ats: string);
     procedure EndCall(CallId, CallStatus: string);
+    procedure AcceptCall(CallApiId: string);
     procedure SendMess;
   public
     CallApiId: string;
@@ -77,6 +78,7 @@ type
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
     procedure StartCall(CallId: string; ats: string);
     function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+    procedure AcceptCall(ACallApiId: string);
   public
     constructor Create(AParam: TStrings; AURI, AUserId, ASql: string); overload;
     destructor Destroy; override;
@@ -276,6 +278,10 @@ begin
     ats := Copy(userid, p + 1, Length(userid));
     userid := Copy(userid, 1, p - 1);
   end;
+  p := Pos('@', ats);
+  if p > 0 then
+    ats := Copy(ats, 1, p - 1);
+
   AddLogMemo('user_id = ' + userid);
 
   if userid <> edtUserId.Text then //только нужную АТС отсекаем
@@ -628,7 +634,7 @@ end;
 procedure TMF.CallFinished(Sender: TObject);
 begin
   //UpdateSession(TCallListener(Sender).CallId);
-  SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallApiId);
+  //SendCommandToUser(TCallListener(Sender).Extension, '#callfinish:' + TCallListener(Sender).CallApiId);
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -1357,17 +1363,31 @@ begin
     else
       cf := 1;
 
-    //
-    fSql := StringReplace(fSql, ':CALLFLOW', IntToStr(Cf),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLID', QuotedStr(fParams.Values['CallID']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLERIDNUM', QuotedStr(fParams.Values['CALLERIDNUM']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLERIDNAME', QuotedStr(fParams.Values['CALLERIDNAME']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLEDDID', QuotedStr(fParams.Values['CALLEDDID']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLEREXTENSION', QuotedStr(fParams.Values['CALLEREXTENSION']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLSTATUS', QuotedStr(fParams.Values['CALLSTATUS']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLEDEXTENSION', QuotedStr(fParams.Values['CALLEDEXTENSION']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLEDNUMBER', QuotedStr(fParams.Values['CALLEDNUMBER']),[rfReplaceAll, rfIgnoreCase]);
-    fSql := StringReplace(fSql, ':CALLAPIID', QuotedStr(fParams.Values['CALLAPIID']),[rfReplaceAll, rfIgnoreCase]);
+    if fParams.Values['CALLEDEXTENSIONID'] = '' then
+      fParams.Values['CALLEDEXTENSIONID'] := 'null';
+    if fParams.Values['CALLEREXTENSIONID'] = '' then
+      fParams.Values['CALLEREXTENSIONID'] := 'null';
+    if fParams.Values['DURATION'] = '' then
+      fParams.Values['DURATION'] := 'null';
+
+
+    fSql := StringReplace(fSql, ':CALLFLOW', IntToStr(Cf), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLID', AnsiQuotedStr(fParams.Values['CallID'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLERIDNUM', AnsiQuotedStr(fParams.Values['CALLERIDNUM'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLERIDNAME', AnsiQuotedStr(fParams.Values['CALLERIDNAME'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDDID', AnsiQuotedStr(fParams.Values['CALLEDDID'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEREXTENSIONID', fParams.Values['CALLEREXTENSIONID'], [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEREXTENSION', AnsiQuotedStr(fParams.Values['CALLEREXTENSION'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLSTATUS', AnsiQuotedStr(fParams.Values['CALLSTATUS'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDEXTENSIONID', fParams.Values['CALLEDEXTENSIONID'], [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDEXTENSION', AnsiQuotedStr(fParams.Values['CALLEDEXTENSION'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLEDNUMBER', AnsiQuotedStr(fParams.Values['CALLEDNUMBER'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':CALLAPIID', AnsiQuotedStr(fParams.Values['CALLAPIID'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':EVENTTYPE', AnsiQuotedStr(fParams.Values['EVENTTYPE'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':DURATION', fParams.Values['DURATION'], [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':RECID', AnsiQuotedStr(fParams.Values['RECID'], ''''), [rfReplaceAll, rfIgnoreCase]);
+    fSql := StringReplace(fSql, ':EVENTTIME', fParams.Values['EVENTTIME'], [rfReplaceAll, rfIgnoreCase]);
+
     //WriteLog('Sql: ' + fSql, false);
 
     with fIBSQL do
@@ -1439,6 +1459,11 @@ end;
 
 { TCallSession }
 
+procedure TCallSession.AcceptCall(CallApiId: string);
+begin
+  fFinished := True;
+end;
+
 constructor TCallSession.Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer);
 begin
   inherited Create(false);
@@ -1447,13 +1472,13 @@ begin
   fList := AList;
   fSeconds := ASecond;
   FreeOnTerminate := True;
-  fCallIdList := TStringList.Create;
+  //fCallIdList := TStringList.Create;
   fStartTime := Now;
 
-  fListener := TCallListener.Create(MF.AccessToken, aCallApiId, '@self');
-  fListener.ExtIgnored := '099,200';
-  fListener.StopOnAccept := True;
-  fListener.AutoDestroy := True;
+  //fListener := TCallListener.Create(MF.AccessToken, aCallApiId, '@self');
+  //fListener.ExtIgnored := '099,200';
+  //fListener.StopOnAccept := True;
+  //fListener.AutoDestroy := True;
 end;
 
 procedure TCallSession.DeleteSession;
@@ -1475,8 +1500,9 @@ end;
 
 destructor TCallSession.Destroy;
 begin
-  fCallIdList.Free;
-  fListener.Free;
+  //fCallIdList.Free;
+  //fListener.Free;
+  WriteLog('Уничтожен TCallSession: ' + CallApiId);
   inherited;
 end;
 
@@ -1485,7 +1511,8 @@ var
   ind: Integer;
   ats: string;
 begin
-  if LockMutex(CallMutex, 2000) then
+  fFinished := True;
+  (*if LockMutex(CallMutex, 2000) then
   try
     ind := fCallIdList.IndexOfName(CallId);
     if ind = -1 then
@@ -1496,37 +1523,37 @@ begin
       fNeedCheckStatus := True;
   finally
     UnlockMutex(CallMutex);
-  end;
+  end;*)
 end;
 
 procedure TCallSession.Execute;
 begin
-    while not Terminated do
-    begin
-      if fNeedCheckStatus and not fListener.Started then
-        fListener.Start;
-
-      if not fAccepted and (fListener.Accepted) then //остался один звонок
-      begin
-        fAccepted := True;
-        fCallId := fListener.CallApiId;
-        fAts := fListener.AcceptedExt;
-        Synchronize(SendMess);
-        fFinished := True;
-      end;
-      if not fFinished then
-        fFinished := fListener.Finished;
-      if SecondOfTheDay(Now) - SecondOfTheDay(fStartTime) >
-         fSeconds then
-        Terminate
-      else
-        Sleep(300);
-  end;
-
-  if fFinished then
+  while not Terminated do
   begin
-    DeleteSession;
-    Terminate;
+    (*if fNeedCheckStatus and not fListener.Started then
+      fListener.Start;
+
+    if not fAccepted and (fListener.Accepted) then //остался один звонок
+    begin
+      fAccepted := True;
+      fCallId := fListener.CallApiId;
+      fAts := fListener.AcceptedExt;
+      Synchronize(SendMess);
+      fFinished := True;
+    end;
+    if not fFinished then
+      fFinished := fListener.Finished;
+    if SecondOfTheDay(Now) - SecondOfTheDay(fStartTime) >
+       fSeconds then
+      Terminate
+    else*)
+      Sleep(300);
+
+    if fFinished then
+    begin
+      DeleteSession;
+      Terminate;
+    end;
   end;
   Terminate;
 end;
@@ -1541,7 +1568,7 @@ procedure TCallSession.StartCall(CallId, ats: string);
 begin
   //if LockMutex(CallMutex, 1000) then
   try
-    fCallIdList.Add(CallId + '=' + ats);
+    //fCallIdList.Add(CallId + '=' + ats);
   finally
     //UnlockMutex(CallMutex);
   end;
@@ -1560,6 +1587,23 @@ begin
 end;
 
 { TEventWriter }
+
+procedure TEventWriter.AcceptCall(ACallApiId: string);
+var
+  ind: Integer;
+begin
+ if LockMutex(EventsMutex, 1000) then
+  try
+    ind := MF.fSessions.IndexOf(ACallApiId);
+    if ind > -1 then
+    begin
+      TCallSession(MF.fSessions.Objects[ind]).AcceptCall(ACallApiId);
+      Exit;
+    end;
+  finally
+    UnLockMutex(EventsMutex);
+  end;
+end;
 
 constructor TEventWriter.Create(AParam: TStrings; AURI, AUserId, ASql: string);
 begin
@@ -1629,14 +1673,18 @@ begin
     ats := Copy(userid, p + 1, Length(userid));
     userid := Copy(userid, 1, p - 1);
   end;
+  p := Pos('@', ats);
+  if p > 0  then
+    ats := Copy(ats, 1, p - 1);
+
   WriteLog('user_id = ' + userid);
 
   if userid <> fUserId then //только нужную АТС отсекаем
     Exit;
 
 
-  ///////////with TDbWriter.Create(MF.DB, fParams, fSql) do
-  /////////  Start;
+  with TDbWriter.Create(MF.DB, fParams, fSql) do
+    Start;
 
     if fParams.Values['CallStatus'] = 'CALLING' then
     begin
@@ -1656,6 +1704,7 @@ begin
 
     end
     else  //окончание звонка
+    if fParams.Values['EVENTTYPE'] = 'hangup' then
     begin
       if (Cf = 0) or ((Cf = 1) and (pos(fUserId + '*', tel) = 0)) then
       begin
@@ -1666,8 +1715,14 @@ begin
         if cf = 0 then
         EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID'], fParams.Values['CallStatus']);
       end;
-    end;
+    end
 
+    else //звонок принят
+    if fParams.Values['EVENTTYPE'] = 'answer' then
+    begin
+      SendCommandToUser(ats, Format('#callaccepted:%s', [fParams.Values['CallApiID']]));
+      AcceptCall(fParams.Values['CallAPIID']);
+    end;
   end;
 end;
 

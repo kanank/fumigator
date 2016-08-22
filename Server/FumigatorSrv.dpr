@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   Srr_MF in 'Srr_MF.pas' {MF},
   TelpinAPI in 'TelpinAPI.pas',
-  CommonFunc in 'CommonFunc.pas';
+  CommonFunc in 'CommonFunc.pas',
+  TelpinRingMeAPI in 'TelpinRingMeAPI.pas';
 
 {$R *.res}
 

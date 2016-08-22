@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 481
+      Left = 473
       Top = 290
       Width = 106
       Height = 25

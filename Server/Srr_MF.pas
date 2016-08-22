@@ -8,7 +8,7 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
+  TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
   Vcl.IdAntiFreeze, IBX.IBSQL;
 
 type
@@ -184,7 +184,7 @@ type
     CSectionCommand: TCriticalSection;
     CSectionLog: TCriticalSection;
 
-    AccessToken: TTelphinToken;
+    AccessToken: TTelphinRingMeToken;
     Caller: TPhoneCalls;
 
     AtsUserPrefix: string;
@@ -585,12 +585,15 @@ procedure TMF.Button5Click(Sender: TObject);
 var
   i: Integer;
   s: string;
-  cl: TCallListener;
+  tInfo: TTelphinRingMeTool;
 begin
    //cl := TCallListener.Create(AccessToken, Edit1.Text, '@self');
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
+  tInfo := TTelphinRingMeTool.Create(AccessToken);
+  s := tInfo.ClientId;
+  tInfo.Free;
 
 
 end;
@@ -758,9 +761,9 @@ begin
   CSectionMsg       := TCriticalSection.Create;
   fSessions         := TStringList.Create;
 
-  AccessToken := TTelphinToken.Create;
-  AccessToken.ClientKey := '1.5dVYsc31.XAW2KIdf~jpmzgUJY-VKt';
-  AccessToken.SecretKey := 'R_39AzkxxI_7gWKgg96~Xt80PzxO~fd0';
+  AccessToken := TTelphinRingMeToken.Create;
+  AccessToken.AppId := 'f6444c4e28b14529bfcbf2cdfaff00ae';
+  AccessToken.AppSecret := '363999ae34484bef86c4831aa5e9e89f';
 
   TCPServer.ContextClass := TMyContext;
 
@@ -1632,8 +1635,8 @@ begin
     Exit;
 
 
-  with TDbWriter.Create(MF.DB, fParams, fSql) do
-    Start;
+  ///////////with TDbWriter.Create(MF.DB, fParams, fSql) do
+  /////////  Start;
 
     if fParams.Values['CallStatus'] = 'CALLING' then
     begin

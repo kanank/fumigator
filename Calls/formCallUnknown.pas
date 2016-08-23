@@ -81,7 +81,7 @@ begin
   TypeBtnClick := TComponent(Sender).Name;
   CanClose := True;
 
-  if (TypeBtnClick <> btnLID.Name) and  not Assigned(frmSessionResult) then
+  if (TypeBtnClick <> btnLID.Name) and not Assigned(frmSessionResult) then
   begin
     frmSessionResult := TfrmSessionResult.Create(nil);
     with frmSessionResult do

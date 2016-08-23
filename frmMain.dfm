@@ -32,6 +32,26 @@ inherited frmMain: TfrmMain
     Font.Style = [fsItalic]
     ParentFont = False
   end
+  object lblCall: TRzLabel
+    Left = 379
+    Top = 270
+    Width = 77
+    Height = 94
+    Anchors = [akRight, akBottom]
+    Caption = ')'
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clGray
+    Font.Height = -85
+    Font.Name = 'Wingdings'
+    Font.Style = [fsBold]
+    ParentFont = False
+    Transparent = False
+    Visible = False
+    BlinkColor = clLime
+    BlinkIntervalOff = 1000
+    BlinkIntervalOn = 1000
+    FlyByColor = clLime
+  end
   object btnWorkers: TRzMenuButton
     Left = 8
     Top = 319

@@ -126,13 +126,13 @@ begin
     Result := False;
   end
   else
-    Result := true;
+    Result := True;
   CanClose := Result;
 end;
 
 destructor TfrmSessionResult.Destroy;
 begin
-  CallObj.Ready := true;
+  CallObj.Ready := True;
   inherited;
 end;
 

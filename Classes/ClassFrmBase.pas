@@ -131,7 +131,10 @@ procedure TBaseForm.HideAbsolute;
 begin
   Hide;
   if fsModal in FormState then
+  begin
+    Self.CanClose := True;
     ModalResult := mrCancel;
+  end;
 end;
 
 procedure TBaseForm.PostMessageToAll(AMsg: TMessage);

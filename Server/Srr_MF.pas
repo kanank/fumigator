@@ -1511,7 +1511,7 @@ var
   ind: Integer;
   ats: string;
 begin
-  fFinished := True;
+  //fFinished := True;
   (*if LockMutex(CallMutex, 2000) then
   try
     ind := fCallIdList.IndexOfName(CallId);

@@ -53,9 +53,11 @@ inherited frmContact: TfrmContact
     ExplicitTop = 8
     inherited cmbType: TcxDBLookupComboBox
       Style.IsFontAssigned = True
+      ExplicitHeight = 24
     end
     inherited cxDBTextEdit1: TcxDBTextEdit
       Style.IsFontAssigned = True
+      ExplicitHeight = 24
     end
     inherited FramePhones: TFramePhones
       inherited grpPhone: TRzGroupBox

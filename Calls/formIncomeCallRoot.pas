@@ -29,6 +29,7 @@ type
     fCallCancel: Boolean;
     fCallAccepted: Boolean;
     fNeedFinish: Boolean;
+    fResultSaved: Boolean;
     function  GetCallFinished: boolean;
     procedure SetClientClose(AValue: boolean);
     procedure SetCallResult(AValue: string);
@@ -90,7 +91,10 @@ begin
     //FreeAndNil(frmIncomeCallUr);
   end;
   if Assigned(frmCallUnknown) then
-    frmCallUnknown.ModalResult := mrCancel;
+  begin
+    frmCallUnknown.HideAbsolute;
+
+  end;
 
   //Self.ModalResult := mrCancel;
   (*if Assigned(frmCallEvent) then
@@ -120,32 +124,41 @@ begin
     mr := mrOk
   else
     mr := mrCancel;
-  if Assigned(frmCallEvent) then
-    frmCallEvent.ModalResult := mr;
+  if Assigned(frmCallEvent) and frmCallEvent.Visible then
+  begin
+    fNeedFinish := True;
+    frmCallEvent.ModalResult := mrOk;
+    Exit;
+  end;
 
 
   if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
   begin
-    if Assigned(frmIncomeCall) then
+    fNeedFinish := True;
+    if Assigned(frmIncomeCall) and frmIncomeCall.Visible then
     begin
       frmIncomeCall.CloseAbsolute;
+      Exit;
       //frmIncomeCall.Free;
     end;
-    if Assigned(frmIncomeCallUr) then
+    if Assigned(frmIncomeCallUr) and frmIncomeCallUr.Visible then
     begin
       frmIncomeCallUr.CloseAbsolute;
+      Exit;
       //frmIncomeCallUr.Free;
     end;
-    if Assigned(frmContact) then
+    if Assigned(frmContact) and frmContact.Visible then
+    begin
       frmContact.CloseAbsolute;
+      Exit;
+    end;
 
     if frmCallUnknown.Visible then
     begin
-      //frmCallUnknown.CloseAbsolute;
+     //frmCallUnknown.ModalResult := mrCancel;
       frmCallUnknown.HideAbsolute;
+      Exit;
     end;
-    if Assigned(frmCallEvent) then
-      frmCallEvent.ModalResult := mrCancel;
 
     Self.ModalResult := mrCancel;
     CanClose := True;
@@ -179,10 +192,20 @@ begin
         frmIncomeCallUr.CloseAbsolute;
         Exit;
       end;
+      if frmCallUnknown.Visible then
+      begin
+        //frmCallUnknown.ModalResult := mrCancel;;
+        frmCallUnknown.HideAbsolute;
+        Exit;
+      end;
+
     end;
 
-    fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
-
+    if not fResultSaved then
+    begin
+      fCallResult  := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
+      fResultSaved := True;
+    end;
 
     CanClose := True;
     ModalResult := mrOk;
@@ -257,6 +280,7 @@ begin
   if not CallObj.Active then
     ModalResult := mrCancel;
 
+  fClientClose := True; //по умолчанию
   Timer1.Enabled := True;
 end;
 
@@ -433,6 +457,7 @@ var
   formRes: FormResult;
   newCli: Boolean;
 begin
+  /// не используется
   extPrm.Setup;
 
  Timer1.Enabled := False;
@@ -473,31 +498,41 @@ begin
 
        else  //корпоративный и др
        begin
-//       if not Assigned(frmSessionResult) then
-//         frmSessionResult := TfrmSessionResult.Create(nil);
-//         with frmSessionResult do
-//         begin
-//           btnBack.Visible := True;
-//           btnCardNoCreated.Enabled := False;
-//           btnConsult.Enabled := False;
-//           btnNonConsult.Enabled := False;
-//           btnOther.Enabled := False;
-//         end;
-//       end;
-     end;
+         fClientClose := true;
+         fCallResult := 'ANSWER';
+         fResultSaved := True;
+         (*if (frmCallUnknown.TypeBtnClick = frmCallUnknown.btnPost.Name)
+            or
+            (frmCallUnknown.TypeBtnClick = frmCallUnknown.btnCorporate.Name) then
+         begin
+           if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnCorporate.name then
+             extPrm.ClientType := 1
+           else
+             extPrm.ClientType := 2;
+           DM.ShowContact(asCreate, extPrm);
+         end;*)
 
+      end;
+
+     end;
+     mrCancel:
+       if CallObj.Accepted then
+         fClientClose := True;
+   end;
      (*mrYes: formRes := DM.ShowClientUr(asCreate, ExtPrm);
      mrAll:
        begin
         extPrm.ClientType := frmCallUnknown.ContactType;
         formRes := DM.ShowContact(asCreate, ExtPrm);
        end;*)
-     end;
-   end;
+   if fNeedFinish or not CallObj.Active then
+     CallFinish;
+    // end;
+   //end;
   finally
     //frmCallUnknown.Free;
     fClientClose := True;
-    frmCallUnknown.HideAbsolute;
+    //frmCallUnknown.HideAbsolute;
   end
   else
   begin
@@ -518,7 +553,7 @@ begin
       DM.ShowContactCallForm(fClientCallPrm);
     end;
 
-    if fNeedFinish then
+    if fNeedFinish  then
       CallFinish;
       //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
 
@@ -538,8 +573,10 @@ begin
   if not CallObj.Accepted then
     frmCallEvent.ShowModal
   else
-
     frmCallEvent.ModalResult := mrOk;
+
+   if fNeedFinish then
+      CallFinish;
 
   //if frmCallEvent.ModalResult = mrCancel then
   //  DoCallCancel

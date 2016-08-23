@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
   IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze,
-  CommonTypes;
+  CommonTypes, RzLabel;
 
 const
   WM_SHOWMSG         = WM_USER + 100;
@@ -72,6 +72,7 @@ type
     Timer1: TTimer;
     mExceptList: TPopupMenu;
     btnReports: TRzMenuButton;
+    lblCall: TRzLabel;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -112,6 +113,7 @@ type
     procedure AppException(Sender: TObject; E: Exception);
 
     procedure OnCallFinish(Sender: TObject);
+    procedure OnCallStart(Sender: TObject);
 
     function GetHideOnCloseForAll(Sender: tObject): Boolean; // для расчета HideOnClose
   end;
@@ -296,6 +298,8 @@ begin
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')' + ' [вер.: ' + FileVersion(Application.ExeName) + ']';
   DoSocketConnect;
+  CallObj.OnStartCall := OnCallStart;
+  CallObj.OnFinishCall := OnCallFinish;
 end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
@@ -365,14 +369,22 @@ end;
 
 procedure TfrmMain.OnCallFinish(Sender: TObject);
 begin
-   if Assigned(frmCalling) then
+  lblCall.Blinking := False;
+  lblCall.Visible  := False;
+   (*if Assigned(frmCalling) then
       frmCalling.CallFinish
     else
     if Assigned(frmIncomeCallRoot) then
       frmIncomeCallRoot.CallFinish
     else
     if Assigned(frmClientResult) then
-      frmClientResult.CallFinish;
+      frmClientResult.CallFinish;*)
+end;
+
+procedure TfrmMain.OnCallStart(Sender: TObject);
+begin
+  lblCall.Blinking := True;
+  lblCall.Visible  := True;
 end;
 
 procedure TfrmMain.RzMenuButton2Click(Sender: TObject);

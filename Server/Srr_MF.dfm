@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 469
+      Left = 465
       Top = 290
       Width = 106
       Height = 25
@@ -468,6 +468,7 @@ object MF: TMF
     Top = 145
   end
   object DefTr: TIBTransaction
+    Active = True
     Params.Strings = (
       'isc_tpb_read_committed'
       'isc_tpb_rec_version'
@@ -494,7 +495,7 @@ object MF: TMF
     Transaction = DefTr
     BufferChunks = 1000
     CachedUpdates = False
-    ParamCheck = False
+    ParamCheck = True
     SQL.Strings = (
       
         'execute procedure CALL_EVENT_CREATE(:CALLFLOW, :CALLID, :CALLERI' +

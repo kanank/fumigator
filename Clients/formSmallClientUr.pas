@@ -52,16 +52,16 @@ uses
 
 function TfrmSmallCardUr.CheckFields: Boolean;
 begin
-   if (edtName.Text = '') or (edtFamily.Text = '') or
-    (cmbRegion.EditValue = 0) or
-    (FrameUslugi.DS.DataSet.RecordCount = 0) or
-    (cxDBMemo1.Text = '') then
+   Result := (edtName.Text <> '') and (edtFamily.Text <> '') and
+    (cmbRegion.EditValue <> 0) and (
+    (FrameUslugi.DS.DataSet.RecordCount > 0) or
+    (cxDBMemo1.Text <> ''));
+
+   if not Result then
    begin
      MsgBoxWarning('Не заполнены все необходимые поля!');
      Result := False;
-   end
-   else
-     Result := true;
+   end;
 end;
 
 procedure TfrmSmallCardUr.Exit_bntClick(Sender: TObject);

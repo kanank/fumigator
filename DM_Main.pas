@@ -1232,6 +1232,11 @@ begin
         Q.Transaction.CommitRetaining;
 
       Q.Open;
+      if Q.RecordCount = 0 then
+        Exception.Create(
+          Format('Запрос сессии для CALLID=%s вернул пустое значение',
+            [callid]));
+
       Q.Edit;
       Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
       Q.FieldByName('client_id').AsInteger := client_id;
@@ -1556,7 +1561,7 @@ begin
     frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
 
     frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
-    frmIncomeCallRoot.ClientClose       := true;
+    //frmIncomeCallRoot.ClientClose       := true;
     frmIncomeCallRoot.CloseOnCancelCall := true;
     frmIncomeCallRoot.ModalResult := mrNone;
     if CallObj.Active then

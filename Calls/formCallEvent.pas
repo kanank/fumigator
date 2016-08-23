@@ -17,6 +17,8 @@ type
     procedure btnDeclineClick(Sender: TObject);
   private
     { Private declarations }
+  protected
+    //procedure doFinishCall; override;
   public
     { Public declarations }
   end;

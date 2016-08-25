@@ -199,14 +199,14 @@ inherited frmSessionResult: TfrmSessionResult
         'select id,worker_id, client_id, callid, ishod, result, callresul' +
         't, localnum'
       'from sessions'
-      'where callid = :callid')
+      'where callapiid = :callapiid')
     UpdateObject = Q_upd
     Left = 88
     Top = 15
     ParamData = <
       item
         DataType = ftUnknown
-        Name = 'callid'
+        Name = 'callapiid'
         ParamType = ptUnknown
       end>
   end

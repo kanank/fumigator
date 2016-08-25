@@ -155,7 +155,7 @@ type
     function CheckAcceptCall(callid: string): boolean; //проверка захвата звонка
     procedure CheckSession(callid: string; var finished, accepted: Boolean); //проверка сессии на окончание и приём
 
-    function FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
+    function FinishSession(callapiid: string; client_id: integer; callid: string=''): string;
 
     function GetDataset(AQuery: TIBQuery): TIBQuery;
     function GetClientCallParams(TelNum: string): ClientCallParams;
@@ -304,6 +304,7 @@ begin
     FrameUslugi.DS.DataSet := frmClientFiz.FrameUslugi.Query;
     ShowModal;
   end;
+  Result.ModalRes := frmClientFiz.ModalResult;
 end;
 
 function TDataModuleMain.ShowClientsForCall: FormResult;
@@ -364,6 +365,7 @@ begin
     FrameUslugi.DS.DataSet := frmClientUr.FrameUslugi.Query;
     ShowModal;
   end;
+  Result.ModalRes := frmClientUr.ModalResult;
 end;
 
 function TDataModuleMain.ShowContact(AAction: TActionStr;
@@ -433,10 +435,10 @@ function TDataModuleMain.ShowOutcomCall(ACallId, ACallApiId: string; APhone: str
 var Q : TIBQuery;
     ClP :ClientCallParams;
     tel :string;
-    id: integer;
+    id, newHeight: integer;
     Prm: TFrmCreateParam;
     extParam: TClientParam;
-    newFiz, newUr, newContact, fCancel, isClient: Boolean;
+    newFiz, newUr, newContact, nonClient, newClientCreated, fCancel, isClient: Boolean;
     frm: TForm;
 begin
   Application.ProcessMessages;
@@ -501,9 +503,25 @@ begin
            begin
              ExtParam.CallParam.Status_Id := 2; //Лид
              if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
-               DM.ShowClientFizForCall(asCreate, ExtParam)
+             begin
+               if DM.ShowClientFizForCall(asCreate, ExtParam).ModalRes = mrOK then //создан новый клиент
+               begin
+                 newClientCreated := True;
+                 frmClientResult.ClientId :=  DM.Clients.FieldByName('id').AsInteger;
+                 CallObj.CallInfo.ClientId := DM.Clients.FieldByName('id').AsInteger;
+                 CallObj.CallInfo.ClientType := 'F';
+               end
+             end
              else
-               DM.ShowClientURForCall(asCreate, ExtParam);
+             begin
+               if DM.ShowClientURForCall(asCreate, ExtParam).ModalRes = mrOk then
+               begin
+                 newClientCreated := True;
+                 frmClientResult.ClientId :=  DM.Clients.FieldByName('id').AsInteger;
+                 CallObj.CallInfo.ClientId := DM.Clients.FieldByName('id').AsInteger;
+                 CallObj.CallInfo.ClientType := 'U';
+               end;
+             end;
            end
            else //добавить к существующему
            if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
@@ -521,6 +539,8 @@ begin
 
            else  //корпоративный и др
            begin
+             nonClient := True;
+             frmClientResult.ClientId := -1;
     //       if not Assigned(frmSessionResult) then
     //         frmSessionResult := TfrmSessionResult.Create(nil);
     //         with frmSessionResult do
@@ -541,6 +561,9 @@ begin
             formRes := DM.ShowContact(asCreate, ExtPrm);
            end;*)
          end;
+
+         mrCancel:
+           nonClient := True;
        end;
       finally
         //frmCallUnknown.Free;
@@ -554,20 +577,23 @@ begin
         Exit;
     end;
 
-    if not fCancel and not CallObj.Cancelled then
+    if not fCancel (*and not CallObj.Cancelled*) then
     begin
-      frmClientResult.CreateFormResult;
+      if not Assigned(frmSessionResult) or
+          not frmSessionResult.Visible then
+        frmClientResult.CreateFormResult;
 
-      isClient := not(newContact or (CallObj.CallInfo.ClientType = 'C'));
+      isClient := not(newContact or (CallObj.CallInfo.ClientType = 'C')) or newClientCreated;
+
       if isClient then
         DM.GetDataset(DM.Clients)
       else
         DM.GetDataset(DM.Contacts);
 
-      if isClient and (newFiz or NewUr) then
-      begin
-        prm := NewFrmCreateParam(asCreate, DM.Clients);
-      end;
+//      if isClient and (newFiz or NewUr) then
+//      begin
+//        prm := NewFrmCreateParam(asCreate, DM.Clients);
+//      end;
       if newContact then
         prm := NewFrmCreateParam(asCreate, DM.Contacts);
 
@@ -578,71 +604,95 @@ begin
       else
         Prm.Dataset := DM.Contacts;
 
-      if isClient and not newUr and
-        ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
+      if not nonClient then
       begin
-        frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
-        frmClientFiz.RzPanel1.Visible := False;
-        frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
-        frm := frmClientFiz;
+        if isClient (*and not newUr*) and
+          ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
+        begin
+          frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+          frmClientFiz.RzPanel1.Visible := False;
+          frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
+          frm := frmClientFiz;
+        end
+        else
+        if isClient then
+        begin
+          frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+          frmClientUr.RzPanel1.Visible := False;
+          frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
+          frm := frmClientUr;
+        end
+        else //контакт
+        begin
+          frmContact := TfrmContact.Create(frmClientResult, '', @prm);
+          frmContact.RzPanel1.Visible := False;
+          frmContact.Height := frmContact.Height - frmContact.RzPanel1.Height;
+          frm := frmContact;
+        end;
+
+        frm.BorderIcons := [];
+        frm.BorderStyle := bsNone;
+        frm.Parent      := frmClientResult.pnlForm;
+        frmClientResult.pnlForm.Height := frm.Height + 10;
+        if frm.Width > frmClientResult.pnlForm.Width then
+        begin
+          frmClientResult.ClientWidth := frm.Width;
+        end;
+
+        frmClientResult.Height := frmClientResult.pnlForm.Height +
+          frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+        frm.Position := poDefault;
+        frm.Show;
       end
-      else
-      if isClient then
+      else // не было клиента
       begin
-        frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
-        frmClientUr.RzPanel1.Visible := False;
-        frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
-        frm := frmClientUr;
-      end
-      else //контакт
-      begin
-        frmContact := TfrmContact.Create(frmClientResult, '', @prm);
-        frmContact.RzPanel1.Visible := False;
-        frmContact.Height := frmContact.Height - frmContact.RzPanel1.Height;
-        frm := frmContact;
+        frmClientResult.ClientSaved := True;
+        newHeight := frmClientResult.Height - frmClientResult.pnlForm.Height;
+        frmClientResult.pnlForm.Height := 0;
+        frmClientResult.Height := newHeight;
       end;
-
-      frm.BorderIcons := [];
-      frm.BorderStyle := bsNone;
-      frm.Parent      := frmClientResult.pnlForm;
-      frmClientResult.pnlForm.Height := frm.Height + 10;
-      if frm.Width > frmClientResult.pnlForm.Width then
-      begin
-        frmClientResult.ClientWidth := frm.Width;
-      end;
-
-      frmClientResult.Height := frmClientResult.pnlForm.Height +
-        frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
-
-      frm.Position := poDefault;
-      frm.Show;
 
       frmClientResult.frmCli    := frm;
       if isClient then
         frmClientResult.TypeCli := DM.Clients.FieldByName('type_cli').AsInteger
       else
         frmClientResult.TypeCli := 3;
-      frmClientResult.ClientId  := CallObj.CallInfo.ClientId;
+
+      if frmClientResult.ClientId = 0 then //не -1
+        frmClientResult.ClientId  := CallObj.CallInfo.ClientId;
     end;
     frmClientResult.CallId    := ACallId;
     frmClientResult.CallApiId := ACallApiId;
-    if not CallObj.Active or  frmClientResult.CallFinished then
+    if not CallObj.Active or frmClientResult.CallFinished then
     begin
       frmClientResult.CallFinish;
     end;
 
-    frmClientResult.ShowModal;
-    Result := frmClientResult.CallResult;
-    frmClientResult.Free;
+    // если карточка была создана после окончания звонка
+    if (frmClientResult.ClientId <> 0) and
+        Assigned(frmSessionResult) and
+       (frmSessionResult.ResultType =
+                  frmSessionResult.btnCardNoCreated.Name) then
+    begin
+      frmSessionResult.ClearResult;
+    end;
 
   finally
+    if not Assigned(frmSessionResult) or
+        not frmSessionResult.Visible then
+      frmClientResult.CreateFormResult;
+
+    frmClientResult.ShowModal;
+    Result := frmClientResult.CallResult;
+
     inCalling      := False;
     waitCalling    := False;
     CallObj.Active := False;
     CallObj.Ready  := true;
+    FreeAndNil(frmSessionResult);
+    FreeAndNil(frmClientResult);
   end;
-
-  //end;
 
 end;
 
@@ -1212,7 +1262,7 @@ begin
   end;
 end;
 
-function TDataModuleMain.FinishSession(callid: string; client_id: integer; callapiid: string=''): string;
+function TDataModuleMain.FinishSession(callapiid: string; client_id: integer; callid: string=''): string;
 var
   f: boolean;
 begin
@@ -1223,7 +1273,7 @@ begin
   with frmSessionResult do
   try
     try
-      Q.ParamByName('callid').AsString := callid;
+      Q.ParamByName('callapiid').AsString := callapiid;
 
       if Q.Active then
        Q.Close;
@@ -1234,7 +1284,7 @@ begin
       Q.Open;
       if Q.RecordCount = 0 then
         Exception.Create(
-          Format('Запрос сессии для CALLID=%s вернул пустое значение',
+          Format('Запрос сессии для CALLAPIID=%s вернул пустое значение',
             [callid]));
 
       Q.Edit;
@@ -1571,6 +1621,7 @@ begin
     CallObj.Active := False;
     CallObj.Ready := True;
     FreeAndNil(frmCallEvent);
+    FreeAndNil(frmSessionResult);
     FreeAndNil(frmIncomeCallRoot);
   end;
 end;

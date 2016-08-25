@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 465
+      Left = 461
       Top = 290
       Width = 106
       Height = 25
@@ -600,6 +600,7 @@ object MF: TMF
     Database = DB
     Events.Strings = (
       'ACCEPT_PHONE'
+      'CLIENTS_CHANGED'
       'INCOME_CALL'
       'SESSION_CLOSE'
       'SESSION_OPEN')

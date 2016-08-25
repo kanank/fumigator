@@ -48,6 +48,7 @@ type
     TypeCli: Integer;
     property CallId: string read fCallId write SetCallId;
     property CallApiId: string read fCallApiId write fCallApiId;
+    property ClientSaved: Boolean read fClientSaved write fClientSaved;
 
     property  CallFinished: boolean read GetCallFinished;
     property  CallResult: string read GetCallResult write fCallResult;
@@ -81,8 +82,10 @@ begin
     SaveResult;
 
   if fClientSaved and fResultSaved then
+  begin
+    self.CanClose := True;
     ModalResult := mrOk;
-
+  end;
 end;
 
 procedure TfrmClientResult.CallFinish;
@@ -98,17 +101,18 @@ begin
     Exit;
   end;
 
+
   if not Assigned(frmSessionResult) then
     CreateFormResult;
 
   try
-    if Assigned(frmSessionResult.Q.Transaction) and
+    if Assigned(frmSessionResult.Q) and Assigned(frmSessionResult.Q.Transaction) and
         frmSessionResult.Q.Transaction.Active then
       frmSessionResult.Q.Transaction.CommitRetaining;
   except
   end;
 
-  frmSessionResult.Q.ParamByName('callid').AsString := CallObj.CallInfo.CallId;
+  frmSessionResult.Q.ParamByName('callapiid').AsString := CallObj.CallInfo.CallApiId;
   while 1=1 do
   begin
     frmSessionResult.Q.Close;
@@ -122,7 +126,7 @@ begin
   frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
   frmSessionResult.Q.FieldByName('client_id').AsInteger := ClientId;
   if clientid = 0 then //клиент не был создан
-      frmSessionResult.edtIshod.Text := (*.Q.FieldByName('ishod').AsString*) 'Карточка клиента не создана';
+      frmSessionResult.btnCardNoCreated.Click; // .edtIshod.Text := (*.Q.FieldByName('ishod').AsString*) 'Карточка клиента не создана';
   Self.CallResult := CallObj.CallInfo.CallResult; //frmSessionResult.Q.FieldByName('callresult').AsString;
 
 
@@ -135,7 +139,7 @@ end;
 
 function TfrmClientResult.CheckFinish: boolean;
 begin
-  Result := CallResult <> '';
+  Result := not CallObj.Active;
   if not Result then
     Application.MessageBox('Действие не разрешено во время звонка!',
      'Исходящий звонок', MB_ICONSTOP);
@@ -158,7 +162,7 @@ begin
   frmSessionResult.Position := poDefault;
   frmSessionResult.Height := frmSessionResult.Cancel_btn.Top - 2;
   frmSessionResult.Parent   := frmClientResult.pnlResult;
-  frmSessionResult.Top := 3;
+  frmSessionResult.Top := 5;
   Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
   Self.pnlResult.Height := frmSessionResult.Height;
 

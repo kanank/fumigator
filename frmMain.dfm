@@ -238,17 +238,6 @@ inherited frmMain: TfrmMain
       OnClick = UrClients_miClick
     end
   end
-  object ClientSocket: TClientSocket
-    Active = False
-    ClientType = ctNonBlocking
-    Port = 0
-    OnConnect = ClientSocketConnect
-    OnDisconnect = ClientSocketDisconnect
-    OnRead = ClientSocketRead
-    OnError = ClientSocketError
-    Left = 576
-    Top = 64
-  end
   object TrayIcon: TRzTrayIcon
     Hint = #1060#1091#1084#1080#1075#1072#1090#1086#1088
     PopupMenu = TrayMenu

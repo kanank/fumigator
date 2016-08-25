@@ -11,6 +11,9 @@ uses
   TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
   Vcl.IdAntiFreeze, IBX.IBSQL;
 
+const
+  WM_REOPEN_PHONES = WM_USER + 1;
+
 type
   TDbWriter = class(TThread)
   protected
@@ -35,13 +38,14 @@ type
     fStarted: Boolean;
     fAccepted: Boolean;
     fFinished: Boolean;
-    fSeconds: Integer;
+    fSeconds: Integer; // максю время работы
     fList: TStringList;
     //fCallIdList: TStringList;
     fCallId: string;
     fAts: string;
     fMess: string;
     fMessLock: Boolean;
+    fWorkTime: integer; //время работы в сек
     //fNeedCheckStatus: Boolean; //нужно поверять статус
     //fListener: TCallListener;
     procedure Log;
@@ -50,13 +54,13 @@ type
     procedure DeleteSession;
     procedure StartCall(CallId: string; ats: string);
     procedure EndCall(CallId, CallStatus: string);
-    procedure AcceptCall(CallApiId: string);
+    procedure AcceptCall(CallId: string);
     procedure SendMess;
   public
-    CallApiId: string;
+    //CallApiId: string;
+    CallID: string; // в новом API общий ID - в CALLID
     Str: string;
-    constructor Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer); overload;
-    destructor Destroy; overload;
+    constructor Create(ACallId, AStr: string; AList: TStringList; ASecond: integer); overload;
   end;
 
   TEventWriter = class(TThread)
@@ -78,7 +82,7 @@ type
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
     procedure StartCall(CallId: string; ats: string);
     function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
-    procedure AcceptCall(ACallApiId: string);
+    procedure AcceptCall(ACallId: string);
   public
     constructor Create(AParam: TStrings; AURI, AUserId, ASql: string); overload;
     destructor Destroy; override;
@@ -166,7 +170,7 @@ type
   private
     fSessions: TStringList;
     procedure AddLog (Logstr :string; ALock: boolean=True);
-    Function AddCallEvent(Params :TStrings) :Boolean;
+    //Function AddCallEvent(Params :TStrings) :Boolean;
     Function FumigatorCommand(ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo) :Boolean; //выполнение комманд от клиентов прокадо
     function SocketCommand(AContext: TIdContext; cmd, arg: string): Boolean;
     function CreateRWQuery :TIBQuery;
@@ -176,9 +180,12 @@ type
     procedure CallFinished(Sender: TObject);
     function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
     function UpdateSession(ACallId: string): Boolean;
-    function AcceptCall(ACallId, APhone: string): boolean;
-    function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
-    function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+    //function AcceptCall(ACallId, APhone: string): boolean;
+    //function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+    //function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+
+    procedure ReopenPhones;
+    procedure WmReopenPhones(var Msg: TMessage); message WM_REOPEN_PHONES;
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -195,6 +202,7 @@ type
     procedure AddLogMemo(Logstr :string; ALock: Boolean=True);
     function SendMsg(const ANick: String; const AMsg: String) : Boolean;
     function BroadcastMsg(const bmsg: String): boolean;
+
   end;
 
 const
@@ -214,7 +222,7 @@ implementation
 uses
   System.DateUtils, CommonFunc;
 
-function TMF.AcceptCall(ACallId, APhone: string): boolean;
+(*function TMF.AcceptCall(ACallId, APhone: string): boolean;
 var
   Q :TIBQuery;
 begin
@@ -326,7 +334,7 @@ begin
 
 
 
-end;
+end;*)
 
 
 (*function TMF.AddCallEvent(Params: TStrings): Boolean;
@@ -611,14 +619,7 @@ end;
 
 procedure TMF.Button7Click(Sender: TObject);
 begin
-  if LockMutex(EventsMutex, 2000) then
-  try
-    QPhones.Close;
-    QPhones.Open;
-    AddLogMemo('#Обновлен список телефонов');
-  finally
-    UnLockMutex(EventsMutex);
-  end;
+  ReopenPhones;
 end;
 
 procedure TMF.Button8Click(Sender: TObject);
@@ -690,7 +691,7 @@ begin
 
 end;
 
-function TMF.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+(*function TMF.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
 var
   ind: Integer;
 begin
@@ -755,7 +756,7 @@ begin
     if lMutex then
       UnlockMutex(EventsMutex);
   end;
-end;
+end;*)
 
 procedure TMF.FormCreate(Sender: TObject);
 begin
@@ -794,6 +795,7 @@ begin
   FreeAndNil(Caller);
 end;
 
+
 procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
   EventCount: Integer; var CancelAlerts: Boolean);
 begin
@@ -801,7 +803,7 @@ begin
     //LockMutex(EventsMutex, MutexDelay);
 
     AddLogMemo('#IBEvent: ' + EventName);
-    if Copy(EventName,1,11) = 'INCOME_CALL' then
+    (*if Copy(EventName,1,11) = 'INCOME_CALL' then
     begin
       //SendCommandToUser('*', '#checkcall:', false);
     end
@@ -812,10 +814,25 @@ begin
     else
 
     if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
-      SendCommandToUser('*', '#checkacceptcall:', false)
+      SendCommandToUser('*', '#checkacceptcall:', false)*)
+    if Copy(EventName,1,15) = 'CLIENTS_CHANGED' then
+      PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 0);
+
   finally
     //UnLockMutex(EventsMutex);
     //CancelAlerts := True;
+  end;
+end;
+
+procedure TMF.ReopenPhones;
+begin
+  if LockMutex(EventsMutex, 2000) then
+  try
+    QPhones.Close;
+    QPhones.Open;
+    AddLogMemo('#Обновлен список телефонов');
+  finally
+    UnLockMutex(EventsMutex);
   end;
 end;
 
@@ -1011,7 +1028,7 @@ begin
     else
     if cmd = 'callaccept' then  // взяли звонок
     begin
-      AddLogMemo('callaccept');
+      (*AddLogMemo('callaccept');
       AcceptCall(argList[0], argList[1]);
 
       if not Assigned(Caller) then
@@ -1020,7 +1037,7 @@ begin
         Caller.OnAfterCall  := AfterOutcomCall;
        // Caller.OnCallFinish := CallFinished;
       end;
-      Caller.PickUpCall(argList[0], argList[1]);
+      Caller.PickUpCall(argList[0], argList[1]); *)
     end
 
     else
@@ -1186,7 +1203,7 @@ begin
     DBStatus_lbl.Caption := 'Установлено';
     DBStatus_lbl.Font.Color := $00408000;
 
-    //IBEvents.RegisterEvents;
+    IBEvents.RegisterEvents;
     QPhones.Open;
   end;
 
@@ -1221,6 +1238,12 @@ begin
     Q.Transaction.Free;
     FreeAndNil(Q);
   end;
+end;
+
+procedure TMF.WmReopenPhones(var Msg: TMessage);
+begin
+  ReopenPhones;
+  SendCommandToUser('*', '#cmdfumigator:updateclients');
 end;
 
 Function TMyContext.SendMsg(const ANick: String; const AMsg:String) : Boolean;
@@ -1459,15 +1482,15 @@ end;
 
 { TCallSession }
 
-procedure TCallSession.AcceptCall(CallApiId: string);
+procedure TCallSession.AcceptCall(CallId: string);
 begin
   fFinished := True;
 end;
 
-constructor TCallSession.Create(ACallApiId, AStr: string; AList: TStringList; ASecond: integer);
+constructor TCallSession.Create(ACallId, AStr: string; AList: TStringList; ASecond: integer);
 begin
   inherited Create(false);
-  CallApiId := ACallApiId;
+  CallId := ACallId;
   Str := AStr;
   fList := AList;
   fSeconds := ASecond;
@@ -1488,7 +1511,7 @@ begin
   if LockMutex(EventsMutex, 2000) then
   try
     fList.BeginUpdate;
-    ind := fList.IndexOf(CallApiId);
+    ind := fList.IndexOf(CallId);
     if ind > - 1 then
       fList.Delete(ind);
   finally
@@ -1496,14 +1519,6 @@ begin
     UnLockMutex(EventsMutex);
   end;
 
-end;
-
-destructor TCallSession.Destroy;
-begin
-  //fCallIdList.Free;
-  //fListener.Free;
-  WriteLog('Уничтожен TCallSession: ' + CallApiId);
-  inherited;
 end;
 
 procedure TCallSession.EndCall(CallId, CallStatus: string);
@@ -1547,12 +1562,17 @@ begin
        fSeconds then
       Terminate
     else*)
-      Sleep(300);
+    Sleep(300);
+    Inc(fWorkTime, 300);
+
+    if fWorkTime/1000 > fSeconds then
+      fFinished := true;
 
     if fFinished then
     begin
       DeleteSession;
       Terminate;
+      WriteLog('Уничтожен TCallSession: ' + CallId);
     end;
   end;
   Terminate;
@@ -1588,16 +1608,16 @@ end;
 
 { TEventWriter }
 
-procedure TEventWriter.AcceptCall(ACallApiId: string);
+procedure TEventWriter.AcceptCall(ACallId: string);
 var
   ind: Integer;
 begin
  if LockMutex(EventsMutex, 1000) then
   try
-    ind := MF.fSessions.IndexOf(ACallApiId);
+    ind := MF.fSessions.IndexOf(ACallId);
     if ind > -1 then
     begin
-      TCallSession(MF.fSessions.Objects[ind]).AcceptCall(ACallApiId);
+      TCallSession(MF.fSessions.Objects[ind]).AcceptCall(ACallId);
       Exit;
     end;
   finally
@@ -1628,7 +1648,7 @@ var
 begin
  if LockMutex(EventsMutex, 1000) then
   try
-    ind := MF.fSessions.IndexOf(ACallApiId);
+    ind := MF.fSessions.IndexOf(ACallId);
     if ind > -1 then
     begin
       TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallId, ACallStatus);
@@ -1720,8 +1740,8 @@ begin
     else //звонок принят
     if fParams.Values['EVENTTYPE'] = 'answer' then
     begin
-      SendCommandToUser(ats, Format('#callaccepted:%s', [fParams.Values['CallApiID']]));
-      AcceptCall(fParams.Values['CallAPIID']);
+      SendCommandToUser(ats, Format('#callaccepted:%s', [fParams.Values['CallID']]));
+      AcceptCall(fParams.Values['CallID']);
     end;
   end;
 end;
@@ -1742,7 +1762,7 @@ begin
   try
     if fIn then
     begin
-      ind := MF.fSessions.IndexOf(ACallApiId);
+      ind := MF.fSessions.IndexOf(ACallId);
       if ind > -1 then
       begin
         CallObj := TCallSession(MF.fSessions.Objects[ind]);
@@ -1766,9 +1786,9 @@ begin
 
       if fIn then
       begin
-        CallObj := TCallSession.Create(ACallApiId, AclientIdType, MF.fSessions, 60);
-        MF.fSessions.AddObject(ACallApiId, CallObj);
-        CallObj.StartCall(ACallId, Aats);
+        CallObj := TCallSession.Create(ACallId, AclientIdType, MF.fSessions, 60);
+        MF.fSessions.AddObject(ACallId, CallObj);
+        CallObj.StartCall(ACallApiId, Aats);
       end;
     end;
   finally

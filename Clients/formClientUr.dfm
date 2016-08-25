@@ -4,7 +4,6 @@ inherited frmClientUr: TfrmClientUr
   ClientWidth = 768
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -32
   ExplicitWidth = 784
   ExplicitHeight = 702
   PixelsPerInch = 96
@@ -451,7 +450,7 @@ inherited frmClientUr: TfrmClientUr
         end
       end
       inherited RzPanel2: TRzPanel
-        Top = 109
+        Top = 101
         Width = 185
         Height = 27
         ExplicitTop = 101

@@ -10,6 +10,9 @@ const
   WM_FINISHCALL = WM_USER + 201;
   WM_ACCEPTCALL = WM_USER + 202;
 
+  WM_CMDFUMIGATOR = WM_USER + 300; //команды Фумигатора
+        //wParam = 1 - обновить справочник клиентов
+
 type TClientType = (clFiz, clUr);
 type TTrayView =(trayNormal, trayMissed);
 

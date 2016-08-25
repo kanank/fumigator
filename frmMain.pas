@@ -54,7 +54,6 @@ type
     UrClients_mi: TMenuItem;
     FizClients_mi: TMenuItem;
     RzMenuButton2: TRzMenuButton;
-    ClientSocket: TClientSocket;
     lblSocket: TLabel;
     RzMenuButton3: TRzMenuButton;
     RzMenuButton4: TRzMenuButton;
@@ -83,11 +82,11 @@ type
     procedure NewURClnt_miClick(Sender: TObject);
     procedure btnClientsClick(Sender: TObject);
     procedure RzMenuButton2Click(Sender: TObject);
-    procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
-    procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
-    procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
-     ErrorEvent: TErrorEvent; var ErrorCode: Integer);
-    procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
+    //procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
+    //procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
+    //procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
+    // ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+    //procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
     procedure RzMenuButton4Click(Sender: TObject);
     procedure FizClients_miClick(Sender: TObject);
@@ -105,9 +104,14 @@ type
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
     procedure WmShowOutcomeCall(var Msg: TMessage); message WM_SHOWOUTCOMECALL;
-    procedure WmConnectSocket(var Msg: TMessage); message WM_CONNECTSOCKET;
+    procedure WmConnectSocket(var Msg: TMessage);  message WM_CONNECTSOCKET;
+
+    procedure WmCmdFumigator(var Msg: TMessage); message WM_CMDFUMIGATOR;
+
+    procedure UpdateClients;
   public
     ReadThread: TReadingThread;
+    isBusy: Boolean; //выполняются обновления
 
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
@@ -159,7 +163,7 @@ begin
   FreeAndNil(formWorkers);
 end;
 
-procedure TfrmMain.ClientSocketConnect(Sender: TObject;
+(*procedure TfrmMain.ClientSocketConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
   inherited;
@@ -182,9 +186,9 @@ procedure TfrmMain.ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
 begin
   if not ClientSocket.Active then
     DM.SocketTimer.Interval := 20000;
-end;
+end;*)
 
-procedure TfrmMain.ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
+(*procedure TfrmMain.ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
 var
   s: string;
   p: Integer;
@@ -262,7 +266,8 @@ begin
     DM.CallS_Q.ParamByName('date_start').AsDateTime := DM.DateStart;
   end;
 
-end;
+
+end;*)
 
 procedure TfrmMain.FizClients_miClick(Sender: TObject);
 begin
@@ -483,6 +488,26 @@ begin
 
 end;
 
+procedure TfrmMain.UpdateClients;
+begin
+  if Assigned(frmClientResult) or Assigned(frmIncomeCallRoot) then
+    Exit;
+
+  while not CallObj.Ready do
+  begin
+    Application.ProcessMessages;
+    Sleep(500);
+  end;
+
+  try
+    isBusy := True;
+    DM.Clients.Close;
+    DM.Clients.Open;
+  finally
+    isBusy := False;
+  end;
+end;
+
 procedure TfrmMain.UrClients_miClick(Sender: TObject);
 begin
   if not DM.Clients.Active then
@@ -494,6 +519,12 @@ begin
   finally
     FreeAndNil(frmClients);
   end;
+end;
+
+procedure TfrmMain.WmCmdFumigator(var Msg: TMessage);
+begin
+  if Msg.WParam = 1 then
+    UpdateClients;
 end;
 
 procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
@@ -746,7 +777,7 @@ begin
       argList.free;
     end;
 
-    if CallObj.CallInfo.CallApiId = CallInfo.CallApiId then //уже завершился звонок
+    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
       exit;
 
     if Callinfo.CallFlow = 'in' then
@@ -769,20 +800,20 @@ begin
        s := argList[2];
     finally
       if //CallObj.Ready and
-        (CallObj.CallInfo.CallApiId <> argList[0]) then
-        CallObj.CallInfo.CallApiId := argList[0];
+        (CallObj.CallInfo.CallId <> argList[0]) then
+        CallObj.CallInfo.CallId := argList[0];
       argList.free;
     end;
 
     CallObj.FinishCall(s);
   end
 
-  else
+  (*else
   if (cmd = 'callaccepted') then //завершен звонок
   begin
     if CallObj.CallInfo.CallApiId = arg then
       CallObj.Accepted := True;
-  end
+  end *)
 
   else
   if cmd = 'checksession' then //завершен звонок
@@ -848,9 +879,14 @@ begin
         argList.free;
       end;
     end;
+  end
 
-
-  end;
+  else
+  if cmd = 'cmdfumigator' then
+  begin
+    if arg = 'updateclients' then
+      PostMessage(formMain.Handle, WM_CMDFUMIGATOR, 1,0);
+  end
 
 end;
 

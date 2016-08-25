@@ -7,7 +7,19 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ClassFrmBase, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit,
   cxMaskEdit, dxGDIPlusClasses, Vcl.ExtCtrls, cxDBEdit, Vcl.StdCtrls, RzPanel,
-  Data.DB, RzButton, IBX.IBCustomDataSet, IBX.IBQuery;
+  Data.DB, RzButton, IBX.IBCustomDataSet, IBX.IBQuery, dxSkinsCore, dxSkinBlack,
+  dxSkinBlue, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
+  dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
+  dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue;
 
 type
   TfrmCalling = class(TBaseForm)
@@ -115,7 +127,7 @@ procedure TfrmCalling.edtPhoneClick(Sender: TObject);
 begin
   try
     DM.inCalling := True;
-    formMain.ClientSocket.Socket.SendText('#call:' + AtsPhone + ',' + Phone + ',' + AtsPhone);
+    //formMain.ClientSocket.Socket.SendText('#call:' + AtsPhone + ',' + Phone + ',' + AtsPhone);
   finally
     DM.inCalling := False;
   end;
@@ -154,7 +166,7 @@ end;
 procedure TfrmCalling.btnDeleteCallClick(Sender: TObject);
 begin
   try
-    formMain.ClientSocket.Socket.SendText('#calldelete:' + Self.CallId);
+    //formMain.ClientSocket.Socket.SendText('#calldelete:' + Self.CallId);
   finally
     DM.inCalling := False;
   end;

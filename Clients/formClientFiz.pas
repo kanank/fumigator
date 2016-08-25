@@ -94,6 +94,16 @@ var
   res: Boolean;
   err: string;
 begin
+  if not (DS.DataSet.Modified or
+          FramePerson.DS.DataSet.Modified or
+          FramePhones.DS.DataSet.Modified or
+          FrameUslugi.DS.DataSet.Modified or
+          FrameAddress.DS.DataSet.Modified) then
+  begin
+    ModalResult := mrOk;
+    Exit;
+  end;
+
   //проверка
   res := False;
   if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson)) then

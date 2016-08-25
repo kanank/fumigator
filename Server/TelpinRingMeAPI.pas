@@ -12,10 +12,19 @@ type
   TTelphinRingMeAPIBaseElement = class
   protected
     fBaseUrl: string;
+    fApiUrl: string;
     fHttp: TIdHTTP;
+    fHttpErr: string;
+    fResponse: string;
+
     fSSL: TIdSSLIOHandlerSocketOpenSSL;
   public
     property BaseUrl: string read fBaseUrl write fBaseUrl;
+    property ApiUrl: string read fApiUrl write fApiUrl;
+    property HttpErr: string read fHttpErr;
+    property HttpResponse: string read fResponse;
+
+    function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; virtual;
     constructor Create; overload;
     destructor Destroy; overload;
   end;
@@ -24,15 +33,13 @@ type
   private
     FTokenObject: TTelphinRingMeToken;
     fUserId: string;
-    fResponse: string;
-    fHttpErr: string;
+
     function GetTokenObject: TTelphinRingMeToken;
   public
     property TokenObject: TTelphinRingMeToken read GetTokenObject write FTokenObject;
-    property HttpResponse: string read fResponse;
-    property HttpErr: string read fHttpErr;
+
+    function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
     constructor Create(ATokenObject: TTelphinRingMeToken=nil); overload;
-    function HttpGet(aUrl: string): string;
   end;
 
   TTelphinRingMeToken = class(TTelphinRingMeAPIBaseElement)
@@ -44,10 +51,14 @@ type
     fAutoReGet: Boolean;
     fTimeExpires: TDateTime; //время истечения
 
+    fExtList: string; //список extension
+
     procedure SetAutoReGet(AValue: boolean);
     procedure GetTokenProc(Sender: TObject);
     function CheckToken: Boolean;
     function GetActiveToken: string;
+
+    function GetExtList: string;
   public
     property AppId: string read fClientKey write fClientKey;
     property AppSecret: string read fSecretKey write fSecretKey;
@@ -56,6 +67,9 @@ type
     property TimeExpires: TDateTime read fTimeExpires;
     property TokenIsActive: Boolean read CheckToken;
 
+    property ExtensionList: string read GetExtList;
+
+    function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
     constructor Create; overload;
     destructor Destroy; overload;
     function GetToken: Boolean;
@@ -130,11 +144,10 @@ constructor TTelphinRingMeToken.Create;
 begin
   inherited Create;
   fAutoReGet := True;
-  fTimer := TTimer.Create(nil);
-  fTimer.Interval := 0;
-  fTimer.OnTimer := GetTokenProc;
-  fBaseUrl := 'https://apiproxy.telphin.ru';
 
+  //fTimer := TTimer.Create(nil);
+  //fTimer.Interval := 0;
+  //fTimer.OnTimer := GetTokenProc;
 end;
 
 destructor TTelphinRingMeToken.Destroy;
@@ -146,6 +159,12 @@ end;
 function TTelphinRingMeToken.GetToken: Boolean;
 begin
   GetTokenProc(nil);
+  GetExtList;
+end;
+
+function TTelphinRingMeToken.GetExtList: string;
+begin
+  Result := HttpGet('/client/@me/extension/');
 end;
 
 function TTelphinRingMeToken.GetActiveToken: string;
@@ -203,6 +222,16 @@ begin
   end;
 end;
 
+function TTelphinRingMeToken.HttpGet(aUrl: string; aUseApiUrl: Boolean): string;
+begin
+  if fToken <> '' then
+  begin
+    fHttp.Request.CustomHeaders.Clear;
+    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ fToken);
+  end;
+  Result := inherited HttpGet(aUrl, aUseApiUrl);
+end;
+
 procedure TTelphinRingMeToken.SetAutoReGet(AValue: boolean);
 begin
   if not AValue then
@@ -227,29 +256,15 @@ begin
   Result := FTokenObject;
 end;
 
-function TTelphinRingMeAPIElement.HttpGet(aUrl: string): string;
-var
-  sStream: TStringStream;
-  url: string;
+function TTelphinRingMeAPIElement.HttpGet(aUrl: string;
+  aUseApiUrl: Boolean): string;
 begin
-  sStream := TStringStream.Create;
-  fHttp.Request.Method := 'GET';
-  fhttp.Request.CustomHeaders.Clear;
+  fHttp.Request.CustomHeaders.Clear;
   fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
-
-  fHttpErr := '';
-  url := fBaseUrl + aUrl;
-  try
-    fHttp.Get(url, sStream);
-    Result := sStream.DataString;
-  except
-   fHttpErr := Exception(ExceptObject).Message;
-  end;
-  sStream.Free;
+  Result := inherited HttpGet(aUrl, aUseApiUrl);
 end;
 
 { TPhoneCalls }
-
 function TPhoneCalls.DeleteCall(ACallApiId: string; APhone: string): Boolean;
 var
   sStream: TStringStream;
@@ -263,7 +278,6 @@ begin
     fHttp.Request.Method := 'DELETE';
     fHttp.Request.ContentType := 'application/json';
     fhttp.Request.CustomHeaders.Clear;
-    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
     url := fBaseUrl + Format('/uapi/phoneCalls/@me/%s/%s', [APhone, ACallApiId]);
     try
@@ -446,7 +460,8 @@ begin
   fHttp := TIdHTTP.Create(nil);
   fSSL:=TIdSSLIOHandlerSocketOpenSSL.Create;
   fHttp.IOHandler:=fSSL;
-  fBaseUrl := 'https://apiproxy.telphin.ru/api/ver1.0';
+  fBaseUrl := 'https://apiproxy.telphin.ru';
+  fApiUrl  := '/api/ver1.0';
 end;
 
 destructor TTelphinRingMeAPIBaseElement.Destroy;
@@ -455,6 +470,33 @@ begin
     fHttp.Free;
   if Assigned(fSSL) then
     fSSL.Free;
+end;
+
+function TTelphinRingMeAPIBaseElement.HttpGet(aUrl: string;
+  aUseApiUrl: Boolean): string;
+var
+  sStream: TStringStream;
+  url: string;
+begin
+  sStream := TStringStream.Create;
+  fHttp.Request.Method := 'GET';
+  //fhttp.Request.CustomHeaders.Clear;
+  //fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+  fHttpErr := '';
+
+  url := fBaseUrl;
+  if aUseApiUrl then
+    url := url + fApiUrl;
+  url := Url + aUrl;
+
+  try
+    fHttp.Get(url, sStream);
+    Result := sStream.DataString;
+  except
+   fHttpErr := Exception(ExceptObject).Message;
+  end;
+  sStream.Free;
 end;
 
 { TThreadTimer }
@@ -514,7 +556,7 @@ begin
   fhttp.Request.CustomHeaders.Clear;
   fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
-  url := fBaseUrl + '/client/@me/client/';
+  url := fBaseUrl + fApiUrl + '/client/@me/client/';
   try
     fHttp.Get(url, sStream);
     fClientJSON := sStream.DataString;
@@ -526,7 +568,7 @@ end;
 
 function TTelphinRingMeTool.GetExtList: string;
 begin
-  Result := HttpGet('/client/@me/extension/')
+  Result := HttpGet('/client/@me/extension/');
 end;
 
 end.

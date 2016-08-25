@@ -177,8 +177,8 @@ begin
   frmSessionResult.Height := frmSessionResult.Height -
     frmSessionResult.Cancel_btn.Height - 10;
   frmSessionResult.Parent := frmSessionEdit.pnlResult;
-  frmSessionResult.Q.ParamByName('callid').AsString :=
-    DS.DataSet.FieldByName('callid').AsString;
+  frmSessionResult.Q.ParamByName('callapiid').AsString :=
+    DS.DataSet.FieldByName('callapiid').AsString;
   frmSessionResult.Q.Open;
   frmSessionResult.Q.Edit;
   frmSessionResult.Position := poDefault;

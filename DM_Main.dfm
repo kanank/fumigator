@@ -934,6 +934,7 @@ object DataModuleMain: TDataModuleMain
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
+      'ID,'
       'NAME,'
       'TYPE_CLI,'
       'STATUS_ID,'
@@ -953,6 +954,7 @@ object DataModuleMain: TDataModuleMain
       'AREA_UNIT_ID)'
       'values'
       '('
+      ':ID,'
       ':NAME,'
       ':TYPE_CLI,'
       ':STATUS_ID,'
@@ -977,7 +979,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'

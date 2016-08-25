@@ -58,7 +58,7 @@ type
     class function ShowIncomeCall(ACallId: string = ''; ACallApiId: string = ''): Boolean;
     class function ShowCall: Boolean;
     class procedure CloseCall;
-    class procedure CheckAccept(Sender: TObject);
+    //class procedure CheckAccept(Sender: TObject);
   end;
 
 var
@@ -250,7 +250,7 @@ end;
 
 procedure TfrmIncomeCallRoot.CheckTimerTimer(Sender: TObject);
 begin
-  CheckAccept(CallObj);
+  //CheckAccept(CallObj);
   if CallObj.Accepted then
     CheckTimer.Enabled := false;
 end;
@@ -427,7 +427,7 @@ begin
   end;
 end;
 
-class procedure TfrmIncomeCallRoot.CheckAccept(Sender: TObject);
+(*class procedure TfrmIncomeCallRoot.CheckAccept(Sender: TObject);
 begin
   if not TCallProto(Sender).Active then
     exit;
@@ -448,7 +448,7 @@ begin
         frmCallEvent.ModalResult := mrCancel;
     end
   end;
-end;
+end;*)
 
 procedure TfrmIncomeCallRoot.Timer1Timer(Sender: TObject);
 var

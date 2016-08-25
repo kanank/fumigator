@@ -80,12 +80,15 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
   end
   inherited cxDBLookupComboBox2: TcxDBLookupComboBox
     DataBinding.DataSource = frmClientFiz.DS
+    TabOrder = 4
   end
   inherited cxDBLookupComboBox3: TcxDBLookupComboBox
     DataBinding.DataSource = frmClientFiz.DS
+    TabOrder = 5
   end
   inherited edtPhone: TcxMaskEdit
     Style.IsFontAssigned = True
+    TabOrder = 6
     ExplicitWidth = 162
     ExplicitHeight = 22
     Height = 22
@@ -108,7 +111,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfFlat
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 4
+    TabOrder = 2
     Width = 162
   end
   object edtFamily: TcxDBTextEdit [12]
@@ -124,14 +127,14 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     StyleDisabled.LookAndFeel.NativeStyle = True
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.NativeStyle = True
-    TabOrder = 5
+    TabOrder = 1
     Width = 162
   end
   inherited cmbRegion: TcxDBLookupComboBox
     Left = 300
     Top = 7
     DataBinding.DataSource = frmClientFiz.DS
-    TabOrder = 6
+    TabOrder = 3
     ExplicitLeft = 300
     ExplicitTop = 7
     ExplicitWidth = 149
@@ -141,7 +144,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Left = 253
     Width = 196
     Height = 111
-    TabOrder = 7
+    TabOrder = 8
     ExplicitLeft = 253
     ExplicitWidth = 196
     ExplicitHeight = 111
@@ -190,7 +193,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Left = 253
     Top = 161
     DataBinding.DataSource = frmClientFiz.DS
-    TabOrder = 8
+    TabOrder = 7
     ExplicitLeft = 253
     ExplicitTop = 161
     ExplicitWidth = 196

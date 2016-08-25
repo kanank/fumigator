@@ -48,8 +48,11 @@ type
     fBack: Boolean; //нажат возврат
   public
     CallResult: string;
+    ResultType: string; //тип нажатой кнопки
     function CheckFields: Boolean;
     destructor Destroy; overload;
+
+    procedure ClearResult;
   end;
 
 var
@@ -69,6 +72,7 @@ end;
 
 procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
 begin
+  ResultType := TRzButton(Sender).Name;
   edtIshod.Text := TRzButton(Sender).Caption;
   edtIshod.Properties.ReadOnly := True;
   //TRzButton(Sender).Down := True;
@@ -78,6 +82,7 @@ procedure TfrmSessionResult.btnOtherClick(Sender: TObject);
 begin
   //if not edtIshod.Visible then
   //begin
+    ResultType := TRzButton(Sender).Name;
     edtIshod.Text := '';
     edtIshod.Properties.ReadOnly := False;
     //btnOther.Caption := 'Отменить "другое"';
@@ -101,7 +106,7 @@ begin
   end
   else*)
   if not Q.Active then
-    Q.ParamByName('CALLID').AsString := CallObj.CallInfo.CallId;
+    Q.ParamByName('CALLAPIID').AsString := CallObj.CallInfo.CallApiId;
     Q.Open;
 
   if Q.State <> dsEdit then
@@ -128,6 +133,14 @@ begin
   else
     Result := True;
   CanClose := Result;
+end;
+
+procedure TfrmSessionResult.ClearResult;
+begin
+    ResultType := '';
+    edtIshod.Text := '';
+    edtIshod.Properties.ReadOnly := False;
+    edtResult.Text := '';
 end;
 
 destructor TfrmSessionResult.Destroy;

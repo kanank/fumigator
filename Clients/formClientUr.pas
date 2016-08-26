@@ -232,7 +232,7 @@ begin
  if Field = nil then
    Exit;
 
-  if (Field.FieldName = 'NAME') then
+  if (fFrmParam.action = asCreate) and (Field.FieldName = 'NAME') then
   begin
     QCheck.Close;
     QCheck.ParamByName('name').AsString := Field.AsString;

@@ -439,7 +439,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 461
+      Left = 457
       Top = 290
       Width = 106
       Height = 25
@@ -602,6 +602,7 @@ object MF: TMF
       'ACCEPT_PHONE'
       'CLIENTS_CHANGED'
       'INCOME_CALL'
+      'PHONES_CHANGED'
       'SESSION_CLOSE'
       'SESSION_OPEN')
     Registered = False

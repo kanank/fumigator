@@ -808,12 +808,12 @@ begin
     CallObj.FinishCall(s);
   end
 
-  (*else
+  else
   if (cmd = 'callaccepted') then //завершен звонок
   begin
-    if CallObj.CallInfo.CallApiId = arg then
+    if CallObj.CallInfo.CallId = arg then
       CallObj.Accepted := True;
-  end *)
+  end
 
   else
   if cmd = 'checksession' then //завершен звонок

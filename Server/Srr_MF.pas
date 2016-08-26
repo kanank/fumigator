@@ -605,10 +605,8 @@ begin
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
-  tInfo := TTelphinRingMeTool.Create(AccessToken);
-  s := tInfo.ClientId;
-  tInfo.Free;
-
+  Caller := TPhoneCalls.Create(AccessToken);
+  Caller.DeleteCall(Edit1.Text, '755');
 
 end;
 
@@ -801,7 +799,7 @@ procedure TMF.IBEventsEventAlert(Sender: TObject; EventName: string;
 begin
   try
     //LockMutex(EventsMutex, MutexDelay);
-
+    EventName := Copy(EventName,1,Length(EventName) - 1); //избавляемся от #0 на конце
     AddLogMemo('#IBEvent: ' + EventName);
     (*if Copy(EventName,1,11) = 'INCOME_CALL' then
     begin
@@ -815,8 +813,12 @@ begin
 
     if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
       SendCommandToUser('*', '#checkacceptcall:', false)*)
-    if Copy(EventName,1,15) = 'CLIENTS_CHANGED' then
-      PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 0);
+    if (Copy(EventName,1,15) = 'CLIENTS_CHANGED') then
+      PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 0)
+    else
+    if EventName = 'PHONES_CHANGED' then
+      PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 1)
+
 
   finally
     //UnLockMutex(EventsMutex);
@@ -1243,7 +1245,8 @@ end;
 procedure TMF.WmReopenPhones(var Msg: TMessage);
 begin
   ReopenPhones;
-  SendCommandToUser('*', '#cmdfumigator:updateclients');
+  if Msg.LParam = 0 then
+    SendCommandToUser('*', '#cmdfumigator:updateclients');
 end;
 
 Function TMyContext.SendMsg(const ANick: String; const AMsg:String) : Boolean;

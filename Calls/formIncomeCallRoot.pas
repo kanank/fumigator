@@ -203,7 +203,7 @@ begin
 
     if not fResultSaved then
     begin
-      fCallResult  := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
+      fCallResult  := DM.FinishSession(CallObj.CallInfo.CallApiId, ClientId);
       fResultSaved := True;
     end;
 
@@ -478,9 +478,23 @@ begin
        begin
          ExtPrm.CallParam.Status_Id := 2; //Лид
          if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
-           DM.ShowClientFizForCall(asCreate, ExtPrm)
+         begin
+           if DM.ShowClientFizForCall(asCreate, ExtPrm).ModalRes = mrOk then
+           begin
+             ClientId                    :=  DM.Clients.FieldByName('id').AsInteger;
+             CallObj.CallInfo.ClientId   := DM.Clients.FieldByName('id').AsInteger;
+             CallObj.CallInfo.ClientType := 'F';
+           end;
+         end
          else
-           DM.ShowClientURForCall(asCreate, ExtPrm);
+         begin
+           if DM.ShowClientURForCall(asCreate, ExtPrm).ModalRes = mrOk then
+           begin
+             ClientId                    :=  DM.Clients.FieldByName('id').AsInteger;
+             CallObj.CallInfo.ClientId   := DM.Clients.FieldByName('id').AsInteger;
+             CallObj.CallInfo.ClientType := 'U';
+           end;
+         end;
        end
        else //добавить к существующему
        if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
@@ -489,6 +503,7 @@ begin
          begin
            DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
            extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
+           ClientId := frmCallUnknown.SelectId;
            if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
               DM.ShowClientFizForCall(asEdit, ExtPrm)
            else
@@ -525,13 +540,13 @@ begin
         extPrm.ClientType := frmCallUnknown.ContactType;
         formRes := DM.ShowContact(asCreate, ExtPrm);
        end;*)
-   if fNeedFinish or not CallObj.Active then
-     CallFinish;
     // end;
    //end;
   finally
     //frmCallUnknown.Free;
     fClientClose := True;
+    if fNeedFinish or not CallObj.Active then
+     CallFinish;
     //frmCallUnknown.HideAbsolute;
   end
   else
@@ -553,13 +568,13 @@ begin
       DM.ShowContactCallForm(fClientCallPrm);
     end;
 
-    if fNeedFinish  then
-      CallFinish;
-      //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
+     //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
 
   end;
  finally
    fClientClose := True;
+   if fNeedFinish or not CallObj.Active  then
+      CallFinish;
  end;
 end;
 

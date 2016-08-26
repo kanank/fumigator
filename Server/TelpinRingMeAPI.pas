@@ -25,6 +25,8 @@ type
     property HttpResponse: string read fResponse;
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; virtual;
+    function HttpPost(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; virtual;
+    function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; virtual;
     constructor Create; overload;
     destructor Destroy; overload;
   end;
@@ -39,6 +41,7 @@ type
     property TokenObject: TTelphinRingMeToken read GetTokenObject write FTokenObject;
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
+   function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; override;
     constructor Create(ATokenObject: TTelphinRingMeToken=nil); overload;
   end;
 
@@ -51,14 +54,15 @@ type
     fAutoReGet: Boolean;
     fTimeExpires: TDateTime; //время истечения
 
-    fExtList: string; //список extension
+    fExtList: TStringList; //список extension
 
     procedure SetAutoReGet(AValue: boolean);
-    procedure GetTokenProc(Sender: TObject);
+    function GetTokenProc(aRevoke: boolean = false): boolean;
     function CheckToken: Boolean;
     function GetActiveToken: string;
+    function RevokeToken: Boolean;
 
-    function GetExtList: string;
+    function GetExtList: boolean;//список extension номер = extension_id
   public
     property AppId: string read fClientKey write fClientKey;
     property AppSecret: string read fSecretKey write fSecretKey;
@@ -67,9 +71,12 @@ type
     property TimeExpires: TDateTime read fTimeExpires;
     property TokenIsActive: Boolean read CheckToken;
 
-    property ExtensionList: string read GetExtList;
+    property ExtensionList: TStringList read fExtList;
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
+
+    function ExtensionId(APhone: string): Integer;
+
     constructor Create; overload;
     destructor Destroy; overload;
     function GetToken: Boolean;
@@ -107,7 +114,10 @@ type
     function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
     function TransferCall(Callid, APhone: string): Boolean;
     function PickUpCall(Callid, APhone: string): Boolean;
-    function DeleteCall(ACallApiId: string; APhone: string): Boolean;
+
+    function DeleteCall(ACallApiId: string; APhone: string): Boolean; overload;
+    function DeleteCall(ACallApiId: string; AExtId: integer): Boolean; overload;
+
     function GetRecordInfo(ACallApiId: string; AExt: string): string;
   end;
 
@@ -144,7 +154,7 @@ constructor TTelphinRingMeToken.Create;
 begin
   inherited Create;
   fAutoReGet := True;
-
+  fExtList := TStringList.Create;
   //fTimer := TTimer.Create(nil);
   //fTimer.Interval := 0;
   //fTimer.OnTimer := GetTokenProc;
@@ -154,17 +164,55 @@ destructor TTelphinRingMeToken.Destroy;
 begin
   if Assigned(fTimer) then
    fTimer.Free;
+  fExtList.Free;
+end;
+
+function TTelphinRingMeToken.ExtensionId(APhone: string): Integer;
+var
+  i: Integer;
+begin
+  i := fExtList.IndexOfName(APhone);
+  if i > -1 then
+    Result := StrToIntDef(fExtList.ValueFromIndex[i], 0);
 end;
 
 function TTelphinRingMeToken.GetToken: Boolean;
 begin
-  GetTokenProc(nil);
+  GetTokenProc;
   GetExtList;
 end;
 
-function TTelphinRingMeToken.GetExtList: string;
+function TTelphinRingMeToken.GetExtList: boolean;
+var
+  response, s: string;
+  json: TJSONObject;
+  json1: TJSONArray;
+  i, p: Integer;
 begin
-  Result := HttpGet('/client/@me/extension/');
+  try
+    response := HttpGet('/client/@me/extension/');
+    if fHttpErr <> '' then
+      Exit;
+
+    json1 := TJSONObject.ParseJSONValue(response) as TJSONArray;
+    if json1 <> nil then
+    begin
+      fExtList.Clear;
+
+      for i := 0 to json1.Count - 1 do
+      begin
+        json := TJSONObject.ParseJSONValue(json1.Items[i].ToString) as TJSONObject;
+        s := json.GetValue('name').Value;
+        p := Pos('*', s);
+        if p > 0 then
+          s := Copy(s, p+1, Length(s));
+        fExtList.Add(s + '=' + json.GetValue('id').Value);
+      end;
+      Result := True;
+    end;
+  except
+    Result := False;
+  end;
 end;
 
 function TTelphinRingMeToken.GetActiveToken: string;
@@ -174,50 +222,51 @@ begin
   Result := fToken;
 end;
 
-procedure TTelphinRingMeToken.GetTokenProc(Sender: TObject);
+function TTelphinRingMeToken.GetTokenProc(aRevoke: boolean = false): boolean;
 var
   sResponse: string;
-  stream: TStringStream;
+  //stream: TStringStream;
+  s, url: string;
   json: TJSONObject;
   keep: Integer;
 begin
-  stream := TStringStream.Create('');
-  stream.WriteString('grant_type=client_credentials&');
+//stream := TStringStream.Create('');
+ //tream.WriteString('grant_type=client_credentials&');
 //  stream.WriteString('redirect_uri=urn:ietf:wg:oauth:2.0:oob&');
-  stream.WriteString('client_id=' + fClientKey + '&');
-  stream.WriteString('client_secret=' + fSecretKey) ;//; + '&');
+//stream.WriteString('client_id=' + fClientKey + '&');
+ //tream.WriteString('client_secret=' + fSecretKey) ;//; + '&');
  // stream.WriteString('state=0');
 
+  if not aRevoke then
+  begin
+    s := Format('grant_type=client_credentials&client_id=%s&client_secret=%s',[fClientKey, fSecretKey]);
+    url := '/oauth/token';
+  end
+  else
+  begin
+    s := Format('client_id=%s&client_secret=%s&token=%s',[fClientKey, fSecretKey, fToken]);
+    url := '/oauth/revoke';
+  end;
 
   try
-//    fHttp.Request.URL := fBaseURL + '/oauth/token.php';
-    fHttp.Request.Method := 'POST';
-    fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
-    fhttp.Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-    fhttp.Request.AcceptCharSet := 'windows-1251,utf-8;q=0.7,*;q=0.3';
-    fhttp.Request.AcceptLanguage := 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
-    fhttp.Request.Connection := 'keep-alive';
-    fhttp.Request.Host := fBaseUrl;
-    fhttp.Request.Referer := fBaseUrl;
-   // fhttp.Request.UserAgent := 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7';
-    fhttp.HandleRedirects := false;
-    fhttp.HTTPOptions := [hoKeepOrigProtocol];
-
     json := TJSONObject.Create;
     try
-      sResponse := fHttp.Post(fBaseUrl + '/oauth/token', stream);
-       json.Parse(BytesOf(sResponse), 0);
+      sResponse := HttpPost(url, false, s);
+
+      json.Parse(BytesOf(sResponse), 0);
       fToken := json.Values['access_token'].ToString;
       fToken := AnsiDequotedStr(fToken, '"');
       keep   := StrToInt(json.Values['expires_in'].ToString);
       if keep > 0  then
         keep := keep - 15;
       fTimeExpires := IncSecond(Now, keep);
+      Result := true;
     except
-
+      Result := false;
+      fToken := '';
     end;
   finally
-    stream.Free;
+    //stream.Free;
     json.Free;
   end;
 end;
@@ -230,6 +279,11 @@ begin
     fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ fToken);
   end;
   Result := inherited HttpGet(aUrl, aUseApiUrl);
+end;
+
+function TTelphinRingMeToken.RevokeToken: Boolean;
+begin
+  GetTokenProc(true);
 end;
 
 procedure TTelphinRingMeToken.SetAutoReGet(AValue: boolean);
@@ -256,6 +310,14 @@ begin
   Result := FTokenObject;
 end;
 
+function TTelphinRingMeAPIElement.HttpDelete(aUrl: string;
+  aUseApiUrl: Boolean): boolean;
+begin
+  fHttp.Request.CustomHeaders.Clear;
+  fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+  Result := inherited HttpDelete(aUrl, aUseApiUrl);
+end;
+
 function TTelphinRingMeAPIElement.HttpGet(aUrl: string;
   aUseApiUrl: Boolean): string;
 begin
@@ -265,31 +327,27 @@ begin
 end;
 
 { TPhoneCalls }
-function TPhoneCalls.DeleteCall(ACallApiId: string; APhone: string): Boolean;
+function TPhoneCalls.DeleteCall(ACallApiId: string; AExtId: integer): Boolean;
 var
-  sStream: TStringStream;
-  sResponse: string;
   url: string;
 begin
   Result := False;
 
-  sStream := TStringStream.Create('');
+  url := Format('/extension/%d/current_calls/%s', [AExtId, ACallApiId]);
   try
-    fHttp.Request.Method := 'DELETE';
-    fHttp.Request.ContentType := 'application/json';
-    fhttp.Request.CustomHeaders.Clear;
+    Result := HttpDelete(url) and (fHttp.ResponseCode = 200);
+  except
 
-    url := fBaseUrl + Format('/uapi/phoneCalls/@me/%s/%s', [APhone, ACallApiId]);
-    try
-      fHttp.Delete(url, sStream);
-    except
-
-    end;
-
-    Result := (fHttp.ResponseCode = 200);
-  finally
-    sStream.Free;
   end;
+end;
+
+function TPhoneCalls.DeleteCall(ACallApiId: string; APhone: string): Boolean;
+var
+  ExtId: integer;
+begin
+  ExtId := FTokenObject.ExtensionId(APhone);
+  if ExtId > 0 then
+    DeleteCall(ACallApiId, ExtId);
 end;
 
 function TPhoneCalls.GetRecordInfo(ACallApiId, AExt: string): string;
@@ -472,6 +530,36 @@ begin
     fSSL.Free;
 end;
 
+function TTelphinRingMeAPIBaseElement.HttpDelete(aUrl: string;
+  aUseApiUrl: Boolean): boolean;
+var
+  sStream: TStringStream;
+  url: string;
+begin
+  fHttp.Request.Method := 'DELETE';
+  fHttp.Request.ContentType := 'application/json';
+  //fhttp.Request.CustomHeaders.Clear;
+
+  sStream := TStringStream.Create;
+  try
+    url := fBaseUrl;
+    if aUseApiUrl then
+      url := url + fApiUrl;
+    url := Url + aUrl;
+
+    try
+      fHttp.Delete(url, sStream);
+      fResponse := sStream.DataString;
+      Result := True;
+    except
+      fHttpErr := Exception(ExceptObject).Message;
+      Result := False;
+    end;
+  finally
+    sStream.Free;
+  end;
+end;
+
 function TTelphinRingMeAPIBaseElement.HttpGet(aUrl: string;
   aUseApiUrl: Boolean): string;
 var
@@ -497,6 +585,44 @@ begin
    fHttpErr := Exception(ExceptObject).Message;
   end;
   sStream.Free;
+end;
+
+function TTelphinRingMeAPIBaseElement.HttpPost(aUrl: string;
+  aUseApiUrl: Boolean; aContent: string): string;
+var
+  sResponse: string;
+  stream: TStringStream;
+  url: string;
+begin
+  url := fBaseUrl;
+  if aUseApiUrl then
+    url := url + fApiUrl;
+  url := Url + aUrl;
+
+  stream := TStringStream.Create('');
+  stream.WriteString(aContent);
+  try
+    fHttpErr := '';
+    fHttp.Request.Method := 'POST';
+    fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
+    fhttp.Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    fhttp.Request.AcceptCharSet := 'windows-1251,utf-8;q=0.7,*;q=0.3';
+    fhttp.Request.AcceptLanguage := 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
+    fhttp.Request.Connection := 'keep-alive';
+    fhttp.Request.Host := Url;
+    fhttp.Request.Referer := Url;
+   // fhttp.Request.UserAgent := 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7';
+    fhttp.HandleRedirects := false;
+    fhttp.HTTPOptions := [hoKeepOrigProtocol];
+
+    try
+      result := fHttp.Post(url, stream);
+    except
+      fHttpErr := Exception(ExceptObject).Message;
+    end;
+  finally
+    stream.Free;
+  end;
 end;
 
 { TThreadTimer }

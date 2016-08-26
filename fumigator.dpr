@@ -85,13 +85,6 @@ begin
   Application.Initialize;
   Application.Title := 'Фумигатор';
 
-  // проверяем запущенную программу
-//  if WaitForSingleObject(hMutex, 0) <> 0 then
-//  begin
-//    Application.Messagebox('Приложение уже запущено', 'Фумигатор', MB_ICONWARNING);
-//    Application.Terminate;
-//  end;
-  //if LockMutex(hMutex, 1000) then
   try
     if CheckStartRepeat(CheckAppName) then  //проверяем повторный запуск
     begin

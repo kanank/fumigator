@@ -74,10 +74,12 @@ procedure TfrmSmallCardUr.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   inherited;
-  if (txtName.Text = '') or (edtFamily.Text = '') or (edtName.Text = '') or
-     (cmbRegion.EditValue = 0) or
-     (FrameUslugi.DS.DataSet.RecordCount = 0) or
-     (cxDBMemo1.Text = '') then
+  CanClose := (txtName.Text <> '') and (edtFamily.Text <> '')
+    and (edtName.Text <> '') and (cmbRegion.EditValue > 0) and
+     ((FrameUslugi.DS.DataSet.RecordCount > 0) or
+       (cxDBMemo1.Text <> '')) ;
+
+  if not CanClose then
   begin
     MsgBoxWarning('Не заполнены все необходимые поля!');
     CanClose := False;

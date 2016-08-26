@@ -337,9 +337,10 @@ begin
   if Field = nil then
     Exit;
 
-  if (Field.FieldName = 'FAMILY') or
+  if (fFrmParam.action =  asCreate) and
+     ((Field.FieldName = 'FAMILY') or
      (Field.FieldName = 'NAME') or
-     (Field.FieldName = 'SURNAME') then
+     (Field.FieldName = 'SURNAME')) then
   begin
     if (Field.DataSet.FieldByName('FAMILY').AsString = '') or
        (Field.DataSet.FieldByName('NAME').AsString = '') or

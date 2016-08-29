@@ -497,7 +497,7 @@ end;
 
 procedure TMF.AfterOutcomCall(Sender: TObject);
 begin
-  SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
+  //SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
 end;
 
 
@@ -606,7 +606,8 @@ begin
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
   Caller := TPhoneCalls.Create(AccessToken);
-  Caller.DeleteCall(Edit1.Text, '755');
+  //Caller.DeleteCall(Edit1.Text, '755');
+  Caller.SimpleCall('755', '+79104579648', '755');
 
 end;
 

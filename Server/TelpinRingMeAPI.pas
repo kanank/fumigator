@@ -110,8 +110,9 @@ type
 
     property CallId: string read fCallId;
     property StatusCall: Integer read GetStatusCall;
-    property Extension: string read fExtension;
-    function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
+
+    function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean; overload;
+    function SimpleCall(ANumberSrc, ANumberDest: string; AExtId: integer): boolean; overload;
     function TransferCall(Callid, APhone: string): Boolean;
     function PickUpCall(Callid, APhone: string): Boolean;
 
@@ -450,10 +451,9 @@ begin
   sStream.Free;
 end;
 
-function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
+function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest: string; AExtId: integer): boolean;
 var
   sStream: TStringStream;
-  sResponse: string;
   url: string;
   json: TJSONObject;
 begin
@@ -462,40 +462,29 @@ begin
   sStream := TStringStream.Create('');
   try
     sStream.WriteString('{' + #13#10);
-    sStream.WriteString('"extension": "' + AExtNumber + '",'+ #13#10);
-    sStream.WriteString('"phoneCallView": ['+ #13#10);
-    sStream.WriteString('{'+ #13#10);
-    sStream.WriteString(' "source":  ["' + ANumberSrc + '" ],'+ #13#10);
-    sStream.WriteString(' "destination": "' + ANumberDest + '",'+ #13#10);
-    sStream.WriteString('     "callerId": "Fumigator <' + ANumberSrc + '>"'+ #13#10);
-    sStream.WriteString('  }'+ #13#10);
-    sStream.WriteString(']'+ #13#10);
+    sStream.WriteString('"allow_public_transfer": true' + #13#10);
+    sStream.WriteString(Format(' "src_num":  ["%s"],'+ #13#10, [ANumberSrc]));
+    sStream.WriteString('"dst_num": "' + ANumberDest + '",'+ #13#10);
+    sStream.WriteString('"callerId": "Fumigator <' + ANumberSrc + '>"'+ #13#10);
     sStream.WriteString('}');
 
-    fHttp.Request.Method := 'POST';
-    fHttp.Request.ContentType := 'application/json';
-    fhttp.Request.CustomHeaders.Clear;
-    fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
-
-    url := fBaseUrl + '/uapi/phoneCalls/@owner/simple?allowPublicTransfer=true' ; //&accessRequestToken=' + FTokenObject.Token;
+    url := Format('/extension/%s/callback/', [AExtId]);
     try
       fResponse := fHttp.Post(url, sStream);
+      Result := True;
     except
-
+      Result := False;
     end;
 
     if (fHttp.ResponseCode < 400) then
     begin
-      if Copy(fResponse, 1, 1) = '[' then
-      begin
-        fResponse := Copy(fResponse, 2, Length(fResponse) - 2);
-      end;
       json := TJSONObject.Create;
-      json.Parse(BytesOf(fResponse), 0);
-      fCallId    := AnsiDequotedStr(json.Values['id'].ToString, '"');
-      fExtension := AnsiDequotedStr(json.Values['extension'].ToString, '"');
-
-     // TCallListener.Create(fTokenObject, fCallId, fExtension, fOnCallFinish);
+      try
+        json.Parse(BytesOf(fResponse), 0);
+        fCallId := AnsiDequotedStr(json.Values['call_id'].ToString, '"');
+      finally
+        json.Free;
+      end;
 
       if Assigned(fOnAfterCall) then
         fOnAfterCall(Self);
@@ -504,6 +493,15 @@ begin
   finally
     sStream.Free;
   end;
+end;
+
+function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
+var
+  ExtId: integer;
+begin
+  ExtId := FTokenObject.ExtensionId(AExtNumber);
+  if ExtId > 0 then
+    Result := SimpleCall(ANumberSrc, ANumberSrc, ExtId);
 end;
 
 function TPhoneCalls.TransferCall(Callid, APhone: string): Boolean;

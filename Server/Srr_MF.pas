@@ -606,8 +606,11 @@ begin
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
   Caller := TPhoneCalls.Create(AccessToken);
-  //Caller.DeleteCall(Edit1.Text, '755');
   Caller.SimpleCall('755', '+79104579648', '755');
+  Sleep(7000);
+  Caller.DeleteCall(Edit1.Text, '755');
+  ShowMessage('aga');
+  Caller.Free;
 
 end;
 

@@ -9,6 +9,8 @@ uses
 type
   TTelphinRingMeToken = class;
 
+  THttpContentType=(htcJson, htcForm);
+
   TTelphinRingMeAPIBaseElement = class
   protected
     fBaseUrl: string;
@@ -16,6 +18,7 @@ type
     fHttp: TIdHTTP;
     fHttpErr: string;
     fResponse: string;
+    fHttpContentType: THttpContentType;
 
     fSSL: TIdSSLIOHandlerSocketOpenSSL;
   public
@@ -23,6 +26,7 @@ type
     property ApiUrl: string read fApiUrl write fApiUrl;
     property HttpErr: string read fHttpErr;
     property HttpResponse: string read fResponse;
+    property HttpContentType: THttpContentType read fHttpContentType write fHttpContentType; //для Post
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; virtual;
     function HttpPost(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; virtual;
@@ -41,7 +45,8 @@ type
     property TokenObject: TTelphinRingMeToken read GetTokenObject write FTokenObject;
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
-   function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; override;
+    function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; override;
+    function HttpPost(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; override;
     constructor Create(ATokenObject: TTelphinRingMeToken=nil); overload;
   end;
 
@@ -301,6 +306,7 @@ begin
   inherited Create;
   if ATokenObject <> nil then
     FTokenObject := ATokenObject;
+  fHttpContentType := htcJson;
 end;
 
 
@@ -325,6 +331,15 @@ begin
   fHttp.Request.CustomHeaders.Clear;
   fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
   Result := inherited HttpGet(aUrl, aUseApiUrl);
+end;
+
+function TTelphinRingMeAPIElement.HttpPost(aUrl: string; aUseApiUrl: Boolean;
+  aContent: string): string;
+begin
+  fHttp.Request.CustomHeaders.Clear;
+  fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+  Result := inherited HttpPost(aUrl, aUseApiUrl, aContent);
 end;
 
 { TPhoneCalls }
@@ -462,15 +477,19 @@ begin
   sStream := TStringStream.Create('');
   try
     sStream.WriteString('{' + #13#10);
-    sStream.WriteString('"allow_public_transfer": true' + #13#10);
-    sStream.WriteString(Format(' "src_num":  ["%s"],'+ #13#10, [ANumberSrc]));
-    sStream.WriteString('"dst_num": "' + ANumberDest + '",'+ #13#10);
-    sStream.WriteString('"callerId": "Fumigator <' + ANumberSrc + '>"'+ #13#10);
+    sStream.WriteString('"allow_public_transfer": true,' + #13#10);
+    sStream.WriteString(Format('"caller_id_name": "Fumigator <%s>",', [ANumberSrc])  + #13#10);
+    sStream.WriteString(Format('"caller_id_number": "%s",', [ANumberSrc]) + #13#10);
+    sStream.WriteString(Format('"dst_num": "%s",', [ANumberDest])  + #13#10);
+    sStream.WriteString('"src_num": ['  + #13#10);
+    sStream.WriteString(Format('  "%s"', [ANumberSrc])  + #13#10);
+    sStream.WriteString(']'  + #13#10);
     sStream.WriteString('}');
 
-    url := Format('/extension/%s/callback/', [AExtId]);
+
+    url := Format('/extension/%d/callback/', [AExtId]);
     try
-      fResponse := fHttp.Post(url, sStream);
+      fResponse := HttpPost(url, True, sStream.DataString);
       Result := True;
     except
       Result := False;
@@ -501,7 +520,7 @@ var
 begin
   ExtId := FTokenObject.ExtensionId(AExtNumber);
   if ExtId > 0 then
-    Result := SimpleCall(ANumberSrc, ANumberSrc, ExtId);
+    Result := SimpleCall(ANumberSrc, ANumberDest, ExtId);
 end;
 
 function TPhoneCalls.TransferCall(Callid, APhone: string): Boolean;
@@ -518,6 +537,7 @@ begin
   fHttp.IOHandler:=fSSL;
   fBaseUrl := 'https://apiproxy.telphin.ru';
   fApiUrl  := '/api/ver1.0';
+  fHttpContentType := htcForm;
 end;
 
 destructor TTelphinRingMeAPIBaseElement.Destroy;
@@ -535,8 +555,8 @@ var
   url: string;
 begin
   fHttp.Request.Method := 'DELETE';
-  fHttp.Request.ContentType := 'application/json';
-  //fhttp.Request.CustomHeaders.Clear;
+  if fHttpContentType = htcJson then
+    fHttp.Request.ContentType := 'application/json';
 
   sStream := TStringStream.Create;
   try
@@ -566,7 +586,8 @@ var
 begin
   sStream := TStringStream.Create;
   fHttp.Request.Method := 'GET';
-  //fhttp.Request.CustomHeaders.Clear;
+    if fHttpContentType = htcJson then
+    fHttp.Request.ContentType := 'application/json';
   //fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
 
   fHttpErr := '';
@@ -602,7 +623,6 @@ begin
   try
     fHttpErr := '';
     fHttp.Request.Method := 'POST';
-    fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
     fhttp.Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
     fhttp.Request.AcceptCharSet := 'windows-1251,utf-8;q=0.7,*;q=0.3';
     fhttp.Request.AcceptLanguage := 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
@@ -612,6 +632,10 @@ begin
    // fhttp.Request.UserAgent := 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7';
     fhttp.HandleRedirects := false;
     fhttp.HTTPOptions := [hoKeepOrigProtocol];
+    if fHttpContentType = htcJson then
+      fHttp.Request.ContentType := 'application/json'
+    else
+       fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
 
     try
       result := fHttp.Post(url, stream);

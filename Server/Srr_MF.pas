@@ -194,7 +194,7 @@ type
     CSectionLog: TCriticalSection;
 
     AccessToken: TTelphinRingMeToken;
-    Caller: TPhoneCalls;
+   // Caller: TPhoneCalls;
 
     AtsUserPrefix: string;
     //MsgThread: TMsgThread;
@@ -568,8 +568,6 @@ begin
 end;
 
 procedure TMF.Button2Click(Sender: TObject);
-var
-  Caller: TPhoneCalls;
 begin
   try
   TCPServer.Active := False;
@@ -600,14 +598,15 @@ var
   i: Integer;
   s: string;
   tInfo: TTelphinRingMeTool;
+  lCaller: TPhoneCalls;
 begin
    //cl := TCallListener.Create(AccessToken, Edit1.Text, '@self');
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
-  Caller := TPhoneCalls.Create(AccessToken);
+  lCaller := TPhoneCalls.Create(AccessToken);
   //Caller.DeleteCall(Edit1.Text, '755');
-  Caller.SimpleCall('755', '+79104579648', '755');
+  lCaller.SimpleCall('755', '+79104579648', '755');
 
 end;
 
@@ -791,7 +790,7 @@ begin
   CSectionMsg.Release;
 
   FreeAndNil(AccessToken);
-  FreeAndNil(Caller);
+  //FreeAndNil(Caller);
 end;
 
 
@@ -998,34 +997,36 @@ var
   p: Integer;
   argList: TStringList;
   answer: string;
+  lCaller: TPhoneCalls;
 begin
   argList := TStringList.Create;
   try
      argList.DelimitedText := arg;
     if cmd = 'call' then
     begin
-      if not Assigned(Caller) then
+      if not Assigned(lCaller) then
       begin
-        Caller := TPhoneCalls.Create(AccessToken);
-        Caller.OnAfterCall  := AfterOutcomCall;
+        lCaller := TPhoneCalls.Create(AccessToken);
+        lCaller.OnAfterCall  := AfterOutcomCall;
         //Caller.OnCallFinish := CallFinished;
       end;
-      Caller.SimpleCall(argList[0], argList[1], argList[2]);
+      lCaller.SimpleCall(argList[0], argList[1], argList[2]);
     end
 
     else
     if cmd = 'calldelete' then
     begin
-      if not Assigned(Caller) then
+      if not Assigned(lCaller) then
       begin
-        Caller := TPhoneCalls.Create(AccessToken);
-        Caller.OnAfterCall  := AfterOutcomCall;
+        lCaller := TPhoneCalls.Create(AccessToken);
+        lCaller.OnAfterCall  := AfterOutcomCall;
        // Caller.OnCallFinish := CallFinished;
       end;
       answer := argList[1];
-      if (Length(answer) > 0) and (pos('*', answer) = 0) then
-        answer := AtsUserPrefix + answer;
-      Caller.DeleteCall(argList[0], answer);
+      p := pos('*', answer);
+      if (Length(answer) > 0) and (p > 0) then
+        answer := Copy(answer, p + 1, Length(answer));
+      lCaller.DeleteCall(argList[0], answer);
     end
 
     else
@@ -1046,21 +1047,23 @@ begin
     else
     if cmd = 'getrecordinfo' then
     begin
-      if not Assigned(Caller) then
-        Caller := TPhoneCalls.Create(AccessToken);
+      if not Assigned(lCaller) then
+        lCaller := TPhoneCalls.Create(AccessToken);
         answer := argList[1];
         if answer = '' then
           answer := AtsUserPrefix + TMyContext(AContext).Nick;
         if (Length(answer) > 0) and (pos('*', answer) = 0) then
           answer := AtsUserPrefix + answer;
 
-      answer := Caller.GetRecordInfo(argList[0], answer);
+      answer := lCaller.GetRecordInfo(argList[0], answer);
       AContext.Connection.IOHandler.WriteLn(Format('#RecordInfo:%s,%s', [argList[0], Answer])); //номера атс может не быть, поэтому  не SendCommandToUser
       //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
     end;
 
   finally
     argList.Free;
+    if Assigned(lCaller) then
+      lCaller.Free;
   end;
 end;
 

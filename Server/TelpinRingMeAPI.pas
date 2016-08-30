@@ -336,7 +336,7 @@ begin
 
   url := Format('/extension/%d/current_calls/%s', [AExtId, ACallApiId]);
   try
-    Result := HttpDelete(url) and (fHttp.ResponseCode = 200);
+    Result := HttpDelete(url) and (fHttp.ResponseCode = 204);
   except
 
   end;

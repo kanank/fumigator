@@ -604,19 +604,9 @@ begin
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
-<<<<<<< HEAD
   lCaller := TPhoneCalls.Create(AccessToken);
   //Caller.DeleteCall(Edit1.Text, '755');
   lCaller.SimpleCall('755', '+79104579648', '755');
-=======
-  Caller := TPhoneCalls.Create(AccessToken);
-  Caller.SimpleCall('755', '+79104579648', '755');
-  Sleep(7000);
-  Caller.DeleteCall(Edit1.Text, '755');
-  ShowMessage('aga');
-  Caller.Free;
->>>>>>> origin/NewApi
-
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
@@ -1028,7 +1018,7 @@ begin
       if not Assigned(lCaller) then
       begin
         lCaller := TPhoneCalls.Create(AccessToken);
-        lCaller.OnAfterCall  := AfterOutcomCall;
+        //lCaller.OnAfterCall  := AfterOutcomCall;
        // Caller.OnCallFinish := CallFinished;
       end;
       answer := argList[1];

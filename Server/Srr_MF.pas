@@ -604,9 +604,18 @@ begin
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
+<<<<<<< HEAD
   lCaller := TPhoneCalls.Create(AccessToken);
   //Caller.DeleteCall(Edit1.Text, '755');
   lCaller.SimpleCall('755', '+79104579648', '755');
+=======
+  Caller := TPhoneCalls.Create(AccessToken);
+  Caller.SimpleCall('755', '+79104579648', '755');
+  Sleep(7000);
+  Caller.DeleteCall(Edit1.Text, '755');
+  ShowMessage('aga');
+  Caller.Free;
+>>>>>>> origin/NewApi
 
 end;
 

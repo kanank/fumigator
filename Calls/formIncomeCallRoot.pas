@@ -131,7 +131,6 @@ begin
     Exit;
   end;
 
-
   if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
   begin
     fNeedFinish := True;
@@ -476,12 +475,13 @@ begin
        // новый лид
        if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnLID.Name then
        begin
+         fClientClose := False;
          ExtPrm.CallParam.Status_Id := 2; //Лид
          if frmCallUnknown.SubTypeBtnClick = 'FIZ' then
          begin
            if DM.ShowClientFizForCall(asCreate, ExtPrm).ModalRes = mrOk then
            begin
-             ClientId                    :=  DM.Clients.FieldByName('id').AsInteger;
+             ClientId                    := DM.Clients.FieldByName('id').AsInteger;
              CallObj.CallInfo.ClientId   := DM.Clients.FieldByName('id').AsInteger;
              CallObj.CallInfo.ClientType := 'F';
            end;
@@ -495,12 +495,15 @@ begin
              CallObj.CallInfo.ClientType := 'U';
            end;
          end;
+         if Assigned(frmSessionResult) then
+           frmSessionResult.EnableButtons;
        end
        else //добавить к существующему
        if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
        begin
          if frmCallUnknown.SelectId > 0 then
          begin
+           fClientClose := False;
            DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
            extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
            ClientId := frmCallUnknown.SelectId;
@@ -509,6 +512,8 @@ begin
            else
               DM.ShowClientURForCall(asEdit, ExtPrm);
          end;
+         if Assigned(frmSessionResult) then
+           frmSessionResult.EnableButtons;
        end
 
        else  //корпоративный и др
@@ -551,7 +556,7 @@ begin
   end
   else
   begin
-
+    fClientClose := False; // карточка клиента закрывается только вручную
     if CallObj.CallInfo.ClientType = 'F' then
     begin
       DM.ShowFizCallForm(fClientCallPrm);
@@ -572,7 +577,7 @@ begin
 
   end;
  finally
-   fClientClose := True;
+   //не нужно автоматом fClientClose := True;
    if fNeedFinish or not CallObj.Active  then
       CallFinish;
  end;

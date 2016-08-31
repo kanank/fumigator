@@ -443,7 +443,8 @@ var Q : TIBQuery;
 begin
   Application.ProcessMessages;
 
-  if Db.Connected = false then  Exit;
+  if Db.Connected = false then
+    Exit;
 
   try
      //получаем параметры звонка
@@ -522,6 +523,8 @@ begin
                  CallObj.CallInfo.ClientType := 'U';
                end;
              end;
+             if Assigned(frmSessionResult) then
+               frmSessionResult.EnableButtons;
            end
            else //добавить к существующему
            if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnAddToExist.Name then
@@ -534,6 +537,8 @@ begin
                   DM.ShowClientFizForCall(asEdit, ExtParam)
                else
                   DM.ShowClientURForCall(asEdit, ExtParam);
+               if Assigned(frmSessionResult) then
+                   frmSessionResult.EnableButtons;
              end;
            end
 

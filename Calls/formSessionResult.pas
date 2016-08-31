@@ -53,6 +53,7 @@ type
     destructor Destroy; overload;
 
     procedure ClearResult;
+    procedure EnableButtons;
   end;
 
 var
@@ -141,12 +142,23 @@ begin
     edtIshod.Text := '';
     edtIshod.Properties.ReadOnly := False;
     edtResult.Text := '';
+
+    btnConsult.Enabled    := True;
+    btnNonConsult.Enabled := True;
+    btnOther.Enabled      := True;
 end;
 
 destructor TfrmSessionResult.Destroy;
 begin
   CallObj.Ready := True;
   inherited;
+end;
+
+procedure TfrmSessionResult.EnableButtons;
+begin
+  btnConsult.Enabled    := True;
+  btnNonConsult.Enabled := True;
+  btnOther.Enabled      := True;
 end;
 
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;

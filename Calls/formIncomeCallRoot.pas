@@ -573,11 +573,13 @@ begin
       DM.ShowContactCallForm(fClientCallPrm);
     end;
 
-     //fCallResult := DM.FinishSession(CallObj.CallInfo.CallId, ClientId);
+    fClientClose := True;
+    if fNeedFinish or not CallObj.Active then
+     CallFinish;
 
   end;
  finally
-   //не нужно автоматом fClientClose := True;
+   fClientClose := True;
    if fNeedFinish or not CallObj.Active  then
       CallFinish;
  end;

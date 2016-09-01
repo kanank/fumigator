@@ -104,7 +104,7 @@ begin
   //BringWindowToTop(frmLogo.Handle);
   //frmLogo.Repaint;
 
-  Application.CreateForm(TDataModuleMain, DM);
+  Application.CreateForm(TDM, DM);
   LoadOptions(CfgFileName);
 
   if CheckUpdates then

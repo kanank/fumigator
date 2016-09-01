@@ -43,6 +43,7 @@ type
     { Private declarations }
   protected
     procedure doAcceptCall; override;
+    procedure doFinishCall; override;
   public
     { Public declarations }
   end;
@@ -60,6 +61,9 @@ uses
 procedure TfrmIncomeCallUr.btnTransferClick(Sender: TObject);
 begin
   CanClose := True;
+
+  if finished then //после окончани€ звонка можно закрыть
+    ModalResult := mrCancel;
 end;
 
 procedure TfrmIncomeCallUr.doAcceptCall;
@@ -67,6 +71,13 @@ begin
   inherited;
   if Assigned(frmCallEvent) then
     frmCallEvent.ModalResult := mrOk;
+end;
+
+procedure TfrmIncomeCallUr.doFinishCall;
+begin
+  inherited;
+  finished := True;
+  btnTransfer.Caption := '«акрыть';
 end;
 
 procedure TfrmIncomeCallUr.Exit_bntClick(Sender: TObject);

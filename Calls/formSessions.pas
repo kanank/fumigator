@@ -199,31 +199,35 @@ begin
     if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
     begin
       frmClientFiz := TfrmClientFiz.Create(frmSessionEdit, '', @prm);
-      frmClientFiz.RzPanel1.Visible := False;
-      frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
+      //frmClientFiz.RzPanel1.Visible := False;
+      //frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
       frm := frmClientFiz;
+      frmSessionEdit.frm := frmClientFiz;
     end
     else
     begin
       frmClientUr := TfrmClientUr.Create(frmSessionEdit, '', @prm);
-      frmClientUr.RzPanel1.Visible := False;
-      frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
+      //frmClientUr.RzPanel1.Visible := False;
+      //frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
       frm := frmClientUr;
+      frmSessionEdit.frm := frmClientUr;
     end;
 
-    frm.BorderIcons := [];
-    frm.BorderStyle := bsNone;
-    frm.Parent      := frmSessionEdit.pnlClient;
+    //frm.BorderIcons := [];
+    //frm.BorderStyle := bsNone;
+    //frm.Parent      := frmSessionEdit.pnlClient;
 
     //frmSessionEdit.pnlClient.Height := frm.Height + 5;
     //frmSessionEdit.pnlClient.Width  := frm.Width;
 
-    frm.Position := poDefault;
+    //frm.Position := poDefault;
 
-    if frm.Width > frmSessionEdit.Width then
-      frmSessionEdit.Width := frm.Width;
+    //if frm.Width > frmSessionEdit.Width then
+    //  frmSessionEdit.Width := frm.Width;
 
-    frm.Show;
+    //frm.Show;
+    frmSessionEdit.SetClientForm;
+
     frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
       frm.Height + 5 + frmSessionEdit.pnlCalls.Height +
        frmSessionEdit.RzPanel1.ClientHeight;

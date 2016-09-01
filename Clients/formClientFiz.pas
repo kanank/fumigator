@@ -35,7 +35,7 @@ type
     FrameUslugi: TFrameUslugi;
     butOK: TRzButton;
     FrameAddress: TFrameKladrAdrFull;
-	FramePhones: TFramePhones;
+   	FramePhones: TFramePhones;
     QCheck: TIBQuery;
     cmbWorker: TcxDBLookupComboBox;
     Label5: TLabel;
@@ -65,8 +65,10 @@ type
     procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
     procedure cmbWorkerPropertiesPopup(Sender: TObject);
     procedure btnHideClick(Sender: TObject);
+    procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
+    procedure DSDataChange(Sender: TObject; Field: TField);
   private
-    { Private declarations }
+    procedure ChangeFormat(Sender: TObject);
   public
    //constructor Create(AOwner: TComponent ); override;
   end;
@@ -103,6 +105,7 @@ begin
     ModalResult := mrOk;
     Exit;
   end;
+
 
   //проверка
   res := False;
@@ -205,6 +208,17 @@ begin
   end;
 end;
 
+procedure TfrmClientFiz.ChangeFormat(Sender: TObject);
+var
+  i1, i2: Integer;
+begin
+  i1 := 0; i2 := 0;
+  if FrameUslugi.DS.DataSet.RecordCount > 0  then
+    i1 := 1;
+  if DS.DataSet.FieldByName('GOODS').AsString <> '' then
+    i2 := 2;
+  DS.DataSet.FieldByName('FORMAT_ID').AsInteger := i1 + i2;
+end;
 
 procedure TfrmClientFiz.cmbWorkerPropertiesCloseUp(Sender: TObject);
 var
@@ -218,6 +232,15 @@ end;
 procedure TfrmClientFiz.cmbWorkerPropertiesPopup(Sender: TObject);
 begin
   DM.SetFilterNonDelete(DM.Workers);
+end;
+
+procedure TfrmClientFiz.DSDataChange(Sender: TObject; Field: TField);
+begin
+  if Field = nil then
+    exit;
+
+  if Field.FieldName = 'GOODS' then
+   ChangeFormat(sender);
 end;
 
 procedure TfrmClientFiz.Exit_bntClick(Sender: TObject);
@@ -359,6 +382,12 @@ begin
       FramePerson.edtFamily.SetFocus;
     end;
   end;
+end;
+
+procedure TfrmClientFiz.FrameUslugiQueryAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  ChangeFormat(self);
 end;
 
 end.

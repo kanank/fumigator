@@ -476,6 +476,9 @@ inherited frmClientUr: TfrmClientUr
         end
       end
     end
+    inherited Query: TIBQuery
+      AfterPost = FrameUslugiQueryAfterPost
+    end
   end
   object cmbWorker: TcxDBLookupComboBox
     Left = 588

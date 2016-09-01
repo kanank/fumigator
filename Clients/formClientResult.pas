@@ -160,7 +160,7 @@ begin
   frmSessionResult.BorderIcons := [];
   frmSessionResult.BorderStyle := bsNone;
   frmSessionResult.Position := poDefault;
-  frmSessionResult.Height := frmSessionResult.Cancel_btn.Top - 2;
+  frmSessionResult.Height   := frmSessionResult.Cancel_btn.Top - 2;
   frmSessionResult.Parent   := frmClientResult.pnlResult;
   frmSessionResult.Top := 5;
   Self.Height := Self.Height + frmSessionResult.Height - Self.pnlResult.Height;
@@ -251,6 +251,9 @@ end;
 function TfrmClientResult.SaveResult: Boolean;
 begin
   Result := False;
+  if not Assigned(frmSessionResult) then
+    CreateFormResult;
+
   with frmSessionResult do
   begin
     if (*(Q.FieldByName('ISHOD').AsString = '') or

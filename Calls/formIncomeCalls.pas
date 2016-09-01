@@ -55,6 +55,8 @@ type
     { Private declarations }
   protected
     procedure doAcceptCall; override;
+    procedure doFinishCall; override;
+
   public
     finished: Boolean;
     function CallFinish(ACallId: string; AClientId: Integer): string;
@@ -73,6 +75,9 @@ uses
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
 begin
   CanClose := True;
+
+  if finished then //после окончани€ звонка можно закрыть
+    ModalResult := mrCancel;
 end;
 
 function TfrmIncomeCall.CallFinish(ACallId: string; AClientId: Integer): string;
@@ -86,6 +91,13 @@ begin
   inherited;
   if Assigned(frmCallEvent) then
     frmCallEvent.ModalResult := mrOk;
+end;
+
+procedure TfrmIncomeCall.doFinishCall;
+begin
+  inherited;
+  finished := True;
+  btnTransfer.Caption := '«акрыть';
 end;
 
 procedure TfrmIncomeCall.Exit_bntClick(Sender: TObject);

@@ -72,8 +72,9 @@ type
     procedure cmbWorkerPropertiesPopup(Sender: TObject);
     procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
     procedure btnHideClick(Sender: TObject);
+    procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
   private
-    { Private declarations }
+    procedure ChangeFormat(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -211,6 +212,18 @@ begin
   end;
   if not fCanclose then
     ModalResult := mrNone;
+end;
+
+procedure TfrmClientUr.ChangeFormat(Sender: TObject);
+var
+  i1, i2: Integer;
+begin
+  i1 := 0; i2 := 0;
+  if FrameUslugi.DS.DataSet.RecordCount > 0  then
+    i1 := 1;
+  if DS.DataSet.FieldByName('GOODS').AsString <> '' then
+    i2 := 2;
+  DS.DataSet.FieldByName('FORMAT_ID').AsInteger := i1 + i2;
 end;
 
 procedure TfrmClientUr.cmbWorkerPropertiesCloseUp(Sender: TObject);
@@ -355,5 +368,11 @@ begin
   FrameClientCalls.Visible := true;
 end;
 
+
+procedure TfrmClientUr.FrameUslugiQueryAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  ChangeFormat(self);
+end;
 
 end.

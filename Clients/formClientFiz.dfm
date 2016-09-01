@@ -66,8 +66,11 @@ inherited frmClientFiz: TfrmClientFiz
     ExplicitTop = 592
     ExplicitWidth = 786
     inherited Image2: TImage
-      Left = 58
-      ExplicitLeft = 58
+      Left = 3
+      Top = 5
+      Anchors = [akLeft, akBottom]
+      ExplicitLeft = 3
+      ExplicitTop = 5
     end
     object btnHide: TRzButton [1]
       Left = 652
@@ -395,6 +398,12 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 162
         end
       end
+    end
+    inherited Query: TIBQuery
+      AfterPost = FrameUslugiQueryAfterPost
+    end
+    inherited DS: TDataSource
+      OnDataChange = nil
     end
   end
   inline FrameAddress: TFrameKladrAdrFull
@@ -819,6 +828,7 @@ inherited frmClientFiz: TfrmClientFiz
   end
   object DS: TDataSource
     AutoEdit = False
+    OnDataChange = DSDataChange
     Left = 352
     Top = 319
   end

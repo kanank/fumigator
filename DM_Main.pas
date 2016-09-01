@@ -408,6 +408,9 @@ begin
   DM.GetDataset(DM.Clients);
   DM.Clients.Locate('ID', CallObj.CallInfo.ClientId, []);
 
+  if Assigned(frmIncomeCall) then
+    frmIncomeCall.CloseAbsolute;
+
   frmIncomeCall := TfrmIncomeCall.Create(nil);
   try
     frmIncomeCall.CloseOnCancelCall := True;
@@ -697,6 +700,8 @@ begin
     CallObj.Ready  := true;
     FreeAndNil(frmSessionResult);
     FreeAndNil(frmClientResult);
+    FreeAndNil(frmIncomeCallUr);
+    FreeAndNil(frmIncomeCall);
   end;
 
 end;
@@ -728,6 +733,9 @@ begin
   DM.GetDataset(DM.Clients);
   DM.Clients.Locate('ID', client_id, []);
   ClientExtUr(CallObj.CallInfo.ClientId);
+
+  if Assigned(frmIncomeCallUr) then
+    frmIncomeCallUr.CloseAbsolute;
 
   frmIncomeCallUr := TfrmIncomeCallUr.Create(nil);
   try
@@ -1628,6 +1636,8 @@ begin
     FreeAndNil(frmCallEvent);
     FreeAndNil(frmSessionResult);
     FreeAndNil(frmIncomeCallRoot);
+    FreeAndNil(frmIncomeCall);
+    FreeAndNil(frmIncomeCallUr);
   end;
 end;
 

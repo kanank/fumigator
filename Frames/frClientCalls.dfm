@@ -134,6 +134,10 @@ inherited frameClientCalls: TframeClientCalls
           DataBinding.FieldName = 'LOCALNUM'
           Visible = False
         end
+        object GridViewColumn5: TcxGridDBColumn
+          DataBinding.FieldName = 'RECID'
+          Visible = False
+        end
       end
       inherited grdPhoneLevel1: TcxGridLevel
         GridView = GridView

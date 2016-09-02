@@ -35,10 +35,21 @@ type
   TServerCmd = class(TIdSync)
     protected
       FMsg: String;
+      fStream: TMemoryStream;
       procedure DoSynchronize; override;
     public
       constructor Create(const AMsg: String);
       class procedure DoCmd(const AMsg: String);
+    end;
+
+  TScocketStream = class(TIdSync)
+    protected
+      fStream: TMemoryStream;
+      fFileName: string;
+      procedure DoSynchronize; override;
+    public
+      constructor Create(const AFileName: string; const AStream: TMemoryStream);
+      class procedure DoFile(const AFileName: string; const AStream: TMemoryStream);
     end;
 
 type
@@ -882,6 +893,24 @@ begin
   end
 
   else
+  if cmd = 'recordfile' then
+  begin
+    if Assigned(frmRecordPlay) then
+    begin
+      argList := TStringList.Create;
+      try
+        s := '';
+        arglist.Delimiter := ',';
+        argList.DelimitedText := arg;
+        if frmRecordPlay.recid = argList[0] then
+          frmRecordPlay.FileName := argList[1];
+      finally
+        argList.free;
+      end;
+    end;
+  end
+
+  else
   if cmd = 'cmdfumigator' then
   begin
     if arg = 'updateclients' then
@@ -901,6 +930,7 @@ end;
 procedure TReadingThread.Execute;
 var
   s: string;
+  //stream: TMemoryStream;
 begin
   while not Terminated and FConn.Connected do
   begin
@@ -920,6 +950,11 @@ begin
           PostMessage(formMain.Handle, WM_CONNECTSOCKET, 0,0);
       end;
       //s := URLDecode(s);
+      if Copy(s, 1, 9) = '#getfile:' then
+      begin
+        //здесь должен быть код получения файла через сокет и вызов TSocketStream.DoFile
+      end;
+
       if not Terminated and (s <> '') then
         TServerCmd.DoCmd(s);
         Sleep(200);
@@ -928,6 +963,31 @@ begin
     end;
   end;
 
+end;
+
+{ TScocketStream }
+
+constructor TScocketStream.Create(const AFileName: string; const AStream: TMemoryStream);
+begin
+  fStream := TMemoryStream.Create;
+  fStream.CopyFrom(AStream, AStream.Size);
+  inherited Create;
+end;
+
+class procedure TScocketStream.DoFile(const AFileName: string; const AStream: TMemoryStream);
+begin
+  with Create(AFileName, AStream) do
+  try
+    Synchronize;
+  finally
+    fStream.Free;
+    Free;
+  end;
+end;
+
+procedure TScocketStream.DoSynchronize;
+begin
+  fStream.SaveToFile(fFileName);
 end;
 
 initialization

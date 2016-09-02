@@ -17,6 +17,7 @@ type
     fApiUrl: string;
     fHttp: TIdHTTP;
     fHttpErr: string;
+    fHttpStream: TStringStream;
     fResponse: string;
     fHttpContentType: THttpContentType;
 
@@ -125,6 +126,8 @@ type
     function DeleteCall(ACallApiId: string; AExtId: integer): Boolean; overload;
 
     function GetRecordInfo(ACallApiId: string; AExt: string): string;
+
+    function GetRecord(Arecord_uuid: string): TStream;
   end;
 
   TThreadTimer = class(TThread)
@@ -366,6 +369,16 @@ begin
     DeleteCall(ACallApiId, ExtId);
 end;
 
+function TPhoneCalls.GetRecord(Arecord_uuid: string): TStream;
+var
+  url: string;
+  s : string;
+begin
+  url := Format('/client/@me/record/%s', [Arecord_uuid]);
+  s := HttpGet(url);
+  result := fhttpStream;
+end;
+
 function TPhoneCalls.GetRecordInfo(ACallApiId, AExt: string): string;
 var
   sStream: TStringStream;
@@ -538,6 +551,7 @@ begin
   fBaseUrl := 'https://apiproxy.telphin.ru';
   fApiUrl  := '/api/ver1.0';
   fHttpContentType := htcForm;
+  fHttpStream := TStringStream.Create;
 end;
 
 destructor TTelphinRingMeAPIBaseElement.Destroy;
@@ -546,19 +560,22 @@ begin
     fHttp.Free;
   if Assigned(fSSL) then
     fSSL.Free;
+  if Assigned(fHttpStream) then
+    fHttpStream.Free;
 end;
 
 function TTelphinRingMeAPIBaseElement.HttpDelete(aUrl: string;
   aUseApiUrl: Boolean): boolean;
 var
-  sStream: TStringStream;
+  //sStream: TStringStream;
   url: string;
 begin
   fHttp.Request.Method := 'DELETE';
   if fHttpContentType = htcJson then
     fHttp.Request.ContentType := 'application/json';
 
-  sStream := TStringStream.Create;
+  //sStream := TStringStream.Create;
+  fHttpStream.Clear;
   try
     url := fBaseUrl;
     if aUseApiUrl then
@@ -566,25 +583,26 @@ begin
     url := Url + aUrl;
 
     try
-      fHttp.Delete(url, sStream);
-      fResponse := sStream.DataString;
+      fHttp.Delete(url, fHttpStream);
+      fResponse := fHttpStream.DataString;
       Result := True;
     except
       fHttpErr := Exception(ExceptObject).Message;
       Result := False;
     end;
   finally
-    sStream.Free;
+    //sStream.Free;
   end;
 end;
 
 function TTelphinRingMeAPIBaseElement.HttpGet(aUrl: string;
   aUseApiUrl: Boolean): string;
 var
-  sStream: TStringStream;
+  //sStream: TStringStream;
   url: string;
 begin
-  sStream := TStringStream.Create;
+  //sStream := TStringStream.Create;
+  fHttpStream.Clear;
   fHttp.Request.Method := 'GET';
     if fHttpContentType = htcJson then
     fHttp.Request.ContentType := 'application/json';
@@ -598,19 +616,22 @@ begin
   url := Url + aUrl;
 
   try
-    fHttp.Get(url, sStream);
-    Result := sStream.DataString;
+    fHttp.Get(url, fHttpStream);
+    if Pos('attachment', LowerCase(fHttp.Response.ContentDisposition)) = 0 then
+      Result := fHttpStream.DataString
+    else
+      result := fHttp.Response.ContentDisposition;
   except
    fHttpErr := Exception(ExceptObject).Message;
   end;
-  sStream.Free;
+  //sStream.Free;
 end;
 
 function TTelphinRingMeAPIBaseElement.HttpPost(aUrl: string;
   aUseApiUrl: Boolean; aContent: string): string;
 var
   sResponse: string;
-  stream: TStringStream;
+  //stream: TStringStream;
   url: string;
 begin
   url := fBaseUrl;
@@ -618,8 +639,9 @@ begin
     url := url + fApiUrl;
   url := Url + aUrl;
 
-  stream := TStringStream.Create('');
-  stream.WriteString(aContent);
+  //stream := TStringStream.Create('');
+  fHttpStream.Clear;
+  fHttpStream.WriteString(aContent);
   try
     fHttpErr := '';
     fHttp.Request.Method := 'POST';
@@ -638,12 +660,12 @@ begin
        fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
 
     try
-      result := fHttp.Post(url, stream);
+      result := fHttp.Post(url, fHttpStream);
     except
       fHttpErr := Exception(ExceptObject).Message;
     end;
   finally
-    stream.Free;
+    //stream.Free;
   end;
 end;
 

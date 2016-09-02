@@ -56,6 +56,7 @@ type
     GridViewColumn12: TcxGridDBColumn;
     pnlForm: TPanel;
     GridViewColumn13: TcxGridDBColumn;
+    GridViewColumn14: TcxGridDBColumn;
     procedure RzButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -121,6 +122,10 @@ begin
   frmPlay.CallApiId := GridViewColumn5 .FocusedCellViewInfo.GridRecord.Values[ColumnId];
   ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
   frmPlay.ext  := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+
+  ColumnID      := GridView.GetColumnByFieldName('RECID').Index;
+  frmPlay.RecId := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+
   frmPlay.FileName  := '';
   frmPlay.Width  := GridViewColumn5.Width;
   frmPlay.Height := GridViewColumn5.FocusedCellViewInfo.Height-2;

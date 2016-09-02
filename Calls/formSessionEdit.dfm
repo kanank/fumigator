@@ -6,7 +6,6 @@ inherited frmSessionEdit: TfrmSessionEdit
   AutoScroll = True
   Caption = #1057#1077#1089#1089#1080#1103' ['#1088#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1077']'
   Position = poDesktopCenter
-  Visible = True
   ExplicitWidth = 846
   ExplicitHeight = 639
   PixelsPerInch = 96
@@ -20,7 +19,7 @@ inherited frmSessionEdit: TfrmSessionEdit
   inherited RzPanel1: TRzPanel
     Top = 557
     Width = 830
-    ExplicitTop = 563
+    ExplicitTop = 557
     ExplicitWidth = 830
     inherited Image2: TImage
       Left = 4
@@ -130,12 +129,7 @@ inherited frmSessionEdit: TfrmSessionEdit
     BorderOuter = fsFlat
     BorderSides = [sdBottom]
     TabOrder = 3
-    object RzPanel2: TRzPanel
-      Left = 304
-      Top = 184
-      Width = 185
-      Height = 41
-      TabOrder = 0
-    end
+    ExplicitLeft = 8
+    ExplicitTop = 169
   end
 end

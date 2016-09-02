@@ -32,6 +32,7 @@ type
     GridViewColumn2: TcxGridDBColumn;
     GridViewColumn3: TcxGridDBColumn;
     pnlForm: TPanel;
+    GridViewColumn5: TcxGridDBColumn;
     procedure GridViewFocusedRecordChanged(
       Sender: TcxCustomGridTableView; APrevFocusedRecord,
       AFocusedRecord: TcxCustomGridRecord;
@@ -86,6 +87,10 @@ begin
   fPlay.CallApiId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
   ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
   fPlay.ext  := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+
+  ColumnID      := GridView.GetColumnByFieldName('RECID').Index;
+  fPlay.RecId   := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+
   fPlay.FileName  := '';
   fPlay.Width  := ColumnRecord.Width - 4;
   fPlay.Height := ColumnRecord.FocusedCellViewInfo.Height-2;

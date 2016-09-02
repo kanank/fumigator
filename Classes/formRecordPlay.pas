@@ -31,13 +31,15 @@ type
     procedure btnPlayClick(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
   private
-
+    fFileName: string;
   public
     CallApiId: string;
     ext: string;
+    RecId: string; //в новом API
     FileName: string;
     procedure GetFileName;
     function  GetFileFromFtp: Boolean;
+    function GetFileFromHttp: boolean;
   end;
 
 var
@@ -47,7 +49,7 @@ implementation
 
 {$R *.dfm}
 uses
-  frmMain, IdFTPCommon;
+  frmMain, IdFTPCommon, idHttp, CommonVars;
 
 
 function TfrmRecordPlay.GetFileFromFtp: Boolean;
@@ -86,11 +88,50 @@ begin
   end;
 end;
 
+function TfrmRecordPlay.GetFileFromHttp: boolean;
+var
+  http: TIdHTTP;
+  fstream: TMemoryStream;
+  url: string;
+  fGet: Boolean;
+begin
+ HTTP := TIdHTTP.Create(nil);
+  try
+    fStream := TMemoryStream.Create;
+    url := Format('http://%s:%d/fumigator?action=getrecfile&recid=%s', [ServerHost, ServerHttpPort, RecId]);
+    try
+      fGet := False;
+      HTTP.Get(url, fStream);
+      if (fStream.Size > 0) and
+         (HTTP.Response.ContentLength = fStream.Size) then
+        fGet := True;
+    except
+      fGet := false;
+    end;
+    if fGet and (HTTP.ResponseCode = 200) then
+    begin
+      if not DirectoryExists(TempFolder) then
+        CreateDir(TempFolder);
+      fFileName := TempFolder + '\' + RecId + '.mp3';
+      fStream.SaveToFile(fFileName);
+      Result := True;
+    end;
+
+  finally
+     fStream.Free;
+     HTTP.Free;
+  end;
+end;
+
 procedure TfrmRecordPlay.GetFileName;
 var
   cnt: Integer;
 begin
-  formMain.TCPClient.IOHandler.WriteLn(Format('#getrecordinfo:%s,%s', [CallApiId, ext]));
+//  formMain.TCPClient.IOHandler.WriteLn(Format('#getrecordinfo:%s,%s', [CallApiId, ext]));
+  if RecId = '' then
+    Exit;
+
+  formMain.TCPClient.IOHandler.WriteLn(Format('#getrecord:%s', [RecId]));
 
   while (FileName = '') and (cnt < 50) do
   begin
@@ -117,12 +158,12 @@ begin
   if Assigned(Self.Parent) then
     TForm(Parent.Owner).Enabled := False;
   try
-    GetFileName;
+    //GetFileName;
 
-    if GetFileFromFtp then
+    if GetFileFromHttp then
     begin
       MediaPlayer.Close;
-      MediaPlayer.FileName := ExtractFilePath(Application.ExeName) + FileName + '.wav';
+      MediaPlayer.FileName := fFileName;
       MediaPlayer.Open;
       MediaPlayer.Play;
       btnStop.Visible := True;

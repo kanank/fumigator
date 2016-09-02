@@ -7,10 +7,11 @@ function UrlEncode(Str: Ansistring): Ansistring;
 function UrlDecode(Str: Ansistring): Ansistring;
 function LockMutex(AHandle: THandle; ATimeout: integer): Boolean;
 function UnlockMutex(AHandle: THandle): boolean;
+function GetFileSize(FileName: String): Integer;
 
 implementation
 uses
-  Windows, System.SysUtils;
+  Windows, System.SysUtils, System.Classes;
 
 function  FileVersion ( fName : string ) : string;
     const
@@ -230,6 +231,19 @@ begin
   except
     result := False;
   end;
+end;
+
+function GetFileSize(FileName: String): Integer;
+var
+  FS: TFileStream;
+begin
+  try
+    FS := TFileStream.Create(Filename, fmOpenRead);
+  except
+    Result := -1;
+  end;
+  if Result <> -1 then Result := FS.Size;
+  FS.Free;
 end;
 
 end.

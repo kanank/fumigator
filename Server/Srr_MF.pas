@@ -9,7 +9,7 @@ uses
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
   TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
-  Vcl.IdAntiFreeze, IBX.IBSQL;
+  Vcl.IdAntiFreeze, IBX.IBSQL, RzCommon, RzSelDir;
 
 const
   WM_REOPEN_PHONES = WM_USER + 1;
@@ -148,6 +148,9 @@ type
     Button7: TButton;
     Button8: TButton;
     Button9: TButton;
+    RzSelDirDialog1: TRzSelDirDialog;
+    Label12: TLabel;
+    edtRecordPath: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -186,6 +189,8 @@ type
 
     procedure ReopenPhones;
     procedure WmReopenPhones(var Msg: TMessage); message WM_REOPEN_PHONES;
+
+    function GetRecordFile(ARecord_uuid: string): string;
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -604,9 +609,10 @@ begin
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
-  lCaller := TPhoneCalls.Create(AccessToken);
+  //lCaller := TPhoneCalls.Create(AccessToken);
   //Caller.DeleteCall(Edit1.Text, '755');
-  lCaller.SimpleCall('755', '+79104579648', '755');
+  //lCaller.SimpleCall('755', '+79104579648', '755');
+  GetRecordFile('16248-f12f56b6705111e6b0d4eb26cd02ac23');
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
@@ -890,8 +896,78 @@ begin
         //Stream.Free;
       end;
     end
+
+    else // получить файл записи
+    if ARequestInfo.Params.Values['action'] = 'getrecfile' then
+    begin
+      s := ARequestInfo.Params.Values['recid'];
+      s := GetRecordFile(s);
+      if s <> '' then
+      begin
+        Stream := TMemoryStream.Create;
+        try
+          Stream.LoadFromFile(s);
+          Stream.Position := 0;
+          AResponseInfo.ContentStream := Stream;
+          AResponseInfo.ContentLength := Stream.Size;
+          AResponseInfo.ContentDisposition := 'attachment; filename=' + ExtractFileName(s);
+          AResponseInfo.ContentType   := 'application/octet-stream';
+          AResponseInfo.ResponseNo    := 200;
+
+          AResponseInfo.WriteHeader;
+          AResponseInfo.WriteContent;
+        finally
+          //Stream.Free;
+        end;
+      end;
+    end;
   finally
     CSectionFumigator.Leave;
+    //if Assigned(stream) then
+    //  Stream.Free;
+  end;
+
+end;
+
+function TMF.GetRecordFile(ARecord_uuid: string): string;
+var
+  fn: string;
+  mStream: TMemoryStream;
+  lCaller: TPhoneCalls;
+begin
+  mStream := TMemoryStream.Create;
+  try
+    if not DirectoryExists(edtRecordPath.Text) then
+      CreateDir(edtRecordPath.Text);
+    fn := edtRecordPath.Text + '\' + ARecord_uuid + '.mp3';
+
+    if FileExists(fn) then
+    begin //файл уже есть
+      Result := fn;
+    end
+
+    else //получаем от Телфина
+    begin
+      lCaller := TPhoneCalls.Create(AccessToken);
+      try
+      mStream := lcaller.GetRecord(ARecord_uuid) as TMemoryStream;
+      if mStream.Size > 0 then
+      begin
+        mStream.Position := 0;
+        try
+          mStream.SaveToFile(fn);
+          Result := fn;
+        except
+          Result := '';
+        end;
+      end;
+      finally
+            lCaller.Free;
+      end;
+    end;
+
+  finally
+    mStream.Free;
   end;
 
 end;
@@ -1057,6 +1133,16 @@ begin
       answer := lCaller.GetRecordInfo(argList[0], answer);
       AContext.Connection.IOHandler.WriteLn(Format('#RecordInfo:%s,%s', [argList[0], Answer])); //номера атс может не быть, поэтому  не SendCommandToUser
       //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
+    end
+
+    else
+    if cmd = 'getrecord' then //получение записи по-новому
+    begin
+      answer := GetRecordFile(argList[0]);
+//      p := CommonFunc.GetFileSize(answer);
+      AContext.Connection.IOHandler.WriteLn(Format('#RecordFile:%s', [answer])); //номера атс может не быть, поэтому  не SendCommandToUser
+//      AContext.Connection.IOHandler.WriteLn(Format('#getfile:%d',[p]);
+//      AContext.Connection.IOHandler.WriteFile(answer);
     end;
 
   finally

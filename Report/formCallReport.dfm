@@ -150,7 +150,6 @@ inherited frmCallReport: TfrmCallReport
     Height = 33
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 809
     DesignSize = (
       831
       33)
@@ -387,7 +386,6 @@ inherited frmCallReport: TfrmCallReport
     Height = 436
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 809
     object GridView: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       Navigator.InfoPanel.Visible = True
@@ -534,6 +532,9 @@ inherited frmCallReport: TfrmCallReport
       object GridViewColumn13: TcxGridDBColumn
         DataBinding.FieldName = 'LOCALNUM'
         Visible = False
+      end
+      object GridViewColumn14: TcxGridDBColumn
+        DataBinding.FieldName = 'RECID'
       end
     end
     object GridLevel1: TcxGridLevel

@@ -2,7 +2,7 @@ object MF: TMF
   Left = 0
   Top = 0
   Caption = #1057#1077#1088#1074#1077#1088' "'#1060#1091#1084#1080#1075#1072#1090#1086#1088'" v.0.01b'
-  ClientHeight = 529
+  ClientHeight = 583
   ClientWidth = 627
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,21 +19,22 @@ object MF: TMF
     Left = 0
     Top = 0
     Width = 627
-    Height = 321
+    Height = 327
     Align = alTop
     BevelKind = bkFlat
     TabOrder = 0
     DesignSize = (
       623
-      317)
+      323)
     object GroupBox1: TGroupBox
       Left = 1
-      Top = 223
+      Top = 253
       Width = 621
       Height = 67
       Align = alTop
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
       TabOrder = 0
+      ExplicitTop = 224
       DesignSize = (
         621
         67)
@@ -59,7 +60,7 @@ object MF: TMF
       end
       object Button2: TButton
         Left = 441
-        Top = 14
+        Top = 7
         Width = 169
         Height = 25
         Anchors = [akTop, akRight]
@@ -149,7 +150,7 @@ object MF: TMF
       Left = 1
       Top = 127
       Width = 621
-      Height = 96
+      Height = 126
       Align = alTop
       Caption = #1057#1083#1091#1078#1073#1072' '#1088#1077#1075#1080#1089#1090#1088#1072#1094#1080#1080' '#1090#1077#1083#1077#1092#1086#1085#1085#1099#1093' '#1074#1099#1079#1086#1074#1086#1074#1086' (Call Events)'
       Font.Charset = DEFAULT_CHARSET
@@ -161,7 +162,7 @@ object MF: TMF
       TabOrder = 1
       DesignSize = (
         621
-        96)
+        126)
       object Label3: TLabel
         Left = 11
         Top = 69
@@ -215,6 +216,13 @@ object MF: TMF
         Width = 36
         Height = 13
         Caption = 'UserId:'
+      end
+      object Label12: TLabel
+        Left = 11
+        Top = 97
+        Width = 107
+        Height = 13
+        Caption = #1050#1072#1090#1072#1083#1086#1075' '#1076#1083#1103' '#1079#1072#1087#1080#1089#1077#1081
       end
       object Button1: TButton
         Left = 441
@@ -295,14 +303,28 @@ object MF: TMF
         OnClick = btnPhoneClick
       end
       object Button5: TButton
-        Left = 275
-        Top = 72
+        Left = 279
+        Top = 71
         Width = 130
-        Height = 25
+        Height = 18
         Anchors = [akTop, akRight]
         Caption = #1047#1074#1086#1085#1086#1082
         TabOrder = 6
         OnClick = Button5Click
+      end
+      object edtRecordPath: TEdit
+        Left = 128
+        Top = 94
+        Width = 217
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        Text = 'Records'
       end
     end
     object GroupBox3: TGroupBox
@@ -439,7 +461,7 @@ object MF: TMF
       end
     end
     object Button9: TButton
-      Left = 449
+      Left = 441
       Top = 290
       Width = 106
       Height = 25
@@ -451,13 +473,15 @@ object MF: TMF
   end
   object Log_memo: TMemo
     Left = 0
-    Top = 321
+    Top = 327
     Width = 627
-    Height = 208
+    Height = 256
     Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 1
+    ExplicitTop = 368
+    ExplicitHeight = 215
   end
   object Tel_SRV: TIdHTTPServer
     Bindings = <>
@@ -643,5 +667,22 @@ object MF: TMF
         '=3')
     Left = 313
     Top = 81
+  end
+  object RzSelDirDialog1: TRzSelDirDialog
+    DriveTypes = [dtFloppy, dtFixed, dtNetwork, dtCDROM, dtRAM]
+    Prompt = 'Folder Name'
+    PromptFolders = 'Folders'
+    PromptDrives = 'Drives'
+    Caption = 'Rfnfkju lkz pfgbctq pdjyrjd'
+    CaptionOK = 'OK'
+    CaptionCancel = 'Cancel'
+    CaptionHelp = '&Help'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 353
+    Top = 215
   end
 end

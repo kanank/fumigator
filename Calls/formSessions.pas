@@ -168,7 +168,7 @@ var
   mres: TModalResult;
   frm: TForm;
 begin
-  frmSessionEdit := TfrmSessionEdit.Create(self);
+  frmSessionEdit := TfrmSessionEdit.Create(nil);
 
   try
   // результат

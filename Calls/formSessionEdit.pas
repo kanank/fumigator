@@ -15,7 +15,6 @@ type
     RzButton1: TRzButton;
     frameClientCalls: TframeClientCalls;
     btnClientEdit: TRzButton;
-    RzPanel2: TRzPanel;
     procedure btnClientEditClick(Sender: TObject);
   private
     { Private declarations }

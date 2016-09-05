@@ -128,8 +128,7 @@ inherited frmSessions: TfrmSessions
     Height = 375
     Align = alClient
     PopupMenu = GridPopup
-    ExplicitLeft = 8
-    ExplicitTop = 95
+    ExplicitTop = 93
     ExplicitWidth = 924
     ExplicitHeight = 375
     inherited GridView: TcxGridDBTableView

@@ -181,6 +181,12 @@ begin
     DS.DataSet.FieldByName('callapiid').AsString;
   frmSessionResult.Q.Open;
   frmSessionResult.Q.Edit;
+
+  frmSessionResult.edtResult.Text :=
+    frmSessionResult.Q.FieldByName('RESULT').AsString;
+  frmSessionResult.edtIshod.Text :=
+    frmSessionResult.Q.FieldByName('ISHOD').AsString;
+
   frmSessionResult.Position := poDefault;
 
   frmSessionResult.BorderIcons := [];

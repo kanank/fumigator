@@ -97,10 +97,9 @@ begin
 
   if frmCallUnknown.Visible then
   begin
-    frmCallUnknown.ModalResult := mrCancel;
+    // не закрывать автоматом frmCallUnknown.ModalResult := mrCancel;
     Exit;
   end;
-
 
   if not Assigned(frmSessionResult) then
     CreateFormResult;

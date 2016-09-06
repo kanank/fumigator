@@ -163,6 +163,9 @@ type
     function OffFilter(ADataset: TDataset; AField: TField = nil): Variant; //сброс фильтра и установка на запись
     procedure FilterNonDelete(DataSet: TDataSet; var Accept: Boolean);
     //function CopyClientCallParams(ASource: ClientCallParams): ClientCallParams;
+
+    function isModifiedData(Ds: TIBQuery): Boolean; overload;//проверка наличия изменений
+    function isModifiedData(Ds: TDataset): Boolean; overload;
   var
     CurrentUserSets: CurrentUserRec;
     //FtpProp: FtpProps;
@@ -450,6 +453,7 @@ begin
     Exit;
 
   try
+  try
      //получаем параметры звонка
      //CLP := getClientCallParams(APhone);
      //CLP.id_call := ACallid;
@@ -685,7 +689,9 @@ begin
     begin
       frmSessionResult.ClearResult;
     end;
-
+  except
+    MsgBoxError(Exception(ExceptObject).Message, 'Непредвиденная ошибка');
+  end;
   finally
     if not Assigned(frmSessionResult) or
         not frmSessionResult.Visible then
@@ -698,6 +704,10 @@ begin
     waitCalling    := False;
     CallObj.Active := False;
     CallObj.Ready  := true;
+
+    if frmCallUnknown.Visible then
+       frmCallUnknown.HideAbsolute;
+
     FreeAndNil(frmSessionResult);
     FreeAndNil(frmClientResult);
     FreeAndNil(frmIncomeCallUr);
@@ -1475,6 +1485,22 @@ begin
   end;
 end;
 
+function TDataModuleMain.isModifiedData(Ds: TIBQuery): Boolean;
+begin
+  if Ds.CachedUpdates then
+    Result := Ds.UpdatesPending or ds.Modified
+  else
+    result := ds.Modified;
+end;
+
+function TDataModuleMain.isModifiedData(Ds: TDataset): Boolean;
+begin
+  if Ds is TIBQuery then
+    Result := isModifiedData(TIBQuery(Ds))
+  else
+    Result := ds.Modified;
+end;
+
 function TDataModuleMain.isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean;
 begin
    if Clients.Locate('id', AClient_id, []) then
@@ -1620,7 +1646,8 @@ begin
     Exit;
 
   try
-    DM.incomeCalling := True;
+  try
+    DM.incomeCalling  := True;
     frmIncomeCallRoot := TfrmIncomeCallRoot.Create(nil);
 
     frmIncomeCallRoot.ClientId := CallObj.CallInfo.ClientId;
@@ -1629,6 +1656,9 @@ begin
     frmIncomeCallRoot.ModalResult := mrNone;
     if CallObj.Active then
       frmIncomeCallRoot.ShowModal;
+  except
+    MsgBoxError(Exception(ExceptObject).Message, 'Непредвиденная ошибка');
+  end;
 
   finally
     CallObj.Active := False;

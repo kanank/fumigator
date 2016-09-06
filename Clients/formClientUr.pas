@@ -98,12 +98,12 @@ var
   res: Boolean;
   err: string;
 begin
-  if not (DS.DataSet.Modified or
-          FramePerson.DS.DataSet.Modified or
-          FramePhones.DS.DataSet.Modified or
-          FrameUslugi.DS.DataSet.Modified or
-          FrameAddress.DS.DataSet.Modified or
-          FrameClientExtUr.DS.DataSet.Modified) then
+  if not (DM.isModifiedData(DS.DataSet) or
+          DM.isModifiedData(FramePerson.DS.DataSet) or
+          DM.isModifiedData(FramePhones.DS.DataSet) or
+          DM.isModifiedData(FrameUslugi.DS.DataSet) or
+          DM.isModifiedData(FrameAddress.DS.DataSet) or
+          DM.isModifiedData(FrameClientExtUr.DS.DataSet)) then
   begin
     ModalResult := mrOk;
     Exit;

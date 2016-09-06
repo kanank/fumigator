@@ -110,17 +110,25 @@ begin
     Q.ParamByName('CALLAPIID').AsString := CallObj.CallInfo.CallApiId;
     Q.Open;
 
-  if Q.State <> dsEdit then
-    Q.Edit;
+  if Q.RecordCount = 0 then
+    MsgBoxWarning('Не найдена сессия в БД');
 
-  if CheckFields then
-  begin
-    Q.FieldByName('RESULT').AsString := edtResult.Text;
-    Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
-    Q.Post;
+   if Q.RecordCount > 0 then
+   begin
+     if Q.State <> dsEdit then
+      Q.Edit;
 
-    Self.ModalResult := mrOk;
-  end;
+      if CheckFields then
+      begin
+        Q.FieldByName('RESULT').AsString := edtResult.Text;
+        Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
+        Q.Post;
+
+        Self.ModalResult := mrOk;
+      end;
+   end
+   else
+     Self.ModalResult := mrCancel;
 end;
 
 function TfrmSessionResult.CheckFields: Boolean;

@@ -112,6 +112,8 @@ begin
 
   //frmCallEvent.ModalResult := mrCancel;
   //if fClose then
+  //if CallObj.Accepted then
+  //  fNeedFinish := True;
   CallFinish;
 
 end;
@@ -462,6 +464,7 @@ begin
  Timer1.Enabled := False;
  DM.GetDataset(DM.Clients);
  try
+ try
   Timer2.Enabled := True;
   if CallObj.CallInfo.ClientType = '' then
   try  // Вызываем неизвестный звонок.
@@ -578,9 +581,14 @@ begin
      CallFinish;
 
   end;
+ except
+   MsgBoxError(Exception(ExceptObject).Message, 'Непредвиденная ошибка');
+   fNeedFinish := True;
+   CallFinish;
+ end;
  finally
    fClientClose := True;
-   if fNeedFinish or not CallObj.Active  then
+   if CallObj.Accepted or fNeedFinish or not CallObj.Active  then
       CallFinish;
  end;
 end;

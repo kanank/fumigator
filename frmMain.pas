@@ -158,7 +158,7 @@ uses
   formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
   CommonVars, CommonFunc, formWorkerShedule, formCallReport,
-  formRecordPlay, formCallUnknown;
+  formRecordPlay, formCallUnknown, formSessionResult;
 
 procedure TfrmMain.btnTuneClick(Sender: TObject);
 begin
@@ -500,8 +500,12 @@ begin
 end;
 
 procedure TfrmMain.UpdateClients;
+var
+  id: Integer;
 begin
-  if Assigned(frmClientResult) or Assigned(frmIncomeCallRoot) then
+  if Assigned(frmClientResult) or Assigned(frmIncomeCallRoot) or
+    (Assigned(frmClientFiz) and frmClientFiz.InUpdate) or
+    (Assigned(frmClientUr) and frmClientUr.InUpdate) then
     Exit;
 
   while not CallObj.Ready do
@@ -512,8 +516,10 @@ begin
 
   try
     isBusy := True;
+    id := DM.Clients.FieldByName('id').AsInteger;
     DM.Clients.Close;
     DM.Clients.Open;
+    DM.Clients.Locate('id', id, []);
   finally
     isBusy := False;
   end;
@@ -546,8 +552,9 @@ end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  //if DM.incomeCalling then
-  //  Exit;
+  if Assigned(frmClientFiz) or Assigned(frmClientUr) or
+     Assigned(frmSessionResult)  then
+    Exit;
   try
   //CallObj.OnFinishCall := OnCallFinish;
     CallObj.StartCall(CallInfo);

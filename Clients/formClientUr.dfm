@@ -450,7 +450,7 @@ inherited frmClientUr: TfrmClientUr
         end
       end
       inherited RzPanel2: TRzPanel
-        Top = 105
+        Top = 101
         Width = 185
         Height = 27
         ExplicitTop = 101

@@ -3,7 +3,7 @@ unit CommonTypes;
 interface
 uses
   System.UITypes, System.Classes, DB, System.SysUtils, Winapi.Messages,
-  Vcl.Forms, Winapi.Windows, Vcl.ExtCtrls;
+  Vcl.Forms, Winapi.Windows, Vcl.ExtCtrls, IBX.IBQuery;
 
 const
   WM_STARTCALL  = WM_USER + 200;
@@ -154,6 +154,19 @@ end;
  public
    constructor Init(Aaction: TActionstr; ADataset: TDataset; AExtParam: PClientParam);
  end;
+
+
+//type
+//  TIBQueryFilt = class(TIBQuery)// !!!Filtered переоткрывает датасет
+//  protected
+//    fFiltered: Boolean;
+//    FFilterBuffer: TRecBuf;
+//  protected
+//    procedure SetFiltered(Value: Boolean); override;
+//    function InternalGetRecord(Buffer: TRecBuf; GetMode: TGetMode;
+//                       DoCheck: Boolean): TGetResult;
+//    function GetRecord(Buffer: TRecBuf; GetMode: TGetMode; DoCheck: Boolean): TGetResult; override;
+//  end;
 
 function NewFrmCreateParam(AAction: TActionstr; ADataSet: TDataSet=nil; AExtParam: PClientParam=nil): TFrmCreateParam;
 procedure PostMessageToAll(AMsg: CArdinal);
@@ -384,5 +397,41 @@ begin
   ClientType := '';
   ClientSubType := '';
 end;
+
+{ TIBQueryFilt }
+
+//function TIBQueryFilt.GetRecord(Buffer: TRecBuf; GetMode: TGetMode;
+//  DoCheck: Boolean): TGetResult;
+//var
+//  Accept: Boolean;
+//  SaveState: TDataSetState;
+//begin
+//  Result := grOK;
+//  if fFiltered and Assigned(OnFilterRecord) then
+//  begin
+//    Accept := False;
+//    SaveState := SetTempState(dsFilter);
+//    while not Accept do
+//    begin
+//      Result := InternalGetRecord(Buffer, GetMode, DoCheck);
+//      if Result <> grOK then
+//        break;
+//      FFilterBuffer := Buffer;
+//      Accept := True;
+//      OnFilterRecord(Self, Accept);
+//      if not Accept and (GetMode = gmCurrent) then
+//        GetMode := gmPrior;
+//    end;
+//    RestoreState(SaveState);
+//  end
+//  else
+//    Result := InternalGetRecord(Buffer, GetMode, DoCheck);
+//end;
+//
+//procedure TIBQueryFilt.SetFiltered(Value: Boolean);
+//begin
+//   //inherited SetFiltered(Value);
+//   fFiltered := Value;
+//end;
 
 end.

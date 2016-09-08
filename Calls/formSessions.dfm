@@ -375,7 +375,7 @@ inherited frmSessions: TfrmSessions
   end
   object DS: TDataSource
     AutoEdit = False
-    DataSet = Q
+    DataSet = MemQ
     Left = 24
     Top = 88
   end
@@ -439,5 +439,12 @@ inherited frmSessions: TfrmSessions
         OnClick = miFilterOffClick
       end
     end
+  end
+  object MemQ: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    OnFilterRecord = QFilterRecord
+    Left = 144
+    Top = 80
   end
 end

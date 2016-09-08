@@ -40,20 +40,20 @@ inherited frmIncomeCall: TfrmIncomeCall
     Top = 181
     ExplicitTop = 181
     inherited Exit_bnt: TRzButton
-      Left = 145
+      Left = 123
       Top = 6
       Height = 33
       ModalResult = 1
       Caption = #1054#1090#1082#1088#1099#1090#1100' '#1082#1072#1088#1090#1086#1095#1082#1091' '#1082#1083#1080#1077#1085#1090#1072
       OnClick = Exit_bntClick
-      ExplicitLeft = 145
+      ExplicitLeft = 123
       ExplicitTop = 6
       ExplicitHeight = 33
     end
     object btnTransfer: TRzButton
-      Left = 509
+      Left = 520
       Top = 6
-      Width = 124
+      Width = 113
       Height = 33
       ModalResult = 2
       Anchors = [akTop, akRight]
@@ -69,6 +69,26 @@ inherited frmIncomeCall: TfrmIncomeCall
       TabOrder = 1
       ThemeAware = False
       OnClick = btnTransferClick
+    end
+    object btnOk: TRzButton
+      Left = 387
+      Top = 6
+      Width = 113
+      Height = 33
+      ModalResult = 1
+      Anchors = [akTop, akRight]
+      Caption = #1054#1050
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 2960640
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 2
+      ThemeAware = False
+      OnClick = btnOkClick
     end
   end
   object grpBox: TRzGroupBox

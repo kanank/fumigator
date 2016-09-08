@@ -48,9 +48,11 @@ type
     cmbFormat: TcxLookupComboBox;
     cmbStatus: TcxLookupComboBox;
     lblWorker: TcxLabel;
+    btnOk: TRzButton;
     procedure FormCreate(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
     procedure btnTransferClick(Sender: TObject);
+    procedure btnOkClick(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -69,8 +71,20 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, formIncomeCallRoot, formCallEvent;
+  DM_Main, formIncomeCallRoot, formCallEvent, formClientFiz;
 
+
+procedure TfrmIncomeCall.btnOkClick(Sender: TObject);
+begin
+  if Assigned(frmClientFiz) then
+  try
+    frmClientFiz.butOK.Click;
+     CanClose := True;
+     ModalResult := mrOk;
+  finally
+
+  end;
+end;
 
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
 begin
@@ -89,6 +103,7 @@ end;
 procedure TfrmIncomeCall.doAcceptCall;
 begin
   inherited;
+  btnTransfer.Caption := 'Закрыть';
   if Assigned(frmCallEvent) then
     frmCallEvent.ModalResult := mrOk;
 end;

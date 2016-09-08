@@ -23,7 +23,7 @@ uses
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  frClientCalls, frBank;
+  frClientCalls, frBank, CommonTypes;
 
 type
   TfrmClientUr = class(TSimpleForm)
@@ -74,9 +74,13 @@ type
     procedure btnHideClick(Sender: TObject);
     procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
   private
+    fMode: TActionstr;
     procedure ChangeFormat(Sender: TObject);
+    procedure SetMode(AValue: TActionstr);
+  protected
+    procedure SetCaption(AValue: string); override;
   public
-    { Public declarations }
+    property Mode: TActionstr read fMode write SetMode;
   end;
 
 var
@@ -86,7 +90,7 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonTypes, System.StrUtils, formIncomeCallRoot;
+  DM_Main, System.StrUtils, formIncomeCallRoot;
 
 procedure TfrmClientUr.btnHideClick(Sender: TObject);
 begin
@@ -98,6 +102,7 @@ var
   res: Boolean;
   err: string;
 begin
+  fInUpdate := True;
   if not (DM.isModifiedData(DS.DataSet) or
           DM.isModifiedData(FramePerson.DS.DataSet) or
           DM.isModifiedData(FramePhones.DS.DataSet) or
@@ -196,6 +201,7 @@ begin
       fCanClose := False;
     end;
   finally
+    fInUpdate := False;
     if Res then
     begin
       if TIBQuery(DS.DataSet).Transaction.InTransaction then
@@ -278,36 +284,7 @@ begin
   if fFrmParam.Dataset <> nil then
     DS.DataSet := fFrmParam.Dataset;
 
-  status_id := 1;
-  if (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
-  (TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id <> 0) then
-    status_id := TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id;
-
-  case fFrmParam.action of
-    asCreate:
-      begin
-        Title := Title + ' [новая запись]';
-        if (DS.DataSet <> nil) and DS.DataSet.Active then
-        begin
-          DS.DataSet.Append;
-          DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 1;
-          DS.DataSet.FieldByName('STATUS_ID').AsInteger := status_id;
-          DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
-          DS.DataSet.FieldByName('ACT').AsInteger := 1;
-          DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
-        end;
-      end;
-    asEdit:
-      begin
-        Title := Title + ' [редактирование]';
-        if (DS.DataSet <> nil) and DS.DataSet.Active then
-          DS.DataSet.Edit;
-      end;
-    asShow:
-      begin
-        Title := Title + ' [просмотр]';
-      end;
-  end;
+  Mode := fFrmParam.action;
 
   SetValidateList('NAME,FORMAT_ID,STATUS_ID');
 
@@ -373,6 +350,65 @@ procedure TfrmClientUr.FrameUslugiQueryAfterPost(DataSet: TDataSet);
 begin
   inherited;
   ChangeFormat(self);
+end;
+
+procedure TfrmClientUr.SetCaption(AValue: string);
+begin
+  inherited;
+ case Mode of
+    asCreate:
+      begin
+        Caption := Caption + ' [новая запись]';
+      end;
+    asEdit:
+      begin
+        Caption := Caption + ' [редактирование]';
+      end;
+    asShow:
+      begin
+        Caption := Caption + ' [просмотр]';
+      end;
+  end;
+end;
+
+procedure TfrmClientUr.SetMode(AValue: TActionstr);
+var
+  status_id: Integer;
+begin
+  if fMode <> AValue  then
+   fMode := AValue;
+  Title := Title;
+
+ case fMode of
+    asCreate:
+      begin
+        status_id := 1;
+        if (fFrmParam.ExtParam <> nil) and (fFrmParam.ExtParam^.CallParam <> nil) and
+        (TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id <> 0) then
+          status_id := TClientParam(fFrmParam.ExtParam^).CallParam^.Status_Id;
+
+        if (DS.DataSet <> nil) and DS.DataSet.Active then
+        begin
+          DS.DataSet.Append;
+          DS.DataSet.FieldByName('TYPE_CLI').AsInteger  := 1;
+          DS.DataSet.FieldByName('STATUS_ID').AsInteger := status_id;
+          DS.DataSet.FieldByName('FORMAT_ID').AsInteger := 1;
+          DS.DataSet.FieldByName('ACT').AsInteger := 1;
+          DS.DataSet.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
+        end;
+      end;
+    asEdit:
+      begin
+        if (DS.DataSet <> nil) and DS.DataSet.Active then
+          DS.DataSet.Edit;
+      end;
+    asShow:
+      if DS.Dataset.State <> dsBrowse then
+      begin
+        DS.DataSet.Cancel;
+        TIBQuery(DS.DataSet).CancelUpdates;
+      end;
+  end;
 end;
 
 end.

@@ -129,7 +129,5 @@ inherited frmSessionEdit: TfrmSessionEdit
     BorderOuter = fsFlat
     BorderSides = [sdBottom]
     TabOrder = 3
-    ExplicitLeft = 8
-    ExplicitTop = 169
   end
 end

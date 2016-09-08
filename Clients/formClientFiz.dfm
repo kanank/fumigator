@@ -4,6 +4,7 @@ inherited frmClientFiz: TfrmClientFiz
   ClientWidth = 786
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitTop = -3
   ExplicitWidth = 802
   ExplicitHeight = 674
   PixelsPerInch = 96
@@ -99,7 +100,7 @@ inherited frmClientFiz: TfrmClientFiz
     end
     object butOK: TRzButton
       Left = 508
-      Top = 8
+      Top = 9
       Width = 124
       Height = 29
       Anchors = [akTop, akRight]

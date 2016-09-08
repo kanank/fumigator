@@ -63,12 +63,14 @@ implementation
 
 {$R *.dfm}
 uses
-  DM_Main, CommonVars;
+  DM_Main, CommonVars, formIncomeCallRoot;
 
 
 procedure TfrmSessionResult.btnBackClick(Sender: TObject);
 begin
+  FormStyle := fsNormal;
   fBack := True;
+  ModalResult := mrClose;
 end;
 
 procedure TfrmSessionResult.btnConsultClick(Sender: TObject);
@@ -172,8 +174,17 @@ end;
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  if not fBack and not CheckFields then
+  CanClose := True;
+  if not fBack and Assigned(frmIncomeCallRoot) and CallObj.Accepted and
+    CallObj.Active then
+  begin
+    MsgBoxWarning('Звонок еще не завершен!');
     CanClose := False;
+    Exit;
+  end ;
+
+  CanClose := CheckFields;
+
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

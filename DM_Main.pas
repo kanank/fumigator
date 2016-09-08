@@ -105,12 +105,22 @@ type
     QClientExtUR: TIBQuery;
     WorkerRegions: TIBQuery;
     DsWorkerRegions: TDataSource;
+    ClientList: TdxMemData;
+    IntegerField1: TIntegerField;
+    StringField1: TStringField;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
+    procedure ClientsAfterOpen(DataSet: TDataSet);
+    procedure ClientsBeforeClose(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure ClientListAfterScroll(DataSet: TDataSet);
+    procedure ClientsAfterPost(DataSet: TDataSet);
   private
     procedure CreateContactTypesPopup(Adata: TDataset); // создаем попап менютипов клиентов
   public
+    //Clients: TIBQueryFilt;
     Procedure MakeTopForm (Form :TForm); // сделать поверх всех окон.
     Procedure UnMakeTopForm (Form :TForm); // сделать обычное окно.
 
@@ -693,25 +703,28 @@ begin
     MsgBoxError(Exception(ExceptObject).Message, 'Непредвиденная ошибка');
   end;
   finally
-    if not Assigned(frmSessionResult) or
-        not frmSessionResult.Visible then
-      frmClientResult.CreateFormResult;
+    try
+      if not Assigned(frmSessionResult) or
+          not frmSessionResult.Visible then
+        frmClientResult.CreateFormResult;
 
-    frmClientResult.ShowModal;
-    Result := frmClientResult.CallResult;
+      frmClientResult.ShowModal;
+      Result := frmClientResult.CallResult;
 
-    inCalling      := False;
-    waitCalling    := False;
-    CallObj.Active := False;
-    CallObj.Ready  := true;
+      inCalling      := False;
+      waitCalling    := False;
 
-    if frmCallUnknown.Visible then
-       frmCallUnknown.HideAbsolute;
-
-    FreeAndNil(frmSessionResult);
-    FreeAndNil(frmClientResult);
-    FreeAndNil(frmIncomeCallUr);
-    FreeAndNil(frmIncomeCall);
+      if frmCallUnknown.Visible then
+         frmCallUnknown.HideAbsolute;
+    finally
+      FreeAndNil(frmSessionResult);
+      FreeAndNil(frmClientResult);
+      FreeAndNil(frmIncomeCallUr);
+      FreeAndNil(frmIncomeCall);
+      FreeAndNil(frmClientFiz);
+      FreeAndNil(frmClientUr);
+      CallObj.Ready  := true;
+    end;
   end;
 
 end;
@@ -1248,6 +1261,49 @@ begin
   end;
 end;
 
+procedure TDataModuleMain.ClientListAfterScroll(DataSet: TDataSet);
+begin
+  Clients.Locate('id', DataSet.FieldByName('id').AsInteger, []);
+end;
+
+procedure TDataModuleMain.ClientsAfterOpen(DataSet: TDataSet);
+begin
+  ClientList.AfterScroll := nil;
+  try
+    ClientList.Close;
+    ClientList.CopyFromDataSet(Dataset);
+    if DataSet.Tag > 0 then
+    begin
+      DataSet.Locate('id', DataSet.Tag, []);
+      if ClientList.Active then
+        ClientList.Locate('id', DataSet.Tag, []);
+    end;
+  finally
+    ClientList.AfterScroll := ClientListAfterScroll;
+  end;
+end;
+
+procedure TDataModuleMain.ClientsAfterPost(DataSet: TDataSet);
+var
+  i: Integer;
+begin
+  if ClientList.Active and ClientList.Locate('id', DataSet.FieldByName('id').AsInteger, []) then
+  try
+    ClientList.Edit;
+    for i := 0 to DataSet.FieldCount - 1 do
+      ClientList.FieldByName(Dataset.Fields[i].FieldName).Value := Dataset.Fields[i].Value;
+  finally
+    if ClientList.State <> dsBrowse then
+      ClientList.Post;
+  end;
+end;
+
+procedure TDataModuleMain.ClientsBeforeClose(DataSet: TDataSet);
+begin
+  if DataSet.Active then
+    DataSet.Tag := DataSet.FieldByName('id').AsInteger;
+end;
+
 function TDataModuleMain.CheckAcceptCall(callid: string): boolean;
 begin
   Result := false;
@@ -1362,6 +1418,35 @@ begin
   end;
 end;
 
+
+procedure TDataModuleMain.DataModuleCreate(Sender: TObject);
+begin
+//  Clients := TIBQueryFilt.Create(self);
+//  //Clients.UpdateObject :=  _Clients.UpdateObject;
+// // Clients.CachedUpdates := _Clients.CachedUpdates;
+//  //Clients.
+//  DsClients.DataSet := Clients;
+//
+//  Clients.Database      := DB;
+//  Clients.Transaction   := _Clients.Transaction;
+//  Clients.ObjectView    := _Clients.ObjectView;
+//  Clients.FieldOptions.UpdatePersistent := _Clients.FieldOptions.UpdatePersistent;
+//  Clients.AfterOpen     := _Clients.AfterOpen;
+//  Clients.BeforeClose   := _Clients.BeforeClose;
+//  Clients.BufferChunks  := _Clients.BufferChunks;
+//  Clients.CachedUpdates := _Clients.CachedUpdates;
+//  Clients.ParamCheck    := _Clients.ParamCheck;
+//  Clients.SQL.AddStrings(_Clients.SQL);
+//  Clients.UpdateObject  := _Clients.UpdateObject;
+//  Clients.GeneratorField.Field      := _Clients.GeneratorField.Field;
+//  Clients.GeneratorField.Generator  := _Clients.GeneratorField.Generator;
+//  Clients.GeneratorField.ApplyEvent := _Clients.GeneratorField.ApplyEvent;
+end;
+
+procedure TDataModuleMain.DataModuleDestroy(Sender: TObject);
+begin
+  Clients.Free;
+end;
 
 procedure TDataModuleMain.DsWorkerDataChange(Sender: TObject; Field: TField);
 var
@@ -1661,13 +1746,15 @@ begin
   end;
 
   finally
-    CallObj.Active := False;
+    //CallObj.Active := False;
     CallObj.Ready := True;
     FreeAndNil(frmCallEvent);
     FreeAndNil(frmSessionResult);
     FreeAndNil(frmIncomeCallRoot);
     FreeAndNil(frmIncomeCall);
     FreeAndNil(frmIncomeCallUr);
+    FreeAndNil(frmClientFiz);
+    FreeAndNil(frmClientUr);
   end;
 end;
 
@@ -1701,6 +1788,5 @@ begin
   fQuery.ParamByName('id').AsInteger := fId;
   fQuery.Open;
 end;
-
 
 end.

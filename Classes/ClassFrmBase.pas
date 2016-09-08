@@ -16,8 +16,6 @@ type
   TBaseForm = class(TForm)
     img1: TImage;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-  private
-    procedure SetCaption(AValue: string);
   protected
     fCloseOnCancelCall: boolean; //закрывать при отмене звонка
     fCanClose: Boolean;
@@ -27,6 +25,8 @@ type
     fFrmParam: TFrmCreateParam;
     fNonValidateList: TStringList;
     fValidateList: TStringList;  //процедуры возвращают поля без признака Required
+    fInUpdate: Boolean; //признак сохранения
+    procedure SetCaption(AValue: string); virtual;
     procedure SetNonValidate(Alist: string);
     function Validate(ADataSource: TDataSource): Boolean;
     procedure WmStartCall(var Msg: TMessage); message WM_STARTCALL;
@@ -52,6 +52,7 @@ type
     property CanClose: Boolean read fCanClose write fCanClose;
     property CloseOnCancelCall: Boolean read fCloseOnCancelCall write fCloseOnCancelCall;
     property HideOnClose: boolean read CalcHideOnClose;
+    property InUpdate: Boolean read fInUpdate;
   end;
 
 

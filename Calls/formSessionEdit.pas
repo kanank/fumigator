@@ -31,7 +31,7 @@ implementation
 {$R *.dfm}
 
 uses
-  formClientFiz, formClientUr;
+  formClientFiz, formClientUr, CommonTypes;
 
 procedure TfrmSessionEdit.btnClientEditClick(Sender: TObject);
 begin
@@ -47,6 +47,7 @@ begin
     TfrmClientFiz(frm).FrameClientCalls.Visible := True;
     frm.Height := frm.Height + TfrmClientFiz(frm).RzPanel1.Height +
       TfrmClientFiz(frm).frameClientCalls.Height ;
+    TfrmClientFiz(frm).Mode := asEdit;
   end
 
   else
@@ -56,6 +57,7 @@ begin
     TfrmClientUr(frm).FrameClientCalls.Visible := True;
     frm.Height := frm.Height + TfrmClientUr(frm).RzPanel1.Height +
       TfrmClientUr(frm).frameClientCalls.Height;
+    TfrmClientUr(frm).Mode := asEdit;
   end;
 
   frm.ShowModal;
@@ -64,10 +66,14 @@ end;
 
 procedure TfrmSessionEdit.SetClientForm;
 begin
+  btnClientEdit.Enabled := Assigned(frm);
+  if not Assigned(frm) then
+    Exit;
+
   frm.BorderIcons := [];
   frm.BorderStyle := bsNone;
   frm.Parent      := pnlClient;
-  frm.Position := poDefault;
+  frm.Position    := poDefault;
 
   if frm is TfrmClientFiz then
   begin
@@ -75,6 +81,7 @@ begin
     TfrmClientFiz(frm).FrameClientCalls.Visible := False;
     frm.Height := frm.Height - TfrmClientFiz(frm).RzPanel1.Height -
       TfrmClientFiz(frm).frameClientCalls.Height ;
+    TfrmClientFiz(frm).Mode := asShow;
   end
 
   else
@@ -84,6 +91,7 @@ begin
     TfrmClientUr(frm).FrameClientCalls.Visible := False;
     frm.Height := frm.Height - TfrmClientUr(frm).RzPanel1.Height -
       TfrmClientUr(frm).frameClientCalls.Height;
+    TfrmClientUr(frm).Mode := asShow;
   end;
 
   if frm.Width > self.Width then

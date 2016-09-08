@@ -129,7 +129,7 @@ var
   fUr: integer;
 begin
   try
-    DS.DataSet.Filtered := false;
+    //DS.DataSet.Filtered := false;
 
     extPrm := TClientParam.Init(status, 0, nil);
     //extPrm.CallParam.Status_Id := status;
@@ -151,7 +151,7 @@ begin
 
    id := DS.DataSet.FieldByName('id').AsInteger;
   finally
-    DS.DataSet.Filtered := True;
+    //DS.DataSet.Filtered := True;
     DS.DataSet.Locate('ID', id, []);
     Grid.SetFocus;
   end;
@@ -178,7 +178,7 @@ constructor TfrmClients.Create(AOwner: TComponent; ADataSet: TDataset = nil; Ais
 begin
   inherited Create(AOwner);
   if ADataSet = nil then
-    DS.DataSet := DM.Clients;
+    DS.DataSet := DM.ClientList;
   isUr := AisUr;
 
   status := 1;
@@ -186,26 +186,26 @@ begin
 end;
 
 procedure TfrmClients.Del_btnClick(Sender: TObject);
-var
-  id: integer;
+//var
+//  id: integer;
 begin
   try
-    id := DS.DataSet.FieldByName('id').AsInteger;
-    DS.DataSet.Filtered := false;
+    //id := DS.DataSet.FieldByName('id').AsInteger;
+    //DS.DataSet.Filtered := false;
 
-    if not DS.DataSet.Locate('ID', id, []) then
-      Exit;
+    //if not DS.DataSet.Locate('ID', id, []) then
+    //  Exit;
 
-    if not (DS.DataSet.State in [dsInsert, dsEdit]) then
-      DS.DataSet.Edit;
+    if not (DM.Clients.State in [dsInsert, dsEdit]) then
+      DM.Clients.Edit;
 
-    DS.DataSet.FieldByName('act').AsInteger := 0;
-    DS.DataSet.Post;
+    DM.Clients.FieldByName('act').AsInteger := 0;
+    DM.Clients.Post;
     //DS.Dataset.Delete;
-    TIBQuery(DS.DataSet).ApplyUpdates;
-    TIBQuery(DS.DataSet).Transaction.CommitRetaining;
+    TIBQuery(DM.Clients).ApplyUpdates;
+    TIBQuery(DM.Clients).Transaction.CommitRetaining;
   finally
-    DS.DataSet.Filtered := True;
+    //DS.DataSet.Filtered := True;
   end;
 
 end;
@@ -214,18 +214,18 @@ procedure TfrmClients.Edit_btnClick(Sender: TObject);
 var
   prm: TFrmCreateParam;
   mres: TModalResult;
-  id: integer;
+  //id: integer;
 begin
   try
-    id := DS.DataSet.FieldByName('id').AsInteger;
-    DS.DataSet.Filtered := False;
-    if not DS.DataSet.Locate('id', id, []) then
-      Exit;
+//    id := DS.DataSet.FieldByName('id').AsInteger;
+//    DS.DataSet.Filtered := False;
+//    if not DS.DataSet.Locate('id', id, []) then
+//      Exit;
 
     DM.GetDataset(DM.Clients);
 
     prm := NewFrmCreateParam(asEdit, DM.Clients);
-    if DS.DataSet.FieldByName('isur').AsInteger = 0 then
+    if DM.Clients.FieldByName('isur').AsInteger = 0 then
     begin
       frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
       mres := frmClientFiz.ShowModal;
@@ -244,7 +244,7 @@ begin
       DM.Clients.Refresh;
     end;
   finally
-    DM.Clients.Filtered := True;
+    //DS.DataSet.Filtered := True;
   end;
 end;
 
@@ -312,37 +312,40 @@ var
   mres: TModalResult;
   frm: TForm;
 begin
-  DM.GetDataset(DM.Clients);
-  frmClientResult := TfrmClientResult.Create(self);
+  try
+    DM.GetDataset(DM.Clients);
+    frmClientResult := TfrmClientResult.Create(self);
 
-  prm := NewFrmCreateParam(asEdit, DM.Clients);
-  if fIsUr = 0 then
-  begin
-    frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
-    frmClientFiz.RzPanel1.Visible := False;
-    frm := frmClientFiz;
-  end
-  else
-  begin
-    frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
-    frmClientUr.RzPanel1.Visible := False;
-    frm := frmClientUr;
+    prm := NewFrmCreateParam(asEdit, DM.Clients);
+    if fIsUr = 0 then
+    begin
+      frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+      frmClientFiz.RzPanel1.Visible := False;
+      frm := frmClientFiz;
+    end
+    else
+    begin
+      frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+      frmClientUr.RzPanel1.Visible := False;
+      frm := frmClientUr;
+    end;
+
+    frm.BorderIcons := [];
+    frm.BorderStyle := bsNone;
+    frm.Parent      := frmClientResult.pnlForm;
+    frmClientResult.pnlForm.Height := frm.Height + 10;
+    frmClientResult.pnlForm.Width  := frm.Width;
+    frmClientResult.Height := frmClientResult.pnlForm.Height +
+      frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
+
+    frm.Position := poDefault;
+    frm.Show;
+
+
+    frmClientResult.ShowModal;
+  finally
+    FreeAndNil(frmClientResult);
   end;
-
-  frm.BorderIcons := [];
-  frm.BorderStyle := bsNone;
-  frm.Parent      := frmClientResult.pnlForm;
-  frmClientResult.pnlForm.Height := frm.Height + 10;
-  frmClientResult.pnlForm.Width  := frm.Width;
-  frmClientResult.Height := frmClientResult.pnlForm.Height +
-    frmClientResult.pnlResult.Height + frmClientResult.RzPanel1.Height;
-
-  frm.Position := poDefault;
-  frm.Show;
-
-  frmClientResult.ShowModal;
-  frmClientResult.Free;
-
 end;
 
 procedure TfrmClients.SetButton(AButton: TRzButton);

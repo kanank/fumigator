@@ -177,6 +177,15 @@ begin
     Exit;
   end;
 
+  if CallObj.Active and CallObj.Accepted and fClientClose  then
+  begin
+    if not fResultSaved then
+    begin
+      fCallResult  := DM.FinishSession(CallObj.CallInfo.CallApiId, ClientId);
+      fResultSaved := True;
+    end;
+  end;
+
   if not CallObj.Active and CallObj.Accepted and fClientClose  then
   begin
     if not fNeedFinish then //не закрывались модальные окна
@@ -493,7 +502,7 @@ begin
          begin
            if DM.ShowClientURForCall(asCreate, ExtPrm).ModalRes = mrOk then
            begin
-             ClientId                    :=  DM.Clients.FieldByName('id').AsInteger;
+             ClientId                    := DM.Clients.FieldByName('id').AsInteger;
              CallObj.CallInfo.ClientId   := DM.Clients.FieldByName('id').AsInteger;
              CallObj.CallInfo.ClientType := 'U';
            end;
@@ -553,7 +562,7 @@ begin
   finally
     //frmCallUnknown.Free;
     fClientClose := True;
-    if fNeedFinish or not CallObj.Active then
+    if fNeedFinish or not CallObj.Active or CallObj.Accepted then
      CallFinish;
     //frmCallUnknown.HideAbsolute;
   end
@@ -577,7 +586,7 @@ begin
     end;
 
     fClientClose := True;
-    if fNeedFinish or not CallObj.Active then
+    if fNeedFinish or not CallObj.Active or CallObj.Accepted then
      CallFinish;
 
   end;

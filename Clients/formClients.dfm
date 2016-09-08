@@ -114,9 +114,7 @@ inherited frmClients: TfrmClients
       OnClick = Edit_btnClick
     end
     inherited Del_btn: TRzButton
-      Top = 5
       OnClick = Del_btnClick
-      ExplicitTop = 5
     end
     inherited Add_btn: TRzButton
       Top = 5

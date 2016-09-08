@@ -1,5 +1,7 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
   Height = 536
   Width = 816
   object DB: TIBDatabase
@@ -896,6 +898,9 @@ object DataModuleMain: TDataModuleMain
     Transaction = Clients_tr
     ObjectView = True
     FieldOptions.UpdatePersistent = True
+    AfterOpen = ClientsAfterOpen
+    AfterPost = ClientsAfterPost
+    BeforeClose = ClientsBeforeClose
     BufferChunks = 1000
     CachedUpdates = True
     ParamCheck = True
@@ -1735,5 +1740,17 @@ object DataModuleMain: TDataModuleMain
     DataSet = WorkerRegions
     Left = 746
     Top = 389
+  end
+  object ClientList: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 376
+    Top = 80
+    object IntegerField1: TIntegerField
+      FieldName = 'ID'
+    end
+    object StringField1: TStringField
+      FieldName = 'NAME'
+    end
   end
 end

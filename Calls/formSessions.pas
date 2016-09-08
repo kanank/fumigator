@@ -73,6 +73,7 @@ type
     miFilterOff: TMenuItem;
     cmbFilter: TcxComboBox;
     chkWorkerClients: TcxCheckBox;
+    MemQ: TdxMemData;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -172,7 +173,7 @@ begin
 
   try
   // результат
-  frmSessionResult := TfrmSessionResult.Create(self);
+  frmSessionResult := TfrmSessionResult.Create(nil);
   frmSessionResult.Cancel_btn.Visible := False;
   frmSessionResult.Height := frmSessionResult.Height -
     frmSessionResult.Cancel_btn.Height - 10;
@@ -232,7 +233,10 @@ begin
     //  frmSessionEdit.Width := frm.Width;
 
     //frm.Show;
-    frmSessionEdit.SetClientForm;
+    if Assigned(frmSessionEdit.frm) then
+      frmSessionEdit.SetClientForm
+    else
+      frmSessionEdit.btnClientEdit.Enabled := False;
 
     frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
       frm.Height + 5 + frmSessionEdit.pnlCalls.Height +
@@ -255,7 +259,8 @@ begin
 
     frmSessionEdit.ShowModal;
 
-    if frmSessionEdit.ModalResult = mrOk then
+    if (frmSessionEdit.ModalResult = mrOk) and
+       DM.isModifiedData(frmSessionResult.Q) then
     begin
       if frmSessionResult.CheckFields then
       try
@@ -265,14 +270,14 @@ begin
         except
            if frmSessionResult.Q.Transaction.Active then
              frmSessionResult.Q.Transaction.RollbackRetaining;
-        end;
-
+        end
+      else
+        Exit;
     end;
 
   finally
+    FreeAndNil(frmSessionResult);
     FreeAndNil(frmSessionEdit);
-    //FreeAndNil(frmSessionEdit);
-    //FreeAndNil(frmSessionEdit);
   end;
 end;
 
@@ -325,7 +330,7 @@ procedure TfrmSessions.miFilterOffClick(Sender: TObject);
 begin
   miFilterAccepted.Checked := false;
   miFilterDuration.Checked := False;
-  Q.Filtered := false;
+  MemQ.Filtered := false;
 end;
 
 function TfrmSessions.MillesecondToDateTime(ms: int64): TDateTime;
@@ -365,22 +370,36 @@ end;
 
 procedure TfrmSessions.RzButton1Click(Sender: TObject);
 begin
-  Q.Close;
-  DM.GetDataset(DM.Clients);
+  try
+    Screen.Cursor := crSQLWait;
+    Q.Close;
+    MemQ.Close;
 
-  if Q.Transaction.Active then
-    Q.Transaction.CommitRetaining;
+    DM.GetDataset(DM.Clients);
 
-  Q.ParamByName('date1').AsDateTime := edtTimeStart.Date;
-  Q.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
-  Q.Open;
-  CalcHeader;
+    if Q.Transaction.Active then
+      Q.Transaction.CommitRetaining;
+
+    Q.ParamByName('date1').AsDateTime := edtTimeStart.Date;
+    Q.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
+    Q.Open;
+    MemQ.CopyFromDataSet(Q);
+
+    CalcHeader;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 procedure TfrmSessions.SetFilter;
 begin
-  Q.Filtered := False;
-  Q.Filtered := True;
+  try
+    Screen.Cursor := crHourGlass;
+    MemQ.Filtered := False;
+    MemQ.Filtered := True;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 end.

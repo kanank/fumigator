@@ -132,7 +132,7 @@ begin
   try
     try
       self.ModalResult := mrNone;
-      CanClose := False;
+      //CanClose := False;
 
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
@@ -189,7 +189,7 @@ begin
       if res then
       begin
         ModalResult := mrOk;
-        CanClose := True;
+        fCanClose := True;
       end
       else
         raise Exception.Create(err);

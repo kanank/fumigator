@@ -16,6 +16,7 @@ type
   TBaseForm = class(TForm)
     img1: TImage;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormDestroy(Sender: TObject);
   protected
     fCloseOnCancelCall: boolean; //закрывать при отмене звонка
     fCanClose: Boolean;
@@ -26,6 +27,8 @@ type
     fNonValidateList: TStringList;
     fValidateList: TStringList;  //процедуры возвращают поля без признака Required
     fInUpdate: Boolean; //признак сохранения
+    fOnTopMost: Boolean; //находится в режиме TopMost
+
     procedure SetCaption(AValue: string); virtual;
     procedure SetNonValidate(Alist: string);
     function Validate(ADataSource: TDataSource): Boolean;
@@ -47,14 +50,16 @@ type
     procedure CloseAbsolute; //закрыть, не смотря CanClose
     procedure HideAbsolute; //скрыть
     procedure PostMessageToAll(AMsg: TMessage);
+    procedure SetTopMost;
+    procedure UnSetTopMost;
   published
     property Title: string read fTitle write SetCaption;
-    property CanClose: Boolean read fCanClose write fCanClose;
+    property CloseEnable: Boolean read fCanClose write fCanClose;
     property CloseOnCancelCall: Boolean read fCloseOnCancelCall write fCloseOnCancelCall;
     property HideOnClose: boolean read CalcHideOnClose;
     property InUpdate: Boolean read fInUpdate;
+    property OnTopMost: Boolean read fOnTopMost;
   end;
-
 
 implementation
 
@@ -72,7 +77,7 @@ end;
 
 procedure TBaseForm.CloseAbsolute;
 begin
-  CanClose := True;
+  fCanClose := True;
   if fsModal in FormState then
     ModalResult := mrCancel
   else
@@ -97,6 +102,7 @@ destructor TBaseForm.Destroy;
 begin
   fNonValidateList.Free;
   fValidateList.Free;
+  inherited;
 end;
 
 procedure TBaseForm.DoAcceptCall;
@@ -124,8 +130,18 @@ begin
 
   CanClose := not HideOnClose;
 
+  if CanClose and fOnTopMost then
+    UnSetTopMost;
+
   if HideOnClose then
     Hide;
+end;
+
+procedure TBaseForm.FormDestroy(Sender: TObject);
+begin
+  fNonValidateList.Free;
+  fValidateList.Free;
+  inherited;
 end;
 
 procedure TBaseForm.HideAbsolute;
@@ -133,7 +149,7 @@ begin
   Hide;
   if fsModal in FormState then
   begin
-    Self.CanClose := True;
+    Self.fCanClose := True;
     ModalResult := mrCancel;
   end;
 end;
@@ -157,9 +173,35 @@ begin
   fNonValidateList.DelimitedText := Alist;
 end;
 
+procedure TBaseForm.SetTopMost;
+begin
+  with self do
+    SetWindowPos(Handle,
+      HWND_TOPMOST,
+      Left,
+      Top,
+      Width,
+      Height,
+      SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+  fOnTopMost := True;
+end;
+
 procedure TBaseForm.SetValidateList(Alist: string);
 begin
   fValidateList.DelimitedText := Alist;
+end;
+
+procedure TBaseForm.UnSetTopMost;
+begin
+  with self do
+  SetWindowPos(Handle,
+    HWND_NOTOPMOST,
+    Left,
+    Top,
+    Width,
+    Height,
+    SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+  fOnTopMost := False;
 end;
 
 function TBaseForm.Validate(ADataSource: TDataSource): Boolean;

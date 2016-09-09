@@ -4,7 +4,7 @@ inherited frmClientFiz: TfrmClientFiz
   ClientWidth = 786
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -3
+  OnDestroy = FormDestroy
   ExplicitWidth = 802
   ExplicitHeight = 674
   PixelsPerInch = 96

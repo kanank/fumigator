@@ -4281,6 +4281,7 @@ object BaseForm: TBaseForm
     01FFFF0003FFFF8007FFFF8007FFFFC00FFFFFE01FFFFFF03FFFFFF8FFFF}
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
+  OnDestroy = FormDestroy
   DesignSize = (
     641
     358)

@@ -77,6 +77,8 @@ procedure TframeClientCalls.GridViewFocusedRecordChanged(
 var
   ColumnId: Integer;
   Cellvalue : variant;
+  vRecId: variant;
+  sRecId: string;
 begin
   if fInQuery or not GridView.Focused then
     Exit;
@@ -86,10 +88,17 @@ begin
   Cellvalue    := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnID];
   fPlay.CallApiId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
   ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
-  fPlay.ext  := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  fPlay.ext    := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
 
-  ColumnID      := GridView.GetColumnByFieldName('RECID').Index;
-  fPlay.RecId   := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  ColumnID     := GridView.GetColumnByFieldName('RECID').Index;
+
+  vRecId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  if VarIsNull(vRecId) then
+    sRecId := ''
+  else
+    sRecId := vRecId;
+
+  fPlay.RecId   := sRecId;
 
   fPlay.FileName  := '';
   fPlay.Width  := ColumnRecord.Width - 4;

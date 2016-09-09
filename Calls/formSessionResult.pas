@@ -44,11 +44,17 @@ type
     procedure btnConsultClick(Sender: TObject);
     procedure btnOtherClick(Sender: TObject);
     procedure btnBackClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     fBack: Boolean; //нажат возврат
   public
     CallResult: string;
     ResultType: string; //тип нажатой кнопки
+    ShowOnTop: Boolean; //показать поверх
+    NeedCheckCall: Boolean; //надо проверять окончание звонка True по умолчанию
+
     function CheckFields: Boolean;
     destructor Destroy; overload;
 
@@ -102,12 +108,6 @@ end;
 
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
 begin
-  (*if (cmbIshod.Text = '') or (edtResult.Text = '')  then
-  begin
-    Application.MessageBox('Необходимо заполнить поля', 'Результат сессии', MB_ICONSTOP);
-    Exit;
-  end
-  else*)
   if not Q.Active then
     Q.ParamByName('CALLAPIID').AsString := CallObj.CallInfo.CallApiId;
     Q.Open;
@@ -143,7 +143,7 @@ begin
   end
   else
     Result := True;
-  CanClose := Result;
+  fCanClose := Result;
 end;
 
 procedure TfrmSessionResult.ClearResult;
@@ -175,7 +175,8 @@ procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   CanClose := True;
-  if not fBack and Assigned(frmIncomeCallRoot) and CallObj.Accepted and
+
+  if NeedCheckCall and not fBack and Assigned(frmIncomeCallRoot) and CallObj.Accepted and
     CallObj.Active then
   begin
     MsgBoxWarning('Звонок еще не завершен!');
@@ -184,7 +185,26 @@ begin
   end ;
 
   CanClose := CheckFields;
+  fCanClose := CanClose;
+  //inherited;
+end;
 
+procedure TfrmSessionResult.FormCreate(Sender: TObject);
+begin
+  inherited;
+  NeedCheckCall := True;
+end;
+
+procedure TfrmSessionResult.FormDestroy(Sender: TObject);
+begin
+  CallObj.Ready := True;
+  inherited;
+end;
+
+procedure TfrmSessionResult.FormShow(Sender: TObject);
+begin
+  if ShowOnTop then
+    SetTopMost;
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

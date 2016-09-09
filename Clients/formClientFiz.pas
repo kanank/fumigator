@@ -67,6 +67,7 @@ type
     procedure btnHideClick(Sender: TObject);
     procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
     procedure DSDataChange(Sender: TObject; Field: TField);
+    procedure FormDestroy(Sender: TObject);
   private
     fMode: TActionstr;
     procedure ChangeFormat(Sender: TObject);
@@ -129,7 +130,7 @@ begin
   try
     try
       ModalResult := mrNone;
-      CanClose := False;
+      //CanClose := False;
 
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
@@ -187,7 +188,7 @@ begin
       if res then
       begin
         ModalResult := mrOk;
-        CanClose := True;
+        //CanClose := True;
       end
       else
         raise Exception.Create(err);
@@ -321,6 +322,18 @@ begin
   FrameClientCalls.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FrameClientCalls.OpenData;
   FrameClientCalls.Visible := true;
+end;
+
+procedure TfrmClientFiz.FormDestroy(Sender: TObject);
+begin
+  FramePerson.Free;
+  FramePhones.Free;
+  FrameUslugi.Free;
+  FrameAddress.Free;
+  FrameClientCalls.Free;
+
+  inherited;
+
 end;
 
 procedure TfrmClientFiz.FramePersoncmbDateBirthPropertiesInitPopup(

@@ -60,7 +60,7 @@ uses
 
 procedure TfrmIncomeCallUr.btnTransferClick(Sender: TObject);
 begin
-  CanClose := True;
+  fCanClose := True;
 
   if finished then //после окончания звонка можно закрыть
     ModalResult := mrCancel;
@@ -82,14 +82,14 @@ end;
 
 procedure TfrmIncomeCallUr.Exit_bntClick(Sender: TObject);
 begin
-  CanClose := True;
+  fCanClose := True;
   frmIncomeCallRoot.ClientClose := False;
 end;
 
 procedure TfrmIncomeCallUr.FormCreate(Sender: TObject);
 begin
   inherited;
-    CanClose := false;
+    fCanClose := false;
 end;
 
 end.

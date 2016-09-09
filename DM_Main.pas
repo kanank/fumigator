@@ -589,6 +589,8 @@ begin
        end;
       finally
         //frmCallUnknown.Free;
+        FreeAndNil(frmClientFiz);
+        FreeAndNil(frmClientUr);
         frmCallUnknown.HideAbsolute;
       end
     else
@@ -1619,7 +1621,7 @@ end;
 procedure TDataModuleMain.miContactTypesClick(Sender: TObject);
 begin
   frmCallUnknown.ContactType := TComponent(Sender).Tag;
-  frmCallUnknown.CanClose := True;
+  frmCallUnknown.CloseEnable := True;
   frmCallUnknown.ModalResult := mrAll;
 end;
 

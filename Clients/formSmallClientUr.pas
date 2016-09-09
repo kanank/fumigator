@@ -73,17 +73,18 @@ end;
 procedure TfrmSmallCardUr.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  inherited;
-  CanClose := (txtName.Text <> '') and (edtFamily.Text <> '')
+  fCanClose := (txtName.Text <> '') and (edtFamily.Text <> '')
     and (edtName.Text <> '') and (cmbRegion.EditValue > 0) and
      ((FrameUslugi.DS.DataSet.RecordCount > 0) or
        (cxDBMemo1.Text <> '')) ;
 
-  if not CanClose then
+  if not fCanClose then
   begin
     MsgBoxWarning('Не заполнены все необходимые поля!');
     CanClose := False;
   end;
+
+  inherited;
 end;
 
 procedure TfrmSmallCardUr.RzBitBtn1Click(Sender: TObject);

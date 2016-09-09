@@ -138,6 +138,7 @@ function SaveLogin(AIniFile, Alogin: string): Boolean;
 function ReadLogin(AIniFile: string): string;
 function CheckUpdates: boolean;
 function FindParam(AParam: string): Boolean;  // проверка наличия параметра запуска
+//procedure FreeAndNilModal(var AForm); inline;//уничтожение с проверкой на модальность
 
 var
   formMain: TfrmMain;
@@ -320,7 +321,7 @@ end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
 begin
-  Result := CanClose;
+  Result := fCanClose;
 end;
 
 procedure TfrmMain.miExitClick(Sender: TObject);
@@ -365,9 +366,12 @@ begin
 
   prm := NewFrmCreateParam(asCreate, DM.Clients);
   frmClientFiz := TfrmClientFiz.Create(self, '', @prm);
+  try
   if frmClientFiz.ShowModal = mrOk then
     DM.Clients.Refresh;
-  FreeAndNil(frmClientFiz);
+  finally
+    FreeAndNil(frmClientFiz);
+  end;
 end;
 
 procedure TfrmMain.NewURClnt_miClick(Sender: TObject);
@@ -378,9 +382,12 @@ begin
 
   prm := NewFrmCreateParam(asCreate, DM.Clients);
   frmClientUr := TfrmClientUr.Create(self, '', @prm);
+  try
   if frmClientUr.ShowModal = mrOk then
     DM.Clients.Refresh;
-  FreeAndNil(frmClientUr);
+  finally
+    FreeAndNil(frmClientUr);
+  end;
 end;
 
 procedure TfrmMain.OnCallFinish(Sender: TObject);
@@ -483,8 +490,11 @@ begin
     DM.Clients.Open;
 
   frmClients := TfrmClients.Create(self);
+  try
   frmClients.ShowModal;
-  FreeAndNil(frmClients);
+  finally
+    FreeAndNil(frmClients);
+  end;
 end;
 
 procedure TfrmMain.btnReportsClick(Sender: TObject);
@@ -556,10 +566,7 @@ begin
      Assigned(frmSessionResult)  then
     Exit;
   try
-  //CallObj.OnFinishCall := OnCallFinish;
     CallObj.StartCall(CallInfo);
-  //CallObj.OnCheckTimer := TfrmIncomeCallRoot.CheckAccept;
-  //TfrmIncomeCallRoot.ShowCall;
 
     DM.ShowCall;
   finally
@@ -996,6 +1003,25 @@ procedure TScocketStream.DoSynchronize;
 begin
   fStream.SaveToFile(fFileName);
 end;
+
+//procedure FreeAndNilModal(var AForm); inline;
+//var
+//  Temp: TObject;
+//begin
+//  Temp := TObject(AForm);
+//
+//  if Temp is TForm then
+//  begin
+//    if Assigned(Temp) and (fsModal in TForm(Temp).FormState) then
+//      if Temp is TBaseForm then
+//        TBaseForm(Temp).CloseAbsolute
+//      else
+//        TForm(Temp).ModalResult := mrCancel;
+//  end;
+//
+//  Pointer(AForm) := nil;
+//  Temp.Free;
+//end;
 
 initialization
   //hMutex := CreateMutex(nil, True,

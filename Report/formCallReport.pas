@@ -112,6 +112,8 @@ procedure TfrmCallReport.GridViewFocusedRecordChanged(
 var
   ColumnId: Integer;
   Cellvalue : variant;
+  vRecId: Variant;
+  sRecId: string;
 begin
   if fInQuery or not GridView.Focused then
     Exit;
@@ -124,7 +126,14 @@ begin
   frmPlay.ext  := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
 
   ColumnID      := GridView.GetColumnByFieldName('RECID').Index;
-  frmPlay.RecId := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+
+  vRecId := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  if VarIsNull(vRecId) then
+    sRecId := ''
+  else
+    sRecId := vRecId;
+
+  frmPlay.RecId := sRecId;
 
   frmPlay.FileName  := '';
   frmPlay.Width  := GridViewColumn5.Width;

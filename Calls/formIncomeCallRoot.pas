@@ -162,7 +162,7 @@ begin
     end;
 
     Self.ModalResult := mrCancel;
-    CanClose := True;
+    fCanClose := True;
     Close;
     Exit;
     //Self.CloseModal;
@@ -205,6 +205,9 @@ begin
       if frmCallUnknown.Visible then
       begin
         //frmCallUnknown.ModalResult := mrCancel;;
+        if Assigned(frmSessionResult) and frmSessionResult.Visible then
+          Exit;
+
         frmCallUnknown.HideAbsolute;
         Exit;
       end;
@@ -217,7 +220,7 @@ begin
       fResultSaved := True;
     end;
 
-    CanClose := True;
+    fCanClose := True;
     ModalResult := mrOk;
   end;
 end;
@@ -533,17 +536,6 @@ begin
          fClientClose := true;
          fCallResult := 'ANSWER';
          fResultSaved := True;
-         (*if (frmCallUnknown.TypeBtnClick = frmCallUnknown.btnPost.Name)
-            or
-            (frmCallUnknown.TypeBtnClick = frmCallUnknown.btnCorporate.Name) then
-         begin
-           if frmCallUnknown.TypeBtnClick = frmCallUnknown.btnCorporate.name then
-             extPrm.ClientType := 1
-           else
-             extPrm.ClientType := 2;
-           DM.ShowContact(asCreate, extPrm);
-         end;*)
-
       end;
 
      end;
@@ -564,6 +556,8 @@ begin
     fClientClose := True;
     if fNeedFinish or not CallObj.Active or CallObj.Accepted then
      CallFinish;
+     FreeAndNil(frmClientFiz);
+     FreeAndNil(frmClientUr);
     //frmCallUnknown.HideAbsolute;
   end
   else

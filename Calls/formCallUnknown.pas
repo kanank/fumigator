@@ -57,6 +57,7 @@ type
     SubTypeBtnClick: string; //подтип
     ContactType: integer;
     SelectId: Integer;
+    ResultSaved: Boolean;
     property OutcomeCall: Boolean read fOutcomeCall write SetOutcomeCall;
   end;
 
@@ -79,10 +80,11 @@ uses
 procedure TfrmCallUnknown.btnClick(Sender: TObject);
 begin
   TypeBtnClick := TComponent(Sender).Name;
-  CanClose := True;
+  fCanClose := True;
 
   if (TypeBtnClick <> btnLID.Name) then
   begin
+    ResultSaved := False;
     if not Assigned(frmSessionResult) then
       frmSessionResult := TfrmSessionResult.Create(nil);
     with frmSessionResult do
@@ -93,11 +95,18 @@ begin
       btnNonConsult.Enabled := False;
       btnOther.Enabled := False;
       edtIshod.Text := TRzButton(Sender).Caption;
-      frmSessionResult.FormStyle := fsStayOnTop;
-      frmSessionResult.ShowModal;
-      if ModalResult = mrClose then
+      ShowOnTop := True;
+      //frmSessionResult.FormStyle := fsStayOnTop;
+      NeedCheckCall := False;
+      try
+        frmSessionResult.ShowModal;
+      finally
+        NeedCheckCall := True;
+      end;
+
+      if frmSessionResult.ModalResult = mrClose then
         Exit;
-      CanClose := True;
+      fCanClose := True;
     end;
   end;
 
@@ -119,13 +128,13 @@ end;
 
 procedure TfrmCallUnknown.Exit_bntClick(Sender: TObject);
 begin
-  CanClose := True;
+  fCanClose := True;
 end;
 
 procedure TfrmCallUnknown.FormCreate(Sender: TObject);
 begin
   inherited;
-  CanClose := false;
+  fCanClose := false;
 end;
 
 procedure TfrmCallUnknown.mExistsClientClick(Sender: TObject);
@@ -151,7 +160,7 @@ begin
     FreeAndNil(fSpr);
     if f then
     begin
-      CanClose := True;
+      fCanClose := True;
       frmCallUnknown.ModalResult := mrOk;
     end;
   end;

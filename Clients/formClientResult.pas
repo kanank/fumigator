@@ -83,7 +83,7 @@ begin
 
   if fClientSaved and fResultSaved then
   begin
-    self.CanClose := True;
+    fCanClose := True;
     ModalResult := mrOk;
   end;
 end;
@@ -185,6 +185,7 @@ procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
 begin
   if not (fClientSaved and fResultSaved) then
     CanClose := False;
+  inherited;
 end;
 
 procedure TfrmClientResult.FormShow(Sender: TObject);

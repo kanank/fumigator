@@ -2,6 +2,9 @@ unit CommonFunc;
 
 interface
 
+uses
+   Windows;
+
 function FileVersion ( fName : string ) : string;
 function UrlEncode(Str: Ansistring): Ansistring;
 function UrlDecode(Str: Ansistring): Ansistring;
@@ -11,7 +14,7 @@ function GetFileSize(FileName: String): Integer;
 
 implementation
 uses
-  Windows, System.SysUtils, System.Classes;
+  System.SysUtils, System.Classes, ClassFrmBase, Vcl.Controls;
 
 function  FileVersion ( fName : string ) : string;
     const

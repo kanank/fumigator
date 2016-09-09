@@ -109,6 +109,7 @@ inherited frmSmallCardUr: TfrmSmallCardUr
         end
       end
       inherited RzPanel2: TRzPanel
+        Top = 91
         ExplicitTop = 90
         ExplicitWidth = 200
         inherited btnDel: TRzBitBtn

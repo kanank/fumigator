@@ -73,8 +73,8 @@ end;
 procedure TfrmSmallCardFiz.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  inherited;
   CanClose := CheckFields;
+  inherited;
 end;
 
 procedure TfrmSmallCardFiz.RzBitBtn1Click(Sender: TObject);

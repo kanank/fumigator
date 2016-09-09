@@ -4,6 +4,8 @@ inherited frmSessionResult: TfrmSessionResult
   ClientHeight = 317
   ClientWidth = 233
   Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
   ExplicitWidth = 249
   ExplicitHeight = 355
   PixelsPerInch = 96

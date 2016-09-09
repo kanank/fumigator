@@ -38,7 +38,7 @@ begin
   if ATitle = '' then
     ATitle := MsgTitle;
   Result :=
-    MessageBox(0, PChar(AMsg), PChar(ATitle), AType);
+    MessageBox(0, PChar(AMsg), PChar(ATitle), AType + MB_TOPMOST);
 end;
 
 procedure MsgBoxError(AMsg: string; ATitle: string = '');

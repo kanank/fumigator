@@ -7,6 +7,7 @@ inherited frmIncomeCallRoot: TfrmIncomeCallRoot
   TransparentColor = True
   TransparentColorValue = clBtnFace
   WindowState = wsMinimized
+  OnDestroy = FormDestroy
   OnShow = FormShow
   ExplicitWidth = 276
   ExplicitHeight = 131

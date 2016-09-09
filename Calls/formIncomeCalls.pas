@@ -79,7 +79,7 @@ begin
   if Assigned(frmClientFiz) then
   try
     frmClientFiz.butOK.Click;
-     CanClose := True;
+     fCanClose := True;
      ModalResult := mrOk;
   finally
 
@@ -88,7 +88,7 @@ end;
 
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);
 begin
-  CanClose := True;
+  fCanClose := True;
 
   if finished then //после окончания звонка можно закрыть
     ModalResult := mrCancel;
@@ -117,14 +117,14 @@ end;
 
 procedure TfrmIncomeCall.Exit_bntClick(Sender: TObject);
 begin
-  CanClose := True;
+  fCanClose := True;
   frmIncomeCallRoot.ClientClose := False;
 end;
 
 procedure TfrmIncomeCall.FormCreate(Sender: TObject);
 begin
   inherited;
-  CanClose := False;
+  fCanClose := False;
 end;
 
 end.

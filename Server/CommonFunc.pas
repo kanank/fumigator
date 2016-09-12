@@ -14,7 +14,7 @@ function GetFileSize(FileName: String): Integer;
 
 implementation
 uses
-  System.SysUtils, System.Classes, ClassFrmBase, Vcl.Controls;
+  System.SysUtils, System.Classes, Vcl.Controls;
 
 function  FileVersion ( fName : string ) : string;
     const

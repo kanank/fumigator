@@ -19,25 +19,21 @@ object MF: TMF
     Left = 0
     Top = 0
     Width = 627
-    Height = 327
+    Height = 340
     Align = alTop
     BevelKind = bkFlat
     TabOrder = 0
-    DesignSize = (
-      623
-      323)
     object GroupBox1: TGroupBox
       Left = 1
       Top = 253
       Width = 621
-      Height = 67
+      Height = 84
       Align = alTop
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
       TabOrder = 0
-      ExplicitTop = 224
       DesignSize = (
         621
-        67)
+        84)
       object Label2: TLabel
         Left = 11
         Top = 19
@@ -120,7 +116,7 @@ object MF: TMF
       end
       object DebugMode_cb: TCheckBox
         Left = 441
-        Top = 46
+        Top = 63
         Width = 121
         Height = 17
         Anchors = [akRight, akBottom]
@@ -144,6 +140,16 @@ object MF: TMF
         Caption = #1050#1083#1080#1077#1085#1090#1099
         TabOrder = 6
         OnClick = Button8Click
+      end
+      object Button9: TButton
+        Left = 441
+        Top = 36
+        Width = 169
+        Height = 25
+        Anchors = [akTop, akRight]
+        Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+        TabOrder = 7
+        OnClick = Button9Click
       end
     end
     object GroupBox2: TGroupBox
@@ -460,28 +466,53 @@ object MF: TMF
         OnClick = Button7Click
       end
     end
-    object Button9: TButton
-      Left = 441
-      Top = 290
-      Width = 106
-      Height = 25
-      Anchors = [akTop, akRight]
-      Caption = #1054#1095#1080#1089#1090#1080#1090#1100
-      TabOrder = 3
-      OnClick = Button9Click
-    end
   end
   object Log_memo: TMemo
     Left = 0
-    Top = 327
+    Top = 340
     Width = 627
-    Height = 256
+    Height = 243
     Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 1
-    ExplicitTop = 368
-    ExplicitHeight = 215
+  end
+  object LogText: TATBinHex
+    Left = 0
+    Top = 340
+    Width = 627
+    Height = 243
+    Cursor = crIBeam
+    Align = alClient
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    Caption = 'LogText'
+    Color = clWindow
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 2
+    FontOEM.Charset = OEM_CHARSET
+    FontOEM.Color = clWindowText
+    FontOEM.Height = -12
+    FontOEM.Name = 'Terminal'
+    FontOEM.Style = []
+    FontFooter.Charset = DEFAULT_CHARSET
+    FontFooter.Color = clBlack
+    FontFooter.Height = -12
+    FontFooter.Name = 'Arial'
+    FontFooter.Style = []
+    FontGutter.Charset = DEFAULT_CHARSET
+    FontGutter.Color = clBlack
+    FontGutter.Height = -12
+    FontGutter.Name = 'Courier New'
+    FontGutter.Style = []
+    TextWrap = True
+    AutoReload = True
   end
   object Tel_SRV: TIdHTTPServer
     Bindings = <>
@@ -533,7 +564,9 @@ object MF: TMF
       '     :CALLEREXTENSIONID,'
       '     :RECID            ,'
       '     :EVENTTIME        ,'
-      '     :DURATION);'
+      '     :DURATION,'
+      '     :CLIENT_ID,'
+      '    :CLIENT_TYPE);'
       '')
     Left = 393
     Top = 143
@@ -617,6 +650,16 @@ object MF: TMF
         DataType = ftUnknown
         Name = 'DURATION'
         ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'CLIENT_ID'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'CLIENT_TYPE'
+        ParamType = ptUnknown
       end>
   end
   object IBEvents: TIBEvents
@@ -640,8 +683,8 @@ object MF: TMF
     OnConnect = TCPServerConnect
     OnDisconnect = TCPServerDisconnect
     OnExecute = TCPServerExecute
-    Left = 520
-    Top = 336
+    Left = 424
+    Top = 208
   end
   object QPhones: TIBQuery
     Database = DB

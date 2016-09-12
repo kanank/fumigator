@@ -45,7 +45,7 @@ type
 
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
     class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil; AValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
-    destructor Destroy; overload;
+    //destructor Destroy; overload;
     procedure SetValidateList(Alist: string);
     procedure CloseAbsolute; //закрыть, не смотря CanClose
     procedure HideAbsolute; //скрыть
@@ -98,12 +98,12 @@ begin
   fCanClose := True;
 end;
 
-destructor TBaseForm.Destroy;
-begin
-  fNonValidateList.Free;
-  fValidateList.Free;
-  inherited;
-end;
+//destructor TBaseForm.Destroy;
+//begin
+//  fNonValidateList.Free;
+//  fValidateList.Free;
+//  inherited;
+//end;
 
 procedure TBaseForm.DoAcceptCall;
 begin
@@ -139,9 +139,13 @@ end;
 
 procedure TBaseForm.FormDestroy(Sender: TObject);
 begin
-  fNonValidateList.Free;
-  fValidateList.Free;
-  inherited;
+  try
+    FreeAndNil(fNonValidateList);
+    FreeAndNil(fValidateList);
+  finally
+
+  end;
+
 end;
 
 procedure TBaseForm.HideAbsolute;

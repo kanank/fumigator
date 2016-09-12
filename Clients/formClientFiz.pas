@@ -326,11 +326,11 @@ end;
 
 procedure TfrmClientFiz.FormDestroy(Sender: TObject);
 begin
-  FramePerson.Free;
-  FramePhones.Free;
-  FrameUslugi.Free;
-  FrameAddress.Free;
-  FrameClientCalls.Free;
+  FreeAndNil(FramePerson);
+  FreeAndNil(FramePhones);
+  FreeAndNil(FrameUslugi);
+  FreeAndNil(FrameAddress);
+  FreeAndNil(FrameClientCalls);
 
   inherited;
 

@@ -633,7 +633,7 @@ begin
         if isClient (*and not newUr*) and
           ((DM.Clients.FieldByName('type_cli').AsInteger = 0) or newFiz) then
         begin
-          frmClientFiz := TfrmClientFiz.Create(frmClientResult, '', @prm);
+          frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
           frmClientFiz.RzPanel1.Visible := False;
           frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
           frm := frmClientFiz;
@@ -641,14 +641,14 @@ begin
         else
         if isClient then
         begin
-          frmClientUr := TfrmClientUr.Create(frmClientResult, '', @prm);
+          frmClientUr := TfrmClientUr.Create(nil, '', @prm);
           frmClientUr.RzPanel1.Visible := False;
           frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
           frm := frmClientUr;
         end
         else //контакт
         begin
-          frmContact := TfrmContact.Create(frmClientResult, '', @prm);
+          frmContact := TfrmContact.Create(nil, '', @prm);
           frmContact.RzPanel1.Visible := False;
           frmContact.Height := frmContact.Height - frmContact.RzPanel1.Height;
           frm := frmContact;
@@ -712,6 +712,7 @@ begin
 
       frmClientResult.ShowModal;
       Result := frmClientResult.CallResult;
+      frmClientResult.frmCli.Parent := nil;
 
       inCalling      := False;
       waitCalling    := False;
@@ -719,13 +720,18 @@ begin
       if frmCallUnknown.Visible then
          frmCallUnknown.HideAbsolute;
     finally
+      try
       FreeAndNil(frmSessionResult);
       FreeAndNil(frmClientResult);
-      FreeAndNil(frmIncomeCallUr);
-      FreeAndNil(frmIncomeCall);
-      FreeAndNil(frmClientFiz);
-      FreeAndNil(frmClientUr);
-      CallObj.Ready  := true;
+      //FreeAndNil();
+      //FreeAndNil(frmIncomeCall);
+      if Assigned(frmClientFiz) then
+        FreeAndNil(frmClientFiz);
+      if Assigned(frmClientUr) then
+        FreeAndNil(frmClientUr);
+      finally
+        CallObj.Ready  := true;
+      end;
     end;
   end;
 
@@ -1749,14 +1755,17 @@ begin
 
   finally
     //CallObj.Active := False;
-    CallObj.Ready := True;
-    FreeAndNil(frmCallEvent);
-    FreeAndNil(frmSessionResult);
-    FreeAndNil(frmIncomeCallRoot);
-    FreeAndNil(frmIncomeCall);
-    FreeAndNil(frmIncomeCallUr);
-    FreeAndNil(frmClientFiz);
-    FreeAndNil(frmClientUr);
+    try
+      FreeAndNil(frmCallEvent);
+      FreeAndNil(frmSessionResult);
+      FreeAndNil(frmIncomeCallRoot);
+      FreeAndNil(frmIncomeCall);
+      FreeAndNil(frmIncomeCallUr);
+      FreeAndNil(frmClientFiz);
+      FreeAndNil(frmClientUr);
+    finally
+      CallObj.Ready := True;
+    end;
   end;
 end;
 

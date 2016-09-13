@@ -21,7 +21,7 @@ uses
   dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus, dxSkinSilver,
   dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008, dxSkinTheAsphaltWorld,
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint,
-  dxSkinXmas2008Blue;
+  dxSkinXmas2008Blue, cxStyles, cxClasses;
 
 type
   TFrameContact = class(TDbFrameBase)
@@ -30,6 +30,9 @@ type
     Label3: TLabel;
     cxDBTextEdit1: TcxDBTextEdit;
     FramePhones: TFramePhones;
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
+    cxStyle2: TcxStyle;
   private
     { Private declarations }
   protected

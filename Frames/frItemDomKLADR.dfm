@@ -5,17 +5,26 @@ inherited FrameItemDomKLADR: TFrameItemDomKLADR
     217
     30)
   inherited lblName: TLabel
-    Width = 20
+    Width = 24
+    Height = 16
     Caption = #1044#1086#1084
-    ExplicitWidth = 20
+    Font.Height = -13
+    ExplicitWidth = 24
+    ExplicitHeight = 16
   end
   inherited btnEdit: TRzBitBtn
     Left = 182
+    Height = 26
     ExplicitLeft = 182
+    ExplicitHeight = 26
   end
   inherited edtName: TcxTextEdit
     ExplicitWidth = 80
+    ExplicitHeight = 26
     Width = 80
+  end
+  inherited edtSocr: TcxTextEdit
+    ExplicitHeight = 26
   end
   object cmbName: TcxComboBox [4]
     Left = 102

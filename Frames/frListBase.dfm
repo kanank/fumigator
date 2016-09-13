@@ -10,6 +10,11 @@ inherited FrameListBase: TFrameListBase
     Height = 118
     BorderSides = [sdLeft, sdTop, sdRight]
     Caption = #1058#1077#1083#1077#1092#1086#1085#1099
+    CaptionFont.Charset = DEFAULT_CHARSET
+    CaptionFont.Color = clWindowText
+    CaptionFont.Height = -13
+    CaptionFont.Name = 'Tahoma'
+    CaptionFont.Style = [fsBold]
     TabOrder = 0
     DesignSize = (
       212
@@ -26,18 +31,18 @@ inherited FrameListBase: TFrameListBase
     end
     object RzPanel2: TRzPanel
       Left = 180
-      Top = 14
+      Top = 19
       Width = 31
-      Height = 103
+      Height = 98
       Align = alRight
       BorderSides = []
       TabOrder = 1
       DesignSize = (
         31
-        103)
+        98)
       object btnAdd: TRzBitBtn
         Left = 2
-        Top = -1
+        Top = -6
         Width = 28
         Height = 28
         Hint = #1044#1086#1073#1072#1074#1080#1090#1100
@@ -49,7 +54,7 @@ inherited FrameListBase: TFrameListBase
       end
       object btnEdit: TRzBitBtn
         Left = 2
-        Top = 33
+        Top = 28
         Width = 28
         Height = 28
         Hint = #1048#1079#1084#1077#1085#1080#1090#1100
@@ -61,7 +66,7 @@ inherited FrameListBase: TFrameListBase
       end
       object btnDel: TRzBitBtn
         Left = 2
-        Top = 74
+        Top = 69
         Width = 28
         Height = 28
         Hint = #1059#1076#1072#1083#1080#1090#1100

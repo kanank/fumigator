@@ -2,45 +2,69 @@ inherited frmSelectService: TfrmSelectService
   Left = 253
   Top = 27
   Caption = #1042#1099#1073#1086#1088' '#1091#1089#1083#1091#1075
-  ClientHeight = 318
-  ClientWidth = 205
+  ClientHeight = 440
+  ClientWidth = 284
   OnShow = FormShow
-  ExplicitWidth = 211
-  ExplicitHeight = 346
+  ExplicitWidth = 290
+  ExplicitHeight = 468
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited lblData: TLabel
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
   end
   inherited edtData: TcxDBMaskEdit
-    Top = 22
+    Top = 30
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     DataBinding.DataField = ''
     DataBinding.DataSource = nil
     Visible = False
-    ExplicitTop = 22
+    ExplicitTop = 30
+    ExplicitHeight = 26
   end
   inherited btnOK: TRzButton
     Left = 1
-    Top = 288
+    Top = 399
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akLeft, akBottom]
     ExplicitLeft = 1
-    ExplicitTop = 288
+    ExplicitTop = 399
+    ExplicitWidth = 100
   end
   inherited bntCancel: TRzButton
-    Left = 134
-    Top = 290
+    Left = 182
+    Top = 402
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akRight, akBottom]
-    ExplicitLeft = 134
-    ExplicitTop = 290
+    ExplicitLeft = 182
+    ExplicitTop = 402
+    ExplicitWidth = 100
   end
   object grdService: TcxGrid [4]
     Left = 1
     Top = -1
-    Width = 203
-    Height = 285
+    Width = 281
+    Height = 394
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
-    ExplicitHeight = 309
     object grdServiceDBTableView1: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       DataController.DataSource = DS

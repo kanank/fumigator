@@ -8,7 +8,7 @@ object frmEditData: TfrmEditData
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -15
   Font.Name = 'Tahoma'
   Font.Style = []
   Icon.Data = {
@@ -1097,7 +1097,7 @@ object frmEditData: TfrmEditData
     345
     84)
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   object lblData: TLabel
     Left = 8
     Top = 3
@@ -1131,7 +1131,7 @@ object frmEditData: TfrmEditData
     Caption = 'OK'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 2960640
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -1151,7 +1151,7 @@ object frmEditData: TfrmEditData
     Caption = #1054#1090#1084#1077#1085#1072
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 2960640
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True

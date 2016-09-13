@@ -51,12 +51,12 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
     object Label5: TLabel [7]
       Left = 254
       Top = 106
-      Width = 49
-      Height = 13
+      Width = 60
+      Height = 16
       Caption = 'Email '#1088#1072#1073'.'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -72,24 +72,31 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       Top = 69
       AutoSize = False
       ExplicitTop = 69
-      ExplicitWidth = 170
-      Width = 170
+      ExplicitWidth = 182
+      ExplicitHeight = 21
+      Height = 21
+      Width = 182
     end
     inherited edtName: TcxDBTextEdit [10]
       Top = 37
       AutoSize = False
       ExplicitTop = 37
-      ExplicitWidth = 170
-      Width = 170
+      ExplicitWidth = 182
+      ExplicitHeight = 21
+      Height = 21
+      Width = 182
     end
     inherited edtFamily: TcxDBTextEdit [11]
       AutoSize = False
-      ExplicitWidth = 170
-      Width = 170
+      ExplicitWidth = 182
+      ExplicitHeight = 21
+      Height = 21
+      Width = 182
     end
     inherited cmbSex: TcxDBComboBox [12]
       Left = 176
       Top = 102
+      Style.IsFontAssigned = True
       Visible = False
       ExplicitLeft = 176
       ExplicitTop = 102
@@ -98,14 +105,22 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       Top = 102
       AutoSize = False
       ExplicitTop = 102
-      ExplicitWidth = 170
-      Width = 170
+      ExplicitWidth = 162
+      ExplicitHeight = 21
+      Height = 21
+      Width = 162
     end
     inline FrameFoto: TFrameFoto [14]
       Left = 458
       Top = 2
       Width = 116
       Height = 124
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 7
       ExplicitLeft = 458
       ExplicitTop = 2
@@ -157,18 +172,25 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       end
     end
     inherited cmbDateBirth: TcxDBDateEdit
-      Left = 340
+      Left = 349
       Top = 5
-      ExplicitLeft = 340
+      Style.IsFontAssigned = True
+      ExplicitLeft = 349
       ExplicitTop = 5
-      ExplicitWidth = 109
-      Width = 109
+      ExplicitWidth = 100
+      Width = 100
     end
     inline FramePhones: TFramePhones
       Left = 253
       Top = 26
       Width = 201
       Height = 70
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 8
       ExplicitLeft = 253
       ExplicitTop = 26
@@ -217,17 +239,24 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       end
     end
     object edtEmailWork: TcxDBTextEdit
-      Left = 306
+      Left = 320
       Top = 102
       AutoSize = False
       BeepOnEnter = False
       DataBinding.DataField = 'EMAIL_WORK'
       DataBinding.DataSource = DS
+      ParentFont = False
       Style.BorderStyle = ebsFlat
+      Style.Font.Charset = DEFAULT_CHARSET
+      Style.Font.Color = clWindowText
+      Style.Font.Height = -13
+      Style.Font.Name = 'Tahoma'
+      Style.Font.Style = []
       Style.HotTrack = False
       Style.LookAndFeel.Kind = lfFlat
       Style.LookAndFeel.NativeStyle = True
       Style.TransparentBorder = True
+      Style.IsFontAssigned = True
       StyleDisabled.LookAndFeel.Kind = lfFlat
       StyleDisabled.LookAndFeel.NativeStyle = True
       StyleFocused.LookAndFeel.Kind = lfFlat
@@ -236,7 +265,7 @@ inherited FramePersonSmallFoto: TFramePersonSmallFoto
       StyleHot.LookAndFeel.NativeStyle = True
       TabOrder = 9
       Height = 21
-      Width = 143
+      Width = 129
     end
   end
   inherited Query_upd: TIBUpdateSQL

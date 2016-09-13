@@ -31,23 +31,43 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       215)
     inherited Label11: TLabel
       Left = 2
+      Width = 53
+      Height = 16
+      Font.Height = -13
       ExplicitLeft = 2
+      ExplicitWidth = 53
+      ExplicitHeight = 16
     end
     inherited Label10: TLabel
-      Left = 177
+      Left = 179
       Top = 8
-      ExplicitLeft = 177
+      Width = 23
+      Height = 16
+      Font.Height = -13
+      ExplicitLeft = 179
       ExplicitTop = 8
+      ExplicitWidth = 23
+      ExplicitHeight = 16
     end
     inherited Label9: TLabel
       Left = 328
       Top = 8
+      Width = 55
+      Height = 16
+      Font.Height = -13
       ExplicitLeft = 328
       ExplicitTop = 8
+      ExplicitWidth = 55
+      ExplicitHeight = 16
     end
     inherited Label8: TLabel
       Left = 512
+      Width = 92
+      Height = 16
+      Font.Height = -13
       ExplicitLeft = 512
+      ExplicitWidth = 92
+      ExplicitHeight = 16
     end
     inherited Label2: TLabel
       Left = 5
@@ -64,27 +84,35 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
     inherited Label4: TLabel
       Left = 186
       Top = 95
+      Width = 66
+      Height = 16
+      Font.Height = -13
       ExplicitLeft = 186
       ExplicitTop = 95
+      ExplicitWidth = 66
+      ExplicitHeight = 16
     end
     inherited Label5: TLabel
       Left = 186
       Top = 36
-      Width = 32
+      Width = 41
+      Height = 16
       Caption = 'E-mail:'
+      Font.Height = -13
       ExplicitLeft = 186
       ExplicitTop = 36
-      ExplicitWidth = 32
+      ExplicitWidth = 41
+      ExplicitHeight = 16
     end
     object Label6: TLabel [8]
       Left = 232
-      Top = 59
-      Width = 38
-      Height = 13
+      Top = 57
+      Width = 44
+      Height = 16
       Caption = #1083#1080#1095#1085#1099#1081
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -92,12 +120,12 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
     object Label7: TLabel [9]
       Left = 232
       Top = 36
-      Width = 42
-      Height = 13
+      Width = 49
+      Height = 16
       Caption = #1088#1072#1073#1086#1095#1080#1081
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -108,12 +136,13 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       ExplicitLeft = 33
       ExplicitTop = 67
       ExplicitWidth = 77
+      ExplicitHeight = 26
       Width = 77
     end
     inherited edtSurName: TcxDBTextEdit
-      Left = 379
+      Left = 386
       Top = 5
-      ExplicitLeft = 379
+      ExplicitLeft = 386
       ExplicitTop = 5
       ExplicitWidth = 120
       ExplicitHeight = 19
@@ -121,9 +150,9 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       Width = 120
     end
     inherited edtName: TcxDBTextEdit
-      Left = 199
+      Left = 203
       Top = 5
-      ExplicitLeft = 199
+      ExplicitLeft = 203
       ExplicitTop = 5
       ExplicitWidth = 120
       ExplicitHeight = 19
@@ -131,8 +160,8 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       Width = 120
     end
     inherited edtFamily: TcxDBTextEdit
-      Left = 47
-      ExplicitLeft = 47
+      Left = 56
+      ExplicitLeft = 56
       ExplicitWidth = 120
       ExplicitHeight = 19
       Height = 19
@@ -143,6 +172,7 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       Top = 66
       ExplicitLeft = 54
       ExplicitTop = 66
+      ExplicitHeight = 26
     end
     inherited cmbProf: TcxDBLookupComboBox
       Left = 253
@@ -199,9 +229,10 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       end
     end
     inherited cmbDateBirth: TcxDBDateEdit
-      Left = 595
-      ExplicitLeft = 595
+      Left = 602
+      ExplicitLeft = 602
       ExplicitWidth = 69
+      ExplicitHeight = 26
       Width = 69
     end
     inherited FramePhones: TFramePhones
@@ -220,30 +251,28 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         ExplicitHeight = 89
         inherited RzPanel2: TRzPanel
           Left = 142
-          Height = 74
+          Height = 69
           Align = alRight
           Visible = True
           ExplicitLeft = 142
-          ExplicitHeight = 74
+          ExplicitHeight = 69
           inherited btnDel: TRzBitBtn
-            Top = 51
+            Top = 46
             Visible = True
-            ExplicitTop = 51
+            ExplicitTop = 46
           end
           inherited btnAdd: TRzBitBtn
-            Left = 0
-            Top = 0
+            Top = -5
             Height = 25
             Visible = True
-            ExplicitLeft = 0
-            ExplicitTop = 0
+            ExplicitTop = -5
             ExplicitHeight = 25
           end
           inherited btnEdit: TRzBitBtn
-            Top = 25
+            Top = 20
             Height = 25
             Visible = True
-            ExplicitTop = 25
+            ExplicitTop = 20
             ExplicitHeight = 25
           end
         end
@@ -257,9 +286,6 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
           ExplicitWidth = 138
           ExplicitHeight = 71
           inherited grdPhoneDBTableView2: TcxGridDBTableView
-            inherited grdPhoneDBTableView2Column1: TcxGridDBColumn
-              Width = 20
-            end
             inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
               Width = 80
             end
@@ -271,9 +297,9 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       end
     end
     inherited edtEmailWork: TcxDBTextEdit
-      Left = 280
+      Left = 282
       Top = 32
-      ExplicitLeft = 280
+      ExplicitLeft = 282
       ExplicitTop = 32
     end
     inline FramePassport: TFramePassport
@@ -281,6 +307,12 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
       Top = 121
       Width = 427
       Height = 100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 10
       ExplicitTop = 121
       ExplicitWidth = 427
@@ -301,35 +333,40 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
         inherited Label3: TLabel
           Left = 231
           Top = 38
-          Width = 79
-          Height = 26
+          Width = 90
+          Height = 32
           WordWrap = True
           ExplicitLeft = 231
           ExplicitTop = 38
-          ExplicitWidth = 79
-          ExplicitHeight = 26
+          ExplicitWidth = 90
+          ExplicitHeight = 32
         end
         inherited Label4: TLabel
           Top = 38
           ExplicitTop = 38
         end
+        inherited edtNomer: TcxDBMaskEdit
+          ExplicitHeight = 26
+        end
         inherited cmbDate: TcxDBDateEdit
-          Left = 315
+          Left = 325
           Top = 16
-          ExplicitLeft = 315
+          ExplicitLeft = 325
           ExplicitTop = 16
+          ExplicitHeight = 26
         end
         inherited edtKem: TcxDBMemo
-          Top = 51
-          ExplicitTop = 51
+          Top = 53
+          ExplicitTop = 53
           ExplicitHeight = 38
           Height = 38
         end
         inherited edtCode: TcxDBMaskEdit
-          Left = 315
+          Left = 325
           Top = 43
-          ExplicitLeft = 315
+          ExplicitLeft = 325
           ExplicitTop = 43
+          ExplicitHeight = 26
         end
       end
       inherited Query_upd: TIBUpdateSQL
@@ -347,8 +384,8 @@ inherited FramePersonFullFoto: TFramePersonFullFoto
     end
   end
   object edtEmailPrivate: TcxDBTextEdit [2]
-    Left = 283
-    Top = 66
+    Left = 285
+    Top = 55
     AutoSize = False
     BeepOnEnter = False
     DataBinding.DataField = 'EMAIL_PRIVATE'

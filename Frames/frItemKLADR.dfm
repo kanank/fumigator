@@ -8,13 +8,13 @@ inherited FrameItemKLADR: TFrameItemKLADR
     30)
   object lblName: TLabel [0]
     Left = 2
-    Top = 7
-    Width = 31
-    Height = 13
+    Top = 9
+    Width = 35
+    Height = 16
     Caption = #1040#1076#1088#1077#1089
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -23,7 +23,7 @@ inherited FrameItemKLADR: TFrameItemKLADR
     Left = 301
     Top = 3
     Width = 30
-    Height = 22
+    Height = 26
     Hint = #1048#1079#1084#1077#1085#1080#1090#1100
     Alignment = taLeftJustify
     Anchors = [akTop, akRight]
@@ -35,14 +35,14 @@ inherited FrameItemKLADR: TFrameItemKLADR
   end
   object edtName: TcxTextEdit [2]
     Left = 102
-    Top = 4
+    Top = 3
     TabOrder = 1
     OnKeyPress = edtNameKeyPress
     Width = 199
   end
   object edtSocr: TcxTextEdit [3]
     Left = 67
-    Top = 4
+    Top = 3
     Enabled = False
     Style.BorderStyle = ebsNone
     Style.Color = clBtnFace

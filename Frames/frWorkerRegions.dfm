@@ -30,9 +30,9 @@ inherited FrameWorkerRegions: TFrameWorkerRegions
     inherited RzPanel2: TRzPanel
       inherited btnAdd: TRzBitBtn
         Left = -1
-        Top = 3
+        Top = -3
         ExplicitLeft = -1
-        ExplicitTop = 3
+        ExplicitTop = -3
       end
       inherited btnEdit: TRzBitBtn
         Left = -1
@@ -40,9 +40,9 @@ inherited FrameWorkerRegions: TFrameWorkerRegions
       end
       inherited btnDel: TRzBitBtn
         Left = -1
-        Top = 67
+        Top = 70
         ExplicitLeft = -1
-        ExplicitTop = 67
+        ExplicitTop = 70
       end
     end
   end

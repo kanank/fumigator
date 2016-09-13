@@ -1,17 +1,18 @@
 inherited FrameKladrAll: TFrameKladrAll
   Width = 335
-  Height = 158
+  Height = 161
+  ParentFont = True
   ExplicitWidth = 335
-  ExplicitHeight = 158
+  ExplicitHeight = 161
   object lblName: TLabel [0]
-    Left = 234
-    Top = 136
-    Width = 49
-    Height = 13
+    Left = 231
+    Top = 138
+    Width = 55
+    Height = 16
     Caption = #1050#1074#1072#1088#1090#1080#1088#1072
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -21,12 +22,18 @@ inherited FrameKladrAll: TFrameKladrAll
     Top = 1
     Width = 334
     Height = 30
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
     ExplicitTop = 1
     inherited lblName: TLabel
-      Width = 35
+      Width = 40
       Caption = #1056#1077#1075#1080#1086#1085
-      ExplicitWidth = 35
+      ExplicitWidth = 40
     end
     inherited Query: TIBQuery
       BeforeOpen = nil
@@ -58,6 +65,12 @@ inherited FrameKladrAll: TFrameKladrAll
     Width = 334
     Height = 30
     Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
     ExplicitTop = 52
     inherited lblName: TLabel
@@ -109,12 +122,18 @@ inherited FrameKladrAll: TFrameKladrAll
     Width = 334
     Height = 30
     Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
     ExplicitTop = 77
     inherited lblName: TLabel
-      Width = 55
+      Width = 61
       Caption = #1053#1072#1089'. '#1087#1091#1085#1082#1090
-      ExplicitWidth = 55
+      ExplicitWidth = 61
     end
     inherited Query: TIBQuery
       SQL.Strings = (
@@ -166,6 +185,12 @@ inherited FrameKladrAll: TFrameKladrAll
     Width = 334
     Height = 30
     Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 3
     ExplicitTop = 102
     inherited lblName: TLabel
@@ -221,12 +246,16 @@ inherited FrameKladrAll: TFrameKladrAll
     Width = 334
     Height = 30
     Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
     ExplicitTop = 26
     inherited lblName: TLabel
-      Width = 30
       Caption = #1056#1072#1081#1086#1085
-      ExplicitWidth = 30
     end
     inherited Query: TIBQuery
       SQL.Strings = (
@@ -268,6 +297,12 @@ inherited FrameKladrAll: TFrameKladrAll
     Top = 129
     Width = 217
     Height = 30
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 5
     ExplicitTop = 129
     inherited cmbName: TcxComboBox
@@ -330,6 +365,13 @@ inherited FrameKladrAll: TFrameKladrAll
   object edtKvartira: TcxTextEdit
     Left = 289
     Top = 133
+    ParentFont = False
+    Style.Font.Charset = DEFAULT_CHARSET
+    Style.Font.Color = clWindowText
+    Style.Font.Height = -15
+    Style.Font.Name = 'Tahoma'
+    Style.Font.Style = []
+    Style.IsFontAssigned = True
     TabOrder = 6
     Width = 43
   end

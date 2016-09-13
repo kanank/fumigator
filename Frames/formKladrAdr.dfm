@@ -1,41 +1,355 @@
 inherited frmKladrAdr: TfrmKladrAdr
   Caption = #1042#1099#1073#1086#1088' '#1072#1076#1088#1077#1089#1072
-  ClientHeight = 201
-  ClientWidth = 337
-  ExplicitWidth = 343
-  ExplicitHeight = 229
+  ClientHeight = 268
+  ClientWidth = 467
+  ExplicitWidth = 473
+  ExplicitHeight = 296
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited lblData: TLabel
-    Left = 304
-    Top = 262
+    Left = 421
+    Top = 363
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 304
-    ExplicitTop = 262
+    ExplicitLeft = 421
+    ExplicitTop = 363
   end
   inherited edtData: TcxDBMaskEdit
-    Left = 304
-    Top = 249
+    Left = 421
+    Top = 345
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 304
-    ExplicitTop = 249
+    ExplicitLeft = 421
+    ExplicitTop = 345
+    ExplicitHeight = 26
   end
   inherited btnOK: TRzButton
-    Top = 165
+    Left = 112
+    Top = 228
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     OnClick = btnOKClick
-    ExplicitTop = 165
+    ExplicitLeft = 112
+    ExplicitTop = 228
+    ExplicitWidth = 100
   end
   inherited bntCancel: TRzButton
-    Top = 165
-    ExplicitTop = 165
+    Left = 267
+    Top = 228
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    ExplicitLeft = 267
+    ExplicitTop = 228
+    ExplicitWidth = 100
   end
   inline FrameKladrAll1: TFrameKladrAll [4]
     Left = 0
     Top = 0
-    Width = 335
-    Height = 158
+    Width = 464
+    Height = 219
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 3
+    ExplicitWidth = 464
+    ExplicitHeight = 219
+    inherited lblName: TLabel
+      Left = 324
+      Top = 188
+      Width = 65
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -15
+      ExplicitLeft = 324
+      ExplicitTop = 188
+      ExplicitWidth = 65
+      ExplicitHeight = 18
+    end
+    inherited FrameRegion: TFrameItemKLADR
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 46
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 46
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 276
+        ExplicitHeight = 26
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
+    end
+    inherited FrameCity: TFrameItemKLADR
+      Top = 72
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitTop = 72
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 40
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 40
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 276
+        ExplicitHeight = 26
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
+    end
+    inherited FrameSite: TFrameItemKLADR
+      Top = 107
+      Width = 462
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitTop = 107
+      ExplicitWidth = 462
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 74
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 74
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 276
+        ExplicitHeight = 26
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
+    end
     inherited FrameStreet: TFrameItemKLADR
+      Top = 141
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitTop = 141
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 42
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 42
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 276
+        ExplicitHeight = 26
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
       inherited QuerySearch: TIBQuery
         SQL.Strings = (
           'select * from KLADR_STREET'
@@ -47,6 +361,168 @@ inherited frmKladrAdr: TfrmKladrAdr
           'street_id >0 and'
           'actual = 0')
       end
+    end
+    inherited FrameArea: TFrameItemKLADR
+      Top = 36
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitTop = 36
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 40
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 40
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 276
+        ExplicitHeight = 26
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
+    end
+    inherited FrameDom: TFrameItemDomKLADR
+      Top = 179
+      Width = 300
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitTop = 179
+      ExplicitWidth = 300
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 10
+        Width = 28
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 28
+        ExplicitHeight = 18
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 252
+        Top = 4
+        Width = 42
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 252
+        ExplicitTop = 4
+        ExplicitWidth = 42
+        ExplicitHeight = 31
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 111
+        ExplicitHeight = 26
+        Width = 111
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 6
+        ExplicitWidth = 45
+        ExplicitHeight = 26
+        Width = 45
+      end
+      inherited cmbName: TcxComboBox
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 111
+        ExplicitHeight = 26
+        Width = 111
+      end
+    end
+    inherited edtKvartira: TcxTextEdit
+      Left = 400
+      Top = 184
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitLeft = 400
+      ExplicitTop = 184
+      ExplicitWidth = 60
+      ExplicitHeight = 26
+      Width = 60
     end
   end
 end

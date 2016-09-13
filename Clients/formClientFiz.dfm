@@ -1,87 +1,111 @@
 inherited frmClientFiz: TfrmClientFiz
   Caption = #1050#1072#1088#1090#1086#1095#1082#1072' '#1082#1083#1080#1077#1085#1090#1072'. '#1060#1080#1079#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
-  ClientHeight = 636
-  ClientWidth = 786
+  ClientHeight = 746
+  ClientWidth = 1070
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitWidth = 802
-  ExplicitHeight = 674
+  ExplicitLeft = -79
+  ExplicitTop = -218
+  ExplicitWidth = 1086
+  ExplicitHeight = 784
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 652
-    Top = 547
-    Width = 126
-    Height = 40
+    Left = 885
+    Top = 757
+    Width = 174
+    Height = 56
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     Visible = False
-    ExplicitLeft = 600
-    ExplicitTop = 226
-    ExplicitWidth = 126
-    ExplicitHeight = 40
+    ExplicitLeft = 903
+    ExplicitTop = 757
+    ExplicitWidth = 174
+    ExplicitHeight = 56
   end
   object Label14: TLabel [1]
-    Left = 386
-    Top = 352
-    Width = 67
-    Height = 13
+    Left = 537
+    Top = 439
+    Width = 93
+    Height = 18
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
   end
   object Label5: TLabel [2]
-    Left = 385
-    Top = 379
-    Width = 84
-    Height = 26
+    Left = 536
+    Top = 465
+    Width = 113
+    Height = 36
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1054#1090#1074#1077#1090#1089#1090#1074#1077#1085#1085#1099#1081' '#1089#1086#1090#1088#1091#1076#1085#1080#1082
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
     WordWrap = True
   end
   object Label4: TLabel [3]
-    Left = 594
-    Top = 94
-    Width = 38
-    Height = 13
+    Left = 822
+    Top = 99
+    Width = 52
+    Height = 18
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1058#1086#1074#1072#1088#1099
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 592
-    Width = 786
+    Top = 685
+    Width = 1070
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     TabOrder = 6
-    ExplicitTop = 592
-    ExplicitWidth = 786
+    ExplicitTop = 685
+    ExplicitWidth = 1088
     inherited Image2: TImage
-      Left = 3
-      Top = 5
+      Left = 4
+      Top = 7
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Anchors = [akLeft, akBottom]
-      ExplicitLeft = 3
-      ExplicitTop = 5
+      ExplicitLeft = 4
+      ExplicitTop = 7
     end
     object btnHide: TRzButton [1]
-      Left = 652
-      Top = 8
-      Width = 124
-      Height = 29
+      Left = 885
+      Top = 11
+      Width = 171
+      Height = 40
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akTop, akRight]
       Caption = #1057#1082#1088#1099#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 2960640
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -91,22 +115,31 @@ inherited frmClientFiz: TfrmClientFiz
       ThemeAware = False
       Visible = False
       OnClick = btnHideClick
+      ExplicitLeft = 903
     end
     inherited Exit_bnt: TRzButton
-      Left = 652
+      Left = 885
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       OnClick = Exit_bntClick
-      ExplicitLeft = 652
+      ExplicitLeft = 903
     end
     object butOK: TRzButton
-      Left = 508
-      Top = 9
-      Width = 124
-      Height = 29
+      Left = 685
+      Top = 12
+      Width = 172
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akTop, akRight]
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 2960640
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -115,11 +148,16 @@ inherited frmClientFiz: TfrmClientFiz
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
+      ExplicitLeft = 703
     end
   end
   object ID_edt: TcxDBTextEdit
-    Left = 400
-    Top = 180
+    Left = 554
+    Top = 249
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
     DataBinding.DataField = 'ID'
@@ -127,7 +165,7 @@ inherited frmClientFiz: TfrmClientFiz
     Style.Color = 13421823
     Style.Font.Charset = DEFAULT_CHARSET
     Style.Font.Color = clWindowText
-    Style.Font.Height = -11
+    Style.Font.Height = -15
     Style.Font.Name = 'Tahoma'
     Style.Font.Style = []
     Style.HotTrack = False
@@ -143,241 +181,1192 @@ inherited frmClientFiz: TfrmClientFiz
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 10
     Visible = False
-    Width = 73
+    ExplicitWidth = 101
+    Width = 83
   end
   object Comments_memo: TcxDBMemo
-    Left = 460
-    Top = 348
+    Left = 657
+    Top = 434
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     DataBinding.DataField = 'COMMENT'
     DataBinding.DataSource = DS
     Properties.MaxLength = 0
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 3
     Height = 26
-    Width = 300
+    Width = 398
   end
   inline FramePerson: TFramePersonFull
     Left = 0
-    Top = 80
-    Width = 370
-    Height = 313
+    Top = 91
+    Width = 512
+    Height = 386
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
-    ExplicitTop = 80
-    ExplicitWidth = 370
-    ExplicitHeight = 313
+    ExplicitTop = 91
+    ExplicitWidth = 512
+    ExplicitHeight = 386
     inherited Label3: TLabel
+      Left = 420
+      Top = 208
+      Width = 47
+      Height = 46
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -19
       Visible = False
+      ExplicitLeft = 420
+      ExplicitTop = 208
+      ExplicitWidth = 47
+      ExplicitHeight = 46
     end
     inherited Label5: TLabel
-      Left = 238
-      Top = 181
-      Width = 24
+      Left = 330
+      Top = 238
+      Width = 33
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'Email'
-      ExplicitLeft = 238
-      ExplicitTop = 181
-      ExplicitWidth = 24
+      Font.Height = -15
+      ExplicitLeft = 330
+      ExplicitTop = 238
+      ExplicitWidth = 33
+      ExplicitHeight = 18
     end
     inherited FramePassport: TFramePassport
-      Left = 5
-      Top = 160
-      ExplicitLeft = 5
-      ExplicitTop = 160
+      Left = 7
+      Top = 223
+      Width = 341
+      Height = 170
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitLeft = 7
+      ExplicitTop = 223
+      ExplicitWidth = 341
+      ExplicitHeight = 170
       inherited RzGroupBox1: TRzGroupBox
-        Top = 15
-        Height = 136
-        ExplicitTop = 15
-        ExplicitHeight = 136
+        Left = 2
+        Top = 5
+        Width = 313
+        Height = 156
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ParentFont = False
+        ExplicitLeft = 2
+        ExplicitTop = 5
+        ExplicitWidth = 313
+        ExplicitHeight = 156
+        inherited Label1: TLabel
+          Left = 7
+          Width = 101
+          Height = 18
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -15
+          ExplicitLeft = 7
+          ExplicitWidth = 101
+          ExplicitHeight = 18
+        end
+        inherited Label2: TLabel
+          Left = 7
+          Top = 46
+          Width = 86
+          Height = 18
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -15
+          ExplicitLeft = 7
+          ExplicitTop = 46
+          ExplicitWidth = 86
+          ExplicitHeight = 18
+        end
+        inherited Label3: TLabel
+          Left = 7
+          Top = 71
+          Width = 133
+          Height = 18
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -15
+          ExplicitLeft = 7
+          ExplicitTop = 71
+          ExplicitWidth = 133
+          ExplicitHeight = 18
+        end
+        inherited Label4: TLabel
+          Left = 7
+          Top = 92
+          Width = 74
+          Height = 18
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -15
+          ExplicitLeft = 7
+          ExplicitTop = 92
+          ExplicitWidth = 74
+          ExplicitHeight = 18
+        end
+        inherited edtNomer: TcxDBMaskEdit
+          Left = 169
+          Top = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 169
+          ExplicitTop = 15
+          ExplicitWidth = 125
+          Width = 125
+        end
+        inherited cmbDate: TcxDBDateEdit
+          Left = 169
+          Top = 42
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 169
+          ExplicitTop = 42
+          ExplicitWidth = 125
+          Width = 125
+        end
+        inherited edtKem: TcxDBMemo
+          Left = 7
+          Top = 113
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 7
+          ExplicitTop = 113
+          ExplicitWidth = 287
+          ExplicitHeight = 39
+          Height = 39
+          Width = 287
+        end
+        inherited edtCode: TcxDBMaskEdit
+          Left = 169
+          Top = 69
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 169
+          ExplicitTop = 69
+          ExplicitWidth = 125
+          Width = 125
+        end
       end
     end
     inherited FramePhones: TFramePhones
-      Left = 288
-      Top = 31
-      Width = 271
-      Height = 110
-      ExplicitLeft = 288
-      ExplicitTop = 31
-      ExplicitWidth = 271
-      ExplicitHeight = 110
+      Left = 300
+      Top = 35
+      Width = 375
+      Height = 152
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      Visible = False
+      ExplicitLeft = 300
+      ExplicitTop = 35
+      ExplicitWidth = 375
+      ExplicitHeight = 152
       inherited grpPhone: TRzGroupBox
-        Top = -2
-        Height = 112
+        Left = 6
+        Top = -3
+        Width = 296
+        Height = 155
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Visible = False
-        ExplicitTop = -2
-        ExplicitHeight = 112
+        ExplicitLeft = 6
+        ExplicitTop = -3
+        ExplicitWidth = 296
+        ExplicitHeight = 155
         inherited grdPhone: TcxGrid
-          Height = 88
-          ExplicitHeight = 88
+          Left = 6
+          Top = 22
+          Width = 245
+          Height = 122
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 6
+          ExplicitTop = 22
+          ExplicitWidth = 245
+          ExplicitHeight = 122
         end
         inherited RzPanel2: TRzPanel
-          Height = 97
-          ExplicitHeight = 97
+          Left = 252
+          Top = 25
+          Width = 43
+          Height = 129
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 252
+          ExplicitTop = 25
+          ExplicitWidth = 43
+          ExplicitHeight = 129
+          inherited btnAdd: TRzBitBtn
+            Top = -10
+            Width = 39
+            Height = 39
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitTop = -10
+            ExplicitWidth = 39
+            ExplicitHeight = 39
+          end
           inherited btnEdit: TRzBitBtn
-            Top = 29
-            ExplicitTop = 29
+            Top = 34
+            Width = 39
+            Height = 39
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitTop = 34
+            ExplicitWidth = 39
+            ExplicitHeight = 39
           end
           inherited btnDel: TRzBitBtn
-            Top = 62
-            ExplicitTop = 62
+            Top = 80
+            Width = 39
+            Height = 39
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitTop = 80
+            ExplicitWidth = 39
+            ExplicitHeight = 39
           end
         end
       end
     end
     inherited RzPanel1: TRzPanel
-      Top = 6
-      Width = 287
-      ExplicitTop = 6
-      ExplicitWidth = 287
+      Left = 4
+      Top = 8
+      Width = 514
+      Height = 224
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ParentFont = False
+      ExplicitLeft = 4
+      ExplicitTop = 8
+      ExplicitWidth = 514
+      ExplicitHeight = 224
       DesignSize = (
-        287
-        142)
+        514
+        224)
       inherited Label10: TLabel [0]
+        Left = 3
+        Top = 36
+        Width = 28
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 36
+        ExplicitWidth = 28
+        ExplicitHeight = 18
       end
       inherited Label9: TLabel [1]
+        Left = 3
+        Top = 68
+        Width = 66
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 68
+        ExplicitWidth = 66
+        ExplicitHeight = 18
       end
       inherited Label1: TLabel [2]
-        Top = 85
-        ExplicitTop = 85
+        Left = 277
+        Top = 98
+        Width = 26
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ParentFont = True
+        ExplicitLeft = 277
+        ExplicitTop = 98
+        ExplicitWidth = 26
+        ExplicitHeight = 18
       end
       inherited Label11: TLabel [3]
+        Left = 3
+        Top = 10
+        Width = 60
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 10
+        ExplicitWidth = 60
+        ExplicitHeight = 18
       end
       inherited Label4: TLabel [4]
-        Left = 2
+        Top = 154
+        Width = 77
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
         Visible = False
-        ExplicitLeft = 2
+        ExplicitTop = 154
+        ExplicitWidth = 77
+        ExplicitHeight = 18
       end
       inherited Label2: TLabel [5]
-        Top = 113
-        ExplicitTop = 113
+        Left = 3
+        Top = 125
+        Width = 91
+        Height = 18
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
+        ExplicitLeft = 3
+        ExplicitTop = 125
+        ExplicitWidth = 91
+        ExplicitHeight = 18
       end
       inherited Label8: TLabel [6]
-        Top = 85
-        Width = 51
-        Height = 26
+        Left = 3
+        Top = 88
+        Width = 68
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -15
         WordWrap = True
-        ExplicitTop = 85
-        ExplicitWidth = 51
-        ExplicitHeight = 26
+        ExplicitLeft = 3
+        ExplicitTop = 88
+        ExplicitWidth = 68
+        ExplicitHeight = 36
       end
       inherited edtSurName: TcxDBTextEdit [7]
-        ExplicitWidth = 165
-        Width = 165
+        Left = 98
+        Top = 64
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 98
+        ExplicitTop = 64
+        ExplicitWidth = 227
+        Width = 397
       end
       inherited edtName: TcxDBTextEdit [8]
-        ExplicitWidth = 164
-        Width = 164
+        Left = 98
+        Top = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 98
+        ExplicitTop = 36
+        ExplicitWidth = 227
+        Width = 397
       end
       inherited edtFamily: TcxDBTextEdit [9]
-        Left = 71
-        ExplicitLeft = 71
-        ExplicitWidth = 165
-        Width = 165
+        Left = 98
+        Top = 7
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 98
+        ExplicitTop = 7
+        ExplicitWidth = 227
+        Width = 397
       end
       inherited cmbSex: TcxDBComboBox [10]
-        Top = 81
-        ExplicitTop = 81
+        Left = 316
+        Top = 92
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ParentFont = True
+        ExplicitLeft = 316
+        ExplicitTop = 92
+        ExplicitWidth = 79
+        ExplicitHeight = 26
+        Width = 79
       end
       inherited cmbProf: TcxDBLookupComboBox [11]
+        Left = 98
+        Top = 149
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Visible = False
+        ExplicitLeft = 98
+        ExplicitTop = 149
+        ExplicitWidth = 296
+        Width = 296
       end
       inherited edtCitizen: TcxDBTextEdit [12]
-        Top = 110
-        ExplicitTop = 110
-        ExplicitWidth = 164
-        Width = 164
+        Left = 98
+        Top = 121
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 98
+        ExplicitTop = 121
+        ExplicitWidth = 296
+        Width = 296
       end
       inherited cmbDateBirth: TcxDBDateEdit [13]
-        Left = 72
-        Top = 81
+        Left = 98
+        Top = 92
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ParentFont = True
         Properties.OnInitPopup = FramePersoncmbDateBirthPropertiesInitPopup
-        ExplicitLeft = 72
-        ExplicitTop = 81
-        ExplicitWidth = 74
-        Width = 74
+        ExplicitLeft = 98
+        ExplicitTop = 92
+        ExplicitWidth = 135
+        ExplicitHeight = 26
+        Width = 135
       end
     end
     inherited FrameAddress: TFrameKladrAdrFull
-      Left = 2
-      Top = 145
-      Width = 359
-      Height = 28
+      Left = 3
+      Top = 184
+      Width = 497
+      Height = 39
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Visible = True
-      ExplicitLeft = 2
-      ExplicitTop = 145
-      ExplicitWidth = 359
-      ExplicitHeight = 28
+      ExplicitLeft = 3
+      ExplicitTop = 184
+      ExplicitWidth = 497
+      ExplicitHeight = 39
+      inherited Label8: TLabel
+        Left = 4
+        Top = 8
+        Width = 60
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 4
+        ExplicitTop = 8
+        ExplicitWidth = 60
+        ExplicitHeight = 23
+      end
+      inherited Label1: TLabel
+        Left = 4
+        Top = 43
+        Width = 93
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 4
+        ExplicitTop = 43
+        ExplicitWidth = 93
+        ExplicitHeight = 23
+      end
       inherited Label2: TLabel
+        Left = 4
         Top = -1
-        Width = 66
-        Height = 28
+        Width = 92
+        Height = 38
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         AutoSize = False
         Caption = #1040#1076#1088#1077#1089' '#1088#1077#1075#1080#1089#1090#1088#1072#1094#1080#1080
+        Font.Color = clWindowText
+        Font.Height = -15
         WordWrap = True
+        ExplicitLeft = 4
         ExplicitTop = -1
-        ExplicitWidth = 66
-        ExplicitHeight = 28
+        ExplicitWidth = 92
+        ExplicitHeight = 38
+      end
+      inherited lblName: TLabel
+        Left = 320
+        Top = 191
+        Width = 83
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 320
+        ExplicitTop = 191
+        ExplicitWidth = 83
+        ExplicitHeight = 23
+      end
+      inherited FrameRegion: TFrameItemKLADR
+        Top = 105
+        Width = 462
+        Height = 42
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -20
+        ExplicitTop = 105
+        ExplicitWidth = 462
+        ExplicitHeight = 42
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 60
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 60
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 417
+          Top = 4
+          Width = 41
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 417
+          ExplicitTop = 4
+          ExplicitWidth = 41
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 276
+          ExplicitHeight = 32
+          Width = 276
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          ExplicitHeight = 32
+          Width = 45
+        end
+      end
+      inherited FrameCity: TFrameItemKLADR
+        Top = 151
+        Width = 462
+        Height = 41
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -20
+        ExplicitTop = 151
+        ExplicitWidth = 462
+        ExplicitHeight = 41
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 52
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 52
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 417
+          Top = 4
+          Width = 41
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 417
+          ExplicitTop = 4
+          ExplicitWidth = 41
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 276
+          ExplicitHeight = 32
+          Width = 276
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          ExplicitHeight = 32
+          Width = 45
+        end
+      end
+      inherited FrameSite: TFrameItemKLADR
+        Top = 186
+        Width = 462
+        Height = 41
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -20
+        ExplicitTop = 186
+        ExplicitWidth = 462
+        ExplicitHeight = 41
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 93
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 93
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 417
+          Top = 4
+          Width = 41
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 417
+          ExplicitTop = 4
+          ExplicitWidth = 41
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 276
+          ExplicitHeight = 32
+          Width = 276
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          ExplicitHeight = 32
+          Width = 45
+        end
+      end
+      inherited FrameStreet: TFrameItemKLADR
+        Top = 220
+        Width = 462
+        Height = 42
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitTop = 220
+        ExplicitWidth = 462
+        ExplicitHeight = 42
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 54
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 54
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 417
+          Top = 4
+          Width = 41
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 417
+          ExplicitTop = 4
+          ExplicitWidth = 41
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 276
+          Width = 276
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          Width = 45
+        end
+      end
+      inherited FrameArea: TFrameItemKLADR
+        Top = 115
+        Width = 462
+        Height = 41
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -20
+        ExplicitTop = 115
+        ExplicitWidth = 462
+        ExplicitHeight = 41
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 52
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 52
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 417
+          Top = 4
+          Width = 41
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 417
+          ExplicitTop = 4
+          ExplicitWidth = 41
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 276
+          ExplicitHeight = 32
+          Width = 276
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          ExplicitHeight = 32
+          Width = 45
+        end
       end
       inherited btnEdit: TRzBitBtn
-        Left = 328
+        Left = 454
         Top = 1
-        ExplicitLeft = 328
+        Width = 39
+        Height = 30
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 454
         ExplicitTop = 1
+        ExplicitWidth = 39
+        ExplicitHeight = 30
+      end
+      inherited edtRegion: TcxTextEdit
+        Left = 100
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Style.Font.Height = -19
+        Style.IsFontAssigned = True
+        ExplicitLeft = 100
+        ExplicitTop = 4
+        ExplicitWidth = 290
+        ExplicitHeight = 31
+        Width = 290
+      end
+      inherited edtSite: TcxTextEdit
+        Left = 89
+        Top = 39
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Style.Font.Height = -19
+        Style.IsFontAssigned = True
+        ExplicitLeft = 89
+        ExplicitTop = 39
+        ExplicitWidth = 397
+        ExplicitHeight = 31
+        Width = 397
       end
       inherited edtAddress: TcxTextEdit
-        Left = 72
-        Top = 2
-        ExplicitLeft = 72
-        ExplicitTop = 2
-        ExplicitWidth = 252
-        Width = 252
+        Left = 100
+        Top = 3
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Style.Font.Height = -15
+        Style.IsFontAssigned = True
+        ExplicitLeft = 100
+        ExplicitTop = 3
+        ExplicitWidth = 349
+        ExplicitHeight = 26
+        Width = 349
+      end
+      inherited FrameDom: TFrameItemDomKLADR
+        Top = 258
+        Width = 300
+        Height = 41
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -20
+        ExplicitTop = 258
+        ExplicitWidth = 300
+        ExplicitHeight = 41
+        inherited lblName: TLabel
+          Left = 3
+          Top = 12
+          Width = 35
+          Height = 23
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -19
+          ExplicitLeft = 3
+          ExplicitTop = 12
+          ExplicitWidth = 35
+          ExplicitHeight = 23
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 252
+          Top = 4
+          Width = 42
+          Height = 36
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          ExplicitLeft = 252
+          ExplicitTop = 4
+          ExplicitWidth = 42
+          ExplicitHeight = 36
+        end
+        inherited edtName: TcxTextEdit
+          Left = 141
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 4
+          ExplicitWidth = 111
+          ExplicitHeight = 32
+          Width = 111
+        end
+        inherited edtSocr: TcxTextEdit
+          Left = 93
+          Top = 4
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 93
+          ExplicitTop = 4
+          ExplicitWidth = 45
+          ExplicitHeight = 32
+          Width = 45
+        end
+        inherited cmbName: TcxComboBox
+          Left = 141
+          Top = 6
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 141
+          ExplicitTop = 6
+          ExplicitWidth = 111
+          ExplicitHeight = 32
+          Width = 111
+        end
+      end
+      inherited edtKvartira: TcxTextEdit
+        Left = 400
+        Top = 184
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Style.Font.Height = -20
+        Style.IsFontAssigned = True
+        ExplicitLeft = 400
+        ExplicitTop = 184
+        ExplicitWidth = 60
+        ExplicitHeight = 32
+        Width = 60
       end
     end
     inherited edtEmailPrivate: TcxDBTextEdit
-      Left = 288
-      Top = 179
+      Left = 399
+      Top = 248
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       AutoSize = False
+      Style.Font.Height = -19
+      Style.IsFontAssigned = True
       Visible = False
-      ExplicitLeft = 288
-      ExplicitTop = 179
+      ExplicitLeft = 399
+      ExplicitTop = 248
       ExplicitWidth = 0
+      ExplicitHeight = 29
+      Height = 29
       Width = 0
     end
     inherited edtEmailWork: TcxDBTextEdit
-      Left = 268
-      Top = 179
-      ExplicitLeft = 268
-      ExplicitTop = 179
-      ExplicitWidth = 92
-      Width = 92
+      Left = 329
+      Top = 259
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Style.Font.Height = -15
+      Style.IsFontAssigned = True
+      ExplicitLeft = 329
+      ExplicitTop = 259
+      ExplicitWidth = 179
+      ExplicitHeight = 26
+      Width = 179
     end
     inherited DS: TDataSource
       OnDataChange = FramePersonDSDataChange
     end
   end
   inline FrameUslugi: TFrameUslugi
-    Left = 380
-    Top = 87
-    Width = 205
-    Height = 125
+    Left = 526
+    Top = 95
+    Width = 284
+    Height = 174
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
-    ExplicitLeft = 380
-    ExplicitTop = 87
-    ExplicitWidth = 205
-    ExplicitHeight = 125
+    ExplicitLeft = 526
+    ExplicitTop = 95
+    ExplicitWidth = 284
+    ExplicitHeight = 174
     inherited grpPhone: TRzGroupBox
-      Left = 3
-      Width = 201
-      Height = 128
-      ExplicitLeft = 3
-      ExplicitWidth = 201
-      ExplicitHeight = 128
+      Left = 4
+      Top = 4
+      Width = 278
+      Height = 177
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ParentFont = False
+      ExplicitLeft = 4
+      ExplicitTop = 4
+      ExplicitWidth = 278
+      ExplicitHeight = 177
       DesignSize = (
-        201
-        128)
+        278
+        177)
       inherited grdPhone: TcxGrid
-        Width = 191
-        Height = 81
-        ExplicitWidth = 191
-        ExplicitHeight = 81
+        Left = 6
+        Top = 22
+        Width = 264
+        Height = 112
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 6
+        ExplicitTop = 22
+        ExplicitWidth = 264
+        ExplicitHeight = 112
         inherited grdPhoneDBTableView1: TcxGridDBTableView
           OptionsView.Header = False
           inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
@@ -387,15 +1376,63 @@ inherited frmClientFiz: TfrmClientFiz
         end
       end
       inherited RzPanel2: TRzPanel
-        Top = 97
-        Width = 199
-        Height = 30
-        ExplicitTop = 97
-        ExplicitWidth = 199
-        ExplicitHeight = 30
+        Top = 135
+        Width = 276
+        Height = 41
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitTop = 135
+        ExplicitWidth = 276
+        ExplicitHeight = 41
+        inherited btnAdd: TRzBitBtn
+          Left = 3
+          Top = -1
+          Width = 38
+          Height = 29
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitLeft = 3
+          ExplicitTop = -1
+          ExplicitWidth = 38
+          ExplicitHeight = 29
+        end
+        inherited btnEdit: TRzBitBtn
+          Left = 118
+          Top = -1
+          Width = 38
+          Height = 29
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitLeft = 118
+          ExplicitTop = -1
+          ExplicitWidth = 38
+          ExplicitHeight = 29
+        end
         inherited btnDel: TRzBitBtn
-          Left = 162
-          ExplicitLeft = 162
+          Left = 231
+          Top = -1
+          Width = 38
+          Height = 29
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitLeft = 231
+          ExplicitTop = -1
+          ExplicitWidth = 38
+          ExplicitHeight = 29
         end
       end
     end
@@ -407,138 +1444,691 @@ inherited frmClientFiz: TfrmClientFiz
     end
   end
   inline FrameAddress: TFrameKladrAdrFull
-    Left = 432
+    Left = 598
     Top = 0
-    Width = 350
-    Height = 81
+    Width = 485
+    Height = 92
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 5
     Visible = False
-    ExplicitLeft = 432
-    ExplicitWidth = 350
-    ExplicitHeight = 81
+    ExplicitLeft = 598
+    ExplicitWidth = 485
+    ExplicitHeight = 92
     inherited Label2: TLabel [0]
-      Left = 5
-      Top = 50
-      ExplicitLeft = 5
-      ExplicitTop = 50
+      Left = 7
+      Top = 66
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitLeft = 7
+      ExplicitTop = 66
     end
     inherited Label8: TLabel [1]
-      Left = 5
-      Top = 7
-      ExplicitLeft = 5
-      ExplicitTop = 7
+      Left = 7
+      Top = 10
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitLeft = 7
+      ExplicitTop = 10
     end
     inherited Label1: TLabel [2]
-      Left = 5
-      Top = 27
-      ExplicitLeft = 5
-      ExplicitTop = 27
+      Left = 7
+      Top = 37
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ExplicitLeft = 7
+      ExplicitTop = 37
+    end
+    inherited lblName: TLabel
+      Left = 320
+      Top = 191
+      Width = 83
+      Height = 23
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -19
+      ExplicitLeft = 320
+      ExplicitTop = 191
+      ExplicitWidth = 83
+      ExplicitHeight = 23
     end
     inherited edtAddress: TcxTextEdit [4]
-      Left = 76
-      Top = 47
-      ExplicitLeft = 76
-      ExplicitTop = 47
-      ExplicitWidth = 271
-      Width = 271
+      Left = 105
+      Top = 60
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Style.Font.Height = -15
+      Style.IsFontAssigned = True
+      ExplicitLeft = 105
+      ExplicitTop = 60
+      ExplicitWidth = 360
+      ExplicitHeight = 26
+      Width = 360
     end
     inherited FrameRegion: TFrameItemKLADR [5]
+      Top = 105
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
       Visible = False
+      ExplicitTop = 105
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 60
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 60
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 276
+        ExplicitHeight = 32
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
     end
     inherited FrameCity: TFrameItemKLADR [6]
+      Top = 151
+      Width = 462
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitTop = 151
+      ExplicitWidth = 462
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 52
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 52
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 276
+        ExplicitHeight = 32
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
     end
     inherited FrameSite: TFrameItemKLADR [7]
+      Top = 186
+      Width = 462
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitTop = 186
+      ExplicitWidth = 462
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 93
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 93
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 276
+        ExplicitHeight = 32
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
     end
     inherited FrameDom: TFrameItemDomKLADR [8]
+      Top = 258
+      Width = 300
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitTop = 258
+      ExplicitWidth = 300
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 35
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 35
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 252
+        Top = 4
+        Width = 42
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 252
+        ExplicitTop = 4
+        ExplicitWidth = 42
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 111
+        ExplicitHeight = 32
+        Width = 111
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
+      inherited cmbName: TcxComboBox
+        Left = 141
+        Top = 6
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 6
+        ExplicitWidth = 111
+        ExplicitHeight = 32
+        Width = 111
+      end
     end
     inherited FrameStreet: TFrameItemKLADR [9]
+      Top = 220
+      Width = 462
+      Height = 42
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitTop = 220
+      ExplicitWidth = 462
+      ExplicitHeight = 42
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 54
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 54
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 276
+        ExplicitHeight = 32
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
     end
     inherited FrameArea: TFrameItemKLADR [10]
+      Top = 115
+      Width = 462
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Height = -20
+      ExplicitTop = 115
+      ExplicitWidth = 462
+      ExplicitHeight = 41
+      inherited lblName: TLabel
+        Left = 3
+        Top = 12
+        Width = 52
+        Height = 23
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Font.Height = -19
+        ExplicitLeft = 3
+        ExplicitTop = 12
+        ExplicitWidth = 52
+        ExplicitHeight = 23
+      end
+      inherited btnEdit: TRzBitBtn
+        Left = 417
+        Top = 4
+        Width = 41
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Margin = 3
+        ExplicitLeft = 417
+        ExplicitTop = 4
+        ExplicitWidth = 41
+        ExplicitHeight = 36
+      end
+      inherited edtName: TcxTextEdit
+        Left = 141
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 141
+        ExplicitTop = 4
+        ExplicitWidth = 276
+        ExplicitHeight = 32
+        Width = 276
+      end
+      inherited edtSocr: TcxTextEdit
+        Left = 93
+        Top = 4
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 93
+        ExplicitTop = 4
+        ExplicitWidth = 45
+        ExplicitHeight = 32
+        Width = 45
+      end
     end
     inherited btnEdit: TRzBitBtn [11]
-      Left = 300
-      Top = 8
-      Width = 41
-      Height = 31
+      Left = 407
+      Width = 42
+      Height = 32
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Layout = blGlyphTop
-      ExplicitLeft = 300
-      ExplicitTop = 8
-      ExplicitWidth = 41
-      ExplicitHeight = 31
+      Margin = 3
+      ExplicitLeft = 407
+      ExplicitWidth = 42
+      ExplicitHeight = 32
     end
     inherited edtRegion: TcxTextEdit [12]
-      Left = 75
-      Top = 2
-      ExplicitLeft = 75
-      ExplicitTop = 2
-      ExplicitWidth = 210
-      Width = 210
+      Left = 104
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Style.Font.Height = -15
+      Style.IsFontAssigned = True
+      ExplicitLeft = 104
+      ExplicitWidth = 291
+      ExplicitHeight = 26
+      Width = 291
     end
     inherited edtSite: TcxTextEdit [13]
-      Left = 75
-      Top = 24
-      ExplicitLeft = 75
-      ExplicitTop = 24
-      ExplicitWidth = 210
-      Width = 210
+      Left = 104
+      Top = 31
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Style.Font.Height = -15
+      Style.IsFontAssigned = True
+      ExplicitLeft = 104
+      ExplicitTop = 31
+      ExplicitWidth = 291
+      ExplicitHeight = 26
+      Width = 291
+    end
+    inherited edtKvartira: TcxTextEdit
+      Left = 400
+      Top = 184
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Style.Font.Height = -20
+      Style.IsFontAssigned = True
+      ExplicitLeft = 400
+      ExplicitTop = 184
+      ExplicitWidth = 60
+      ExplicitHeight = 32
+      Width = 60
     end
   end
   inline FramePhones: TFramePhones
-    Left = 386
-    Top = 212
-    Width = 267
-    Height = 127
+    Left = 534
+    Top = 280
+    Width = 370
+    Height = 161
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
-    ExplicitLeft = 386
-    ExplicitTop = 212
-    ExplicitWidth = 267
-    ExplicitHeight = 127
+    ExplicitLeft = 534
+    ExplicitTop = 280
+    ExplicitWidth = 370
+    ExplicitHeight = 161
     inherited grpPhone: TRzGroupBox
-      Left = 2
-      Top = 3
-      Width = 262
-      Height = 125
-      ExplicitLeft = 2
-      ExplicitTop = 3
-      ExplicitWidth = 262
-      ExplicitHeight = 125
+      Left = 3
+      Top = 4
+      Width = 363
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ParentFont = False
+      ExplicitLeft = 3
+      ExplicitTop = 4
+      ExplicitWidth = 363
+      ExplicitHeight = 157
       inherited grdPhone: TcxGrid
-        Left = 5
-        Top = 15
-        Width = 225
-        Height = 91
-        ExplicitLeft = 5
-        ExplicitTop = 15
-        ExplicitWidth = 225
-        ExplicitHeight = 91
+        Left = 7
+        Top = 21
+        Width = 311
+        Height = 126
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 7
+        ExplicitTop = 21
+        ExplicitWidth = 311
+        ExplicitHeight = 126
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
-            Width = 104
+            HeaderAlignmentHorz = taCenter
+            Width = 130
           end
           inherited grdPhoneDBTableView2Column5: TcxGridDBColumn
-            Width = 36
+            Width = 66
+          end
+          inherited grdPhoneDBTableView2Column3: TcxGridDBColumn
+            Width = 39
           end
         end
       end
       inherited RzPanel2: TRzPanel
-        Left = 230
-        Height = 110
-        ExplicitLeft = 230
-        ExplicitHeight = 110
+        Left = 319
+        Width = 43
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitLeft = 319
+        ExplicitTop = 18
+        ExplicitWidth = 43
+        ExplicitHeight = 153
+        inherited btnAdd: TRzBitBtn
+          Top = -12
+          Width = 39
+          Height = 39
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitTop = 2
+          ExplicitWidth = 39
+          ExplicitHeight = 39
+        end
         inherited btnEdit: TRzBitBtn
-          Top = 34
-          ExplicitTop = 34
+          Top = 32
+          Width = 39
+          Height = 39
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitTop = 46
+          ExplicitWidth = 39
+          ExplicitHeight = 39
         end
         inherited btnDel: TRzBitBtn
-          Top = 65
-          ExplicitTop = 65
+          Top = 75
+          Width = 39
+          Height = 39
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Margin = 3
+          Spacing = 6
+          ExplicitTop = 89
+          ExplicitWidth = 39
+          ExplicitHeight = 39
         end
       end
     end
+    inherited Q_Check: TIBQuery
+      Left = 168
+      Top = 59
+    end
   end
   object cmbWorker: TcxDBLookupComboBox
-    Left = 472
-    Top = 380
+    Left = 657
+    Top = 466
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     DataBinding.DataField = 'WORKER_ID'
     DataBinding.DataSource = DS
     Properties.KeyFieldNames = 'ID'
@@ -553,100 +2143,132 @@ inherited frmClientFiz: TfrmClientFiz
     Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
     Properties.OnPopup = cmbWorkerPropertiesPopup
     TabOrder = 7
-    Width = 178
+    Width = 246
   end
   object RzPanel2: TRzPanel
-    Left = -2
+    Left = -3
     Top = 0
-    Width = 425
-    Height = 88
+    Width = 589
+    Height = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     BorderSides = []
     TabOrder = 8
     DesignSize = (
-      425
-      88)
+      589
+      100)
     object Label2: TLabel
-      Left = 219
-      Top = 32
-      Width = 38
-      Height = 13
+      Left = 303
+      Top = 38
+      Width = 52
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1060#1086#1088#1084#1072#1090
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object Label1: TLabel
-      Left = 219
-      Top = 8
-      Width = 36
-      Height = 13
+      Left = 303
+      Top = 11
+      Width = 48
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1057#1090#1072#1090#1091#1089
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 6
-      Top = 33
-      Width = 82
-      Height = 13
+      Left = 8
+      Top = 38
+      Width = 111
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1053#1086#1084#1077#1088' '#1076#1086#1075#1086#1074#1086#1088#1072
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object Label6: TLabel
-      Left = 6
-      Top = 58
-      Width = 69
-      Height = 13
+      Left = 8
+      Top = 69
+      Width = 93
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1058#1080#1087' '#1076#1086#1075#1086#1074#1086#1088#1072
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object Label7: TLabel
-      Left = 219
-      Top = 54
-      Width = 54
-      Height = 26
+      Left = 303
+      Top = 62
+      Width = 71
+      Height = 36
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1055#1083#1086#1097#1072#1076#1100' '#1086#1073#1088#1072#1073#1086#1090#1082#1080
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
       WordWrap = True
     end
     object Label8: TLabel
-      Left = 4
-      Top = 8
-      Width = 35
-      Height = 13
+      Left = 6
+      Top = 11
+      Width = 46
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1056#1077#1075#1080#1086#1085
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object cmbFormat: TcxDBLookupComboBox
-      Left = 263
-      Top = 31
+      Left = 389
+      Top = 38
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       DataBinding.DataField = 'FORMAT_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'ID'
@@ -659,11 +2281,15 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsFormatsCli
       TabOrder = 1
-      Width = 88
+      Width = 122
     end
     object cmbStatus: TcxDBLookupComboBox
-      Left = 262
-      Top = 4
+      Left = 388
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       AutoSize = False
       DataBinding.DataField = 'STATUS_ID'
       DataBinding.DataSource = DS
@@ -677,12 +2303,16 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicStatusCli
       TabOrder = 0
-      Height = 21
-      Width = 89
+      Height = 29
+      Width = 123
     end
     object cmbRegion: TcxDBLookupComboBox
-      Left = 44
-      Top = 4
+      Left = 61
+      Top = 6
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       DataBinding.DataField = 'REGION_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'REGION_ID'
@@ -695,11 +2325,15 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListSource = DataModuleMain.DsDicRegions
       Properties.ReadOnly = False
       TabOrder = 2
-      Width = 162
+      Width = 224
     end
     object edtDogNum: TcxDBTextEdit
-      Left = 93
-      Top = 30
+      Left = 129
+      Top = 34
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       BeepOnEnter = False
@@ -717,12 +2351,16 @@ inherited frmClientFiz: TfrmClientFiz
       StyleHot.LookAndFeel.Kind = lfFlat
       StyleHot.LookAndFeel.NativeStyle = True
       TabOrder = 3
-      Height = 21
-      Width = 110
+      Height = 26
+      Width = 156
     end
     object cxDBLookupComboBox1: TcxDBLookupComboBox
-      Left = 94
-      Top = 53
+      Left = 130
+      Top = 62
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       DataBinding.DataField = 'DOG_TYPE_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'ID'
@@ -737,11 +2375,15 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
       Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 4
-      Width = 111
+      Width = 155
     end
     object cxDBLookupComboBox2: TcxDBLookupComboBox
-      Left = 281
-      Top = 57
+      Left = 389
+      Top = 66
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       DataBinding.DataField = 'AREA_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'ID'
@@ -756,11 +2398,15 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
       Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 5
-      Width = 88
+      Width = 122
     end
     object cxDBLookupComboBox3: TcxDBLookupComboBox
-      Left = 375
-      Top = 57
+      Left = 519
+      Top = 66
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       DataBinding.DataField = 'AREA_UNIT_ID'
       DataBinding.DataSource = DS
       Properties.KeyFieldNames = 'ID'
@@ -775,53 +2421,178 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
       Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 6
-      Width = 46
+      Width = 64
     end
   end
   object cxDBMemo1: TcxDBMemo
-    Left = 593
-    Top = 107
+    Left = 821
+    Top = 117
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     DataBinding.DataField = 'goods'
     DataBinding.DataSource = DS
     TabOrder = 9
-    Height = 89
-    Width = 185
+    Height = 123
+    Width = 242
   end
   object pnlCalls: TRzPanel
     Left = 0
-    Top = 411
-    Width = 786
+    Top = 504
+    Width = 1070
     Height = 181
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     BorderOuter = fsNone
     TabOrder = 2
     inline frameClientCalls: TframeClientCalls
-      Left = -2
-      Top = 0
-      Width = 765
-      Height = 160
+      Left = -3
+      Top = 1
+      Width = 1059
+      Height = 177
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
-      ExplicitLeft = -2
-      ExplicitHeight = 160
+      ExplicitLeft = -3
+      ExplicitTop = 1
+      ExplicitWidth = 1059
+      ExplicitHeight = 177
       inherited grpPhone: TRzGroupBox
-        Width = 772
-        ExplicitWidth = 772
+        Width = 1069
+        Height = 175
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ExplicitWidth = 1069
+        ExplicitHeight = 175
         inherited RzPanel2: TRzPanel
-          Left = 740
-          ExplicitLeft = 740
+          Left = 1025
+          Width = 43
+          Height = 155
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 1025
+          ExplicitTop = 25
+          ExplicitWidth = 43
+          ExplicitHeight = 230
+          inherited btnAdd: TRzBitBtn
+            Left = 3
+            Top = 10
+            Width = 39
+            Height = 39
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitLeft = 3
+            ExplicitTop = 85
+            ExplicitWidth = 39
+            ExplicitHeight = 39
+          end
+          inherited btnEdit: TRzBitBtn
+            Left = 3
+            Top = 58
+            Width = 39
+            Height = 38
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitLeft = 3
+            ExplicitTop = 133
+            ExplicitWidth = 39
+            ExplicitHeight = 38
+          end
+          inherited btnDel: TRzBitBtn
+            Left = 3
+            Top = 114
+            Width = 39
+            Height = 39
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Margin = 3
+            Spacing = 6
+            ExplicitLeft = 3
+            ExplicitTop = 189
+            ExplicitWidth = 39
+            ExplicitHeight = 39
+          end
         end
         inherited grdPhone: TcxGrid
           Left = 5
-          Top = 17
-          Width = 757
+          Top = 19
+          Width = 1057
+          Height = 231
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Font.Height = -15
           ExplicitLeft = 5
-          ExplicitTop = 17
-          ExplicitWidth = 757
+          ExplicitTop = 19
+          ExplicitWidth = 1057
+          ExplicitHeight = 231
           inherited GridView: TcxGridDBTableView
+            inherited GridViewColumn1: TcxGridDBColumn
+              Width = 115
+            end
+            inherited GridViewColumn4: TcxGridDBColumn
+              Width = 124
+            end
+            inherited GridViewColumn6: TcxGridDBColumn
+              Width = 106
+            end
+            inherited GridViewColumn7: TcxGridDBColumn
+              Width = 198
+            end
+            inherited GridViewColumn9: TcxGridDBColumn
+              Width = 140
+            end
+            inherited GridViewColumn10: TcxGridDBColumn
+              Width = 213
+            end
             inherited GridViewColumn11: TcxGridDBColumn
               IsCaptionAssigned = True
             end
+            inherited ColumnRecord: TcxGridDBColumn
+              Width = 127
+            end
           end
+        end
+        inherited pnlForm: TPanel
+          Left = 710
+          Top = 66
+          Width = 190
+          Height = 35
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          ExplicitLeft = 710
+          ExplicitTop = 66
+          ExplicitWidth = 190
+          ExplicitHeight = 35
         end
       end
     end
@@ -829,8 +2600,8 @@ inherited frmClientFiz: TfrmClientFiz
   object DS: TDataSource
     AutoEdit = False
     OnDataChange = DSDataChange
-    Left = 352
-    Top = 319
+    Left = 368
+    Top = 279
   end
   object QCheck: TIBQuery
     Database = DataModuleMain.DB

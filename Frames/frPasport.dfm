@@ -1,24 +1,29 @@
 inherited FramePassport: TFramePassport
-  Width = 218
+  Width = 226
   Height = 140
-  ExplicitWidth = 218
+  ExplicitWidth = 226
   ExplicitHeight = 140
   object RzGroupBox1: TRzGroupBox [0]
     Left = 0
     Top = 0
-    Width = 217
+    Width = 224
     Height = 140
     Caption = #1055#1072#1089#1087#1086#1088#1090#1085#1099#1077' '#1076#1072#1085#1085#1099#1077
+    CaptionFont.Charset = DEFAULT_CHARSET
+    CaptionFont.Color = clWindowText
+    CaptionFont.Height = -13
+    CaptionFont.Name = 'Tahoma'
+    CaptionFont.Style = [fsBold]
     TabOrder = 0
     object Label1: TLabel
       Left = 13
       Top = 19
-      Width = 73
-      Height = 13
+      Width = 87
+      Height = 16
       Caption = #1057#1077#1088#1080#1103' '#1080' '#1085#1086#1084#1077#1088
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -26,12 +31,12 @@ inherited FramePassport: TFramePassport
     object Label2: TLabel
       Left = 13
       Top = 44
-      Width = 67
-      Height = 13
+      Width = 74
+      Height = 16
       Caption = #1050#1086#1075#1076#1072' '#1074#1099#1076#1072#1085
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -39,12 +44,12 @@ inherited FramePassport: TFramePassport
     object Label3: TLabel
       Left = 13
       Top = 69
-      Width = 102
-      Height = 13
+      Width = 115
+      Height = 16
       Caption = #1050#1086#1076' '#1087#1086#1076#1088#1072#1079#1076#1077#1083#1077#1085#1080#1103
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -52,18 +57,18 @@ inherited FramePassport: TFramePassport
     object Label4: TLabel
       Left = 13
       Top = 91
-      Width = 55
-      Height = 13
+      Width = 63
+      Height = 16
       Caption = #1050#1077#1084' '#1074#1099#1076#1072#1085
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object edtNomer: TcxDBMaskEdit
-      Left = 119
+      Left = 130
       Top = 16
       DataBinding.DataField = 'PASS_NUM'
       DataBinding.DataSource = DS
@@ -74,7 +79,7 @@ inherited FramePassport: TFramePassport
       Width = 90
     end
     object cmbDate: TcxDBDateEdit
-      Left = 119
+      Left = 130
       Top = 41
       DataBinding.DataField = 'PASS_DATE'
       DataBinding.DataSource = DS
@@ -90,10 +95,10 @@ inherited FramePassport: TFramePassport
       Properties.ValidationOptions = [evoShowErrorIcon]
       TabOrder = 2
       Height = 28
-      Width = 196
+      Width = 207
     end
     object edtCode: TcxDBMaskEdit
-      Left = 119
+      Left = 130
       Top = 68
       DataBinding.DataField = 'PASS_CODE'
       DataBinding.DataSource = DS

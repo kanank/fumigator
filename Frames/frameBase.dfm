@@ -3,6 +3,12 @@ object DbFrameBase: TDbFrameBase
   Top = 0
   Width = 289
   Height = 127
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -15
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  ParentFont = False
   TabOrder = 0
   object Query_upd: TIBUpdateSQL
     ModifySQL.Strings = (

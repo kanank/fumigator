@@ -12,6 +12,8 @@ inherited FrameGoods: TFrameGoods
     Anchors = [akLeft, akTop, akRight, akBottom]
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
     Caption = #1058#1086#1074#1072#1088#1099
+    CaptionFont.Height = -13
+    CaptionFont.Style = [fsBold]
     ExplicitWidth = 176
     ExplicitHeight = 148
     DesignSize = (

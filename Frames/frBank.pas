@@ -30,8 +30,8 @@ type
     cxDBTextEdit1: TcxDBTextEdit;
     Label2: TLabel;
     cxDBMaskEdit2: TcxDBMaskEdit;
-    Label4: TLabel;
     cxDBMaskEdit3: TcxDBMaskEdit;
+    Label4: TLabel;
   private
     { Private declarations }
   public

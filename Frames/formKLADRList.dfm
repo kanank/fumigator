@@ -1,42 +1,67 @@
 inherited frmKLADRList: TfrmKLADRList
   Caption = #1042#1099#1073#1086#1088
-  ClientHeight = 272
-  ClientWidth = 282
-  ExplicitWidth = 288
-  ExplicitHeight = 300
+  ClientHeight = 377
+  ClientWidth = 390
+  ExplicitWidth = 396
+  ExplicitHeight = 405
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited lblData: TLabel
-    Left = 312
-    Top = 8
+    Left = 432
+    Top = 11
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 312
-    ExplicitTop = 8
+    ExplicitLeft = 432
+    ExplicitTop = 11
   end
   inherited edtData: TcxDBMaskEdit
-    Left = 304
+    Left = 421
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 304
-    ExplicitWidth = 33
-    Width = 33
+    ExplicitLeft = 421
+    ExplicitWidth = 46
+    ExplicitHeight = 26
+    Width = 46
   end
   inherited btnOK: TRzButton
-    Left = 48
-    Top = 241
-    ExplicitLeft = 48
-    ExplicitTop = 241
+    Left = 76
+    Top = 338
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    ExplicitLeft = 76
+    ExplicitTop = 338
+    ExplicitWidth = 100
   end
   inherited bntCancel: TRzButton
-    Left = 147
-    Top = 241
-    ExplicitLeft = 147
-    ExplicitTop = 241
+    Left = 214
+    Top = 338
+    Width = 100
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    ExplicitLeft = 214
+    ExplicitTop = 338
+    ExplicitWidth = 100
   end
   object grid: TcxGrid [4]
     Left = -1
     Top = 0
-    Width = 283
-    Height = 240
+    Width = 391
+    Height = 332
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
     object gridDBTableView1: TcxGridDBTableView

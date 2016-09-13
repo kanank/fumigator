@@ -1,9 +1,12 @@
 inherited frmMain: TfrmMain
+  Font.Height = -15
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
     Left = 389
     Top = 274
@@ -59,7 +62,7 @@ inherited frmMain: TfrmMain
     Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082#1080
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -79,7 +82,7 @@ inherited frmMain: TfrmMain
     Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -99,7 +102,7 @@ inherited frmMain: TfrmMain
     Caption = #1053#1086#1074#1099#1081' '#1082#1083#1080#1077#1085#1090
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -118,7 +121,7 @@ inherited frmMain: TfrmMain
     Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -154,12 +157,12 @@ inherited frmMain: TfrmMain
   object RzMenuButton3: TRzMenuButton
     Left = 205
     Top = 8
-    Width = 170
+    Width = 196
     Height = 31
     Caption = #1057#1087#1080#1089#1086#1082' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1085#1072' '#1076#1072#1090#1091
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clInactiveCaption
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -178,7 +181,7 @@ inherited frmMain: TfrmMain
     Caption = #1057#1077#1089#1089#1080#1080
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -192,12 +195,12 @@ inherited frmMain: TfrmMain
   object btnReports: TRzMenuButton
     Left = 205
     Top = 45
-    Width = 170
+    Width = 196
     Height = 31
     Caption = #1054#1090#1095#1077#1090' 1'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clInactiveCaption
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True

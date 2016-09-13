@@ -7,6 +7,8 @@ inherited frameClientCalls: TframeClientCalls
     Width = 760
     Height = 185
     Caption = #1047#1074#1086#1085#1082#1080' '#1082#1083#1080#1077#1085#1090#1072
+    CaptionFont.Height = -13
+    CaptionFont.Style = [fsBold]
     ExplicitWidth = 760
     ExplicitHeight = 185
     DesignSize = (
@@ -14,29 +16,33 @@ inherited frameClientCalls: TframeClientCalls
       185)
     inherited RzPanel2: TRzPanel [0]
       Left = 728
-      Height = 170
+      Top = 19
+      Height = 165
       Visible = False
       ExplicitLeft = 728
-      ExplicitHeight = 170
+      ExplicitTop = 19
+      ExplicitHeight = 165
       DesignSize = (
         31
-        170)
+        165)
       inherited btnAdd: TRzBitBtn
-        Top = 66
-        ExplicitTop = 66
+        Top = 61
+        ExplicitTop = 61
       end
       inherited btnEdit: TRzBitBtn
-        Top = 100
-        ExplicitTop = 100
+        Top = 95
+        ExplicitTop = 95
       end
       inherited btnDel: TRzBitBtn
-        Top = 141
-        ExplicitTop = 141
+        Top = 136
+        ExplicitTop = 136
       end
     end
     inherited grdPhone: TcxGrid [1]
       Width = 754
       Height = 167
+      Font.Height = -13
+      ParentFont = False
       ExplicitWidth = 754
       ExplicitHeight = 167
       object GridView: TcxGridDBTableView [0]
@@ -68,7 +74,7 @@ inherited frameClientCalls: TframeClientCalls
           Properties.ListSource = DataModuleMain.DSDicCallTypes
           Properties.ValidateOnEnter = False
           HeaderAlignmentHorz = taCenter
-          Width = 70
+          Width = 76
         end
         object GridViewColumn4: TcxGridDBColumn
           Caption = #1053#1072#1095#1072#1083#1086
@@ -80,7 +86,7 @@ inherited frameClientCalls: TframeClientCalls
           Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
           DataBinding.FieldName = 'DATESTRING'
           HeaderAlignmentHorz = taCenter
-          Width = 85
+          Width = 91
         end
         object GridViewColumn7: TcxGridDBColumn
           Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082
@@ -100,7 +106,7 @@ inherited frameClientCalls: TframeClientCalls
           Caption = #1048#1089#1093#1086#1076
           DataBinding.FieldName = 'ISHOD'
           HeaderAlignmentHorz = taCenter
-          Width = 137
+          Width = 106
         end
         object GridViewColumn10: TcxGridDBColumn
           Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
@@ -124,7 +130,7 @@ inherited frameClientCalls: TframeClientCalls
               Kind = bkEllipsis
             end>
           Options.AutoWidthSizable = False
-          Width = 103
+          Width = 114
         end
         object GridViewColumn2: TcxGridDBColumn
           DataBinding.FieldName = 'CALLAPIID'

@@ -25,7 +25,7 @@ uses
   cxGridCustomView, cxGrid, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit,
   RzButton, cxTextEdit, cxMaskEdit, cxCalendar, Vcl.StdCtrls, Vcl.ExtCtrls,
   RzPanel, IBX.IBCustomDataSet, IBX.IBQuery, dxGDIPlusClasses, cxTimeEdit,
-  formRecordPlay;
+  formRecordPlay, dxmdaset;
 
 type
   TfrmCallReport = class(TfrmDbBaseForm)
@@ -57,6 +57,8 @@ type
     pnlForm: TPanel;
     GridViewColumn13: TcxGridDBColumn;
     GridViewColumn14: TcxGridDBColumn;
+    MemRegions: TdxMemData;
+    DsRegions: TDataSource;
     procedure RzButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -93,14 +95,23 @@ begin
   inherited;
   frmRecordPlay := TfrmRecordPlay.Create(nil);
   frmPlay := frmRecordPlay;
-  frmPlay.parent := pnlForm;
+  frmPlay.Parent :=  pnlForm;
   pnlForm.Visible := False;
   edtTimeStart.Date := Date;
   edtTimeEnd.Date   := edtTimeStart.Date;
+  with MemRegions do
+  begin
+    CopyFromDataSet(DM.DicRegions);
+    First;
+    Insert;
+    FieldByName('NAME').AsString := 'Ыўсющ';
+    Post;
+  end;
 end;
 
 procedure TfrmCallReport.FormDestroy(Sender: TObject);
 begin
+  GridView.OnFocusedRecordChanged := nil;
   frmPlay.Free;
   inherited;
 
@@ -114,20 +125,34 @@ var
   Cellvalue : variant;
   vRecId: Variant;
   sRecId: string;
+  focusedCell: TcxGridTableDataCellViewInfo;
 begin
   if fInQuery or not GridView.Focused then
     Exit;
-  pnlForm.Top  := Grid.Top + GridViewColumn5.FocusedCellViewInfo.RealBounds.Top + 1;
-  pnlForm.Left := GridViewColumn5.FocusedCellViewInfo.RealBounds.Left + 1;
+  focusedCell := nil;
+
+  if GridViewColumn5.FocusedCellViewInfo = nil then
+  begin
+    if GridView.ViewData.RowCount > 0 then
+      focusedCell := GridView.ViewData.Rows[0].ViewInfo.GetCellViewInfoByItem(GridViewColumn5);
+  end
+  else
+    focusedCell := GridViewColumn5.FocusedCellViewInfo;
+
+  if focusedCell = nil then
+    Exit;
+
+  pnlForm.Top  := Grid.Top + focusedCell.RealBounds.Top + 1;
+  pnlForm.Left := focusedCell.RealBounds.Left + 1;
   ColumnID     := GridView.GetColumnByFieldName('CALLAPIID').Index;
-  Cellvalue    := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnID];
-  frmPlay.CallApiId := GridViewColumn5 .FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  Cellvalue    := focusedCell.GridRecord.Values[ColumnID];
+  frmPlay.CallApiId := focusedCell.GridRecord.Values[ColumnId];
   ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
-  frmPlay.ext  := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  frmPlay.ext  := focusedCell.GridRecord.Values[ColumnId];
 
-  ColumnID      := GridView.GetColumnByFieldName('RECID').Index;
+  ColumnID     := GridView.GetColumnByFieldName('RECID').Index;
 
-  vRecId := GridViewColumn5.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  vRecId := focusedCell.GridRecord.Values[ColumnId];
   if VarIsNull(vRecId) then
     sRecId := ''
   else
@@ -137,7 +162,7 @@ begin
 
   frmPlay.FileName  := '';
   frmPlay.Width  := GridViewColumn5.Width;
-  frmPlay.Height := GridViewColumn5.FocusedCellViewInfo.Height-2;
+  frmPlay.Height := focusedCell.Height-2;
   pnlForm.Width  := frmPlay.Width;
   pnlForm.Height := frmPlay.Height;
   frmPlay.Top := 0;
@@ -164,12 +189,18 @@ begin
    try
      _Query.Open;
      SetFilter;
+
      frmPlay.BorderIcons := [];
      frmPlay.BorderStyle := bsNone;
      //frmPlay.Visible := True;
      fInQuery := False;
-     GridViewColumn1.Selected := True;
+
      pnlForm.Visible := (_Query.RecordCount > 0);
+     GridView.ViewData.Rows[0].Selected := True;
+     GridViewFocusedRecordChanged(GridView, nil,
+       GridView.ViewData.Rows[0], false);
+     //GridView.sel FirstRecordIndex
+
    except
      frmPlay.Hide;
      fInQuery := False;
@@ -179,14 +210,19 @@ end;
 
 procedure TfrmCallReport.SetFilter;
 begin
-  _Query.Filtered := False;
-  _Query.Filtered := True;
+  try
+    GridView.OnFocusedRecordChanged := nil;
+    _Query.Filtered := False;
+    _Query.Filtered := True;
+  finally
+    GridView.OnFocusedRecordChanged := GridViewFocusedRecordChanged;
+  end;
 end;
 
 procedure TfrmCallReport._QueryFilterRecord(DataSet: TDataSet;
   var Accept: Boolean);
 begin
-  Accept := cmbRegion.EditValue = null;
+  Accept := (cmbRegion.EditValue = null) or (cmbRegion.EditValue = 0);
   if not Accept then
     Accept := DataSet.FieldByName('region_id').AsInteger =
         cmbRegion.EditValue;

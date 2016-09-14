@@ -1,25 +1,32 @@
 inherited frmCallReport: TfrmCallReport
   Caption = #1054#1090#1095#1077#1090#1099' '#1087#1086' '#1079#1074#1086#1085#1082#1072#1084
-  ClientHeight = 469
-  ClientWidth = 831
+  ClientHeight = 649
+  ClientWidth = 1151
   Position = poDesktopCenter
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
-  ExplicitWidth = 847
-  ExplicitHeight = 507
+  ExplicitWidth = 1167
+  ExplicitHeight = 687
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 542
-    Top = 394
-    ExplicitLeft = 520
-    ExplicitTop = 394
+    Left = 750
+    Top = 546
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitLeft = 750
+    ExplicitTop = 546
   end
   object Image1: TImage [1]
-    Left = 528
-    Top = 349
-    Width = 289
-    Height = 105
+    Left = 731
+    Top = 483
+    Width = 400
+    Height = 146
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Anchors = [akRight, akBottom]
     Picture.Data = {
       0D546478536D617274496D61676589504E470D0A1A0A0000000D494844520000
@@ -140,24 +147,30 @@ inherited frmCallReport: TfrmCallReport
       BE40ED1E6AD7E7BC80FC7C187B006ED33180D91CDB21509FCC4933008FB753FC
       941ADE3EF120B577507B6509F8071106F8371DFC52BF17016831A18662D7694A
       0000000049454E44AE426082}
-    ExplicitLeft = 352
-    ExplicitTop = 283
   end
   object RzPanel2: TRzPanel [2]
     Left = 0
     Top = 0
-    Width = 831
-    Height = 33
+    Width = 1151
+    Height = 46
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alTop
     TabOrder = 0
     DesignSize = (
-      831
-      33)
+      1151
+      46)
     object Image2: TImage
-      Left = 734
-      Top = 2
-      Width = 90
-      Height = 32
+      Left = 1016
+      Top = 3
+      Width = 125
+      Height = 44
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akRight, akBottom]
       Picture.Data = {
         0D546478536D617274496D61676589504E470D0A1A0A0000000D494844520000
@@ -280,69 +293,88 @@ inherited frmCallReport: TfrmCallReport
         0000000049454E44AE426082}
       Proportional = True
       Stretch = True
-      ExplicitLeft = 690
     end
     object Label11: TLabel
-      Left = 9
-      Top = 8
-      Width = 129
-      Height = 13
+      Left = 12
+      Top = 11
+      Width = 173
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072' '#1079#1072' '#1087#1077#1088#1080#1086#1076' '#1086#1090
       Color = clBtnShadow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentColor = False
       ParentFont = False
     end
     object Label1: TLabel
-      Left = 252
-      Top = 8
-      Width = 13
-      Height = 13
+      Left = 349
+      Top = 11
+      Width = 16
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1076#1086
       Color = clBtnShadow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentColor = False
       ParentFont = False
     end
     object Label2: TLabel
-      Left = 482
-      Top = 8
-      Width = 35
-      Height = 13
+      Left = 667
+      Top = 11
+      Width = 46
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1056#1077#1075#1080#1086#1085
       Color = clBtnShadow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentColor = False
       ParentFont = False
     end
     object edtTimeStart: TcxDateEdit
-      Left = 153
-      Top = 5
+      Left = 212
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.DisplayFormat = 'dd.mm.yyyy'
       TabOrder = 0
-      Width = 88
+      Width = 122
     end
     object RzButton1: TRzButton
-      Left = 367
-      Top = 6
-      Width = 83
-      Height = 21
+      Left = 508
+      Top = 8
+      Width = 115
+      Height = 29
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1055#1086#1082#1072#1079#1072#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -353,15 +385,23 @@ inherited frmCallReport: TfrmCallReport
       OnClick = RzButton1Click
     end
     object edtTimeEnd: TcxDateEdit
-      Left = 273
-      Top = 5
+      Left = 378
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.DisplayFormat = 'dd.mm.yyyy'
       TabOrder = 2
-      Width = 88
+      Width = 122
     end
     object cmbRegion: TcxLookupComboBox
-      Left = 520
-      Top = 5
+      Left = 720
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.KeyFieldNames = 'REGION_ID'
       Properties.ListColumns = <
         item
@@ -372,18 +412,22 @@ inherited frmCallReport: TfrmCallReport
         end>
       Properties.ListOptions.GridLines = glNone
       Properties.ListOptions.ShowHeader = False
-      Properties.ListSource = DataModuleMain.DsDicRegions
+      Properties.ListSource = DsRegions
       Properties.OnChange = cmbRegionPropertiesChange
       Properties.OnEditValueChanged = cmbRegionPropertiesChange
       TabOrder = 3
-      Width = 186
+      Width = 258
     end
   end
   object Grid: TcxGrid [3]
     Left = 0
-    Top = 33
-    Width = 831
-    Height = 436
+    Top = 46
+    Width = 1151
+    Height = 603
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alClient
     TabOrder = 1
     object GridView: TcxGridDBTableView
@@ -406,7 +450,7 @@ inherited frmCallReport: TfrmCallReport
       OptionsView.NoDataToDisplayInfoText = '<'#1057#1087#1080#1089#1086#1082' '#1087#1091#1089#1090'>'
       OptionsView.GridLines = glVertical
       OptionsView.GroupByBox = False
-      OptionsView.HeaderHeight = 40
+      OptionsView.HeaderHeight = 45
       object GridViewColumn4: TcxGridDBColumn
         Caption = #1053#1072#1095#1072#1083#1086
         DataBinding.FieldName = 'STARTTIME'
@@ -428,6 +472,7 @@ inherited frmCallReport: TfrmCallReport
         Properties.ListSource = DataModuleMain.DSDicCallTypes
         Properties.ValidateOnEnter = False
         HeaderAlignmentHorz = taCenter
+        HeaderGlyphAlignmentHorz = taCenter
         Width = 73
       end
       object GridViewColumn3: TcxGridDBColumn
@@ -448,13 +493,13 @@ inherited frmCallReport: TfrmCallReport
           end>
         Properties.ListSource = DataModuleMain.DsClients
         HeaderAlignmentHorz = taCenter
-        Width = 90
+        Width = 168
       end
       object GridViewColumn2: TcxGridDBColumn
         Caption = #1059#1089#1083#1091#1075#1080
         DataBinding.FieldName = 'USLUGI'
         HeaderAlignmentHorz = taCenter
-        Width = 93
+        Width = 125
       end
       object GridViewColumn7: TcxGridDBColumn
         Caption = #1058#1086#1074#1072#1088#1099
@@ -468,7 +513,7 @@ inherited frmCallReport: TfrmCallReport
           end>
         Properties.ListSource = DataModuleMain.DSWorkers
         HeaderAlignmentHorz = taCenter
-        Width = 75
+        Width = 121
       end
       object GridViewColumn9: TcxGridDBColumn
         Caption = #1055#1083#1086#1097#1072#1076#1100' '#1086#1073#1088'.'
@@ -483,7 +528,7 @@ inherited frmCallReport: TfrmCallReport
         Properties.ListSource = DataModuleMain.DsDicAreaVolume
         Properties.ReadOnly = True
         HeaderAlignmentHorz = taCenter
-        Width = 65
+        Width = 87
       end
       object GridViewColumn10: TcxGridDBColumn
         Caption = #1052#1077#1088#1072
@@ -498,7 +543,7 @@ inherited frmCallReport: TfrmCallReport
         Properties.ListSource = DataModuleMain.DsDicUnits
         Properties.ReadOnly = False
         HeaderAlignmentHorz = taCenter
-        Width = 48
+        Width = 71
       end
       object GridViewColumn6: TcxGridDBColumn
         Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082
@@ -511,7 +556,7 @@ inherited frmCallReport: TfrmCallReport
           end>
         Properties.ListSource = DataModuleMain.DSWorkers
         HeaderAlignmentHorz = taCenter
-        Width = 66
+        Width = 186
       end
       object GridViewColumn5: TcxGridDBColumn
         Caption = #1047#1072#1087#1080#1089#1100
@@ -535,6 +580,7 @@ inherited frmCallReport: TfrmCallReport
       end
       object GridViewColumn14: TcxGridDBColumn
         DataBinding.FieldName = 'RECID'
+        Visible = False
       end
     end
     object GridLevel1: TcxGridLevel
@@ -542,10 +588,14 @@ inherited frmCallReport: TfrmCallReport
     end
   end
   object pnlForm: TPanel [4]
-    Left = 569
-    Top = 80
-    Width = 137
-    Height = 25
+    Left = 788
+    Top = 111
+    Width = 190
+    Height = 34
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     AutoSize = True
     BevelEdges = []
     TabOrder = 2
@@ -579,5 +629,16 @@ inherited frmCallReport: TfrmCallReport
   inherited _DS: TDataSource
     Left = 112
     Top = 144
+  end
+  object MemRegions: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 488
+    Top = 104
+  end
+  object DsRegions: TDataSource
+    DataSet = MemRegions
+    Left = 480
+    Top = 168
   end
 end

@@ -715,8 +715,10 @@ begin
     else // получить файл записи
     if ARequestInfo.Params.Values['action'] = 'getrecfile' then
     begin
+      WriteLog(ARequestInfo.UnparsedParams);
       s := ARequestInfo.Params.Values['recid'];
       s := GetRecordFile(s);
+      WriteLog(s);
       if s <> '' then
       begin
         Stream := TMemoryStream.Create;

@@ -159,6 +159,11 @@ begin
     TForm(Parent.Owner).Enabled := False;
   try
     //GetFileName;
+    if RecId = '' then
+    begin
+      MsgBoxWarning('Нет ссылки на запись!');
+      Exit;
+    end;
 
     if GetFileFromHttp then
     begin

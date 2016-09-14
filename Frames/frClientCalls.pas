@@ -79,20 +79,33 @@ var
   Cellvalue : variant;
   vRecId: variant;
   sRecId: string;
+  focusedCell: TcxGridTableDataCellViewInfo;
 begin
   if fInQuery or not GridView.Focused then
     Exit;
-  pnlForm.Top  := GrdPhone.Top + ColumnRecord.FocusedCellViewInfo.RealBounds.Top + 1;
-  pnlForm.Left := GrdPhone.Left + ColumnRecord.FocusedCellViewInfo.RealBounds.Left + 1;
+
+  if ColumnRecord.FocusedCellViewInfo = nil then
+  begin
+    if GridView.ViewData.RowCount > 0 then
+      focusedCell := GridView.ViewData.Rows[0].ViewInfo.GetCellViewInfoByItem(ColumnRecord);
+  end
+  else
+    focusedCell := ColumnRecord.FocusedCellViewInfo;
+
+  if focusedCell = nil then
+    Exit;
+
+  pnlForm.Top  := GrdPhone.Top + focusedCell.RealBounds.Top + 1;
+  pnlForm.Left := GrdPhone.Left + focusedCell.RealBounds.Left + 1;
   ColumnID     := GridView.GetColumnByFieldName('CALLAPIID').Index;
-  Cellvalue    := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnID];
-  fPlay.CallApiId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  Cellvalue    := focusedCell.GridRecord.Values[ColumnID];
+  fPlay.CallApiId := focusedCell.GridRecord.Values[ColumnId];
   ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
-  fPlay.ext    := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  fPlay.ext    := focusedCell.GridRecord.Values[ColumnId];
 
   ColumnID     := GridView.GetColumnByFieldName('RECID').Index;
 
-  vRecId := ColumnRecord.FocusedCellViewInfo.GridRecord.Values[ColumnId];
+  vRecId := focusedCell.GridRecord.Values[ColumnId];
   if VarIsNull(vRecId) then
     sRecId := ''
   else
@@ -102,7 +115,7 @@ begin
 
   fPlay.FileName  := '';
   fPlay.Width  := ColumnRecord.Width - 4;
-  fPlay.Height := ColumnRecord.FocusedCellViewInfo.Height-2;
+  fPlay.Height := focusedCell.Height-2;
   pnlForm.Width  := fPlay.Width;
   pnlForm.Height := fPlay.Height;
   fPlay.Top := 0;

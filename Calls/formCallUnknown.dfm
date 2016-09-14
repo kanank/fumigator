@@ -2,31 +2,39 @@ inherited frmCallUnknown: TfrmCallUnknown
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1050#1083#1080#1077#1085#1090' '#1085#1077' '#1085#1072#1081#1076#1077#1085
-  ClientHeight = 339
-  ClientWidth = 383
+  ClientHeight = 469
+  ClientWidth = 530
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitWidth = 389
-  ExplicitHeight = 367
+  ExplicitWidth = 536
+  ExplicitHeight = 497
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 366
-    Top = -83
+    Left = 507
+    Top = -115
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     Visible = False
-    ExplicitLeft = 624
-    ExplicitTop = -64
+    ExplicitLeft = 507
+    ExplicitTop = -115
   end
   object RzLabel1: TRzLabel [1]
-    Left = 100
-    Top = 8
-    Width = 182
-    Height = 23
+    Left = 152
+    Top = 11
+    Width = 206
+    Height = 25
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1050#1083#1080#1077#1085#1090' '#1085#1077' '#1085#1072#1081#1076#1077#1085'!'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -19
+    Font.Height = -21
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
@@ -34,32 +42,47 @@ inherited frmCallUnknown: TfrmCallUnknown
     BlinkIntervalOn = 1000
   end
   inherited RzPanel1: TRzPanel
-    Top = 295
-    Width = 383
-    ExplicitTop = 295
-    ExplicitWidth = 383
+    Top = 408
+    Width = 530
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitTop = 408
+    ExplicitWidth = 530
     inherited Image2: TImage
-      Left = 4
-      ExplicitLeft = 4
+      Left = 6
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      ExplicitLeft = 6
     end
     inherited Exit_bnt: TRzButton
-      Left = 250
+      Left = 346
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Cancel = True
       Caption = #1054#1090#1084#1077#1085#1072
-      Font.Height = -13
       OnClick = Exit_bntClick
-      ExplicitLeft = 250
+      ExplicitLeft = 346
     end
   end
   object btnPost: TRzButton
-    Left = 4
-    Top = 147
-    Width = 376
-    Height = 33
+    Left = 6
+    Top = 204
+    Width = 520
+    Height = 45
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -70,8 +93,12 @@ inherited frmCallUnknown: TfrmCallUnknown
     OnClick = btnClick
   end
   object edtPhone: TcxMaskEdit
-    Left = 4
-    Top = 39
+    Left = 6
+    Top = 54
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     AutoSize = False
     ParentFont = False
     Properties.AlwaysShowBlanksAndLiterals = True
@@ -80,24 +107,28 @@ inherited frmCallUnknown: TfrmCallUnknown
     Properties.ValidationOptions = [evoShowErrorIcon, evoAllowLoseFocus]
     Style.Font.Charset = DEFAULT_CHARSET
     Style.Font.Color = clWindowText
-    Style.Font.Height = -19
+    Style.Font.Height = -21
     Style.Font.Name = 'Tahoma'
     Style.Font.Style = [fsBold]
     Style.IsFontAssigned = True
     TabOrder = 2
     Text = '          '
-    Height = 32
-    Width = 188
+    Height = 44
+    Width = 260
   end
   object btnLID: TRzMenuButton
-    Left = 4
-    Top = 99
-    Width = 376
-    Height = 33
+    Left = 6
+    Top = 137
+    Width = 520
+    Height = 46
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1053#1086#1074#1099#1081' '#1051#1048#1044
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -105,18 +136,24 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 3
     ThemeAware = False
+    Margin = 3
+    Spacing = 6
     DropDownMenu = pmNewClient
     ShowArrow = False
   end
   object btnCorporate: TRzButton
-    Left = 4
-    Top = 195
-    Width = 376
-    Height = 33
+    Left = 6
+    Top = 270
+    Width = 520
+    Height = 46
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1050#1086#1087#1086#1088#1072#1090#1080#1074#1085#1099#1081' '#1085#1086#1084#1077#1088
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -127,14 +164,18 @@ inherited frmCallUnknown: TfrmCallUnknown
     OnClick = btnClick
   end
   object btnErrorCall: TRzButton
-    Left = 4
-    Top = 244
-    Width = 376
-    Height = 33
+    Left = 6
+    Top = 338
+    Width = 520
+    Height = 46
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1054#1096#1080#1073#1086#1095#1085#1099#1081' '#1074#1099#1079#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -145,14 +186,18 @@ inherited frmCallUnknown: TfrmCallUnknown
     OnClick = btnClick
   end
   object btnAddToExist: TRzMenuButton
-    Left = 198
-    Top = 39
-    Width = 182
-    Height = 32
+    Left = 274
+    Top = 54
+    Width = 252
+    Height = 44
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082' '#1089#1091#1097#1077#1089#1090#1074#1091#1102#1097#1077#1084#1091
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -160,6 +205,8 @@ inherited frmCallUnknown: TfrmCallUnknown
     ParentFont = False
     TabOrder = 6
     ThemeAware = False
+    Margin = 3
+    Spacing = 6
     DropDownMenu = pmExistsClient
     ShowArrow = False
   end

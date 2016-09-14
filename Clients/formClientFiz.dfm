@@ -4,8 +4,7 @@ inherited frmClientFiz: TfrmClientFiz
   ClientWidth = 1070
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -79
-  ExplicitTop = -218
+  ExplicitTop = -210
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -80,7 +79,7 @@ inherited frmClientFiz: TfrmClientFiz
     Margins.Bottom = 6
     TabOrder = 6
     ExplicitTop = 685
-    ExplicitWidth = 1088
+    ExplicitWidth = 1070
     inherited Image2: TImage
       Left = 4
       Top = 7
@@ -115,7 +114,6 @@ inherited frmClientFiz: TfrmClientFiz
       ThemeAware = False
       Visible = False
       OnClick = btnHideClick
-      ExplicitLeft = 903
     end
     inherited Exit_bnt: TRzButton
       Left = 885
@@ -124,7 +122,7 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Right = 6
       Margins.Bottom = 6
       OnClick = Exit_bntClick
-      ExplicitLeft = 903
+      ExplicitLeft = 885
     end
     object butOK: TRzButton
       Left = 685
@@ -148,7 +146,6 @@ inherited frmClientFiz: TfrmClientFiz
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
-      ExplicitLeft = 703
     end
   end
   object ID_edt: TcxDBTextEdit
@@ -181,7 +178,6 @@ inherited frmClientFiz: TfrmClientFiz
     StyleHot.LookAndFeel.NativeStyle = True
     TabOrder = 10
     Visible = False
-    ExplicitWidth = 101
     Width = 83
   end
   object Comments_memo: TcxDBMemo
@@ -210,7 +206,7 @@ inherited frmClientFiz: TfrmClientFiz
     Margins.Bottom = 4
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -20
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -259,7 +255,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitLeft = 7
       ExplicitTop = 223
       ExplicitWidth = 341
@@ -397,7 +392,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       Visible = False
       ExplicitLeft = 300
       ExplicitTop = 35
@@ -433,19 +427,17 @@ inherited frmClientFiz: TfrmClientFiz
         end
         inherited RzPanel2: TRzPanel
           Left = 252
-          Top = 25
           Width = 43
-          Height = 129
+          Height = 135
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           ExplicitLeft = 252
-          ExplicitTop = 25
           ExplicitWidth = 43
-          ExplicitHeight = 129
+          ExplicitHeight = 135
           inherited btnAdd: TRzBitBtn
-            Top = -10
+            Top = -4
             Width = 39
             Height = 39
             Margins.Left = 4
@@ -454,12 +446,12 @@ inherited frmClientFiz: TfrmClientFiz
             Margins.Bottom = 4
             Margin = 3
             Spacing = 6
-            ExplicitTop = -10
+            ExplicitTop = -4
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
           inherited btnEdit: TRzBitBtn
-            Top = 34
+            Top = 40
             Width = 39
             Height = 39
             Margins.Left = 4
@@ -468,12 +460,12 @@ inherited frmClientFiz: TfrmClientFiz
             Margins.Bottom = 4
             Margin = 3
             Spacing = 6
-            ExplicitTop = 34
+            ExplicitTop = 40
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
           inherited btnDel: TRzBitBtn
-            Top = 80
+            Top = 86
             Width = 39
             Height = 39
             Margins.Left = 4
@@ -482,7 +474,7 @@ inherited frmClientFiz: TfrmClientFiz
             Margins.Bottom = 4
             Margin = 3
             Spacing = 6
-            ExplicitTop = 80
+            ExplicitTop = 86
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
@@ -491,7 +483,7 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited RzPanel1: TRzPanel
       Left = 4
-      Top = 8
+      Top = 9
       Width = 514
       Height = 224
       Margins.Left = 4
@@ -500,7 +492,7 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Bottom = 4
       ParentFont = False
       ExplicitLeft = 4
-      ExplicitTop = 8
+      ExplicitTop = 9
       ExplicitWidth = 514
       ExplicitHeight = 224
       DesignSize = (
@@ -545,7 +537,8 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ParentFont = True
+        Font.Color = clWindowText
+        Font.Height = -15
         ExplicitLeft = 277
         ExplicitTop = 98
         ExplicitWidth = 26
@@ -618,9 +611,11 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        ParentFont = False
+        Style.IsFontAssigned = True
         ExplicitLeft = 98
         ExplicitTop = 64
-        ExplicitWidth = 227
+        ExplicitWidth = 397
         Width = 397
       end
       inherited edtName: TcxDBTextEdit [8]
@@ -630,9 +625,11 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        ParentFont = False
+        Style.IsFontAssigned = True
         ExplicitLeft = 98
         ExplicitTop = 36
-        ExplicitWidth = 227
+        ExplicitWidth = 397
         Width = 397
       end
       inherited edtFamily: TcxDBTextEdit [9]
@@ -642,9 +639,11 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        ParentFont = False
+        Style.IsFontAssigned = True
         ExplicitLeft = 98
         ExplicitTop = 7
-        ExplicitWidth = 227
+        ExplicitWidth = 397
         Width = 397
       end
       inherited cmbSex: TcxDBComboBox [10]
@@ -654,7 +653,8 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ParentFont = True
+        Style.Font.Height = -15
+        Style.IsFontAssigned = True
         ExplicitLeft = 316
         ExplicitTop = 92
         ExplicitWidth = 79
@@ -668,6 +668,8 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        ParentFont = False
+        Style.IsFontAssigned = True
         Visible = False
         ExplicitLeft = 98
         ExplicitTop = 149
@@ -681,6 +683,8 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        ParentFont = False
+        Style.IsFontAssigned = True
         ExplicitLeft = 98
         ExplicitTop = 121
         ExplicitWidth = 296
@@ -693,8 +697,9 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ParentFont = True
         Properties.OnInitPopup = FramePersoncmbDateBirthPropertiesInitPopup
+        Style.Font.Height = -15
+        Style.IsFontAssigned = True
         ExplicitLeft = 98
         ExplicitTop = 92
         ExplicitWidth = 135
@@ -788,7 +793,6 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Font.Height = -20
         ExplicitTop = 105
         ExplicitWidth = 462
         ExplicitHeight = 42
@@ -832,7 +836,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 4
           ExplicitWidth = 276
-          ExplicitHeight = 32
           Width = 276
         end
         inherited edtSocr: TcxTextEdit
@@ -845,7 +848,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 93
           ExplicitTop = 4
           ExplicitWidth = 45
-          ExplicitHeight = 32
           Width = 45
         end
       end
@@ -857,7 +859,6 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Font.Height = -20
         ExplicitTop = 151
         ExplicitWidth = 462
         ExplicitHeight = 41
@@ -901,7 +902,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 4
           ExplicitWidth = 276
-          ExplicitHeight = 32
           Width = 276
         end
         inherited edtSocr: TcxTextEdit
@@ -914,7 +914,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 93
           ExplicitTop = 4
           ExplicitWidth = 45
-          ExplicitHeight = 32
           Width = 45
         end
       end
@@ -926,7 +925,6 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Font.Height = -20
         ExplicitTop = 186
         ExplicitWidth = 462
         ExplicitHeight = 41
@@ -970,7 +968,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 4
           ExplicitWidth = 276
-          ExplicitHeight = 32
           Width = 276
         end
         inherited edtSocr: TcxTextEdit
@@ -983,7 +980,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 93
           ExplicitTop = 4
           ExplicitWidth = 45
-          ExplicitHeight = 32
           Width = 45
         end
       end
@@ -1061,7 +1057,6 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Font.Height = -20
         ExplicitTop = 115
         ExplicitWidth = 462
         ExplicitHeight = 41
@@ -1105,7 +1100,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 4
           ExplicitWidth = 276
-          ExplicitHeight = 32
           Width = 276
         end
         inherited edtSocr: TcxTextEdit
@@ -1118,7 +1112,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 93
           ExplicitTop = 4
           ExplicitWidth = 45
-          ExplicitHeight = 32
           Width = 45
         end
       end
@@ -1190,7 +1183,6 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Font.Height = -20
         ExplicitTop = 258
         ExplicitWidth = 300
         ExplicitHeight = 41
@@ -1234,7 +1226,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 4
           ExplicitWidth = 111
-          ExplicitHeight = 32
           Width = 111
         end
         inherited edtSocr: TcxTextEdit
@@ -1247,7 +1238,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 93
           ExplicitTop = 4
           ExplicitWidth = 45
-          ExplicitHeight = 32
           Width = 45
         end
         inherited cmbName: TcxComboBox
@@ -1260,7 +1250,6 @@ inherited frmClientFiz: TfrmClientFiz
           ExplicitLeft = 141
           ExplicitTop = 6
           ExplicitWidth = 111
-          ExplicitHeight = 32
           Width = 111
         end
       end
@@ -1271,12 +1260,10 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Style.Font.Height = -20
         Style.IsFontAssigned = True
         ExplicitLeft = 400
         ExplicitTop = 184
         ExplicitWidth = 60
-        ExplicitHeight = 32
         Width = 60
       end
     end
@@ -1328,7 +1315,7 @@ inherited frmClientFiz: TfrmClientFiz
     Margins.Bottom = 4
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -20
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -1525,7 +1512,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       Visible = False
       ExplicitTop = 105
       ExplicitWidth = 462
@@ -1570,7 +1556,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1583,7 +1569,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1595,7 +1581,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 151
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1639,7 +1624,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1652,7 +1637,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1664,7 +1649,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 186
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1708,7 +1692,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1721,7 +1705,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1733,7 +1717,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 258
       ExplicitWidth = 300
       ExplicitHeight = 41
@@ -1777,7 +1760,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 111
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 111
       end
       inherited edtSocr: TcxTextEdit
@@ -1790,7 +1773,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
       inherited cmbName: TcxComboBox
@@ -1803,7 +1786,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 6
         ExplicitWidth = 111
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 111
       end
     end
@@ -1815,7 +1798,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 220
       ExplicitWidth = 462
       ExplicitHeight = 42
@@ -1859,7 +1841,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1872,7 +1854,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1884,7 +1866,6 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 115
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1928,7 +1909,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1941,7 +1922,7 @@ inherited frmClientFiz: TfrmClientFiz
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1994,12 +1975,11 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Style.Font.Height = -20
       Style.IsFontAssigned = True
       ExplicitLeft = 400
       ExplicitTop = 184
       ExplicitWidth = 60
-      ExplicitHeight = 32
+      ExplicitHeight = 26
       Width = 60
     end
   end
@@ -2014,7 +1994,7 @@ inherited frmClientFiz: TfrmClientFiz
     Margins.Bottom = 4
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -20
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -2035,7 +2015,6 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitLeft = 3
       ExplicitTop = 4
       ExplicitWidth = 363
-      ExplicitHeight = 157
       inherited grdPhone: TcxGrid
         Left = 7
         Top = 21
@@ -2070,9 +2049,7 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Right = 4
         Margins.Bottom = 4
         ExplicitLeft = 319
-        ExplicitTop = 18
         ExplicitWidth = 43
-        ExplicitHeight = 153
         inherited btnAdd: TRzBitBtn
           Top = -12
           Width = 39
@@ -2083,7 +2060,7 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 2
+          ExplicitTop = -12
           ExplicitWidth = 39
           ExplicitHeight = 39
         end
@@ -2097,7 +2074,7 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 46
+          ExplicitTop = 32
           ExplicitWidth = 39
           ExplicitHeight = 39
         end
@@ -2111,7 +2088,7 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 89
+          ExplicitTop = 75
           ExplicitWidth = 39
           ExplicitHeight = 39
         end
@@ -2487,9 +2464,8 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Right = 4
           Margins.Bottom = 4
           ExplicitLeft = 1025
-          ExplicitTop = 25
           ExplicitWidth = 43
-          ExplicitHeight = 230
+          ExplicitHeight = 155
           inherited btnAdd: TRzBitBtn
             Left = 3
             Top = 10
@@ -2502,7 +2478,7 @@ inherited frmClientFiz: TfrmClientFiz
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 85
+            ExplicitTop = 10
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
@@ -2518,7 +2494,7 @@ inherited frmClientFiz: TfrmClientFiz
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 133
+            ExplicitTop = 58
             ExplicitWidth = 39
             ExplicitHeight = 38
           end
@@ -2534,25 +2510,26 @@ inherited frmClientFiz: TfrmClientFiz
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 189
+            ExplicitTop = 114
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
         end
         inherited grdPhone: TcxGrid
           Left = 5
-          Top = 19
+          Top = 17
           Width = 1057
-          Height = 231
+          Height = 154
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
+          Anchors = [akLeft, akTop, akRight, akBottom]
           Font.Height = -15
           ExplicitLeft = 5
-          ExplicitTop = 19
+          ExplicitTop = 17
           ExplicitWidth = 1057
-          ExplicitHeight = 231
+          ExplicitHeight = 154
           inherited GridView: TcxGridDBTableView
             inherited GridViewColumn1: TcxGridDBColumn
               Width = 115

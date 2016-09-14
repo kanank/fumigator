@@ -1,75 +1,104 @@
 inherited frmSessions: TfrmSessions
   Caption = #1057#1077#1089#1089#1080#1080
-  ClientHeight = 517
-  ClientWidth = 924
+  ClientHeight = 660
+  ClientWidth = 1250
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitWidth = 940
-  ExplicitHeight = 555
+  ExplicitLeft = -531
+  ExplicitWidth = 1266
+  ExplicitHeight = 698
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 731
-    Top = 413
-    ExplicitLeft = 594
-    ExplicitTop = 303
+    Left = 983
+    Top = 516
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitLeft = 1012
+    ExplicitTop = 572
   end
   inherited RzPanel2: TRzPanel
-    Width = 924
-    ExplicitWidth = 924
+    Width = 1250
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitWidth = 1250
     DesignSize = (
-      924
-      33)
+      1250
+      46)
     inherited Image1: TImage
-      Left = 827
-      ExplicitLeft = 690
+      Left = 1116
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      ExplicitLeft = 1145
     end
     object Label11: TLabel
-      Left = 9
-      Top = 8
-      Width = 129
-      Height = 13
+      Left = 12
+      Top = 11
+      Width = 173
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072' '#1079#1072' '#1087#1077#1088#1080#1086#1076' '#1086#1090
       Color = clBtnShadow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentColor = False
       ParentFont = False
     end
     object Label1: TLabel
-      Left = 252
-      Top = 8
-      Width = 13
-      Height = 13
+      Left = 349
+      Top = 11
+      Width = 16
+      Height = 18
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1076#1086
       Color = clBtnShadow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentColor = False
       ParentFont = False
     end
     object edtTimeStart: TcxDateEdit
-      Left = 153
-      Top = 5
+      Left = 212
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.DisplayFormat = 'dd.mm.yyyy'
       TabOrder = 0
-      Width = 88
+      Width = 122
     end
     object RzButton1: TRzButton
-      Left = 367
-      Top = 5
-      Width = 83
-      Height = 21
+      Left = 508
+      Top = 7
+      Width = 115
+      Height = 29
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1055#1086#1082#1072#1079#1072#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -80,8 +109,12 @@ inherited frmSessions: TfrmSessions
       OnClick = RzButton1Click
     end
     object cmbFilter: TcxComboBox
-      Left = 483
-      Top = 5
+      Left = 669
+      Top = 7
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.Items.Strings = (
         #1042#1089#1077
         #1055#1088#1080#1085#1103#1090#1099#1077
@@ -89,50 +122,87 @@ inherited frmSessions: TfrmSessions
         #1055#1088#1086#1087#1091#1097#1077#1085#1085#1099#1077)
       Properties.OnChange = cmbFilterPropertiesChange
       TabOrder = 2
-      Width = 136
+      Width = 188
     end
     object chkWorkerClients: TcxCheckBox
-      Left = 632
-      Top = 6
+      Left = 875
+      Top = 8
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1058#1086#1083#1100#1082#1086' '#1082#1083#1080#1077#1085#1090#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
       State = cbsChecked
       TabOrder = 3
       OnClick = chkWorkerClientsClick
-      Width = 189
+      Width = 262
     end
   end
   inherited RzPanel1: TRzPanel
-    Top = 468
-    Width = 924
-    ExplicitTop = 468
-    ExplicitWidth = 924
+    Top = 607
+    Width = 1250
+    Height = 53
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitTop = 607
+    ExplicitWidth = 1250
+    ExplicitHeight = 53
     inherited Cancel_btn: TRzButton
-      Left = 788
-      ExplicitLeft = 788
+      Left = 1062
+      Top = 6
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      ExplicitLeft = 1062
+      ExplicitTop = 6
     end
     inherited Del_btn: TRzButton [1]
+      Top = 6
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Visible = False
+      ExplicitTop = 6
     end
     inherited Add_btn: TRzButton [2]
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Visible = False
     end
     inherited Edit_btn: TRzButton [3]
-      Left = 9
+      Left = 12
+      Top = 6
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       OnClick = Edit_btnClick
-      ExplicitLeft = 9
+      ExplicitLeft = 12
+      ExplicitTop = 6
     end
   end
   inherited Grid: TcxGrid
-    Top = 93
-    Width = 924
-    Height = 375
+    Top = 129
+    Width = 1250
+    Height = 478
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     Align = alClient
     PopupMenu = GridPopup
-    ExplicitTop = 93
-    ExplicitWidth = 924
-    ExplicitHeight = 375
+    ExplicitTop = 129
+    ExplicitWidth = 1250
+    ExplicitHeight = 478
     inherited GridView: TcxGridDBTableView
       OnCustomDrawCell = GridViewCustomDrawCell
+      OnFocusedRecordChanged = GridViewFocusedRecordChanged
       DataController.DataSource = DS
       OptionsData.CancelOnExit = False
       OptionsData.Deleting = False
@@ -187,7 +257,7 @@ inherited frmSessions: TfrmSessions
         DataBinding.FieldName = 'CALLEDN'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 86
+        Width = 95
       end
       object GridViewColumn7: TcxGridDBColumn
         Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082
@@ -202,28 +272,28 @@ inherited frmSessions: TfrmSessions
         Properties.ListSource = DataModuleMain.DSWorkers
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 75
+        Width = 185
       end
       object GridViewColumn9: TcxGridDBColumn
         Caption = #1048#1089#1093#1086#1076
         DataBinding.FieldName = 'ISHOD'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 85
+        Width = 155
       end
       object GridViewColumn10: TcxGridDBColumn
         Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
         DataBinding.FieldName = 'RESULT'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 130
+        Width = 173
       end
       object GridViewColumn6: TcxGridDBColumn
         Caption = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
         DataBinding.FieldName = 'DATESTRING'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 66
+        Width = 96
       end
       object GridViewColumn4: TcxGridDBColumn
         Caption = #1053#1072#1095#1072#1083#1086
@@ -246,28 +316,58 @@ inherited frmSessions: TfrmSessions
         Width = 20
         IsCaptionAssigned = True
       end
+      object RecColumn: TcxGridDBColumn
+        Caption = #1047#1072#1087#1080#1089#1100
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 60
+      end
+      object GridViewColumn12: TcxGridDBColumn
+        DataBinding.FieldName = 'CALLAPIID'
+        Visible = False
+      end
+      object GridViewColumn13: TcxGridDBColumn
+        DataBinding.FieldName = 'LOCALNUM'
+        Visible = False
+      end
+      object GridViewColumn14: TcxGridDBColumn
+        DataBinding.FieldName = 'RecAPIID'
+        Visible = False
+      end
     end
   end
   object edtTimeEnd: TcxDateEdit
-    Left = 273
-    Top = 5
+    Left = 378
+    Top = 7
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Properties.DisplayFormat = 'dd.mm.yyyy'
     TabOrder = 3
-    Width = 88
+    Width = 122
   end
   object RzPanel3: TRzPanel
     Left = 0
-    Top = 33
-    Width = 924
-    Height = 60
+    Top = 46
+    Width = 1250
+    Height = 83
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alTop
     BorderSides = []
     TabOrder = 4
     object cxGrid1: TcxGrid
       Left = 0
       Top = 0
-      Width = 924
-      Height = 56
+      Width = 1250
+      Height = 74
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alTop
       TabOrder = 0
       object cxGridDBTableView1: TcxGridDBTableView
@@ -291,7 +391,7 @@ inherited frmSessions: TfrmSessions
         OptionsView.ScrollBars = ssNone
         OptionsView.GridLines = glVertical
         OptionsView.GroupByBox = False
-        OptionsView.HeaderHeight = 35
+        OptionsView.HeaderHeight = 45
         object cxGridDBColumn1: TcxGridDBColumn
           Caption = #1054#1073#1097#1072#1103' '#1076#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
           DataBinding.FieldName = 'SUM_DURATION'
@@ -306,7 +406,7 @@ inherited frmSessions: TfrmSessions
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.DisplayFormat = 'hh:nn:ss.zzz'
           HeaderAlignmentHorz = taCenter
-          Width = 141
+          Width = 157
         end
         object cxGridDBColumn3: TcxGridDBColumn
           Caption = #1050#1086#1083'-'#1074#1086' '#1089#1077#1089#1089#1080#1081
@@ -318,7 +418,7 @@ inherited frmSessions: TfrmSessions
           Caption = #1050#1086#1083'-'#1074#1086' '#1091#1089#1087#1077#1096#1085#1099#1093' '#1089#1077#1089#1089#1080#1081
           DataBinding.FieldName = 'CNT_GOOD_SESSION'
           HeaderAlignmentHorz = taCenter
-          Width = 124
+          Width = 158
         end
         object cxGridDBColumn5: TcxGridDBColumn
           Caption = #1047#1072#1082#1086#1085#1095#1080#1083' '#1082#1083#1080#1077#1085#1090
@@ -330,13 +430,27 @@ inherited frmSessions: TfrmSessions
           Caption = #1047#1072#1082#1086#1085#1095#1080#1083' '#1086#1087#1077#1088#1072#1090#1086#1088
           DataBinding.FieldName = 'END_BY_USER'
           HeaderAlignmentHorz = taCenter
-          Width = 157
+          Width = 197
         end
       end
       object cxGridLevel1: TcxGridLevel
         GridView = cxGridDBTableView1
       end
     end
+  end
+  object pnlForm: TPanel
+    Left = 788
+    Top = 111
+    Width = 190
+    Height = 34
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    AutoSize = True
+    BevelEdges = []
+    TabOrder = 5
+    Visible = False
   end
   object Q: TIBQuery
     Database = DataModuleMain.DB
@@ -353,7 +467,9 @@ inherited frmSessions: TfrmSessions
       
         ' case when calltype=0 then (select count(*)from sessions where c' +
         'allapiid=s.callapiid'
-      ' and localnum not like '#39'%*%'#39') else 0 end answer'
+      
+        ' and localnum not like '#39'%*%'#39') else 0 end answer, recid as recapi' +
+        'id'
       'from sessions s'
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +

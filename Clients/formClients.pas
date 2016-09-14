@@ -68,6 +68,7 @@ type
     NewFizClnt_mi: TMenuItem;
     NewURClnt_mi: TMenuItem;
     PropStore: TcxPropertiesStore;
+    btnFavCli: TRzButton;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -87,6 +88,7 @@ type
     procedure btnAllClick(Sender: TObject);
     procedure NewFizClnt_miClick(Sender: TObject);
     procedure Add_btn1Click(Sender: TObject);
+    procedure btnFavCliClick(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -166,6 +168,12 @@ procedure TfrmClients.btnCliClick(Sender: TObject);
 begin
   inherited;
   Status := 1;
+end;
+
+procedure TfrmClients.btnFavCliClick(Sender: TObject);
+begin
+  inherited;
+  status := 3;
 end;
 
 procedure TfrmClients.btnLidClick(Sender: TObject);
@@ -423,23 +431,44 @@ begin
     fStatus := AValue;
     SetFilter;
   end;
-  if AValue = 1 then
-  begin
-    btnCli.Down   := True;
-    btnLid.Down   := False;
-    btnCli.Color  := $00FAECDE;
-    btnLid.Color  := $00E9F4F8;
-    btnCli.Font.Style  := btnCli.Font.Style + [fsBold];
-    btnLid.Font.Style  := btnLid.Font.Style - [fsBold];
-  end
-  else
-  begin
-    btnCli.Down   := False;
-    btnLid.Down   := True;
-    btnCli.Color  := $00E9F4F8;
-    btnLid.Color  := $00FAECDE;
-    btnCli.Font.Style  := btnCli.Font.Style - [fsBold];
-    btnLid.Font.Style  := btnLid.Font.Style + [fsBold];
+
+  case AValue of
+    1:
+    begin
+      btnCli.Down      := True;
+      btnLid.Down      := False;
+      btnFavCli.Down   := False;
+      btnCli.Color     := $00FAECDE;
+      btnLid.Color     := $00E9F4F8;
+      btnFavCli.Color  := $00E9F4F8;
+      btnCli.Font.Style    := btnCli.Font.Style + [fsBold];
+      btnLid.Font.Style    := btnLid.Font.Style - [fsBold];
+      btnFavCli.Font.Style := btnLid.Font.Style - [fsBold];
+    end;
+    2:
+    begin
+      btnCli.Down   := False;
+      btnLid.Down   := True;
+      btnFavCli.Down := False;
+      btnCli.Color  := $00E9F4F8;
+      btnLid.Color  := $00FAECDE;
+      btnFavCli.Color  := $00E9F4F8;
+      btnCli.Font.Style  := btnCli.Font.Style - [fsBold];
+      btnLid.Font.Style  := btnLid.Font.Style + [fsBold];
+      btnFavCli.Font.Style := btnLid.Font.Style - [fsBold]
+    end;
+    3:
+    begin
+      btnCli.Down      := False;
+      btnLid.Down      := False;
+      btnFavCli.Down   := True;
+      btnCli.Color     := $00E9F4F8;
+      btnLid.Color     := $00E9F4F8;
+      btnFavCli.Color  := $00FAECDE;
+      btnCli.Font.Style  := btnCli.Font.Style - [fsBold];
+      btnLid.Font.Style  := btnLid.Font.Style - [fsBold];
+      btnFavCli.Font.Style := btnLid.Font.Style + [fsBold]
+    end;
   end;
 end;
 

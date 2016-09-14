@@ -7,8 +7,6 @@ inherited frameClientCalls: TframeClientCalls
     Width = 760
     Height = 185
     Caption = #1047#1074#1086#1085#1082#1080' '#1082#1083#1080#1077#1085#1090#1072
-    CaptionFont.Height = -13
-    CaptionFont.Style = [fsBold]
     ExplicitWidth = 760
     ExplicitHeight = 185
     DesignSize = (
@@ -16,11 +14,9 @@ inherited frameClientCalls: TframeClientCalls
       185)
     inherited RzPanel2: TRzPanel [0]
       Left = 728
-      Top = 19
       Height = 165
       Visible = False
       ExplicitLeft = 728
-      ExplicitTop = 19
       ExplicitHeight = 165
       DesignSize = (
         31
@@ -41,6 +37,7 @@ inherited frameClientCalls: TframeClientCalls
     inherited grdPhone: TcxGrid [1]
       Width = 754
       Height = 167
+      Anchors = [akLeft, akTop, akRight, akBottom]
       Font.Height = -13
       ParentFont = False
       ExplicitWidth = 754

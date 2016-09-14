@@ -24,7 +24,7 @@ uses
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  dxSkinscxPCPainter, cxCheckBox;
+  dxSkinscxPCPainter, cxCheckBox, formRecordPlay;
 
 type
   TfrmSessions = class(TSprForm)
@@ -74,6 +74,11 @@ type
     cmbFilter: TcxComboBox;
     chkWorkerClients: TcxCheckBox;
     MemQ: TdxMemData;
+    RecColumn: TcxGridDBColumn;
+    pnlForm: TPanel;
+    GridViewColumn12: TcxGridDBColumn;
+    GridViewColumn13: TcxGridDBColumn;
+    GridViewColumn14: TcxGridDBColumn;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -86,12 +91,16 @@ type
     procedure Edit_btnClick(Sender: TObject);
     procedure cmbFilterPropertiesChange(Sender: TObject);
     procedure chkWorkerClientsClick(Sender: TObject);
+    procedure GridViewFocusedRecordChanged(Sender: TcxCustomGridTableView;
+      APrevFocusedRecord, AFocusedRecord: TcxCustomGridRecord;
+      ANewItemRecordFocusingChanged: Boolean);
+    procedure FormDestroy(Sender: TObject);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
     procedure SetFilter;
   public
-    { Public declarations }
+    frmPlay: TfrmRecordPlay;
   end;
 
 var
@@ -286,12 +295,25 @@ begin
   edtTimeStart.Date := Date;
   edtTimeEnd.Date   := edtTimeStart.Date;
 
+  frmRecordPlay := TfrmRecordPlay.Create(nil);
+  frmPlay := frmRecordPlay;
+  frmPlay.Parent :=  pnlForm;
+  frmPlay.BorderIcons := [];
+  frmPlay.BorderStyle := bsNone;
+  pnlForm.Visible := False;
+
   MemHeader.Open;
   MemHeader.Append;
   MemHeader.Post;
   cmbFilter.ItemIndex := 0;
 end;
 
+
+procedure TfrmSessions.FormDestroy(Sender: TObject);
+begin
+  frmPlay.Free;
+  inherited;
+end;
 
 procedure TfrmSessions.GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
   ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
@@ -312,6 +334,62 @@ begin
    ACanvas.Canvas.Font.Style := [fsBold]
  else
    ACanvas.Canvas.Font.Style := [];
+end;
+
+procedure TfrmSessions.GridViewFocusedRecordChanged(
+  Sender: TcxCustomGridTableView; APrevFocusedRecord,
+  AFocusedRecord: TcxCustomGridRecord; ANewItemRecordFocusingChanged: Boolean);
+var
+  ColumnId: Integer;
+  Cellvalue : variant;
+  vRecId: Variant;
+  sRecId: string;
+  focusedCell: TcxGridTableDataCellViewInfo;
+begin
+  if not GridView.Focused then
+    Exit;
+  focusedCell := nil;
+
+  if RecColumn.FocusedCellViewInfo = nil then
+  begin
+    if GridView.ViewData.RowCount > 0 then
+      focusedCell := GridView.ViewData.Rows[0].ViewInfo.GetCellViewInfoByItem(GridViewColumn5);
+  end
+  else
+    focusedCell := RecColumn.FocusedCellViewInfo;
+
+  if focusedCell = nil then
+    Exit;
+
+  pnlForm.Top  := Grid.Top + focusedCell.RealBounds.Top + 1;
+  pnlForm.Left := focusedCell.RealBounds.Left + 1;
+  ColumnID     := GridView.GetColumnByFieldName('CALLAPIID').Index;
+  Cellvalue    := focusedCell.GridRecord.Values[ColumnID];
+  frmPlay.CallApiId := focusedCell.GridRecord.Values[ColumnId];
+  ColumnID     := GridView.GetColumnByFieldName('LOCALNUM').Index;
+  frmPlay.ext  := focusedCell.GridRecord.Values[ColumnId];
+
+  ColumnID      := GridView.GetColumnByFieldName('RECAPIID').Index;
+
+  vRecId := focusedCell.GridRecord.Values[ColumnId];
+  if VarIsNull(vRecId) then
+    sRecId := ''
+  else
+    sRecId := vRecId;
+
+  frmPlay.RecId := sRecId;
+
+  frmPlay.FileName  := '';
+  frmPlay.Width  := GridViewColumn5.Width;
+  frmPlay.Height := focusedCell.Height-2;
+  pnlForm.Width  := frmPlay.Width;
+  pnlForm.Height := frmPlay.Height;
+  frmPlay.Top := 0;
+  frmPlay.Left := 0;
+  frmPlay.Visible := True;
+  pnlForm.Visible := True;
+  pnlForm.BringToFront;
+  frmPlay.BringToFront;
 end;
 
 procedure TfrmSessions.miFilterAcceptedClick(Sender: TObject);
@@ -394,11 +472,14 @@ end;
 procedure TfrmSessions.SetFilter;
 begin
   try
+    GridView.OnFocusedRecordChanged := nil;
     Screen.Cursor := crHourGlass;
     MemQ.Filtered := False;
     MemQ.Filtered := True;
   finally
     Screen.Cursor := crDefault;
+    GridView.OnFocusedRecordChanged := GridViewFocusedRecordChanged;
+    pnlForm.Visible := (MemQ.RecordCount > 0);
   end;
 end;
 

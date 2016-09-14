@@ -504,6 +504,7 @@ begin
   try
     frmCallReport.ShowModal;
   finally
+    frmCallReport._Query.Close;
     frmCallReport.Free;
   end;
 

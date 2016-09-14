@@ -1,5 +1,4 @@
 inherited frmMain: TfrmMain
-  Font.Height = -15
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate

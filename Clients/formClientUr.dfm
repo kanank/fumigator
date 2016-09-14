@@ -4,7 +4,7 @@ inherited frmClientUr: TfrmClientUr
   ClientWidth = 1063
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -262
+  ExplicitTop = -187
   ExplicitWidth = 1079
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -209,7 +209,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitLeft = -3
       ExplicitTop = 220
       ExplicitWidth = 305
@@ -467,7 +466,7 @@ inherited frmClientUr: TfrmClientUr
       Margins.Bottom = 4
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -531,8 +530,8 @@ inherited frmClientUr: TfrmClientUr
           ExplicitHeight = 18
         end
         inherited Label8: TLabel
-          Left = 51
-          Top = 93
+          Left = 119
+          Top = 92
           Width = 136
           Height = 23
           Margins.Left = 4
@@ -541,8 +540,8 @@ inherited frmClientUr: TfrmClientUr
           Margins.Bottom = 4
           Font.Height = -19
           Visible = False
-          ExplicitLeft = 51
-          ExplicitTop = 93
+          ExplicitLeft = 119
+          ExplicitTop = 92
           ExplicitWidth = 136
           ExplicitHeight = 23
         end
@@ -887,7 +886,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 105
       ExplicitWidth = 462
       ExplicitHeight = 42
@@ -931,7 +929,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -944,7 +942,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -956,7 +954,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 151
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1000,7 +997,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1013,7 +1010,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1025,7 +1022,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 186
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1069,7 +1065,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1082,7 +1078,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1094,7 +1090,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 220
       ExplicitWidth = 462
       ExplicitHeight = 42
@@ -1138,7 +1133,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1151,7 +1146,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1163,7 +1158,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 115
       ExplicitWidth = 462
       ExplicitHeight = 41
@@ -1207,7 +1201,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 276
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 276
       end
       inherited edtSocr: TcxTextEdit
@@ -1220,7 +1214,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
     end
@@ -1293,7 +1287,6 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Font.Height = -20
       ExplicitTop = 258
       ExplicitWidth = 300
       ExplicitHeight = 41
@@ -1337,7 +1330,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 4
         ExplicitWidth = 111
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 111
       end
       inherited edtSocr: TcxTextEdit
@@ -1350,7 +1343,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 93
         ExplicitTop = 4
         ExplicitWidth = 45
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 45
       end
       inherited cmbName: TcxComboBox
@@ -1363,7 +1356,7 @@ inherited frmClientUr: TfrmClientUr
         ExplicitLeft = 141
         ExplicitTop = 6
         ExplicitWidth = 111
-        ExplicitHeight = 32
+        ExplicitHeight = 26
         Width = 111
       end
     end
@@ -1374,12 +1367,11 @@ inherited frmClientUr: TfrmClientUr
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Style.Font.Height = -20
       Style.IsFontAssigned = True
       ExplicitLeft = 400
       ExplicitTop = 184
       ExplicitWidth = 60
-      ExplicitHeight = 32
+      ExplicitHeight = 26
       Width = 60
     end
     inherited Query: TIBQuery
@@ -1875,9 +1867,8 @@ inherited frmClientUr: TfrmClientUr
         Margins.Right = 4
         Margins.Bottom = 4
         ExplicitLeft = 311
-        ExplicitTop = 25
         ExplicitWidth = 43
-        ExplicitHeight = 144
+        ExplicitHeight = 126
         inherited btnAdd: TRzBitBtn
           Top = -2
           Width = 39
@@ -1888,6 +1879,7 @@ inherited frmClientUr: TfrmClientUr
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
+          ExplicitTop = -2
           ExplicitWidth = 39
           ExplicitHeight = 38
         end
@@ -1901,7 +1893,7 @@ inherited frmClientUr: TfrmClientUr
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 44
+          ExplicitTop = 41
           ExplicitWidth = 39
           ExplicitHeight = 38
         end
@@ -1915,7 +1907,7 @@ inherited frmClientUr: TfrmClientUr
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 90
+          ExplicitTop = 87
           ExplicitWidth = 39
           ExplicitHeight = 38
         end
@@ -2034,20 +2026,18 @@ inherited frmClientUr: TfrmClientUr
         ExplicitHeight = 256
         inherited RzPanel2: TRzPanel
           Left = 1015
-          Top = 25
           Width = 42
-          Height = 230
+          Height = 236
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           ExplicitLeft = 1015
-          ExplicitTop = 25
           ExplicitWidth = 42
-          ExplicitHeight = 230
+          ExplicitHeight = 236
           inherited btnAdd: TRzBitBtn
             Left = 3
-            Top = 85
+            Top = 91
             Width = 39
             Height = 39
             Margins.Left = 4
@@ -2057,13 +2047,13 @@ inherited frmClientUr: TfrmClientUr
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 85
+            ExplicitTop = 91
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
           inherited btnEdit: TRzBitBtn
             Left = 3
-            Top = 133
+            Top = 139
             Width = 39
             Height = 38
             Margins.Left = 4
@@ -2073,13 +2063,13 @@ inherited frmClientUr: TfrmClientUr
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 133
+            ExplicitTop = 139
             ExplicitWidth = 39
             ExplicitHeight = 38
           end
           inherited btnDel: TRzBitBtn
             Left = 3
-            Top = 189
+            Top = 195
             Width = 39
             Height = 39
             Margins.Left = 4
@@ -2089,7 +2079,7 @@ inherited frmClientUr: TfrmClientUr
             Margin = 3
             Spacing = 6
             ExplicitLeft = 3
-            ExplicitTop = 189
+            ExplicitTop = 195
             ExplicitWidth = 39
             ExplicitHeight = 39
           end
@@ -2098,7 +2088,7 @@ inherited frmClientUr: TfrmClientUr
           Left = 7
           Top = 24
           Width = 1049
-          Height = 231
+          Height = 125
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -2107,7 +2097,7 @@ inherited frmClientUr: TfrmClientUr
           ExplicitLeft = 7
           ExplicitTop = 24
           ExplicitWidth = 1049
-          ExplicitHeight = 231
+          ExplicitHeight = 125
           inherited GridView: TcxGridDBTableView
             inherited GridViewColumn1: TcxGridDBColumn
               Width = 113

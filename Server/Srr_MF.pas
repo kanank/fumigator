@@ -223,6 +223,7 @@ type
     function SendMsg(const ANick: String; const AMsg: String) : Boolean;
     function BroadcastMsg(const bmsg: String): boolean;
     procedure WriteLog(s: string);
+    procedure AppException(Sender: TObject; E: Exception);
   end;
 
 const
@@ -240,7 +241,7 @@ implementation
 
 {$R *.dfm}
 uses
-  System.DateUtils, CommonFunc;
+  System.DateUtils, CommonFunc, System.StrUtils;
 
 
 procedure TMF.AddLog(Logstr: string; ALock: Boolean=true);
@@ -311,6 +312,11 @@ begin
   //SendCommandToUser(TPhoneCalls(Sender).Extension, '#callid:' + TPhoneCalls(Sender).CallId);
 end;
 
+
+procedure TMF.AppException(Sender: TObject; E: Exception);
+begin
+  WriteLog('Ошибка приложения: ' + E.Message);
+end;
 
 function TMF.BroadcastMsg(const bmsg: String): boolean;
 var
@@ -714,14 +720,14 @@ begin
 
     else // получить файл записи
     if ARequestInfo.Params.Values['action'] = 'getrecfile' then
-    begin
+    try
       WriteLog(ARequestInfo.UnparsedParams);
       s := ARequestInfo.Params.Values['recid'];
       s := GetRecordFile(s);
-      WriteLog(s);
       if s <> '' then
       begin
         Stream := TMemoryStream.Create;
+        try
         try
           Stream.LoadFromFile(s);
           Stream.Position := 0;
@@ -733,11 +739,23 @@ begin
 
           AResponseInfo.WriteHeader;
           AResponseInfo.WriteContent;
-        finally
-          //Stream.Free;
+        except
+          WriteLog('Ошибка: ' + Exception(ExceptObject).Message);
+          AResponseInfo.ResponseNo    := 403;
+          AResponseInfo.WriteHeader;
         end;
+        finally
+
+        end;
+      end
+      else //не найден
+      begin
+        AResponseInfo.ResponseNo    := 404;
+        AResponseInfo.WriteHeader;
       end;
-    end;
+  finally
+    WriteLog(IntToStr(AResponseInfo.ResponseNo)+ ' | ' + s);
+  end;
   finally
     CSectionFumigator.Leave;
     //if Assigned(stream) then
@@ -1709,6 +1727,7 @@ var
   lMutex: boolean;
 begin
   fIn := ACallFlow = 'in';
+  APhone := RightStr(APhone, 10);
   //if fIn then
     lMutex := LockMutex(EventsMutex, 1000);
 

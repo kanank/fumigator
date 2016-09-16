@@ -156,7 +156,7 @@ implementation
 
 function TTelphinRingMeToken.CheckToken: Boolean;
 begin
-  Result := Assigned(Self) and ((fToken = '') or (Now < fTimeExpires));
+  Result := Assigned(Self) and (not (fToken = '') and (Now < fTimeExpires));
 end;
 
 constructor TTelphinRingMeToken.Create;
@@ -260,7 +260,11 @@ begin
   try
     json := TJSONObject.Create;
     try
+      fHttp.Request.CustomHeaders.Clear;
       sResponse := HttpPost(url, false, s);
+
+      if sResponse = '' then
+        Exit;
 
       json.Parse(BytesOf(sResponse), 0);
       fToken := json.Values['access_token'].ToString;

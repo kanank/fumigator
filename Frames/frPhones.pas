@@ -70,6 +70,7 @@ var
   i, ind, client_id: Integer;
   nom: string;
 begin
+  Exit;
   inherited;
   i := TcxGridDBTableView(Sender).GetColumnByFieldName('phone').Index;
 

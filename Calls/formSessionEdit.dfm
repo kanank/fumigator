@@ -6,7 +6,7 @@ inherited frmSessionEdit: TfrmSessionEdit
   AutoScroll = True
   Caption = #1057#1077#1089#1089#1080#1103' ['#1088#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1077']'
   Position = poDesktopCenter
-  ExplicitLeft = -114
+  ExplicitLeft = -308
   ExplicitWidth = 1043
   ExplicitHeight = 639
   PixelsPerInch = 96
@@ -50,7 +50,7 @@ inherited frmSessionEdit: TfrmSessionEdit
       ExplicitLeft = 1161
     end
     object RzButton1: TRzButton
-      Left = 855
+      Left = 846
       Top = 9
       Width = 172
       Height = 41
@@ -58,7 +58,6 @@ inherited frmSessionEdit: TfrmSessionEdit
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      ModalResult = 1
       Anchors = [akTop, akRight]
       Caption = #1054#1050
       Font.Charset = DEFAULT_CHARSET
@@ -71,6 +70,7 @@ inherited frmSessionEdit: TfrmSessionEdit
       ParentFont = False
       TabOrder = 1
       ThemeAware = False
+      OnClick = RzButton1Click
     end
     object btnClientEdit: TRzButton
       Left = 438
@@ -214,7 +214,7 @@ inherited frmSessionEdit: TfrmSessionEdit
           Left = 7
           Top = 24
           Width = 1049
-          Height = 231
+          Height = 227
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -223,7 +223,7 @@ inherited frmSessionEdit: TfrmSessionEdit
           ExplicitLeft = 7
           ExplicitTop = 24
           ExplicitWidth = 1049
-          ExplicitHeight = 231
+          ExplicitHeight = 227
           inherited GridView: TcxGridDBTableView
             inherited GridViewColumn1: TcxGridDBColumn
               Width = 93

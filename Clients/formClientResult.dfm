@@ -1,27 +1,35 @@
 inherited frmClientResult: TfrmClientResult
   Caption = #1048#1089#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082
-  ClientHeight = 414
-  ClientWidth = 769
+  ClientHeight = 573
+  ClientWidth = 1065
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitWidth = 785
-  ExplicitHeight = 452
+  ExplicitWidth = 1081
+  ExplicitHeight = 611
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 480
-    Top = 339
+    Left = 665
+    Top = 469
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 440
-    ExplicitTop = 335
+    ExplicitLeft = 665
+    ExplicitTop = 469
   end
   object pnlForm: TRzPanel
     AlignWithMargins = True
-    Left = 3
-    Top = 3
-    Width = 763
-    Height = 273
+    Left = 4
+    Top = 4
+    Width = 1057
+    Height = 378
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alTop
     Alignment = taLeftJustify
     AlignmentVertical = avTop
@@ -31,39 +39,51 @@ inherited frmClientResult: TfrmClientResult
   end
   object pnlResult: TRzPanel
     Left = 0
-    Top = 283
-    Width = 769
-    Height = 87
+    Top = 392
+    Width = 1065
+    Height = 120
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     BorderOuter = fsFlat
     BorderSides = [sdTop]
     TabOrder = 1
     DesignSize = (
-      769
-      87)
+      1065
+      120)
     object pnlCall: TRzPanel
-      Left = 661
+      Left = 915
       Top = 0
-      Width = 108
-      Height = 87
+      Width = 150
+      Height = 120
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akTop, akRight]
       BorderOuter = fsNone
       TabOrder = 0
       Transparent = True
       DesignSize = (
-        108
-        87)
+        150
+        120)
       object btnTransferCall: TRzButton
         Left = 1
-        Top = 31
-        Width = 105
-        Height = 26
+        Top = 43
+        Width = 146
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Anchors = [akTop, akRight]
         Caption = #1055#1077#1088#1077#1074#1077#1089#1090#1080' '#1074#1099#1079#1086#1074
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2960640
-        Font.Height = -11
+        Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
         HotTrack = True
@@ -74,15 +94,19 @@ inherited frmClientResult: TfrmClientResult
       end
       object btnCallLater: TRzButton
         Left = 1
-        Top = 4
-        Width = 105
-        Height = 26
+        Top = 6
+        Width = 146
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         ModalResult = 1
         Anchors = [akTop, akRight]
         Caption = #1055#1086#1079#1074#1086#1085#1080#1090#1100' '#1087#1086#1079#1078#1077
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2960640
-        Font.Height = -11
+        Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
         HotTrack = True
@@ -94,15 +118,19 @@ inherited frmClientResult: TfrmClientResult
       end
       object btnDeleteCall: TRzButton
         Left = 1
-        Top = 58
-        Width = 105
-        Height = 26
+        Top = 80
+        Width = 146
+        Height = 36
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Anchors = [akTop, akRight]
         Caption = #1047#1072#1082#1086#1085#1095#1080#1090#1100' '#1089#1077#1089#1089#1080#1102
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2960640
-        Font.Height = -11
+        Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
         HotTrack = True
@@ -116,21 +144,29 @@ inherited frmClientResult: TfrmClientResult
   end
   object RzPanel1: TRzPanel
     Left = 0
-    Top = 370
-    Width = 769
-    Height = 44
+    Top = 512
+    Width = 1065
+    Height = 61
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     BorderOuter = fsBump
     BorderSides = [sdTop, sdBottom]
     TabOrder = 2
     DesignSize = (
-      769
-      44)
+      1065
+      61)
     object Image2: TImage
-      Left = 5
-      Top = 5
-      Width = 111
-      Height = 49
+      Left = 7
+      Top = 7
+      Width = 154
+      Height = 68
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akLeft, akBottom]
       Picture.Data = {
         0D546478536D617274496D61676589504E470D0A1A0A0000000D494844520000
@@ -256,16 +292,20 @@ inherited frmClientResult: TfrmClientResult
       Transparent = True
     end
     object Exit_bnt: TRzButton
-      Left = 640
-      Top = 9
-      Width = 124
-      Height = 29
+      Left = 886
+      Top = 12
+      Width = 172
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ModalResult = 2
       Anchors = [akTop, akRight]
       Caption = #1042#1099#1093#1086#1076
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 2960640
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -276,16 +316,20 @@ inherited frmClientResult: TfrmClientResult
       Visible = False
     end
     object butOK: TRzButton
-      Left = 640
-      Top = 8
-      Width = 124
-      Height = 29
+      Left = 886
+      Top = 11
+      Width = 172
+      Height = 40
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ModalResult = 1
       Anchors = [akTop, akRight]
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 2960640
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True

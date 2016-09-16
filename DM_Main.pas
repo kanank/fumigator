@@ -709,26 +709,31 @@ begin
       if not Assigned(frmSessionResult) or
           not frmSessionResult.Visible then
         frmClientResult.CreateFormResult;
+      frmClientResult.frmResult := frmClientResult;
 
+      try
       frmClientResult.ShowModal;
       Result := frmClientResult.CallResult;
       frmClientResult.frmCli.Parent := nil;
+      if Assigned(frmClientResult) and
+          Assigned(frmSessionResult) then
+        frmSessionResult.Parent := nil;
 
-      inCalling      := False;
-      waitCalling    := False;
-
-      if frmCallUnknown.Visible then
-         frmCallUnknown.HideAbsolute;
+      finally
+      end;
     finally
       try
-      FreeAndNil(frmSessionResult);
-      FreeAndNil(frmClientResult);
-      //FreeAndNil();
-      //FreeAndNil(frmIncomeCall);
-      if Assigned(frmClientFiz) then
-        FreeAndNil(frmClientFiz);
-      if Assigned(frmClientUr) then
-        FreeAndNil(frmClientUr);
+        inCalling      := False;
+        waitCalling    := False;
+
+        if frmCallUnknown.Visible then
+           frmCallUnknown.HideAbsolute;
+        FreeAndNil(frmSessionResult);
+        FreeAndNil(frmClientResult);
+        if Assigned(frmClientFiz) then
+          FreeAndNil(frmClientFiz);
+        if Assigned(frmClientUr) then
+          FreeAndNil(frmClientUr);
       finally
         CallObj.Ready  := true;
       end;

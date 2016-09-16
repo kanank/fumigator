@@ -514,7 +514,8 @@ procedure TfrmMain.UpdateClients;
 var
   id: Integer;
 begin
-  if Assigned(frmClientResult) or Assigned(frmIncomeCallRoot) or
+  if not DM.Clients.Active or
+     Assigned(frmClientResult) or Assigned(frmIncomeCallRoot) or
     (Assigned(frmClientFiz) and frmClientFiz.InUpdate) or
     (Assigned(frmClientUr) and frmClientUr.InUpdate) then
     Exit;

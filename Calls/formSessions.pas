@@ -24,7 +24,7 @@ uses
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  dxSkinscxPCPainter, cxCheckBox, formRecordPlay;
+  dxSkinscxPCPainter, cxCheckBox, formRecordPlay, IBX.IBUpdateSQL;
 
 type
   TfrmSessions = class(TSprForm)
@@ -95,6 +95,7 @@ type
       APrevFocusedRecord, AFocusedRecord: TcxCustomGridRecord;
       ANewItemRecordFocusingChanged: Boolean);
     procedure FormDestroy(Sender: TObject);
+    procedure QAfterRefresh(DataSet: TDataSet);
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -181,8 +182,8 @@ begin
   frmSessionEdit := TfrmSessionEdit.Create(nil);
 
   try
-  // результат
   frmSessionResult := TfrmSessionResult.Create(nil);
+  frmSessionResult.NeedCheckCall := False;
   frmSessionResult.Cancel_btn.Visible := False;
   frmSessionResult.Height := frmSessionResult.Height -
     frmSessionResult.Cancel_btn.Height - 10;
@@ -192,10 +193,10 @@ begin
   frmSessionResult.Q.Open;
   frmSessionResult.Q.Edit;
 
-  frmSessionResult.edtResult.Text :=
+  (*frmSessionResult.edtResult.Text :=
     frmSessionResult.Q.FieldByName('RESULT').AsString;
   frmSessionResult.edtIshod.Text :=
-    frmSessionResult.Q.FieldByName('ISHOD').AsString;
+    frmSessionResult.Q.FieldByName('ISHOD').AsString;*)
 
   frmSessionResult.Position := poDefault;
 
@@ -203,6 +204,7 @@ begin
   frmSessionResult.BorderStyle := bsNone;
 
   //frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
+  frmSessionEdit.frmResult := frmSessionResult;
   frmSessionResult.Show;
 
   //карточка клиента
@@ -214,7 +216,7 @@ begin
     prm := NewFrmCreateParam(asShow, DM.Clients);
     if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
     begin
-      frmClientFiz := TfrmClientFiz.Create(frmSessionEdit, '', @prm);
+      frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
       //frmClientFiz.RzPanel1.Visible := False;
       //frmClientFiz.Height := frmClientFiz.Height - frmClientFiz.RzPanel1.Height;
       frm := frmClientFiz;
@@ -222,26 +224,13 @@ begin
     end
     else
     begin
-      frmClientUr := TfrmClientUr.Create(frmSessionEdit, '', @prm);
+      frmClientUr := TfrmClientUr.Create(nil, '', @prm);
       //frmClientUr.RzPanel1.Visible := False;
       //frmClientUr.Height := frmClientUr.Height - frmClientUr.RzPanel1.Height;
       frm := frmClientUr;
       frmSessionEdit.frm := frmClientUr;
     end;
 
-    //frm.BorderIcons := [];
-    //frm.BorderStyle := bsNone;
-    //frm.Parent      := frmSessionEdit.pnlClient;
-
-    //frmSessionEdit.pnlClient.Height := frm.Height + 5;
-    //frmSessionEdit.pnlClient.Width  := frm.Width;
-
-    //frm.Position := poDefault;
-
-    //if frm.Width > frmSessionEdit.Width then
-    //  frmSessionEdit.Width := frm.Width;
-
-    //frm.Show;
     if Assigned(frmSessionEdit.frm) then
       frmSessionEdit.SetClientForm
     else
@@ -269,23 +258,27 @@ begin
     frmSessionEdit.ShowModal;
 
     if (frmSessionEdit.ModalResult = mrOk) and
-       DM.isModifiedData(frmSessionResult.Q) then
-    begin
-      if frmSessionResult.CheckFields then
+       frmSessionResult.isModified  then
       try
+        frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
         frmSessionResult.Q.Post;
           if frmSessionResult.Q.Transaction.Active then
              frmSessionResult.Q.Transaction.CommitRetaining;
+          MemQ.Edit;
+          MemQ.FieldByName('ISHOD').AsString :=
+            frmSessionResult.Q.FieldByName('ISHOD').AsString;
+          MemQ.FieldByName('RESULT').AsString :=
+            frmSessionResult.Q.FieldByName('RESULT').AsString;
+          MemQ.FieldByName('WORKER_ID').AsString :=
+            frmSessionResult.Q.FieldByName('WORKER_ID').AsString;
+
+          MemQ.Post;
         except
            if frmSessionResult.Q.Transaction.Active then
              frmSessionResult.Q.Transaction.RollbackRetaining;
         end
-      else
-        Exit;
-    end;
 
   finally
-    FreeAndNil(frmSessionResult);
     FreeAndNil(frmSessionEdit);
   end;
 end;
@@ -420,6 +413,15 @@ begin
   Result := Ms * MsTime;
 end;
 
+procedure TfrmSessions.QAfterRefresh(DataSet: TDataSet);
+begin
+  if MemQ.Locate('id', DataSet.FieldByName('id').AsInteger, []) then
+  begin
+    MemQ.Edit
+  end;
+
+end;
+
 procedure TfrmSessions.QFilterRecord(DataSet: TDataSet; var Accept: Boolean);
 var
   ff, f0, f1, f2: Boolean;
@@ -431,7 +433,7 @@ begin
   if f0 then
   begin
     if miFilterAccepted.Checked then
-      f1 := DataSet.FieldByName('ISHOD').AsString <> '';
+      f1 := DataSet.FieldByName('ACCEPTED').AsInteger = 1;
     if miFilterDuration.Checked then
       f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
 

@@ -16,10 +16,13 @@ type
     frameClientCalls: TframeClientCalls;
     btnClientEdit: TRzButton;
     procedure btnClientEditClick(Sender: TObject);
+    procedure RzButton1Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   public
     frm: TForm;
+    frmResult: TForm;
     procedure SetClientForm;
   end;
 
@@ -31,7 +34,7 @@ implementation
 {$R *.dfm}
 
 uses
-  formClientFiz, formClientUr, CommonTypes;
+  formSessionResult, formClientFiz, formClientUr, CommonTypes;
 
 procedure TfrmSessionEdit.btnClientEditClick(Sender: TObject);
 begin
@@ -62,6 +65,30 @@ begin
 
   frm.ShowModal;
   SetClientForm;
+end;
+
+procedure TfrmSessionEdit.FormDestroy(Sender: TObject);
+begin
+  if Assigned(frm) then
+    frm.Parent := nil;
+  FreeAndNil(frm);
+  if Assigned(frmResult) then
+    frmResult.Parent := nil;
+  FreeAndNil(frmResult);
+
+  inherited;
+
+end;
+
+procedure TfrmSessionEdit.RzButton1Click(Sender: TObject);
+begin
+  if Assigned(frmResult) and TfrmSessionResult(frmResult).isModified then
+  begin
+    if TfrmSessionResult(frmResult).CheckFields then
+      ModalResult := mrOk;
+  end
+  else
+    ModalResult := mrOk;
 end;
 
 procedure TfrmSessionEdit.SetClientForm;

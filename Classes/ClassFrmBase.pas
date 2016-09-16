@@ -140,6 +140,9 @@ end;
 procedure TBaseForm.FormDestroy(Sender: TObject);
 begin
   try
+    if Self.Parent <> nil then
+      Self.Parent := nil;
+
     FreeAndNil(fNonValidateList);
     FreeAndNil(fValidateList);
   finally

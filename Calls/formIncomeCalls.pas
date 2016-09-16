@@ -76,14 +76,22 @@ uses
 
 procedure TfrmIncomeCall.btnOkClick(Sender: TObject);
 begin
+
   if Assigned(frmClientFiz) then
   try
     frmClientFiz.butOK.Click;
      fCanClose := True;
-     ModalResult := mrOk;
+     ModalResult := mrClose;
   finally
 
+  end
+  else
+  begin
+    fCanClose := True;
+    ModalResult := mrClose;
   end;
+
+
 end;
 
 procedure TfrmIncomeCall.btnTransferClick(Sender: TObject);

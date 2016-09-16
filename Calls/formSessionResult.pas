@@ -47,19 +47,26 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure QAfterOpen(DataSet: TDataSet);
+    procedure QBeforePost(DataSet: TDataSet);
   private
     fBack: Boolean; //нажат возврат
+    function GetModified: Boolean;
   public
     CallResult: string;
     ResultType: string; //тип нажатой кнопки
     ShowOnTop: Boolean; //показать поверх
     NeedCheckCall: Boolean; //надо проверять окончание звонка True по умолчанию
 
+    property isModified: Boolean read GetModified;
+
     function CheckFields: Boolean;
     destructor Destroy; overload;
 
     procedure ClearResult;
     procedure EnableButtons;
+    procedure TextToField;
+    procedure FieldToText;
   end;
 
 var
@@ -171,6 +178,14 @@ begin
   btnOther.Enabled      := True;
 end;
 
+procedure TfrmSessionResult.FieldToText;
+begin
+  if not Q.Active then
+    Exit;
+  edtResult.Text := Q.FieldByName('RESULT').AsString;
+  edtIshod.Text  := Q.FieldByName('ISHOD').AsString;
+end;
+
 procedure TfrmSessionResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
@@ -207,10 +222,41 @@ begin
     SetTopMost;
 end;
 
+function TfrmSessionResult.GetModified: Boolean;
+begin
+  if Q.Active then
+    Result := (edtResult.Text <> Q.FieldByName('RESULT').AsString) or
+        (edtIshod.Text <> Q.FieldByName('ISHOD').AsString)
+  else
+    Result := (edtResult.Text <> '') or
+        (edtIshod.Text <> '')
+end;
+
+procedure TfrmSessionResult.QAfterOpen(DataSet: TDataSet);
+begin
+  FieldToText;
+end;
+
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);
 begin
   //cmbIshod.Text  := '';
   //edtResult.Text := '';
+end;
+
+procedure TfrmSessionResult.QBeforePost(DataSet: TDataSet);
+begin
+  TextToField;
+end;
+
+procedure TfrmSessionResult.TextToField;
+begin
+  if not Q.Active then
+    Exit;
+  if (Q.State <> dsEdit) or (Q.State <> dsInsert) then
+    Q.Edit;
+
+  Q.FieldByName('RESULT').AsString := edtResult.Text;
+  Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
 end;
 
 end.

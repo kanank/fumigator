@@ -693,18 +693,14 @@ object MF: TMF
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      
-        'select code||phone phone,  cast(p.client_id as varchar(11)) || '#39 +
-        ','#39' ||'
+      'select phone phone,  cast(p.client_id as varchar(11)) || '#39','#39' ||'
       'case when c.type_cli = 0 then '#39'F'#39' else '#39'U'#39' end type_cli'
       
         'from phones p join clients c on c.id = p.client_id and p."TYPE"=' +
         '0'
       'where c.act = 1'
       'union all'
-      
-        'select code||phone,  cast(p.client_id as varchar(11)) || '#39','#39' || ' +
-        #39'C'#39
+      'select phone,  cast(p.client_id as varchar(11)) || '#39','#39' || '#39'C'#39
       
         'from phones p join contacts c on c.id = p.client_id and p."TYPE"' +
         '=3')

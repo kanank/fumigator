@@ -25,6 +25,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
     procedure btnCallLaterClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     fCallId: string;
     fCallApiId: string;
@@ -45,6 +46,7 @@ type
     //CallResult: string;
     ClientId: Integer;
     frmCli: TForm;
+    frmResult: TForm;
     TypeCli: Integer;
     property CallId: string read fCallId write SetCallId;
     property CallApiId: string read fCallApiId write fCallApiId;
@@ -55,7 +57,6 @@ type
     procedure CallFinish;
     procedure CheckSession;
     procedure doFinishCall; override;
-    destructor Destroy; overload;
     procedure CreateFormResult;
   end;
 
@@ -169,12 +170,6 @@ begin
   frmSessionResult.Show;
 end;
 
-destructor TfrmClientResult.Destroy;
-begin
-  CallObj.Ready := true;
-  inherited;
-end;
-
 procedure TfrmClientResult.doFinishCall;
 begin
   CallFinish;
@@ -185,6 +180,17 @@ procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
 begin
   if not (fClientSaved and fResultSaved) then
     CanClose := False;
+  inherited;
+end;
+
+procedure TfrmClientResult.FormDestroy(Sender: TObject);
+begin
+  if Assigned(frmCli) then
+    frmCli.Parent := nil;
+
+  if Assigned(frmResult) then
+    frmResult.Parent := nil;
+
   inherited;
 end;
 

@@ -13,5 +13,10 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMF, MF);
-  Application.Run;
+  try
+    Application.OnException := MF.AppException;
+    Application.Run;
+  except
+
+  end;
 end.

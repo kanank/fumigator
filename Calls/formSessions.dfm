@@ -4,7 +4,6 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1250
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -531
   ExplicitWidth = 1266
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -454,10 +453,11 @@ inherited frmSessions: TfrmSessions
   end
   object Q: TIBQuery
     Database = DataModuleMain.DB
-    Transaction = DataModuleMain.DefTr
+    Transaction = DataModuleMain.Calls_Tr
     AutoCalcFields = False
+    AfterRefresh = QAfterRefresh
     BufferChunks = 1000
-    CachedUpdates = False
+    CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
       

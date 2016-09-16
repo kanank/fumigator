@@ -6,6 +6,7 @@ inherited frmIncomeCall: TfrmIncomeCall
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -148
   ExplicitWidth = 900
   ExplicitHeight = 350
   DesignSize = (
@@ -53,12 +54,14 @@ inherited frmIncomeCall: TfrmIncomeCall
     Margins.Right = 6
     Margins.Bottom = 6
     ExplicitTop = 251
+    ExplicitWidth = 884
     inherited Image2: TImage
       Left = 251
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      ExplicitLeft = 251
     end
     inherited Exit_bnt: TRzButton
       Left = 413
@@ -71,7 +74,7 @@ inherited frmIncomeCall: TfrmIncomeCall
       ModalResult = 1
       Caption = #1054#1090#1082#1088#1099#1090#1100' '#1082#1072#1088#1090#1086#1095#1082#1091' '#1082#1083#1080#1077#1085#1090#1072
       OnClick = Exit_bntClick
-      ExplicitLeft = 170
+      ExplicitLeft = 413
       ExplicitTop = 8
       ExplicitHeight = 46
     end
@@ -98,7 +101,6 @@ inherited frmIncomeCall: TfrmIncomeCall
       TabOrder = 1
       ThemeAware = False
       OnClick = btnTransferClick
-      ExplicitLeft = 720
     end
     object btnOk: TRzButton
       Left = 720
@@ -109,7 +111,6 @@ inherited frmIncomeCall: TfrmIncomeCall
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      ModalResult = 1
       Anchors = [akTop, akRight]
       Caption = #1054#1050
       Font.Charset = DEFAULT_CHARSET

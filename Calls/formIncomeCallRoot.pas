@@ -36,7 +36,7 @@ type
     procedure SetClientCallPrm(AValue: ClientCallParams);
     procedure doFinishCall; override;
     procedure doAcceptCall; override;
-
+    procedure doTransferCall; override;
   public
     property CallResult: string read fCallResult write SetCallResult;
     property CallId: string read fCallId write fCallId;
@@ -118,6 +118,12 @@ begin
 
 end;
 
+procedure TfrmIncomeCallRoot.doTransferCall;
+begin
+  inherited;
+  CallFinish;
+end;
+
 procedure TfrmIncomeCallRoot.CallFinish;
 var
   mr: TModalResult;
@@ -133,7 +139,7 @@ begin
     Exit;
   end;
 
-  if not CallObj.Active and not CallObj.Accepted then //Callobj.Cancelled or fSessionClose then
+  if CallObj.Transfered or (not CallObj.Active and not CallObj.Accepted) then //Callobj.Cancelled or fSessionClose then
   begin
     fNeedFinish := True;
     if Assigned(frmIncomeCall) and frmIncomeCall.Visible then

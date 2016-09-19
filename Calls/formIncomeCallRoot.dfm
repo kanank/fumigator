@@ -2,23 +2,26 @@ inherited frmIncomeCallRoot: TfrmIncomeCallRoot
   BorderIcons = []
   BorderStyle = bsNone
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082
-  ClientHeight = 131
-  ClientWidth = 276
+  ClientHeight = 181
+  ClientWidth = 382
   TransparentColor = True
   TransparentColorValue = clBtnFace
   WindowState = wsMinimized
-  OnDestroy = FormDestroy
   OnShow = FormShow
-  ExplicitWidth = 276
-  ExplicitHeight = 131
+  ExplicitWidth = 382
+  ExplicitHeight = 181
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 24
-    Top = 128
+    Left = 33
+    Top = 177
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Visible = False
-    ExplicitLeft = 8
-    ExplicitTop = 90
+    ExplicitLeft = 33
+    ExplicitTop = 177
   end
   object Timer1: TTimer
     Enabled = False

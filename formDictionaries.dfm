@@ -1,33 +1,62 @@
 inherited frmDictionaries: TfrmDictionaries
   Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-  ClientWidth = 957
+  ClientHeight = 480
+  ClientWidth = 1070
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitWidth = 973
+  ExplicitLeft = -204
+  ExplicitWidth = 1086
+  ExplicitHeight = 518
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 772
+    Left = 855
+    Top = 122
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     Visible = False
-    ExplicitLeft = 713
+    ExplicitLeft = 1069
+    ExplicitTop = -7
   end
   inherited RzPanel1: TRzPanel
-    Width = 957
-    ExplicitWidth = 984
+    Top = 429
+    Width = 1070
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitWidth = 1284
     inherited Image2: TImage
-      Left = 57
-      ExplicitLeft = 84
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      ExplicitLeft = 79
+      ExplicitTop = 2
+      ExplicitHeight = 47
     end
     inherited Exit_bnt: TRzButton
-      Left = 823
-      ExplicitLeft = 850
+      Left = 897
+      Top = 5
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      ExplicitLeft = 897
+      ExplicitTop = 5
     end
   end
   object GridUserTypes: TcxGrid
-    Left = 8
-    Top = 8
-    Width = 225
-    Height = 265
+    Left = 9
+    Top = 9
+    Width = 250
+    Height = 367
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 1
     OnEnter = GridUserTypesEnter
     object cxGridDBTableView1: TcxGridDBTableView
@@ -64,7 +93,7 @@ inherited frmDictionaries: TfrmDictionaries
         Options.Grouping = False
         Options.Moving = False
         Styles.Header = cxStyle1
-        Width = 205
+        Width = 224
       end
     end
     object cxGridLevel1: TcxGridLevel
@@ -72,58 +101,83 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object pnlEdit: TRzPanel
-    Left = 8
-    Top = 273
-    Width = 225
-    Height = 34
+    Left = 9
+    Top = 377
+    Width = 250
+    Height = 42
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alCustom
     BorderInner = fsStatus
     BorderOuter = fsPopup
     TabOrder = 2
     DesignSize = (
-      225
-      34)
+      250
+      42)
     object btnAdd: TRzBitBtn
-      Left = 7
-      Top = 3
-      Width = 28
-      Height = 28
+      Left = 3
+      Top = 2
+      Width = 38
+      Height = 39
       Hint = #1044#1086#1073#1072#1074#1080#1090#1100
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 0
       OnClick = btnAddClick
       ImageIndex = 0
       Images = DataModuleMain.ImgList
+      Margin = 3
+      Spacing = 6
     end
     object btnEdit: TRzBitBtn
-      Left = 41
+      Left = 46
       Top = 3
-      Width = 28
-      Height = 28
+      Width = 39
+      Height = 39
       Hint = #1048#1079#1084#1077#1085#1080#1090#1100
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 1
       OnClick = btnEditClick
       ImageIndex = 2
       Images = DataModuleMain.ImgList
+      Margin = 3
+      Spacing = 6
     end
     object btnDel: TRzBitBtn
-      Left = 192
-      Top = 3
-      Width = 28
-      Height = 28
+      Left = 206
+      Top = 2
+      Width = 39
+      Height = 39
       Hint = #1059#1076#1072#1083#1080#1090#1100
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akTop, akRight]
       TabOrder = 2
       OnClick = btnDelClick
       ImageIndex = 3
       Images = DataModuleMain.ImgList
-      ExplicitLeft = 135
+      Margin = 3
+      Spacing = 6
     end
   end
   object GridProfs: TcxGrid
-    Left = 245
-    Top = 8
-    Width = 225
-    Height = 265
+    Left = 277
+    Top = 9
+    Width = 250
+    Height = 367
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 3
     OnEnter = GridUserTypesEnter
     object cxGridDBTableView2: TcxGridDBTableView
@@ -160,7 +214,7 @@ inherited frmDictionaries: TfrmDictionaries
         Options.Grouping = False
         Options.Moving = False
         Styles.Header = cxStyle1
-        Width = 205
+        Width = 224
       end
     end
     object cxGridLevel2: TcxGridLevel
@@ -168,10 +222,14 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object GridMaterials: TcxGrid
-    Left = 482
-    Top = 8
-    Width = 225
-    Height = 265
+    Left = 545
+    Top = 9
+    Width = 250
+    Height = 367
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 4
     OnEnter = GridUserTypesEnter
     object cxGridDBTableView3: TcxGridDBTableView
@@ -216,10 +274,14 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object GridServices: TcxGrid
-    Left = 719
-    Top = 8
-    Width = 225
-    Height = 265
+    Left = 812
+    Top = 9
+    Width = 250
+    Height = 367
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 5
     OnEnter = GridUserTypesEnter
     object cxGridDBTableView4: TcxGridDBTableView
@@ -264,10 +326,14 @@ inherited frmDictionaries: TfrmDictionaries
     end
   end
   object tvMaterials: TdxDBTreeView
-    Left = 482
-    Top = 27
-    Width = 225
-    Height = 246
+    Left = 545
+    Top = 28
+    Width = 250
+    Height = 348
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     ShowNodeHint = True
     RowSelect = True
     DataSource = DataModuleMain.DSDicMaterials

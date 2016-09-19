@@ -18,6 +18,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -983,6 +984,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1761,6 +1763,19 @@ object DataModuleMain: TDataModuleMain
     end
     object ActivePhonesworker_id: TIntegerField
       FieldName = 'worker_id'
+    end
+  end
+  object StyleRepository: TcxStyleRepository
+    Left = 16
+    Top = 456
+    PixelsPerInch = 96
+    object cxStyle1: TcxStyle
+      AssignedValues = [svFont]
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
     end
   end
 end

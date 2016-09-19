@@ -320,6 +320,7 @@ begin
   DoSocketConnect;
   CallObj.OnStartCall := OnCallStart;
   CallObj.OnFinishCall := OnCallFinish;
+  CallObj.OnTransferCall := OnCallTransfer;
 end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
@@ -417,12 +418,15 @@ procedure TfrmMain.OnCallTransfer(Sender: TObject);
 var
   i: Integer;
 begin
-  TCPClient.Socket.WriteLn ('#getuserlist:');
+  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
   fPhoneListUpdated :=False;
+  i := 0;
   while i < 20 do
   begin
     if fPhoneListUpdated then
       break;
+    Sleep(250);
+    Application.ProcessMessages;
     inc(i)
   end;
 
@@ -452,9 +456,7 @@ procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
 begin
- // n := InputBox('Входящий звонок', 'Номер вызывающего', '+79104579648');
- // ClientSocket.Socket.SendText('#call:' + n + ',755,755');
-  TCPClient.Socket.WriteLn ('Тест');
+  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);

@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Classes, System.UITypes, Vcl.Forms, Winapi.Windows,
   IBX.IBDatabase, Data.DB, IBX.IBCustomDataSet,
   IBX.IBQuery, IBX.IBUpdateSQL, Vcl.ImgList, Vcl.Controls, cxGraphics,
-  CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset, Vcl.Menus;
+  CommonVars, CommonTypes, Vcl.ExtCtrls, dxmdaset, Vcl.Menus, cxStyles,
+  cxClasses;
 
 type
   TClientExtUr = class
@@ -111,6 +112,8 @@ type
     ActivePhones: TdxMemData;
     ActivePhonesPhone: TStringField;
     ActivePhonesworker_id: TIntegerField;
+    StyleRepository: TcxStyleRepository;
+    cxStyle1: TcxStyle;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -464,6 +467,12 @@ begin
 
   if Db.Connected = false then
     Exit;
+
+  try
+    FreeAndNil(frmSessionResult);
+  finally
+    frmSessionResult := nil;
+  end;
 
   try
   try
@@ -1745,6 +1754,11 @@ function TDataModuleMain.ShowCall: Boolean;
 begin
  if DM.Db.Connected = false then
     Exit;
+  try
+    FreeAndNil(frmSessionResult);
+  finally
+    frmSessionResult := nil;
+  end;
 
   try
   try

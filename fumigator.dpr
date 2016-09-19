@@ -76,7 +76,8 @@ uses
   MappedFunc in 'Classes\MappedFunc.pas',
   ClassFormSmallCard in 'Classes\ClassFormSmallCard.pas' {frmSmallCard},
   formSmallClientFiz in 'Clients\formSmallClientFiz.pas' {frmSmallCardFiz},
-  formSmallClientUr in 'Clients\formSmallClientUr.pas' {frmSmallCardUr};
+  formSmallClientUr in 'Clients\formSmallClientUr.pas' {frmSmallCardUr},
+  formListActivePhones in 'Calls\formListActivePhones.pas' {frmListActivePhones};
 
 {$R *.res}
 var
@@ -101,8 +102,6 @@ begin
   frmLogo.Info.Caption := 'Проверка новой версии';
   frmLogo.Show;
   frmLogo.RefreshForm;
-  //BringWindowToTop(frmLogo.Handle);
-  //frmLogo.Repaint;
 
   Application.CreateForm(TDataModuleMain, DM);
   LoadOptions(CfgFileName);

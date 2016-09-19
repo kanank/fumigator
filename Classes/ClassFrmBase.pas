@@ -28,6 +28,7 @@ type
     fValidateList: TStringList;  //процедуры возвращают поля без признака Required
     fInUpdate: Boolean; //признак сохранения
     fOnTopMost: Boolean; //находится в режиме TopMost
+    fTransfered: Boolean;
 
     procedure SetCaption(AValue: string); virtual;
     procedure SetNonValidate(Alist: string);
@@ -35,9 +36,11 @@ type
     procedure WmStartCall(var Msg: TMessage); message WM_STARTCALL;
     procedure WmFinishCall(var Msg: TMessage); message WM_FINISHCALL;
     procedure WmAcceptCall(var Msg: TMessage); message WM_ACCEPTCALL;
+    procedure WmTransferCall(var Msg: TMessage); message WM_TRANSFERCALL;
     procedure DoStartCall; virtual;
     procedure DoFinishCall; virtual;
     procedure DoAcceptCall; virtual;
+    procedure DoTransferCall; virtual;
 
     function CalcHideOnClose: boolean; virtual;
   public
@@ -112,12 +115,19 @@ end;
 
 procedure TBaseForm.DoFinishCall;
 begin
-  if fCloseOnCancelCall and CallObj.Cancelled then
-    Self.CloseAbsolute;
-
+  if CallObj.Cancelled or CallObj.Transfered then
+    if fCloseOnCancelCall then
+      Self.CloseAbsolute
+    else
+      Self.HideAbsolute;
 end;
 
 procedure TBaseForm.DoStartCall;
+begin
+
+end;
+
+procedure TBaseForm.DoTransferCall;
 begin
 
 end;
@@ -301,6 +311,12 @@ end;
 procedure TBaseForm.WmStartCall(var Msg: TMessage);
 begin
   DoStartCall;
+end;
+
+procedure TBaseForm.WmTransferCall(var Msg: TMessage);
+begin
+  fTransfered := True;
+  DoTransferCall;
 end;
 
 end.

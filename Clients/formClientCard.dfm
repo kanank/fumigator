@@ -88,16 +88,15 @@ inherited frmClientCard: TfrmClientCard
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 274
+    Top = 284
     Width = 867
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 274
+    ExplicitTop = 284
     ExplicitWidth = 867
     inherited Image2: TImage
-      Left = -12
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -107,6 +106,7 @@ inherited frmClientCard: TfrmClientCard
     end
     inherited Exit_bnt: TRzButton
       Left = 681
+      Top = 6
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -114,10 +114,11 @@ inherited frmClientCard: TfrmClientCard
       ModalResult = 0
       Caption = #1053#1086#1074#1099#1081' '#1076#1086#1075#1086#1074#1086#1088
       ExplicitLeft = 681
+      ExplicitTop = 6
     end
     object RzButton1: TRzButton
       Left = 11
-      Top = 12
+      Top = 6
       Width = 172
       Height = 41
       Margins.Left = 4
@@ -140,7 +141,7 @@ inherited frmClientCard: TfrmClientCard
     end
     object RzButton2: TRzButton
       Left = 249
-      Top = 12
+      Top = 6
       Width = 172
       Height = 41
       Margins.Left = 4

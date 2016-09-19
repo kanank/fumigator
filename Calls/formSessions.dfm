@@ -4,6 +4,7 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1250
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -456
   ExplicitWidth = 1266
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -25,15 +26,15 @@ inherited frmSessions: TfrmSessions
     Margins.Right = 6
     Margins.Bottom = 6
     ExplicitWidth = 1250
-    DesignSize = (
-      1250
-      46)
     inherited Image1: TImage
-      Left = 1116
+      Left = 1123
+      Top = 2
+      Height = 42
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      Align = alRight
       ExplicitLeft = 1145
     end
     object Label11: TLabel
@@ -133,8 +134,9 @@ inherited frmSessions: TfrmSessions
       Caption = #1058#1086#1083#1100#1082#1086' '#1082#1083#1080#1077#1085#1090#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
       State = cbsChecked
       TabOrder = 3
+      Transparent = True
       OnClick = chkWorkerClientsClick
-      Width = 262
+      Width = 235
     end
   end
   inherited RzPanel1: TRzPanel

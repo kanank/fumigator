@@ -15,14 +15,14 @@ var
 
   InitBirthYear: integer = 30;
 
-  ServerHost: string  = 'localhost';  //'81.177.48.139'; ///'localhost';  //''81.177.48.139'; //;
+  ServerHost: string  = '81.177.48.139'; //'localhost';  // 'localhost';  //''81.177.48.139'; //;
   ServerPort: integer = 1025;
   ServerHttpPort: integer = 45455;
 
   CallObj:  TCallProto;
   CallInfo: TCallInfo;
 
- function MsgBox(AMsg, ATitle: string; AType: integer): integer;
+ function  MsgBox(AMsg, ATitle: string; AType: integer): integer;
  procedure MsgBoxError(AMsg: string; ATitle: string = '');
  procedure MsgBoxWarning(AMsg: string; ATitle: string = '');
  procedure MsgBoxInformation(AMsg: string; ATitle: string = '');

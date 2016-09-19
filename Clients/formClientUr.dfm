@@ -4,7 +4,8 @@ inherited frmClientUr: TfrmClientUr
   ClientWidth = 1063
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -187
+  ExplicitLeft = -362
+  ExplicitTop = -156
   ExplicitWidth = 1079
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -363,18 +364,16 @@ inherited frmClientUr: TfrmClientUr
     end
   end
   inherited RzPanel1: TRzPanel
-    Top = 685
+    Top = 695
     Width = 1063
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
     TabOrder = 6
-    ExplicitTop = 685
+    ExplicitTop = 695
     ExplicitWidth = 1063
     inherited Image2: TImage
-      Left = 69
-      Top = 8
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -383,17 +382,19 @@ inherited frmClientUr: TfrmClientUr
       ExplicitTop = 8
     end
     inherited Exit_bnt: TRzButton
-      Left = 885
+      Left = 884
+      Top = 3
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
       OnClick = Exit_bntClick
-      ExplicitLeft = 885
+      ExplicitLeft = 884
+      ExplicitTop = 3
     end
     object butOK: TRzButton
       Left = 692
-      Top = 12
+      Top = 4
       Width = 172
       Height = 41
       Margins.Left = 4
@@ -416,7 +417,7 @@ inherited frmClientUr: TfrmClientUr
     end
     object btnHide: TRzButton
       Left = 883
-      Top = 11
+      Top = 4
       Width = 172
       Height = 40
       Margins.Left = 4
@@ -1984,7 +1985,7 @@ inherited frmClientUr: TfrmClientUr
   end
   object pnlCalls: TRzPanel
     Left = 0
-    Top = 540
+    Top = 550
     Width = 1063
     Height = 145
     Margins.Left = 4

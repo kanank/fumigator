@@ -1,38 +1,55 @@
 inherited SimpleForm: TSimpleForm
   Caption = 'SimpleForm'
+  ClientHeight = 351
+  ExplicitHeight = 389
+  DesignSize = (
+    641
+    351)
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 456
-    Top = 0
-    Width = 185
-    Height = 81
+    Left = 631
+    Top = -7
+    Width = 257
+    Height = 112
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Proportional = True
     Stretch = True
     Transparent = True
-    ExplicitLeft = 456
+    ExplicitLeft = 631
     ExplicitTop = 0
-    ExplicitWidth = 185
-    ExplicitHeight = 81
+    ExplicitWidth = 257
+    ExplicitHeight = 112
   end
   object RzPanel1: TRzPanel
     Left = 0
-    Top = 314
+    Top = 300
     Width = 641
-    Height = 44
+    Height = 51
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     BorderOuter = fsBump
     BorderSides = [sdTop, sdBottom]
     TabOrder = 0
     DesignSize = (
       641
-      44)
+      51)
     object Image2: TImage
-      Left = 6
-      Top = 4
-      Width = 111
-      Height = 49
-      Anchors = [akRight, akBottom]
+      Left = 0
+      Top = 2
+      Width = 154
+      Height = 47
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Align = alLeft
       Picture.Data = {
         0D546478536D617274496D61676589504E470D0A1A0A0000000D494844520000
         00C20000003E080600000079B1C453000000017352474200AECE1CE900000004
@@ -155,18 +172,24 @@ inherited SimpleForm: TSimpleForm
       Proportional = True
       Stretch = True
       Transparent = True
+      ExplicitTop = 1
+      ExplicitHeight = 67
     end
     object Exit_bnt: TRzButton
-      Left = 507
-      Top = 9
-      Width = 124
-      Height = 29
+      Left = 702
+      Top = 12
+      Width = 172
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ModalResult = 2
       Anchors = [akTop, akRight]
       Caption = #1042#1099#1093#1086#1076
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 2960640
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True

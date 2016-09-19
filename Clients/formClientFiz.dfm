@@ -4,7 +4,6 @@ inherited frmClientFiz: TfrmClientFiz
   ClientWidth = 1070
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -210
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -71,23 +70,20 @@ inherited frmClientFiz: TfrmClientFiz
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 685
+    Top = 695
     Width = 1070
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
     TabOrder = 6
-    ExplicitTop = 685
+    ExplicitTop = 695
     ExplicitWidth = 1070
     inherited Image2: TImage
-      Left = 4
-      Top = 7
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      Anchors = [akLeft, akBottom]
       ExplicitLeft = 4
       ExplicitTop = 7
     end
@@ -117,16 +113,18 @@ inherited frmClientFiz: TfrmClientFiz
     end
     inherited Exit_bnt: TRzButton
       Left = 885
+      Top = 6
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
       OnClick = Exit_bntClick
       ExplicitLeft = 885
+      ExplicitTop = 6
     end
     object butOK: TRzButton
       Left = 685
-      Top = 12
+      Top = 6
       Width = 172
       Height = 41
       Margins.Left = 4
@@ -249,7 +247,7 @@ inherited frmClientFiz: TfrmClientFiz
     inherited FramePassport: TFramePassport
       Left = 7
       Top = 223
-      Width = 341
+      Width = 315
       Height = 170
       Margins.Left = 4
       Margins.Top = 4
@@ -257,7 +255,7 @@ inherited frmClientFiz: TfrmClientFiz
       Margins.Bottom = 4
       ExplicitLeft = 7
       ExplicitTop = 223
-      ExplicitWidth = 341
+      ExplicitWidth = 315
       ExplicitHeight = 170
       inherited RzGroupBox1: TRzGroupBox
         Left = 2
@@ -2416,7 +2414,7 @@ inherited frmClientFiz: TfrmClientFiz
   end
   object pnlCalls: TRzPanel
     Left = 0
-    Top = 504
+    Top = 514
     Width = 1070
     Height = 181
     Margins.Left = 4
@@ -2524,7 +2522,6 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Anchors = [akLeft, akTop, akRight, akBottom]
           Font.Height = -15
           ExplicitLeft = 5
           ExplicitTop = 17

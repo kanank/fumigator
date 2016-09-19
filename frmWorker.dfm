@@ -19,27 +19,26 @@ inherited frmWorker: TfrmWorker
     ExplicitTop = -35
   end
   inherited RzPanel1: TRzPanel
-    Top = 405
+    Top = 414
     Width = 1069
-    Height = 56
+    Height = 47
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 405
+    ExplicitTop = 414
     ExplicitWidth = 1069
-    ExplicitHeight = 56
+    ExplicitHeight = 47
     inherited Image2: TImage
-      Top = 1
+      Height = 43
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitTop = 1
     end
     inherited Exit_bnt: TRzButton
       Left = 883
-      Top = 7
+      Top = 3
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -47,11 +46,11 @@ inherited frmWorker: TfrmWorker
       Font.Color = clWindowText
       OnClick = Exit_bntClick
       ExplicitLeft = 883
-      ExplicitTop = 7
+      ExplicitTop = 3
     end
     object FullForm_btn: TRzButton
       Left = 36
-      Top = 7
+      Top = 3
       Width = 165
       Height = 41
       Margins.Left = 4
@@ -77,7 +76,7 @@ inherited frmWorker: TfrmWorker
     Left = 0
     Top = 0
     Width = 1069
-    Height = 405
+    Height = 414
     Hint = ''
     Margins.Left = 4
     Margins.Top = 0
@@ -91,6 +90,7 @@ inherited frmWorker: TfrmWorker
     TabOrder = 1
     TabStyle = tsBackSlant
     TextColors.Selected = 8224125
+    ExplicitHeight = 405
     FixedDimension = 24
     object Short_Tab: TRzTabSheet
       Margins.Left = 4
@@ -105,6 +105,7 @@ inherited frmWorker: TfrmWorker
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ExplicitHeight = 379
       inline _FramePersonSmall: TFramePersonSmallFoto
         Left = -1
         Top = 11
@@ -551,9 +552,10 @@ inherited frmWorker: TfrmWorker
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1072#1103' '#1092#1086#1088#1084#1072
+      ExplicitHeight = 379
       object RzPanel3: TRzPanel
         Left = 0
-        Top = 326
+        Top = 335
         Width = 1067
         Height = 53
         Margins.Left = 4
@@ -564,6 +566,7 @@ inherited frmWorker: TfrmWorker
         BorderOuter = fsBump
         BorderSides = [sdTop, sdBottom]
         TabOrder = 0
+        ExplicitTop = 326
         DesignSize = (
           1067
           53)
@@ -618,7 +621,7 @@ inherited frmWorker: TfrmWorker
         Left = 0
         Top = 0
         Width = 1067
-        Height = 326
+        Height = 335
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -626,6 +629,7 @@ inherited frmWorker: TfrmWorker
         Align = alClient
         BorderOuter = fsNone
         TabOrder = 1
+        ExplicitHeight = 326
         object Label25: TLabel
           Left = 8
           Top = 30
@@ -1191,7 +1195,7 @@ inherited frmWorker: TfrmWorker
                 inherited Label3: TLabel
                   Left = 320
                   Top = 53
-                  Width = 122
+                  Width = 103
                   Height = 36
                   Margins.Left = 4
                   Margins.Top = 4
@@ -1200,7 +1204,7 @@ inherited frmWorker: TfrmWorker
                   Font.Height = -15
                   ExplicitLeft = 320
                   ExplicitTop = 53
-                  ExplicitWidth = 122
+                  ExplicitWidth = 103
                   ExplicitHeight = 36
                 end
                 inherited Label4: TLabel

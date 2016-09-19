@@ -155,7 +155,6 @@ type
     TelURI_edt: TEdit;
     edtUserId: TEdit;
     btnPhone: TButton;
-    Button5: TButton;
     edtRecordPath: TEdit;
     GroupBox3: TGroupBox;
     Label6: TLabel;
@@ -170,6 +169,7 @@ type
     Button3: TButton;
     Button7: TButton;
     lstPhones: TcxListBox;
+    Button5: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -189,8 +189,6 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
-    procedure TabSheet1ContextPopup(Sender: TObject; MousePos: TPoint;
-      var Handled: Boolean);
   private
     fSessions: TStringList;
 
@@ -432,10 +430,11 @@ begin
    //cl.ExtIgnored := '099,200';
    //cl.OnCallAccept := AfterOutcomCall;
    //cl.Start;
-  //lCaller := TPhoneCalls.Create(AccessToken);
+  lCaller := TPhoneCalls.Create(AccessToken);
   //Caller.DeleteCall(Edit1.Text, '755');
   //lCaller.SimpleCall('755', '+79104579648', '755');
-  GetRecordFile('16248-f12f56b6705111e6b0d4eb26cd02ac23');
+  lCaller.TransferCall(Edit1.Text, '757', '755');
+  lCaller.Free;
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
@@ -831,12 +830,14 @@ begin
 
   List := TCPServer.Contexts.LockList;
   try
-    ListOut.AddStrings(lstPhones.Items);
+    for I := 0 to lstPhones.Items.Count - 1 do
+      ListOut.Add(lstPhones.Items[i] + '=');
+
     for I := 0 to List.Count-1 do
     begin
       Context := TMyContext(List[I]);
       //if lowercase(Context.Nick) <> lowercase(Exclude) then
-      ind := ListOut.IndexOf(Context.Nick);
+      ind := ListOut.IndexOfName(Context.Nick);
       if ind > - 1 then
         ListOut.ValueFromIndex[ind] := IntToStr(Context.UserId);
     end;
@@ -996,7 +997,7 @@ begin
       p := pos('*', answer);
       if (Length(answer) > 0) and (p > 0) then
         answer := Copy(answer, p + 1, Length(answer));
-      lCaller.TransferCall(argList[0], answer, AtsUserPrefix + TMyContext(AContext).Nick);
+      lCaller.TransferCall(argList[0], answer, TMyContext(AContext).Nick);
     end
 
     else
@@ -1034,7 +1035,7 @@ begin
     if cmd = 'getuserlist' then
     begin
       answer := GetUserList(TMyContext(AContext).Nick);
-      AContext.Connection.IOHandler.WriteLn(Format('#userlist:%s', [Answer]));
+      AContext.Connection.IOHandler.WriteLn(Format('#userphonelist:%s', [Answer]));
       //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
     end
 

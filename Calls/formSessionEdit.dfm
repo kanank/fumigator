@@ -6,7 +6,9 @@ inherited frmSessionEdit: TfrmSessionEdit
   AutoScroll = True
   Caption = #1057#1077#1089#1089#1080#1103' ['#1088#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1077']'
   Position = poDesktopCenter
-  ExplicitLeft = -308
+  OnShow = FormShow
+  ExplicitLeft = -326
+  ExplicitTop = -11
   ExplicitWidth = 1043
   ExplicitHeight = 639
   PixelsPerInch = 96
@@ -22,22 +24,19 @@ inherited frmSessionEdit: TfrmSessionEdit
     ExplicitTop = 336
   end
   inherited RzPanel1: TRzPanel
-    Top = 540
+    Top = 550
     Width = 1027
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 540
+    ExplicitTop = 550
     ExplicitWidth = 1027
     inherited Image2: TImage
-      Left = 6
-      Top = 8
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      Anchors = [akLeft, akBottom]
       ExplicitLeft = 6
       ExplicitTop = 8
     end
@@ -51,7 +50,7 @@ inherited frmSessionEdit: TfrmSessionEdit
     end
     object RzButton1: TRzButton
       Left = 846
-      Top = 9
+      Top = 5
       Width = 172
       Height = 41
       Margins.Left = 4
@@ -74,7 +73,7 @@ inherited frmSessionEdit: TfrmSessionEdit
     end
     object btnClientEdit: TRzButton
       Left = 438
-      Top = 9
+      Top = 5
       Width = 189
       Height = 41
       Margins.Left = 4
@@ -112,7 +111,7 @@ inherited frmSessionEdit: TfrmSessionEdit
   end
   object pnlCalls: TRzPanel
     Left = 0
-    Top = 290
+    Top = 300
     Width = 1027
     Height = 250
     Margins.Left = 4
@@ -269,7 +268,7 @@ inherited frmSessionEdit: TfrmSessionEdit
     Left = 0
     Top = 226
     Width = 1027
-    Height = 64
+    Height = 74
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4

@@ -42,24 +42,28 @@ inherited frmCallUnknown: TfrmCallUnknown
     BlinkIntervalOn = 1000
   end
   inherited RzPanel1: TRzPanel
-    Top = 408
+    Top = 418
     Width = 530
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 408
+    ExplicitTop = 418
     ExplicitWidth = 530
     inherited Image2: TImage
-      Left = 6
+      Left = 0
+      Top = 2
+      Height = 47
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      Align = alLeft
       ExplicitLeft = 6
     end
     inherited Exit_bnt: TRzButton
       Left = 346
+      Top = 7
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -68,6 +72,7 @@ inherited frmCallUnknown: TfrmCallUnknown
       Caption = #1054#1090#1084#1077#1085#1072
       OnClick = Exit_bntClick
       ExplicitLeft = 346
+      ExplicitTop = 7
     end
   end
   object btnPost: TRzButton

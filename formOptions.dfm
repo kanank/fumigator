@@ -1,96 +1,135 @@
 inherited frmOptions: TfrmOptions
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 408
-  ClientWidth = 891
+  ClientHeight = 565
+  ClientWidth = 1234
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 907
-  ExplicitHeight = 446
+  ExplicitLeft = -516
+  ExplicitWidth = 1250
+  ExplicitHeight = 603
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
   inherited img1: TImage
-    Left = 696
-    Top = 277
+    Left = 964
+    Top = 384
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     Visible = False
-    ExplicitLeft = 696
-    ExplicitTop = 277
+    ExplicitLeft = 964
+    ExplicitTop = 384
   end
   object Label22: TLabel [1]
-    Left = 4
-    Top = 3
-    Width = 178
-    Height = 14
+    Left = 6
+    Top = 4
+    Width = 230
+    Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1087#1086#1076#1082#1083#1102#1095#1077#1085#1080#1103' '#1082' '#1041#1044':'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object Label1: TLabel [2]
-    Left = 7
-    Top = 45
-    Width = 215
-    Height = 14
+    Left = 10
+    Top = 62
+    Width = 277
+    Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1087#1086#1095#1090#1086#1074#1086#1075#1086' '#1089#1077#1088#1074#1077#1088#1072' SMTP:'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object Label2: TLabel [3]
-    Left = 8
-    Top = 87
-    Width = 141
-    Height = 14
+    Left = 11
+    Top = 120
+    Width = 186
+    Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1055#1091#1090#1100' '#1082' '#1086#1073#1097#1077#1084#1091' '#1082#1072#1090#1072#1083#1086#1075#1091':'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object Label3: TLabel [4]
-    Left = 345
-    Top = 3
-    Width = 82
-    Height = 14
+    Left = 478
+    Top = 4
+    Width = 107
+    Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1055#1088#1072#1074#1072' '#1076#1086#1089#1090#1091#1087#1072
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -12
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   inherited RzPanel1: TRzPanel
-    Top = 364
-    Width = 891
-    ExplicitTop = 386
-    ExplicitWidth = 891
+    Top = 514
+    Width = 1234
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ExplicitTop = 514
+    ExplicitWidth = 1234
     inherited Image2: TImage
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Visible = False
     end
     inherited Exit_bnt: TRzButton
-      Left = 757
+      Left = 1048
+      Top = 5
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Font.Color = clWindowText
-      ExplicitLeft = 757
+      ExplicitLeft = 1048
+      ExplicitTop = 5
     end
     object btnAccept: TRzButton
-      Left = 541
-      Top = 9
-      Width = 124
-      Height = 29
+      Left = 749
+      Top = 5
+      Width = 172
+      Height = 41
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Anchors = [akTop, akRight]
       Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -15
       Font.Name = 'Tahoma'
       Font.Style = []
       HotTrack = True
@@ -103,49 +142,65 @@ inherited frmOptions: TfrmOptions
     end
   end
   object txtDBPath: TcxTextEdit
-    Left = 4
-    Top = 18
+    Left = 6
+    Top = 25
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     ParentFont = False
     Style.Font.Charset = DEFAULT_CHARSET
     Style.Font.Color = clWindowText
-    Style.Font.Height = -12
+    Style.Font.Height = -16
     Style.Font.Name = 'Tahoma'
     Style.Font.Style = []
     Style.IsFontAssigned = True
     TabOrder = 1
-    Width = 321
+    Width = 444
   end
   object txtSMTP: TcxTextEdit
-    Left = 8
-    Top = 60
+    Left = 11
+    Top = 83
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     ParentFont = False
     Style.Font.Charset = DEFAULT_CHARSET
     Style.Font.Color = clWindowText
-    Style.Font.Height = -12
+    Style.Font.Height = -16
     Style.Font.Name = 'Tahoma'
     Style.Font.Style = []
     Style.IsFontAssigned = True
     TabOrder = 2
-    Width = 321
+    Width = 445
   end
   object txtTemp: TcxTextEdit
-    Left = 8
-    Top = 102
+    Left = 11
+    Top = 141
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     ParentFont = False
     Style.Font.Charset = DEFAULT_CHARSET
     Style.Font.Color = clWindowText
-    Style.Font.Height = -12
+    Style.Font.Height = -16
     Style.Font.Name = 'Tahoma'
     Style.Font.Style = []
     Style.IsFontAssigned = True
     TabOrder = 3
-    Width = 321
+    Width = 445
   end
   object GridRights: TcxGrid
-    Left = 552
-    Top = 19
-    Width = 331
-    Height = 254
+    Left = 764
+    Top = 26
+    Width = 459
+    Height = 352
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 4
     object GridRightsView: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
@@ -218,10 +273,14 @@ inherited frmOptions: TfrmOptions
     end
   end
   object GridUserTypes: TcxGrid
-    Left = 345
-    Top = 19
-    Width = 208
-    Height = 254
+    Left = 478
+    Top = 26
+    Width = 288
+    Height = 352
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 5
     object cxGridDBTableView1: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
@@ -273,14 +332,18 @@ inherited frmOptions: TfrmOptions
     end
   end
   object btnTuneDictionaries: TRzButton
-    Left = 345
-    Top = 285
-    Width = 184
-    Height = 29
+    Left = 478
+    Top = 395
+    Width = 254
+    Height = 40
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1072' '#1089#1087#1088#1072#1074#1086#1095#1085#1080#1082#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -291,14 +354,18 @@ inherited frmOptions: TfrmOptions
     OnClick = btnTuneDictionariesClick
   end
   object btnTuneOPClentList: TRzButton
-    Left = 345
-    Top = 320
-    Width = 184
-    Height = 36
+    Left = 478
+    Top = 443
+    Width = 254
+    Height = 50
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1072' '#1089#1087#1080#1089#1082#1072' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1076#1083#1103' '#1086#1087#1077#1088#1072#1090#1086#1088#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     HotTrack = True
@@ -309,33 +376,45 @@ inherited frmOptions: TfrmOptions
     OnClick = btnTuneOPClentListClick
   end
   object RzPanel2: TRzPanel
-    Left = 8
-    Top = 152
-    Width = 321
-    Height = 204
+    Left = 11
+    Top = 210
+    Width = 445
+    Height = 283
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     BorderInner = fsGroove
     BorderOuter = fsNone
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 8
     object Label4: TLabel
-      Left = 4
-      Top = 8
-      Width = 165
-      Height = 14
+      Left = 6
+      Top = 11
+      Width = 213
+      Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = #1058#1080#1087#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1077#1081' '#1085#1072' '#1076#1072#1090#1091
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
-      Font.Height = -12
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
     end
     object cxGrid1: TcxGrid
       Left = 0
-      Top = 33
-      Width = 320
-      Height = 170
+      Top = 46
+      Width = 443
+      Height = 235
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 0
       object cxGridDBTableView2: TcxGridDBTableView
         Navigator.Buttons.CustomButtons = <>
@@ -401,11 +480,15 @@ inherited frmOptions: TfrmOptions
       end
     end
     object edtWorkerDate: TcxDateEdit
-      Left = 195
-      Top = 6
+      Left = 270
+      Top = 8
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Properties.OnCloseUp = edtWorkerDatePropertiesCloseUp
       TabOrder = 1
-      Width = 121
+      Width = 168
     end
   end
   object rights_list: TIBQuery

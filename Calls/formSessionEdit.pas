@@ -18,6 +18,7 @@ type
     procedure btnClientEditClick(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -70,13 +71,37 @@ end;
 procedure TfrmSessionEdit.FormDestroy(Sender: TObject);
 begin
   if Assigned(frm) then
+  begin
     frm.Parent := nil;
-  FreeAndNil(frm);
+    if frm is TfrmClientFiz then
+    begin
+      frmClientFiz.Free;
+      frmClientFiz := nil;
+    end
+    else
+    if frm is TfrmClientUr then
+    begin
+      frmClientUr.Free;
+      frmClientUr := nil;
+    end;
+    frm := nil;
+  end;
+
   if Assigned(frmResult) then
+  begin
     frmResult.Parent := nil;
-  FreeAndNil(frmResult);
+    frmResult.Free;
+    frmResult := nil;
+    frmSessionResult := nil;
+  end;
 
   inherited;
+
+end;
+
+procedure TfrmSessionEdit.FormShow(Sender: TObject);
+begin
+  btnClientEdit.Enabled := Assigned(frm);
 
 end;
 
@@ -130,6 +155,7 @@ begin
   if Self.Height > Screen.WorkAreaHeight then
     Self.Height := Screen.WorkAreaHeight - 10;
 
+  btnClientEdit.Enabled := Assigned(frm);
   //Self.VertScrollBar.Visible := True;
 end;
 

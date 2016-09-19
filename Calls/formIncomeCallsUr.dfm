@@ -2,7 +2,7 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
   Caption = #1042#1093#1086#1076#1103#1097#1080#1081' '#1079#1074#1086#1085#1086#1082'. '#1070#1088#1080#1076#1080#1095#1077#1089#1082#1086#1077' '#1083#1080#1094#1086
   ClientHeight = 343
   ClientWidth = 887
-  ExplicitLeft = -23
+  ExplicitLeft = -169
   ExplicitWidth = 903
   ExplicitHeight = 381
   PixelsPerInch = 96
@@ -26,29 +26,35 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
     ExplicitLeft = 554
   end
   inherited RzPanel1: TRzPanel
-    Top = 282
+    Top = 292
     Width = 887
     Margins.Left = 8
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ExplicitTop = 282
-    ExplicitWidth = 777
+    ExplicitTop = 292
+    ExplicitWidth = 887
     inherited Image2: TImage
-      Left = 254
+      Left = 0
+      Top = 2
+      Height = 47
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8
       Margins.Bottom = 8
-      ExplicitLeft = 144
+      Align = alLeft
+      ExplicitLeft = 11
+      ExplicitTop = 2
     end
     inherited Exit_bnt: TRzButton
       Left = 416
+      Top = 3
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8
       Margins.Bottom = 8
-      ExplicitLeft = 306
+      ExplicitLeft = 416
+      ExplicitTop = 3
     end
     inherited btnTransfer: TRzButton
       Left = 966
@@ -56,17 +62,15 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 856
+      ExplicitLeft = 966
     end
     inherited btnOk: TRzButton
-      Left = 720
-      Top = 11
+      Top = 3
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 720
-      ExplicitTop = 11
+      ExplicitTop = 3
     end
   end
   inherited grpBox: TRzGroupBox
@@ -257,7 +261,6 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
           Margins.Top = 6
           Margins.Right = 6
           Margins.Bottom = 6
-          ExplicitHeight = 32
         end
         inherited cmbDateBirth: TcxDBDateEdit
           Margins.Left = 6
@@ -265,28 +268,24 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
           Margins.Right = 6
           Margins.Bottom = 6
           Style.IsFontAssigned = True
-          ExplicitHeight = 31
         end
         inherited edtSurName: TcxDBTextEdit
           Margins.Left = 6
           Margins.Top = 6
           Margins.Right = 6
           Margins.Bottom = 6
-          ExplicitHeight = 32
         end
         inherited edtName: TcxDBTextEdit
           Margins.Left = 6
           Margins.Top = 6
           Margins.Right = 6
           Margins.Bottom = 6
-          ExplicitHeight = 32
         end
         inherited edtFamily: TcxDBTextEdit
           Margins.Left = 6
           Margins.Top = 6
           Margins.Right = 6
           Margins.Bottom = 6
-          ExplicitHeight = 32
         end
         inherited cmbSex: TcxDBComboBox
           Margins.Left = 6
@@ -294,14 +293,12 @@ inherited frmIncomeCallUr: TfrmIncomeCallUr
           Margins.Right = 6
           Margins.Bottom = 6
           Style.IsFontAssigned = True
-          ExplicitHeight = 31
         end
         inherited cmbProf: TcxDBLookupComboBox
           Margins.Left = 6
           Margins.Top = 6
           Margins.Right = 6
           Margins.Bottom = 6
-          ExplicitHeight = 32
         end
       end
     end

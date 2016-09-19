@@ -87,13 +87,13 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     ExplicitTop = 204
   end
   inherited RzPanel1: TRzPanel
-    Top = 302
+    Top = 312
     Width = 634
     Margins.Left = 8
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ExplicitTop = 302
+    ExplicitTop = 312
     ExplicitWidth = 634
     inherited Image2: TImage
       Left = -245
@@ -105,6 +105,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     end
     inherited Exit_bnt: TRzButton
       Left = 449
+      Top = 7
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8
@@ -113,8 +114,10 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       ModalResult = 0
       OnClick = Exit_bntClick
       ExplicitLeft = 449
+      ExplicitTop = 7
     end
     inherited RzBitBtn1: TRzBitBtn
+      Top = 6
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
@@ -122,6 +125,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       OnClick = RzBitBtn1Click
       Margin = 4
       Spacing = 8
+      ExplicitTop = 6
     end
   end
   inherited cxDBLookupComboBox2: TcxDBLookupComboBox

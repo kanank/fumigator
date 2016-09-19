@@ -24,8 +24,6 @@ object MF: TMF
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitTop = 340
-    ExplicitHeight = 243
   end
   object LogText: TATBinHex
     Left = 0
@@ -63,8 +61,6 @@ object MF: TMF
     FontGutter.Style = []
     TextWrap = True
     AutoReload = True
-    ExplicitTop = 340
-    ExplicitHeight = 243
   end
   object Panel1: TPanel
     Left = 0
@@ -84,7 +80,6 @@ object MF: TMF
       TabOrder = 0
       object TabSheet1: TTabSheet
         Caption = #1054#1089#1085#1086#1074#1085#1099#1077
-        ExplicitHeight = 306
         object GroupBox1: TGroupBox
           Left = 0
           Top = 251
@@ -93,7 +88,6 @@ object MF: TMF
           Align = alBottom
           Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
           TabOrder = 0
-          ExplicitTop = 8
           DesignSize = (
             613
             84)
@@ -148,6 +142,7 @@ object MF: TMF
             Top = 38
             Width = 159
             Height = 21
+            Anchors = [akLeft, akRight, akBottom]
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clBlack
             Font.Height = -11
@@ -229,9 +224,6 @@ object MF: TMF
           Font.Style = []
           ParentFont = False
           TabOrder = 1
-          ExplicitLeft = 1
-          ExplicitTop = 127
-          ExplicitWidth = 621
           DesignSize = (
             613
             126)
@@ -374,16 +366,6 @@ object MF: TMF
             TabOrder = 5
             OnClick = btnPhoneClick
           end
-          object Button5: TButton
-            Left = 279
-            Top = 71
-            Width = 130
-            Height = 18
-            Anchors = [akTop, akRight]
-            Caption = #1047#1074#1086#1085#1086#1082
-            TabOrder = 6
-            OnClick = Button5Click
-          end
           object edtRecordPath: TEdit
             Left = 128
             Top = 94
@@ -395,8 +377,18 @@ object MF: TMF
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
-            TabOrder = 7
+            TabOrder = 6
             Text = 'Records'
+          end
+          object Button5: TButton
+            Left = 441
+            Top = 101
+            Width = 169
+            Height = 18
+            Anchors = [akTop, akRight]
+            Caption = #1047#1074#1086#1085#1086#1082
+            TabOrder = 7
+            OnClick = Button5Click
           end
         end
         object GroupBox3: TGroupBox
@@ -407,9 +399,6 @@ object MF: TMF
           Align = alTop
           Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103' '#1086' '#1089#1086#1089#1090#1086#1103#1085#1080#1080' '#1089#1077#1088#1074#1077#1088#1072
           TabOrder = 2
-          ExplicitLeft = 1
-          ExplicitTop = 1
-          ExplicitWidth = 621
           DesignSize = (
             613
             126)
@@ -539,7 +528,6 @@ object MF: TMF
       object TabSheet2: TTabSheet
         Caption = #1058#1077#1083#1077#1092#1086#1085#1099
         ImageIndex = 1
-        ExplicitHeight = 306
         object lstPhones: TcxListBox
           Left = 24
           Top = 56

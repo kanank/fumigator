@@ -234,7 +234,8 @@ end;
 
 procedure TfrmSessionResult.QAfterOpen(DataSet: TDataSet);
 begin
-  FieldToText;
+  if edtIshod.Text = '' then
+    FieldToText;
 end;
 
 procedure TfrmSessionResult.QBeforeOpen(DataSet: TDataSet);

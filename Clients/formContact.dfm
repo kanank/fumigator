@@ -5,7 +5,7 @@ inherited frmContact: TfrmContact
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -12
+  ExplicitLeft = -108
   ExplicitWidth = 842
   ExplicitHeight = 320
   PixelsPerInch = 96
@@ -18,24 +18,27 @@ inherited frmContact: TfrmContact
     Margins.Right = 6
     Margins.Bottom = 6
     Visible = False
+    ExplicitLeft = 816
     ExplicitTop = -213
   end
   inherited RzPanel1: TRzPanel
-    Top = 221
+    Top = 231
     Width = 826
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 221
+    ExplicitTop = 231
+    ExplicitWidth = 826
     inherited Image2: TImage
-      Left = 3
-      Top = 4
+      Left = 0
+      Top = 2
+      Height = 47
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      Anchors = [akLeft, akBottom]
+      Align = alLeft
       ExplicitLeft = 3
       ExplicitTop = 4
     end
@@ -45,10 +48,11 @@ inherited frmContact: TfrmContact
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      ExplicitLeft = 887
     end
     object butOk: TRzButton
       Left = 648
-      Top = 12
+      Top = 5
       Width = 171
       Height = 41
       Margins.Left = 4

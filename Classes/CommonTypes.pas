@@ -364,9 +364,25 @@ begin
 end;
 
 procedure TCallProto.TransferCall;
+var
+  i: Integer;
 begin
   if Assigned(fOnTransferCall) then
     fOnTransferCall(Self);
+
+  i := 0;
+  while i < 20 do
+  begin
+    if not fActive then
+      Break;
+
+    Sleep(250);
+    Application.ProcessMessages;
+    Inc(i);
+  end;
+
+  if i < 20 then
+    Transfered := True;
 end;
 
 procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);

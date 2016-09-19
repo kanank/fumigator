@@ -280,6 +280,7 @@ begin
 
   finally
     FreeAndNil(frmSessionEdit);
+    FreeAndNil(frmSessionResult);
   end;
 end;
 

@@ -58,6 +58,7 @@ type
     procedure CallFinish;
     procedure CheckSession;
     procedure doFinishCall; override;
+    procedure doTransferCall; override;
     procedure CreateFormResult;
   end;
 
@@ -176,6 +177,11 @@ begin
   CallFinish;
 end;
 
+procedure TfrmClientResult.doTransferCall;
+begin
+  Self.ModalResult := mrCancel;
+end;
+
 procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
@@ -187,10 +193,16 @@ end;
 procedure TfrmClientResult.FormDestroy(Sender: TObject);
 begin
   if Assigned(frmCli) then
+  begin
     frmCli.Parent := nil;
+    frmCli := nil;
+  end;
 
   if Assigned(frmResult) then
+  begin
     frmResult.Parent := nil;
+    frmResult := nil;
+  end;
 
   inherited;
 end;

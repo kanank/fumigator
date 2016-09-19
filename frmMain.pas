@@ -112,6 +112,7 @@ type
     procedure btnReportsClick(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
+    fPhoneListUpdated: Boolean;
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
     procedure WmShowOutcomeCall(var Msg: TMessage); message WM_SHOWOUTCOMECALL;
@@ -129,6 +130,7 @@ type
 
     procedure OnCallFinish(Sender: TObject);
     procedure OnCallStart(Sender: TObject);
+    procedure OnCallTransfer(Sender: TObject);
 
     function GetHideOnCloseForAll(Sender: tObject): Boolean; // для расчета HideOnClose
   end;
@@ -410,6 +412,21 @@ begin
   lblCall.Visible  := True;
 end;
 
+procedure TfrmMain.OnCallTransfer(Sender: TObject);
+var
+  i: Integer;
+begin
+  TCPClient.Socket.WriteLn ('#getuserlist:');
+  fPhoneListUpdated :=False;
+  while i < 20 do
+  begin
+    if fPhoneListUpdated then
+      break;
+    inc(i)
+  end;
+
+end;
+
 procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
@@ -440,7 +457,8 @@ begin
   lblSocket.Caption := 'Соединение с сервером установлено';
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
-  TCPClient.Socket.WriteLn('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
+  TCPClient.Socket.WriteLn(Format('#setphone:%s,%d',
+    [DM.CurrentUserSets.ATS_Phone_Num, DM.CurrentUserSets.ID])); //посылаем номер телефона
 end;
 
 procedure TfrmMain.TCPClientDisconnected(Sender: TObject);

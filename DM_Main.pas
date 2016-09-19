@@ -108,6 +108,9 @@ type
     ClientList: TdxMemData;
     IntegerField1: TIntegerField;
     StringField1: TStringField;
+    ActivePhones: TdxMemData;
+    ActivePhonesPhone: TStringField;
+    ActivePhonesworker_id: TIntegerField;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);

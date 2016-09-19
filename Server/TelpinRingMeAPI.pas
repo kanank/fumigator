@@ -32,6 +32,7 @@ type
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; virtual;
     function HttpPost(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; virtual;
     function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; virtual;
+    function HttpPut(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; virtual;
     constructor Create; overload;
     destructor Destroy; overload;
   end;
@@ -48,6 +49,7 @@ type
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
     function HttpDelete(aUrl: string; aUseApiUrl: Boolean = true): boolean; override;
     function HttpPost(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; override;
+    function HttpPut(aUrl: string; aUseApiUrl: Boolean = true; aContent: string = ''): string; override;
     constructor Create(ATokenObject: TTelphinRingMeToken=nil); overload;
   end;
 
@@ -119,7 +121,8 @@ type
 
     function SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean; overload;
     function SimpleCall(ANumberSrc, ANumberDest: string; AExtId: integer): boolean; overload;
-    function TransferCall(Callid, APhone: string): Boolean;
+    function TransferCall(ACallApiId, ANumberDest, AExtNumber: string): boolean; overload;
+    function TransferCall(ACallApiId, ANumberDest: string; AExtId: integer): boolean; overload;
     function PickUpCall(Callid, APhone: string): Boolean;
 
     function DeleteCall(ACallApiId: string; APhone: string): Boolean; overload;
@@ -349,6 +352,15 @@ begin
   Result := inherited HttpPost(aUrl, aUseApiUrl, aContent);
 end;
 
+function TTelphinRingMeAPIElement.HttpPut(aUrl: string; aUseApiUrl: Boolean;
+  aContent: string): string;
+begin
+  fHttp.Request.CustomHeaders.Clear;
+  fhttp.Request.CustomHeaders.Add('Authorization: Bearer '+ TokenObject.Token);
+
+  Result := inherited HttpPut(aUrl, aUseApiUrl, aContent);
+end;
+
 { TPhoneCalls }
 function TPhoneCalls.DeleteCall(ACallApiId: string; AExtId: integer): Boolean;
 var
@@ -531,6 +543,34 @@ begin
   end;
 end;
 
+function TPhoneCalls.TransferCall(ACallApiId,ANumberDest,
+  AExtNumber: string): boolean;
+var
+  ExtId: integer;
+begin
+  ExtId := FTokenObject.ExtensionId(AExtNumber);
+  if ExtId > 0 then
+    Result := TransferCall(ACallApiId, ANumberDest, ExtId);
+end;
+
+function TPhoneCalls.TransferCall(ACallApiId, ANumberDest: string;
+  AExtId: integer): boolean;
+var
+  url: string;
+  s: string;
+begin
+  Result := False;
+  s := Format('{"action": "transfer", "send_dst": "%s"}', [ANumberDest]);
+
+  url := Format('/extension/%d/current_calls/%s', [AExtId, ACallApiId]);
+  try
+    s := HttpPut(url, True, s);
+    Result := (fHttp.ResponseCode = 200);
+  except
+
+  end;
+end;
+
 function TPhoneCalls.SimpleCall(ANumberSrc, ANumberDest, AExtNumber: string): boolean;
 var
   ExtId: integer;
@@ -538,11 +578,6 @@ begin
   ExtId := FTokenObject.ExtensionId(AExtNumber);
   if ExtId > 0 then
     Result := SimpleCall(ANumberSrc, ANumberDest, ExtId);
-end;
-
-function TPhoneCalls.TransferCall(Callid, APhone: string): Boolean;
-begin
-
 end;
 
 { TTelphinRingMeAPIBaseElement }
@@ -670,6 +705,46 @@ begin
     end;
   finally
     //stream.Free;
+  end;
+end;
+
+function TTelphinRingMeAPIBaseElement.HttpPut(aUrl: string; aUseApiUrl: Boolean;
+  aContent: string): string;
+var
+  sResponse: string;
+  url: string;
+begin
+  url := fBaseUrl;
+  if aUseApiUrl then
+    url := url + fApiUrl;
+  url := Url + aUrl;
+
+  fHttpStream.Clear;
+  fHttpStream.WriteString(aContent);
+  try
+    fHttpErr := '';
+    fHttp.Request.Method := 'POST';
+    fhttp.Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    fhttp.Request.AcceptCharSet := 'windows-1251,utf-8;q=0.7,*;q=0.3';
+    fhttp.Request.AcceptLanguage := 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
+    fhttp.Request.Connection := 'keep-alive';
+    fhttp.Request.Host := Url;
+    fhttp.Request.Referer := Url;
+   // fhttp.Request.UserAgent := 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7';
+    fhttp.HandleRedirects := false;
+    fhttp.HTTPOptions := [hoKeepOrigProtocol];
+    if fHttpContentType = htcJson then
+      fHttp.Request.ContentType := 'application/json'
+    else
+       fHttp.Request.ContentType := 'application/x-www-form-urlencoded';
+
+    try
+      result := fHttp.Put(url, fHttpStream);
+    except
+      fHttpErr := Exception(ExceptObject).Message;
+    end;
+  finally
+
   end;
 end;
 

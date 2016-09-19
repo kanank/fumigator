@@ -6,9 +6,10 @@ uses
   Vcl.Forms, Winapi.Windows, Vcl.ExtCtrls, IBX.IBQuery;
 
 const
-  WM_STARTCALL  = WM_USER + 200;
-  WM_FINISHCALL = WM_USER + 201;
-  WM_ACCEPTCALL = WM_USER + 202;
+  WM_STARTCALL    = WM_USER + 200;
+  WM_FINISHCALL   = WM_USER + 201;
+  WM_ACCEPTCALL   = WM_USER + 202;
+  WM_TRANSFERCALL = WM_USER + 203;
 
   WM_CMDFUMIGATOR = WM_USER + 300; //команды Фумигатора
         //wParam = 1 - обновить справочник клиентов
@@ -40,29 +41,34 @@ type
     fOnStartCall: TNotifyEvent;
     fOnFinishCall: TNotifyEvent;
     fOnAcceptCall: TNotifyEvent;
+    fOnTransferCall: TNotifyEvent;
     fOnCheckTimer: TNotifyEvent;
     fActive: Boolean; //идет звонок
     fReady: Boolean;  // готов к звонку
     fAccepted: Boolean; //принят звонок
+    fTransfered: Boolean; // звонок переведен
     fTimer: TTimer;
     procedure SetActive(AValue: boolean);
     procedure SetReady(AValue: boolean);
-    function GetAccepted: Boolean;
+    function  GetAccepted: Boolean;
     procedure SetAccepted(AValue: boolean);
-    function GetCanceled: Boolean;
+    function  GetCanceled: Boolean;
     procedure OnTimerProc(Sender: TObject);
     procedure DoCheckCall;
+    procedure SetTransfered(const AValue: Boolean);
   protected
 
   public
     property Active: Boolean read fActive write SetActive;
     property Ready: Boolean read fReady write SetReady;
     property Accepted: Boolean read GetAccepted write SetAccepted;
+    property Transfered: Boolean read fTransfered write SetTransfered;
     property Cancelled: Boolean read GetCanceled;
     property CallInfo: TCallInfo read fCallInfo;
     property OnStartCall: TNotifyEvent read fOnStartCall write fOnStartCall;
     property OnFinishCall: TNotifyEvent read fOnFinishCall write fOnFinishCall;
     property OnAcceptCall: TNotifyEvent read fOnAcceptCall write fOnAcceptCall;
+    property OnTransferCall: TNotifyEvent read fOnTransferCall write fOnTransferCall;
     property OnCheckTimer: TNotifyEvent read fOnCheckTimer write fOnCheckTimer;
     constructor Create; overload;
     destructor Destroy; overload;
@@ -71,7 +77,7 @@ type
 
     procedure FinishCall(ACallResult: string);
     procedure AcceptCall(ACallId: string);
-
+    procedure TransferCall; virtual;
 
 end;
 
@@ -342,10 +348,25 @@ begin
   end;
 end;
 
+procedure TCallProto.SetTransfered(const AValue: boolean);
+begin
+  if Avalue <> AValue then
+    fTransfered := AValue;
+
+  if fTransfered then
+    PostMessageToAll(WM_TRANSFERCALL);
+end;
+
 procedure TCallProto.StartCall(ACallInfo: TCallInfo);
 begin
   StartCall(ACallInfo.CallFlow, ACallInfo.CallId, ACallInfo.CallApiId,
     ACallInfo.Phone, IntToStr(ACallInfo.ClientId), ACallInfo.ClientType);
+end;
+
+procedure TCallProto.TransferCall;
+begin
+  if Assigned(fOnTransferCall) then
+    fOnTransferCall(Self);
 end;
 
 procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);

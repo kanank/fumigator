@@ -26,6 +26,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnCallLaterClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure btnTransferCallClick(Sender: TObject);
   private
     fCallId: string;
     fCallApiId: string;
@@ -231,6 +232,11 @@ begin
   finally
     DM.inCalling := False;
   end;
+end;
+
+procedure TfrmClientResult.btnTransferCallClick(Sender: TObject);
+begin
+  CallObj.TransferCall;
 end;
 
 function TfrmClientResult.SaveClient: Boolean;

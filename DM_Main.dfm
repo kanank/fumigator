@@ -18,7 +18,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
-    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -984,7 +983,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1751,6 +1749,18 @@ object DataModuleMain: TDataModuleMain
     end
     object StringField1: TStringField
       FieldName = 'NAME'
+    end
+  end
+  object ActivePhones: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 440
+    Top = 88
+    object ActivePhonesPhone: TStringField
+      FieldName = 'Phone'
+    end
+    object ActivePhonesworker_id: TIntegerField
+      FieldName = 'worker_id'
     end
   end
 end

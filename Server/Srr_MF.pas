@@ -9,7 +9,9 @@ uses
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
   TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
-  Vcl.IdAntiFreeze, IBX.IBSQL, RzCommon, RzSelDir, ATBinHex;
+  Vcl.IdAntiFreeze, IBX.IBSQL, RzCommon, RzSelDir, ATBinHex, Vcl.ComCtrls,
+  cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer,
+  cxEdit, cxListBox;
 
 const
   WM_REOPEN_PHONES = WM_USER + 1;
@@ -106,6 +108,7 @@ type
     public
       IP: String;
       Nick: String;
+      UserId: Integer;
       Con: TDateTime;
       function SendMsg(const ANick: String; const AMsg: String) : Boolean;
       procedure BroadcastMsg(const bmsg: String);
@@ -113,56 +116,60 @@ type
   end;
 
   TMF = class(TForm)
-    Panel1: TPanel;
     Log_memo: TMemo;
-    GroupBox1: TGroupBox;
-    Label2: TLabel;
-    GroupBox2: TGroupBox;
-    Label3: TLabel;
-    Button1: TButton;
-    Button2: TButton;
-    Label1: TLabel;
-    TelPort_spin: TSpinEdit;
-    TelIP_edt: TEdit;
-    Label4: TLabel;
-    Label5: TLabel;
-    TelURI_edt: TEdit;
-    TelStatus_lbl: TLabel;
     Tel_SRV: TIdHTTPServer;
     DefTr: TIBTransaction;
     DB: TIBDatabase;
-    GroupBox3: TGroupBox;
-    TestDb_btn: TButton;
-    DBPath_edt: TEdit;
-    Label6: TLabel;
-    DBUser_edt: TEdit;
-    Label7: TLabel;
-    DBPass_edt: TEdit;
-    Label8: TLabel;
-    DBStatus_lbl: TLabel;
-    Label10: TLabel;
-    Button3: TButton;
     CallEnent_Q: TIBQuery;
+    IBEvents: TIBEvents;
+    TCPServer: TIdTCPServer;
+    QPhones: TIBQuery;
+    RzSelDirDialog1: TRzSelDirDialog;
+    LogText: TATBinHex;
+    Panel1: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
     Label9: TLabel;
+    Button2: TButton;
     edtSocketPort: TSpinEdit;
     Edit1: TEdit;
     Button4: TButton;
+    Button6: TButton;
+    DebugMode_cb: TCheckBox;
+    Button8: TButton;
+    Button9: TButton;
+    GroupBox2: TGroupBox;
+    Label3: TLabel;
+    Label1: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    TelStatus_lbl: TLabel;
     Label11: TLabel;
+    Label12: TLabel;
+    Button1: TButton;
+    TelPort_spin: TSpinEdit;
+    TelIP_edt: TEdit;
+    TelURI_edt: TEdit;
     edtUserId: TEdit;
     btnPhone: TButton;
     Button5: TButton;
-    IBEvents: TIBEvents;
-    Button6: TButton;
-    DebugMode_cb: TCheckBox;
-    TCPServer: TIdTCPServer;
-    QPhones: TIBQuery;
-    Button7: TButton;
-    Button8: TButton;
-    RzSelDirDialog1: TRzSelDirDialog;
-    Label12: TLabel;
     edtRecordPath: TEdit;
-    LogText: TATBinHex;
-    Button9: TButton;
+    GroupBox3: TGroupBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    DBStatus_lbl: TLabel;
+    Label10: TLabel;
+    TestDb_btn: TButton;
+    DBPath_edt: TEdit;
+    DBUser_edt: TEdit;
+    DBPass_edt: TEdit;
+    Button3: TButton;
+    Button7: TButton;
+    lstPhones: TcxListBox;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -182,6 +189,8 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure TabSheet1ContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
   private
     fSessions: TStringList;
 
@@ -224,6 +233,8 @@ type
     function BroadcastMsg(const bmsg: String): boolean;
     procedure WriteLog(s: string);
     procedure AppException(Sender: TObject; E: Exception);
+    function GetUserList(Exclude: string): string; //список подключенных пользователей
+
   end;
 
 const
@@ -807,6 +818,39 @@ begin
 
 end;
 
+function TMF.GetUserList(Exclude: string): string;
+var
+  List: TList;
+  ListOut: TStringList;
+  Context: TMyContext;
+  I, ind: Integer;
+begin
+  Result := '';
+  ListOut := TStringList.Create;
+  ListOut.Delimiter := ';';
+
+  List := TCPServer.Contexts.LockList;
+  try
+    ListOut.AddStrings(lstPhones.Items);
+    for I := 0 to List.Count-1 do
+    begin
+      Context := TMyContext(List[I]);
+      //if lowercase(Context.Nick) <> lowercase(Exclude) then
+      ind := ListOut.IndexOf(Context.Nick);
+      if ind > - 1 then
+        ListOut.ValueFromIndex[ind] := IntToStr(Context.UserId);
+    end;
+
+  finally
+    if Assigned(ListOut) then
+    begin
+      Result := ListOut.DelimitedText;
+      ListOut.Free;
+    end;
+    TCPServer.Contexts.UnlockList;
+  end;
+end;
+
 function TMF.SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
 var
   i, p: Integer;
@@ -940,6 +984,22 @@ begin
     end
 
     else
+    if cmd = 'calltransfer' then // перевод звонка
+    begin
+      if not Assigned(lCaller) then
+      begin
+        lCaller := TPhoneCalls.Create(AccessToken);
+        //lCaller.OnAfterCall  := AfterOutcomCall;
+       // Caller.OnCallFinish := CallFinished;
+      end;
+      answer := argList[1];
+      p := pos('*', answer);
+      if (Length(answer) > 0) and (p > 0) then
+        answer := Copy(answer, p + 1, Length(answer));
+      lCaller.TransferCall(argList[0], answer, AtsUserPrefix + TMyContext(AContext).Nick);
+    end
+
+    else
     if cmd = 'callaccept' then  // взяли звонок
     begin
       (*AddLogMemo('callaccept');
@@ -971,6 +1031,14 @@ begin
     end
 
     else
+    if cmd = 'getuserlist' then
+    begin
+      answer := GetUserList(TMyContext(AContext).Nick);
+      AContext.Connection.IOHandler.WriteLn(Format('#userlist:%s', [Answer]));
+      //SendCommandToUser(TMyContext(AContext).Nick, Format('#RecordInfo:argList[0], %s', [Answer]));
+    end
+
+    else
     if cmd = 'getrecord' then //получение записи по-новому
     begin
       answer := GetRecordFile(argList[0]);
@@ -986,6 +1054,8 @@ begin
       lCaller.Free;
   end;
 end;
+
+
 
 procedure TMF.TCPServerConnect(AContext: TIdContext);
 begin
@@ -1013,6 +1083,7 @@ procedure TMF.TCPServerExecute(AContext: TIdContext);
 var
   p: Integer;
   s, cmd, arg: string;
+  arglist: TStringList;
 begin
   try
     if not AContext.Connection.Connected then
@@ -1035,14 +1106,22 @@ begin
       arg := Copy(s, p + 1, Length(s));
 
       if cmd = 'setphone' then
-      begin
-        TMyContext(AContext).Nick := arg;
+      try
+        arglist := TStringList.Create;
+        arglist.Delimiter := ',';
+        arglist.DelimitedText := arg;
+
+        TMyContext(AContext).Nick := arglist[0];
+        if arglist.Count > 1 then
+          TMyContext(AContext).UserId := StrToInt(arglist[1]);
         try
           AContext.Connection.IOHandler.WriteLn('#servertime:' + IntToStr(SecondOfTheDay(Now)));
         except
           try AContext.Connection.IOHandler.Close; except end;
           AddLogMemo('#Ошибка записи: ' +Exception(ExceptObject).Message);
         end;
+      finally
+        arglist.Free;
       end
       else
 

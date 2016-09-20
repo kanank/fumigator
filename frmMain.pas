@@ -123,7 +123,7 @@ type
     procedure UpdateClients;
   public
     ReadThread: TReadingThread;
-    isBusy: Boolean; //выполн€ютс€ обновлени€
+    isBusy: Boolean; //выполняются обновления
 
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
@@ -132,23 +132,23 @@ type
     procedure OnCallStart(Sender: TObject);
     procedure OnCallTransfer(Sender: TObject);
 
-    function GetHideOnCloseForAll(Sender: tObject): Boolean; // дл€ расчета HideOnClose
+    function GetHideOnCloseForAll(Sender: tObject): Boolean; // для расчета HideOnClose
   end;
 
 procedure LoadOptions(AIniFile: string);
 function SaveLogin(AIniFile, Alogin: string): Boolean;
 function ReadLogin(AIniFile: string): string;
 function CheckUpdates: boolean;
-function FindParam(AParam: string): Boolean;  // проверка наличи€ параметра запуска
+function FindParam(AParam: string): Boolean;  // проверка наличия параметра запуска
 //procedure FreeAndNilModal(var AForm); inline;//уничтожение с проверкой на модальность
 
 var
   formMain: TfrmMain;
   MainOptions: TAppOptions;
   msgText: string;
-  OutCallid: string; // callId из сообщени€ об исх. звонке
+  OutCallid: string; // callId из сообщения об исх. звонке
   OutCallApiId: string;
-  OutPhone: string;  // телефон из сообщени€ об исх. звонке
+  OutPhone: string;  // телефон из сообщения об исх. звонке
   TimeShift: Integer; //смещение с сервером в секундах
 
 implementation
@@ -183,7 +183,7 @@ end;
 begin
   inherited;
   DM.SocketTimer.Interval := 0;
-  lblSocket.Caption := '—оединение с сервером установлено';
+  lblSocket.Caption := 'Соединение с сервером установлено';
   DM.DateStart := Now;
   ClientSocket.Socket.SendText('#setphone:' + DM.CurrentUserSets.ATS_Phone_Num); //посылаем номер телефона
 end;
@@ -192,7 +192,7 @@ procedure TfrmMain.ClientSocketDisconnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
   inherited;
-  lblSocket.Caption := '—оединение с сервером разорвано';
+  lblSocket.Caption := 'Соединение с сервером разорвано';
   DM.SocketTimer.Interval := 20000;
 end;
 
@@ -227,7 +227,7 @@ begin
   end
   else
 
-  if cmd = 'callid' then //создан исход€щий звонок с CallId
+  if cmd = 'callid' then //создан исходящий звонок с CallId
   begin
     if Assigned(frmCalling) then
       frmCalling.CallId := arg;
@@ -267,7 +267,7 @@ begin
 
        
   else
-  if cmd = 'checkacceptcall' then //звонок прин€т
+  if cmd = 'checkacceptcall' then //звонок принят
   begin
     //if Assigned(frmIncomeCallRoot) then
     //  frmIncomeCallRoot.CheckSession; //.CheckAccept;
@@ -315,11 +315,12 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
-  Title := 'ѕользователь - ' + DM.CurrentUserSets.UserName +
+  Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')' + ' [вер.: ' + FileVersion(Application.ExeName) + ']';
   DoSocketConnect;
   CallObj.OnStartCall := OnCallStart;
   CallObj.OnFinishCall := OnCallFinish;
+  CallObj.OnTransferCall := OnCallTransfer;
 end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
@@ -329,8 +330,8 @@ end;
 
 procedure TfrmMain.miExitClick(Sender: TObject);
 begin
-  if Application.MessageBox('¬ы действительно хотите закрыть программу?',
-    '¬ыход из программы', MB_YESNO + MB_ICONQUESTION) = mrYes then
+  if Application.MessageBox('Вы действительно хотите закрыть программу?',
+    'Выход из программы', MB_YESNO + MB_ICONQUESTION) = mrYes then
     begin
       fCanClose := True;
       Self.Close;
@@ -417,18 +418,21 @@ procedure TfrmMain.OnCallTransfer(Sender: TObject);
 var
   i: Integer;
 begin
-  TCPClient.Socket.WriteLn ('#getuserlist:');
+  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
   fPhoneListUpdated :=False;
+  i := 0;
   while i < 20 do
   begin
     if fPhoneListUpdated then
       break;
+    Sleep(250);
+    Application.ProcessMessages;
     inc(i)
   end;
 
   if i = 20 then
   begin
-    MsgBoxError('Ќе удалось получить список абонентов с сервера!');
+    MsgBoxError('Не удалось получить список абонентов с сервера!');
     Exit;
   end;
 
@@ -452,9 +456,7 @@ procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
 begin
- // n := InputBox('¬ход€щий звонок', 'Ќомер вызывающего', '+79104579648');
- // ClientSocket.Socket.SendText('#call:' + n + ',755,755');
-  TCPClient.Socket.WriteLn ('“ест');
+  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
@@ -475,7 +477,7 @@ begin
   DM.SocketTimer.Interval := 0;
   ReadThread := TReadingThread.Create(TCPClient);
 
-  lblSocket.Caption := '—оединение с сервером установлено';
+  lblSocket.Caption := 'Соединение с сервером установлено';
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
   TCPClient.Socket.WriteLn(Format('#setphone:%s,%d',
@@ -490,7 +492,7 @@ begin
     ReadThread.WaitFor;
     FreeAndNil(ReadThread);
   end;
-   lblSocket.Caption := '—оединение с сервером не установлено'
+   lblSocket.Caption := 'Соединение с сервером не установлено'
 end;
 
 procedure TfrmMain.DoSocketConnect;
@@ -617,7 +619,7 @@ end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
 begin
-  MessageBox(Handle, PChar(msgText), '—ообщение от сервера', MB_ICONINFORMATION);
+  MessageBox(Handle, PChar(msgText), 'Сообщение от сервера', MB_ICONINFORMATION);
 end;
 
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
@@ -782,7 +784,7 @@ begin
   end
   else
 
-  if cmd = 'callid' then //создан исход€щий звонок с CallId (теперь через CallEvent)
+  if cmd = 'callid' then //создан исходящий звонок с CallId (теперь через CallEvent)
   begin
     //if Assigned(frmCalling) then
     //  frmCalling.CallId := arg;
@@ -843,7 +845,7 @@ begin
       argList.free;
     end;
 
-    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершилс€ звонок
+    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
       exit;
 
     if Callinfo.CallFlow = 'in' then
@@ -896,7 +898,7 @@ begin
   end
 
   else
-  if cmd = 'outcomecall' then //исход€щий звонок
+  if cmd = 'outcomecall' then //исходящий звонок
   begin
 //    if Assigned(frmClientResult) then
 //      Exit;
@@ -915,7 +917,7 @@ begin
   end
   
   else
-  if cmd = 'checkacceptcall' then //звонок прин€т
+  if cmd = 'checkacceptcall' then //звонок принят
   begin
     //if Assigned(frmIncomeCallRoot) then
     //  frmIncomeCallRoot.CheckSession; //.CheckAccept;
@@ -1027,7 +1029,7 @@ begin
       //s := URLDecode(s);
       if Copy(s, 1, 9) = '#getfile:' then
       begin
-        //здесь должен быть код получени€ файла через сокет и вызов TSocketStream.DoFile
+        //здесь должен быть код получения файла через сокет и вызов TSocketStream.DoFile
       end;
 
       if not Terminated and (s <> '') then

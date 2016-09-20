@@ -49,15 +49,17 @@ type
     fStartTime: TDateTime;
     fStarted: Boolean;
     fAccepted: Boolean;
+    fTransfered: Boolean; // звонок переведен
     fFinished: Boolean;
-    fSeconds: Integer; // максю время работы
+    fSeconds: Integer; // макс. время работы
     fList: TStringList;
-    //fCallIdList: TStringList;
+    fCallIdList: TStringList;
     fCallId: string;
     fAts: string;
     fMess: string;
     fMessLock: Boolean;
     fWorkTime: integer; //время работы в сек
+    fStopTime: Integer; // пауза для проверки окончания
     //fNeedCheckStatus: Boolean; //нужно поверять статус
     //fListener: TCallListener;
 
@@ -65,15 +67,20 @@ type
     procedure WriteLog(Amess: string; Ablock: Boolean = True);
     procedure Execute; override;
     procedure DeleteSession;
-    procedure StartCall(CallId: string; ats: string);
-    procedure EndCall(CallId, CallStatus: string);
+    procedure StartCall(CallApiId: string; ats: string);
+    procedure EndCall(CallApiId, CallStatus: string);
+    procedure TransferCall(CallId: string; ats: string);
     procedure AcceptCall(CallId: string);
     procedure SendMess;
   public
     //CallApiId: string;
     CallID: string; // в новом API общий ID - в CALLID
     Str: string;
+    property Transfered: boolean read fTransfered write fTransfered;
+    property Accepted: boolean read fAccepted write fAccepted;
+    property Finished: boolean read fFinished write fFinished;
     constructor Create(ACallId, AStr: string; AList: TStringList; ASecond: integer); overload;
+    destructor Destroy; override;
   end;
 
   TEventWriter = class(TThread)
@@ -93,6 +100,7 @@ type
     procedure SendCommandToUser(ats, msg: string);
 
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
+    function FindSession(ACallId:string; ALock: boolean = true): TCallSession;
     procedure StartCall(CallId: string; ats: string);
     function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
     procedure AcceptCall(ACallId: string);
@@ -1527,7 +1535,7 @@ end;
 
 procedure TCallSession.AcceptCall(CallId: string);
 begin
-  fFinished := True;
+  //fFinished := True;
 end;
 
 constructor TCallSession.Create(ACallId, AStr: string; AList: TStringList; ASecond: integer);
@@ -1538,7 +1546,7 @@ begin
   fList := AList;
   fSeconds := ASecond;
   FreeOnTerminate := True;
-  //fCallIdList := TStringList.Create;
+  fCallIdList := TStringList.Create;
   fStartTime := Now;
 
   //fListener := TCallListener.Create(MF.AccessToken, aCallApiId, '@self');
@@ -1564,27 +1572,32 @@ begin
 
 end;
 
-procedure TCallSession.EndCall(CallId, CallStatus: string);
+destructor TCallSession.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TCallSession.EndCall(CallApiId, CallStatus: string);
 var
   ind: Integer;
   ats: string;
 begin
   //fFinished := True;
-  (*if LockMutex(CallMutex, 2000) then
+  if LockMutex(CallMutex, 2000) then
   try
-    ind := fCallIdList.IndexOfName(CallId);
+    ind := fCallIdList.IndexOf(CallApiId);
     if ind = -1 then
       Exit;
-    ats := fCallIdList.ValueFromIndex[ind];
     fCallIdList.Delete(ind);
-    if not fNeedCheckStatus and (CallStatus <> 'UNKNOWN') then
-      fNeedCheckStatus := True;
   finally
     UnlockMutex(CallMutex);
-  end;*)
+  end;
 end;
 
 procedure TCallSession.Execute;
+//var
+
 begin
   while not Terminated do
   begin
@@ -1611,6 +1624,12 @@ begin
     if fWorkTime/1000 > fSeconds then
       fFinished := true;
 
+    if (fCallIdList.Count = 0) and (fStopTime = 0) then
+      fStopTime := fWorkTime + 5000;
+
+    if (fStopTime > 0) and (fWorkTime >= fStopTime) then
+      fFinished := True;
+
     if fFinished then
     begin
       DeleteSession;
@@ -1627,14 +1646,20 @@ begin
    MF.SendCommandToUser(fAts, Format('#callaccepted:%s', [fCallId]), false);
 end;
 
-procedure TCallSession.StartCall(CallId, ats: string);
+procedure TCallSession.StartCall(CallApiId, ats: string);
 begin
-  //if LockMutex(CallMutex, 1000) then
+  if LockMutex(CallMutex, 1000) then
   try
-    //fCallIdList.Add(CallId + '=' + ats);
+    fCallIdList.Add(CallApiId );
+    fStopTime := 0;
   finally
-    //UnlockMutex(CallMutex);
+    UnlockMutex(CallMutex);
   end;
+end;
+
+procedure TCallSession.TransferCall(CallId, ats: string);
+begin
+
 end;
 
 procedure TCallSession.Log;
@@ -1660,7 +1685,7 @@ begin
     ind := MF.fSessions.IndexOf(ACallId);
     if ind > -1 then
     begin
-      TCallSession(MF.fSessions.Objects[ind]).AcceptCall(ACallId);
+      TCallSession(MF.fSessions.Objects[ind]).Accepted := True; //AcceptCall(ACallId);
       Exit;
     end;
   finally
@@ -1694,7 +1719,7 @@ begin
     ind := MF.fSessions.IndexOf(ACallId);
     if ind > -1 then
     begin
-      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallId, ACallStatus);
+      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallApiId, ACallStatus);
       Exit;
     end;
   finally
@@ -1708,6 +1733,7 @@ var
   Cf :Byte;
   userid, ats, tel, client_type: string;
   p, client_id: Integer;
+  CallObj: TCallSession;
 begin
   s := '#Поступление события на службы Call_Events' + #13#10 +
        fUri + #13#10 +
@@ -1715,47 +1741,55 @@ begin
   WriteLog(s);
 
   begin
-   if fParams.indexOfName('CALLFLOW') = -1 then
-     Exit;
+    if fParams.indexOfName('CALLFLOW') = -1 then
+      Exit;
 
-  if fParams.Values['CALLFLOW'] = 'in' then
-  begin
-    userid := fParams.Values['CalledExtension'];
-    tel    := fParams.Values['CallerIdNum'];
-    cf := 0;
-  end
-  else
-  begin
-    userid := fParams.Values['CallerExtension'];
-    tel    := fParams.Values['CalledNumber'];
-    Cf := 1
-  end;
-  p := Pos('*', userid);
-  if p > 0 then
-  begin
-    ats := Copy(userid, p + 1, Length(userid));
-    userid := Copy(userid, 1, p - 1);
-  end;
-  p := Pos('@', ats);
-  if p > 0  then
-    ats := Copy(ats, 1, p - 1);
+    if fParams.Values['CALLFLOW'] = 'in' then
+    begin
+      userid := fParams.Values['CalledExtension'];
+      tel    := fParams.Values['CallerIdNum'];
+      cf := 0;
+    end
+    else
+    begin
+      userid := fParams.Values['CallerExtension'];
+      tel    := fParams.Values['CalledNumber'];
+      Cf := 1
+    end;
+    p := Pos('*', userid);
+    if p > 0 then
+    begin
+      ats := Copy(userid, p + 1, Length(userid));
+      userid := Copy(userid, 1, p - 1);
+    end;
+    p := Pos('@', ats);
+    if p > 0  then
+      ats := Copy(ats, 1, p - 1);
 
-  WriteLog('user_id = ' + userid);
+    WriteLog('user_id = ' + userid);
 
-  if userid <> fUserId then //только нужную АТС отсекаем
-    Exit;
+    if userid <> fUserId then //только нужную АТС отсекаем
+      Exit;
 
-  if fParams.Values['CallStatus'] <> 'CALLING' then // при звонке отдельна запись
-    with TDbWriter.Create(MF.DB, fParams, fSql) do
-      Start;
+    if fParams.Values['CallStatus'] <> 'CALLING' then // при звонке отдельна запись
+      with TDbWriter.Create(MF.DB, fParams, fSql) do
+        Start;
 
     if fParams.Values['CallStatus'] = 'CALLING' then
     begin
+      client_id := 0; client_type := '';
       if pos(fUserId + '*', tel) = 0 then
-       begin
-         client_id := 0; client_type := '';
-         FindClientByPhone(fParams.Values['CALLFLOW'], fParams.Values['CALLID'], fParams.Values['CALLAPIID'], tel, ats, client_type);
-
+         FindClientByPhone(fParams.Values['CALLFLOW'], fParams.Values['CALLID'], fParams.Values['CALLAPIID'], tel, ats, client_type)
+      else
+      begin
+         CallObj := nil;
+         CallObj := FindSession(fParams.Values['CALLID']);
+         if Assigned(CallObj) then
+         begin
+           CallObj.Transfered := True;
+           client_type := CallObj.Str;
+         end;
+      end;
          p := Pos(',', client_type);
          if p > 0 then
          begin
@@ -1772,19 +1806,19 @@ begin
            tel + ',' +
            //IntToStr(client_id) + ',' +
            client_type)
-       end;
-
     end
+    //end
+
     else  //окончание звонка
     if fParams.Values['EVENTTYPE'] = 'hangup' then
     begin
-      if (Cf = 0) or ((Cf = 1) and (pos(fUserId + '*', tel) = 0)) then
+      //if (Cf = 0) or ((Cf = 1) and (pos(fUserId + '*', tel) = 0)) then
       begin
         SendCommandToUser(ats, '#finishcall:' +
           fParams.Values['CallID'] + ',' +
           fParams.Values['CallAPIID'] + ',' +
           fParams.Values['CallStatus']);
-        if cf = 0 then
+        //if cf = 0 then
         EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID'], fParams.Values['CallStatus']);
       end;
     end
@@ -1813,7 +1847,7 @@ begin
 
   if lMutex then//(fIn and lMutex) or not fIn then
   try
-    if fIn then
+    //нужно для всех звонков для перевода if fIn then
     begin
       ind := MF.fSessions.IndexOf(ACallId);
       if ind > -1 then
@@ -1822,9 +1856,9 @@ begin
         AclientIDType := CallObj.Str;
         //Exit;        ommand
       end
-    end
-    else
-      ind := -1;
+    end;
+    //else
+    //  ind := -1;
 
     if ind = -1 then
     begin
@@ -1837,15 +1871,39 @@ begin
       else
         AClientIDType := '0,';
 
-      if fIn then
+      //if fIn then
       begin
-        CallObj := TCallSession.Create(ACallId, AclientIdType, MF.fSessions, 60);
+        CallObj := TCallSession.Create(ACallId, AclientIdType, MF.fSessions, 3600);
         MF.fSessions.AddObject(ACallId, CallObj);
         CallObj.StartCall(ACallApiId, Aats);
       end;
     end;
   finally
     if lMutex then
+      UnlockMutex(EventsMutex);
+  end;
+end;
+
+function TEventWriter.FindSession(ACallId: string; ALock: boolean): TCallSession;
+var
+  lMutex: Boolean;
+  ind: Integer;
+begin
+  Result := nil;
+  lMutex := not ALock;
+  if not lMutex then
+    lMutex := LockMutex(EventsMutex, 1000);
+
+  if lMutex then//(fIn and lMutex) or not fIn then
+  try
+    //нужно для всех звонков для перевода if fIn then
+    begin
+      ind := MF.fSessions.IndexOf(ACallId);
+      if ind > -1 then
+        result := TCallSession(MF.fSessions.Objects[ind]);
+    end;
+  finally
+    if ALock and lMutex then
       UnlockMutex(EventsMutex);
   end;
 end;

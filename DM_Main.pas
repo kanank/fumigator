@@ -1312,7 +1312,10 @@ procedure TDataModuleMain.ClientsAfterPost(DataSet: TDataSet);
 var
   i: Integer;
 begin
-  if ClientList.Active and ClientList.Locate('id', DataSet.FieldByName('id').AsInteger, []) then
+  if not ClientList.Active then
+    Exit;
+
+  if ClientList.Locate('id', DataSet.FieldByName('id').AsInteger, []) then
   try
     ClientList.Edit;
     for i := 0 to DataSet.FieldCount - 1 do
@@ -1320,7 +1323,16 @@ begin
   finally
     if ClientList.State <> dsBrowse then
       ClientList.Post;
-  end;
+  end
+  else
+  try
+    ClientList.Append;
+    for i := 0 to DataSet.FieldCount - 1 do
+      ClientList.FieldByName(Dataset.Fields[i].FieldName).Value := Dataset.Fields[i].Value;
+  finally
+    if ClientList.State <> dsBrowse then
+      ClientList.Post;
+  end
 end;
 
 procedure TDataModuleMain.ClientsBeforeClose(DataSet: TDataSet);

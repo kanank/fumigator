@@ -110,7 +110,10 @@ inherited FrameUslugi: TFrameUslugi
     RefreshSQL.Strings = (
       'select * from services_client where id = :id')
     ModifySQL.Strings = (
-      '')
+      'update services_client '
+      'set'
+      'service_id = :service_id'
+      'where id = :id')
     InsertSQL.Strings = (
       'insert into services_client ('
       'id, '
@@ -129,6 +132,7 @@ inherited FrameUslugi: TFrameUslugi
     SQL.Strings = (
       'select * from  services_client where client_id = :client_id')
     GeneratorField.Generator = 'GEN_CLIENT_SERVICES_ID'
+    GeneratorField.ApplyEvent = gamOnPost
     ParamData = <
       item
         DataType = ftUnknown

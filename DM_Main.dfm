@@ -896,6 +896,7 @@ object DataModuleMain: TDataModuleMain
   object Clients: TIBQuery
     Database = DB
     Transaction = Clients_tr
+    ForcedRefresh = True
     ObjectView = True
     FieldOptions.UpdatePersistent = True
     AfterOpen = ClientsAfterOpen
@@ -909,7 +910,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
-    GeneratorField.ApplyEvent = gamOnPost
+    GeneratorField.ApplyEvent = gamOnServer
     Left = 160
     Top = 24
   end
@@ -939,7 +940,7 @@ object DataModuleMain: TDataModuleMain
       'where id = :ID')
     InsertSQL.Strings = (
       'insert into clients('
-      'ID,'
+      'id,'
       'NAME,'
       'TYPE_CLI,'
       'STATUS_ID,'
@@ -959,7 +960,7 @@ object DataModuleMain: TDataModuleMain
       'AREA_UNIT_ID)'
       'values'
       '('
-      ':ID,'
+      ':id,'
       ':NAME,'
       ':TYPE_CLI,'
       ':STATUS_ID,'

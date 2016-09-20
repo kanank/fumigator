@@ -4,8 +4,7 @@ inherited frmClientUr: TfrmClientUr
   ClientWidth = 1063
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -362
-  ExplicitTop = -156
+  ExplicitTop = -210
   ExplicitWidth = 1079
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -1849,13 +1848,13 @@ inherited frmClientUr: TfrmClientUr
         ExplicitHeight = 122
         inherited grdPhoneDBTableView2: TcxGridDBTableView
           inherited grdPhoneDBTableView2Column2: TcxGridDBColumn
-            Width = 104
+            Width = 126
           end
           inherited grdPhoneDBTableView2Column5: TcxGridDBColumn
             Width = 36
           end
           inherited grdPhoneDBTableView2Column3: TcxGridDBColumn
-            Width = 28
+            Width = 79
           end
         end
       end
@@ -1913,6 +1912,10 @@ inherited frmClientUr: TfrmClientUr
           ExplicitHeight = 38
         end
       end
+    end
+    inherited Q_Check: TIBQuery
+      Left = 144
+      Top = 51
     end
   end
   object cxDBMemo1: TcxDBMemo

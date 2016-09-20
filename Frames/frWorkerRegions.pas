@@ -67,7 +67,7 @@ begin
       Query.FieldByName('worker_id').AsInteger := client_id;
     end;
 
-    if Query.Modified then
+    if DM.isModifiedData(Query) then
       Query.post;
 
     Query.Next;

@@ -61,7 +61,7 @@ function TFrameUslugi.SaveData: Boolean;
 var
   client_id, ind: Integer;
 begin
-  if not Query.Modified then
+  if not DM.isModifiedData(Query) then
   begin
     Result := True;
     Exit;
@@ -81,7 +81,7 @@ begin
       Query.FieldByName('Client_id').AsInteger := client_id;
     end;
 
-    if Query.Modified then
+    if DM.isModifiedData(Query) then
       Query.post;
 
     Query.Next;

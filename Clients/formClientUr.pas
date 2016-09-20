@@ -229,6 +229,8 @@ begin
     i1 := 1;
   if DS.DataSet.FieldByName('GOODS').AsString <> '' then
     i2 := 2;
+  if (DS.DataSet.State <> dsBrowse) and
+      (DS.DataSet.FieldByName('FORMAT_ID').AsInteger <> i1 + i2) then
   DS.DataSet.FieldByName('FORMAT_ID').AsInteger := i1 + i2;
 end;
 

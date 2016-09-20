@@ -156,6 +156,9 @@ inherited frameClientCalls: TframeClientCalls
       Visible = False
     end
   end
+  inherited Query_upd: TIBUpdateSQL
+    ModifySQL.Strings = ()
+  end
   inherited Query: TIBQuery
     SQL.Strings = (
       'select * from sessions '

@@ -426,6 +426,46 @@ object MF: TMF
     ScrollBars = ssVertical
     TabOrder = 1
   end
+  object LogText: TATBinHex
+    Left = 0
+    Top = 321
+    Width = 627
+    Height = 208
+    Cursor = crIBeam
+    Align = alClient
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    Caption = 'LogText'
+    Color = clWindow
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 2
+    FontOEM.Charset = OEM_CHARSET
+    FontOEM.Color = clWindowText
+    FontOEM.Height = -12
+    FontOEM.Name = 'Terminal'
+    FontOEM.Style = []
+    FontFooter.Charset = DEFAULT_CHARSET
+    FontFooter.Color = clBlack
+    FontFooter.Height = -12
+    FontFooter.Name = 'Arial'
+    FontFooter.Style = []
+    FontGutter.Charset = DEFAULT_CHARSET
+    FontGutter.Color = clBlack
+    FontGutter.Height = -12
+    FontGutter.Name = 'Courier New'
+    FontGutter.Style = []
+    AutoReload = True
+    ExplicitLeft = 136
+    ExplicitTop = 352
+    ExplicitWidth = 200
+    ExplicitHeight = 150
+  end
   object Tel_SRV: TIdHTTPServer
     Bindings = <>
     AutoStartSession = True
@@ -524,17 +564,6 @@ object MF: TMF
         ParamType = ptUnknown
       end>
   end
-  object ServerSocket0: TServerSocket
-    Active = False
-    Port = 1025
-    ServerType = stNonBlocking
-    OnClientConnect = ServerSocket0ClientConnect
-    OnClientDisconnect = ServerSocket0ClientDisconnect
-    OnClientRead = ServerSocket0ClientRead
-    OnClientError = ServerSocket0ClientError
-    Left = 577
-    Top = 265
-  end
   object IBEvents: TIBEvents
     AutoRegister = False
     Database = DB
@@ -546,39 +575,5 @@ object MF: TMF
     OnEventAlert = IBEventsEventAlert
     Left = 377
     Top = 73
-  end
-  object ServerSocket: TIdCmdTCPServer
-    Bindings = <>
-    DefaultPort = 1025
-    CommandHandlers = <
-      item
-        CmdDelimiter = ':'
-        Command = '#setphone'
-        Disconnect = False
-        Name = 'TIdCommandSetPhone'
-        NormalReply.Code = '200'
-        ParamDelimiter = ' '
-        ParseParams = True
-        Tag = 0
-        OnCommand = ServerSocketCommandHandlers0Command
-      end>
-    ExceptionReply.Code = '500'
-    ExceptionReply.Text.Strings = (
-      'Unknown Internal Error')
-    Greeting.Code = '200'
-    Greeting.Text.Strings = (
-      'Welcome')
-    HelpReply.Code = '100'
-    HelpReply.Text.Strings = (
-      'Help follows')
-    MaxConnectionReply.Code = '300'
-    MaxConnectionReply.Text.Strings = (
-      'Too many connections. Try again later.')
-    ReplyTexts = <>
-    ReplyUnknownCommand.Code = '400'
-    ReplyUnknownCommand.Text.Strings = (
-      'Unknown Command')
-    Left = 472
-    Top = 304
   end
 end

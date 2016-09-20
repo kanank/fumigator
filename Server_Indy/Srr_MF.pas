@@ -8,7 +8,8 @@ uses
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
-  TelpinAPI, IBX.IBEvents, IdTCPServer, IdCmdTCPServer, IdCommandHandlers;
+  TelpinAPI, IBX.IBEvents, IdTCPServer, IdCmdTCPServer, IdCommandHandlers,
+  ATBinHex;
 
 type
   TMF = class(TForm)
@@ -42,7 +43,6 @@ type
     Label10: TLabel;
     Button3: TButton;
     CallEnent_Q: TIBQuery;
-    ServerSocket0: TServerSocket;
     Label9: TLabel;
     edtSocketPort: TSpinEdit;
     Edit1: TEdit;
@@ -54,7 +54,7 @@ type
     IBEvents: TIBEvents;
     Button6: TButton;
     DebugMode_cb: TCheckBox;
-    ServerSocket: TIdCmdTCPServer;
+    LogText: TATBinHex;
     procedure Button1Click(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);

@@ -197,6 +197,7 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure QPhonesBeforeOpen(DataSet: TDataSet);
   private
     fSessions: TStringList;
 
@@ -657,7 +658,7 @@ begin
 
     if Copy(EventName,1,12) = 'ACCEPT_PHONE' then
       SendCommandToUser('*', '#checkacceptcall:', false)*)
-    if (Copy(EventName,1,15) = 'CLIENTS_CHANGED') then
+    if EventName = 'CLIENTS_CHANGED' then
       PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 0)
     else
     if EventName = 'PHONES_CHANGED' then
@@ -668,6 +669,12 @@ begin
     //UnLockMutex(EventsMutex);
     //CancelAlerts := True;
   end;
+end;
+
+procedure TMF.QPhonesBeforeOpen(DataSet: TDataSet);
+begin
+  if not DB.Connected then
+    DB.Open;
 end;
 
 procedure TMF.ReopenPhones;
@@ -1256,9 +1263,12 @@ end;
 
 procedure TMF.WmReopenPhones(var Msg: TMessage);
 begin
-  ReopenPhones;
-  if Msg.LParam = 0 then
-    SendCommandToUser('*', '#cmdfumigator:updateclients');
+  try
+    ReopenPhones;
+  finally
+    if Msg.LParam = 0 then
+      SendCommandToUser('*', '#cmdfumigator:updateclients');
+  end;
 end;
 
 procedure TMF.WriteLog(s: string);
@@ -1535,7 +1545,7 @@ end;
 
 procedure TCallSession.AcceptCall(CallId: string);
 begin
-  //fFinished := True;
+  fAccepted := True;
 end;
 
 constructor TCallSession.Create(ACallId, AStr: string; AList: TStringList; ASecond: integer);
@@ -1599,25 +1609,9 @@ procedure TCallSession.Execute;
 //var
 
 begin
+  fWorkTime := 0;
   while not Terminated do
   begin
-    (*if fNeedCheckStatus and not fListener.Started then
-      fListener.Start;
-
-    if not fAccepted and (fListener.Accepted) then //остался один звонок
-    begin
-      fAccepted := True;
-      fCallId := fListener.CallApiId;
-      fAts := fListener.AcceptedExt;
-      Synchronize(SendMess);
-      fFinished := True;
-    end;
-    if not fFinished then
-      fFinished := fListener.Finished;
-    if SecondOfTheDay(Now) - SecondOfTheDay(fStartTime) >
-       fSeconds then
-      Terminate
-    else*)
     Sleep(300);
     Inc(fWorkTime, 300);
 
@@ -1854,7 +1848,7 @@ begin
       begin
         CallObj := TCallSession(MF.fSessions.Objects[ind]);
         AclientIDType := CallObj.Str;
-        //Exit;        ommand
+        CallObj.StartCall(ACallApiId, Aats);
       end
     end;
     //else

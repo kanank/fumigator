@@ -3,8 +3,8 @@ inherited frmClientUr: TfrmClientUr
   ClientHeight = 746
   ClientWidth = 1063
   Position = poDesktopCenter
+  OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitTop = -210
   ExplicitWidth = 1079
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -1771,8 +1771,6 @@ inherited frmClientUr: TfrmClientUr
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicAreaVolume
       Properties.ReadOnly = False
-      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-      Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 5
       Width = 122
     end
@@ -1794,8 +1792,6 @@ inherited frmClientUr: TfrmClientUr
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicUnits
       Properties.ReadOnly = False
-      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-      Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 6
       Width = 64
     end

@@ -1288,7 +1288,9 @@ end;
 
 procedure TDataModuleMain.ClientListAfterScroll(DataSet: TDataSet);
 begin
-  Clients.Locate('id', DataSet.FieldByName('id').AsInteger, []);
+  if Clients.FieldByName('id').AsInteger <>
+             ClientList.FieldByName('id').AsInteger then
+    Clients.Locate('id', DataSet.FieldByName('id').AsInteger, []);
 end;
 
 procedure TDataModuleMain.ClientsAfterOpen(DataSet: TDataSet);
@@ -1569,7 +1571,12 @@ begin
   result := AQuery;
   if not AQuery.Active then
   try
-    AQuery.Open;
+    try
+      Screen.Cursor := crSQLWait;
+      AQuery.Open;
+    finally
+       Screen.Cursor := crDefault;
+    end;
   except
     result := nil;
   end;

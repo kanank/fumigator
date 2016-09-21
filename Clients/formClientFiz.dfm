@@ -3,6 +3,7 @@ inherited frmClientFiz: TfrmClientFiz
   ClientHeight = 746
   ClientWidth = 1070
   Position = poDesktopCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   ExplicitWidth = 1086
   ExplicitHeight = 784
@@ -2370,8 +2371,6 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicAreaVolume
       Properties.ReadOnly = False
-      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-      Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 5
       Width = 122
     end
@@ -2393,8 +2392,6 @@ inherited frmClientFiz: TfrmClientFiz
       Properties.ListOptions.ShowHeader = False
       Properties.ListSource = DataModuleMain.DsDicUnits
       Properties.ReadOnly = False
-      Properties.OnCloseUp = cmbWorkerPropertiesCloseUp
-      Properties.OnPopup = cmbWorkerPropertiesPopup
       TabOrder = 6
       Width = 64
     end

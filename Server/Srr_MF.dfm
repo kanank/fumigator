@@ -724,6 +724,7 @@ object MF: TMF
   object QPhones: TIBQuery
     Database = DB
     Transaction = DefTr
+    BeforeOpen = QPhonesBeforeOpen
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True

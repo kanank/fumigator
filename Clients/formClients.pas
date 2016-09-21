@@ -184,13 +184,20 @@ end;
 
 constructor TfrmClients.Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0);
 begin
-  inherited Create(AOwner);
-  if ADataSet = nil then
-    DS.DataSet := DM.ClientList;
-  isUr := AisUr;
+  DM.ClientList.AfterScroll := nil;
+  try
+    inherited Create(AOwner);
 
-  status := 1;
-  DS.DataSet.OnFilterRecord := Self.FilterRecord;
+    if ADataSet = nil then
+      DS.DataSet := DM.ClientList;
+    isUr := AisUr;
+
+    status := 1;
+
+    DS.DataSet.OnFilterRecord := Self.FilterRecord;
+  finally
+    DM.ClientList.AfterScroll := DM.ClientListAfterScroll;
+  end;
 end;
 
 procedure TfrmClients.Del_btnClick(Sender: TObject);
@@ -273,8 +280,14 @@ end;
 
 procedure TfrmClients.FormDestroy(Sender: TObject);
 begin
-  DS.DataSet.OnFilterRecord := nil;
-  DS.DataSet.Filtered := False;
+  DM.ClientList.AfterScroll := nil;
+  try
+    DS.DataSet.Filtered := False;
+    DS.DataSet.OnFilterRecord := nil;
+  finally
+    DM.ClientList.AfterScroll := DM.ClientListAfterScroll;
+  end;
+
   inherited;
 end;
 

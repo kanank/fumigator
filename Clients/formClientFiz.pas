@@ -68,6 +68,7 @@ type
     procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
     procedure DSDataChange(Sender: TObject; Field: TField);
     procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     fMode: TActionstr;
     procedure ChangeFormat(Sender: TObject);
@@ -163,7 +164,6 @@ begin
         DS.DataSet.FieldByName('ADRES_ID').AsInteger := FrameAddress.Id;
 
       try
-        TIBQuery(DS.DataSet).GeneratorField.Apply;
         DS.DataSet.Post;
         TIBQuery(DS.DataSet).ApplyUpdates;
         res := True;
@@ -262,6 +262,15 @@ begin
   FrameUslugi.Cancel;
   FrameAddress.Cancel;
   fCanClose := True;
+end;
+
+procedure TfrmClientFiz.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if ModalResult <> mrOk then
+  begin
+    DS.DataSet.Cancel;
+    TIBQuery(DS.DataSet).CancelUpdates;
+  end;
 end;
 
 procedure TfrmClientFiz.FormCreate(Sender: TObject);

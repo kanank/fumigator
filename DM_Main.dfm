@@ -910,7 +910,7 @@ object DataModuleMain: TDataModuleMain
     UpdateObject = Clients_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_CLIENTS_ID'
-    GeneratorField.ApplyEvent = gamOnServer
+    GeneratorField.ApplyEvent = gamOnPost
     Left = 160
     Top = 24
   end
@@ -1145,7 +1145,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

@@ -73,6 +73,7 @@ type
     procedure cmbWorkerPropertiesCloseUp(Sender: TObject);
     procedure btnHideClick(Sender: TObject);
     procedure FrameUslugiQueryAfterPost(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     fMode: TActionstr;
     procedure ChangeFormat(Sender: TObject);
@@ -276,6 +277,15 @@ begin
   FrameUslugi.Cancel;
   FrameAddress.Cancel;
   fCanClose := True;
+end;
+
+procedure TfrmClientUr.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if ModalResult <> mrOk then
+  begin
+    DS.DataSet.Cancel;
+    TIBQuery(DS.DataSet).CancelUpdates;
+  end;
 end;
 
 procedure TfrmClientUr.FormCreate(Sender: TObject);

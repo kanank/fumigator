@@ -330,8 +330,8 @@ end;
 
 procedure TfrmMain.miExitClick(Sender: TObject);
 begin
-  if Application.MessageBox('‚ы действительно хотите закрыть программу?',
-    '‚ыход из программы', MB_YESNO + MB_ICONQUESTION) = mrYes then
+  if Application.MessageBox('Вы действительно хотите закрыть программу?',
+    'Выход из программы', MB_YESNO + MB_ICONQUESTION) = mrYes then
     begin
       fCanClose := True;
       Self.Close;

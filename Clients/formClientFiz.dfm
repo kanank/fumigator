@@ -260,7 +260,7 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitHeight = 170
       inherited RzGroupBox1: TRzGroupBox
         Left = 2
-        Top = 5
+        Top = 6
         Width = 313
         Height = 156
         Margins.Left = 4
@@ -269,7 +269,7 @@ inherited frmClientFiz: TfrmClientFiz
         Margins.Bottom = 4
         ParentFont = False
         ExplicitLeft = 2
-        ExplicitTop = 5
+        ExplicitTop = 6
         ExplicitWidth = 313
         ExplicitHeight = 156
         inherited Label1: TLabel

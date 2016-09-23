@@ -67,7 +67,7 @@ begin
     Exit;
 
   frmClientFiz.butOK.Click;
-  ModalResult := mrOk;
+  ModalResult := frmClientFiz.ModalResult;
 end;
 
 procedure TfrmSmallCardFiz.FormCloseQuery(Sender: TObject;

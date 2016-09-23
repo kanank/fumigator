@@ -82,7 +82,6 @@ inherited frmSmallCardUr: TfrmSmallCardUr
     ExplicitTop = 366
     ExplicitWidth = 800
     inherited Image2: TImage
-      Left = -79
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8

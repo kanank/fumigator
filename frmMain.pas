@@ -477,11 +477,13 @@ begin
   DM.SocketTimer.Interval := 0;
   ReadThread := TReadingThread.Create(TCPClient);
 
-  lblSocket.Caption := '‘оединение с сервером установлено';
+  lblSocket.Caption := 'Соединение с сервером установлено';
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
-  TCPClient.Socket.WriteLn(Format('#setphone:%s,%d',
-    [DM.CurrentUserSets.ATS_Phone_Num, DM.CurrentUserSets.ID])); //посылаем номер телефона
+  //TCPClient.Socket.WriteLn(Format('#setphone:%s,%d',
+  //  [DM.CurrentUserSets.ATS_Phone_Num, DM.CurrentUserSets.ID])); //посылаем номер телефона
+  TCPClient.Socket.WriteLn(Format('#setphone:%s',
+    [DM.CurrentUserSets.ATS_Phone_Num]));
 end;
 
 procedure TfrmMain.TCPClientDisconnected(Sender: TObject);
@@ -492,7 +494,7 @@ begin
     ReadThread.WaitFor;
     FreeAndNil(ReadThread);
   end;
-   lblSocket.Caption := '‘оединение с сервером не установлено'
+   lblSocket.Caption := 'Соединение с сервером не установлено'
 end;
 
 procedure TfrmMain.DoSocketConnect;
@@ -619,7 +621,7 @@ end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
 begin
-  MessageBox(Handle, PChar(msgText), '‘ообщение от сервера', MB_ICONINFORMATION);
+  MessageBox(Handle, PChar(msgText), 'Сообщение от сервера', MB_ICONINFORMATION);
 end;
 
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);

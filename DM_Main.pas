@@ -560,14 +560,16 @@ begin
            begin
              if frmCallUnknown.SelectId > 0 then
              begin
-               DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
-               ExtParam.CallParam.Client_id := frmCallUnknown.SelectId;
-               if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
-                  DM.ShowClientFizForCall(asEdit, ExtParam)
-               else
-                  DM.ShowClientURForCall(asEdit, ExtParam);
-               if Assigned(frmSessionResult) then
-                   frmSessionResult.EnableButtons;
+               if DM.Clients.Locate('id', frmCallUnknown.SelectId, []) then
+               begin
+                 ExtParam.CallParam.Client_id := frmCallUnknown.SelectId;
+                 if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+                    DM.ShowClientFizForCall(asEdit, ExtParam)
+                 else
+                   DM.ShowClientURForCall(asEdit, ExtParam);
+                 if Assigned(frmSessionResult) then
+                     frmSessionResult.EnableButtons;
+               end;
              end;
            end
 

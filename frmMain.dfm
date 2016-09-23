@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage
@@ -17,9 +19,9 @@ inherited frmMain: TfrmMain
     ExplicitHeight = 81
   end
   object lblSocket: TLabel
-    Left = 435
+    Left = 407
     Top = 0
-    Width = 203
+    Width = 231
     Height = 13
     Alignment = taRightJustify
     Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077' '#1089' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1085#1077' '#1091#1089#1090#1072#1085#1086#1074#1083#1077#1085#1086

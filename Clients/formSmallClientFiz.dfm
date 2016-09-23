@@ -96,7 +96,6 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     ExplicitTop = 312
     ExplicitWidth = 634
     inherited Image2: TImage
-      Left = -245
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8

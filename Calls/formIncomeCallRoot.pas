@@ -525,16 +525,18 @@ begin
          if frmCallUnknown.SelectId > 0 then
          begin
            fClientClose := False;
-           DM.Clients.Locate('id', frmCallUnknown.SelectId, []);
-           extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
-           ClientId := frmCallUnknown.SelectId;
-           if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
-              DM.ShowClientFizForCall(asEdit, ExtPrm)
-           else
-              DM.ShowClientURForCall(asEdit, ExtPrm);
+           if DM.Clients.Locate('id', frmCallUnknown.SelectId, []) then
+             begin
+             extPrm.CallParam.Client_id := frmCallUnknown.SelectId;
+             ClientId := frmCallUnknown.SelectId;
+             if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
+                DM.ShowClientFizForCall(asEdit, ExtPrm)
+             else
+                DM.ShowClientURForCall(asEdit, ExtPrm);
+           end;
+           if Assigned(frmSessionResult) then
+             frmSessionResult.EnableButtons;
          end;
-         if Assigned(frmSessionResult) then
-           frmSessionResult.EnableButtons;
        end
 
        else  //корпоративный и др

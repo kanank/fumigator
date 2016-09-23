@@ -67,7 +67,7 @@ end;
 procedure TfrmSmallCardUr.Exit_bntClick(Sender: TObject);
 begin
   frmClientUr.butOK.Click;
-  ModalResult := mrOk;
+  ModalResult := frmClientUr.ModalResult;
 end;
 
 procedure TfrmSmallCardUr.FormCloseQuery(Sender: TObject;

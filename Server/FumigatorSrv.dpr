@@ -5,7 +5,8 @@ uses
   Srr_MF in 'Srr_MF.pas' {MF},
   TelpinAPI in 'TelpinAPI.pas',
   CommonFunc in 'CommonFunc.pas',
-  TelpinRingMeAPI in 'TelpinRingMeAPI.pas';
+  TelpinRingMeAPI in 'TelpinRingMeAPI.pas',
+  commonSocketCmd in '..\commonSocketCmd.pas';
 
 {$R *.res}
 

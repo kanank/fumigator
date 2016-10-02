@@ -210,7 +210,7 @@ begin
   //карточка клиента
   DM.GetDataset(DM.Clients);
 
-  if DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
+  if DM.Clientlist.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
   begin
 
     prm := NewFrmCreateParam(asShow, DM.Clients);

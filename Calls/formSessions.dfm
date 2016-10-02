@@ -4,7 +4,6 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1250
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -456
   ExplicitWidth = 1266
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -36,6 +35,8 @@ inherited frmSessions: TfrmSessions
       Margins.Bottom = 6
       Align = alRight
       ExplicitLeft = 1145
+      ExplicitTop = 2
+      ExplicitHeight = 42
     end
     object Label11: TLabel
       Left = 12
@@ -177,14 +178,14 @@ inherited frmSessions: TfrmSessions
       Visible = False
     end
     inherited Edit_btn: TRzButton [3]
-      Left = 12
+      Left = 13
       Top = 6
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
       OnClick = Edit_btnClick
-      ExplicitLeft = 12
+      ExplicitLeft = 13
       ExplicitTop = 6
     end
   end

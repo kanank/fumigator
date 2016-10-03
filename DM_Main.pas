@@ -114,6 +114,9 @@ type
     ActivePhonesworker_id: TIntegerField;
     StyleRepository: TcxStyleRepository;
     cxStyle1: TcxStyle;
+    ClientList0: TdxMemData;
+    IntegerField2: TIntegerField;
+    StringField2: TStringField;
     procedure DsWorkerDataChange(Sender: TObject; Field: TField);
     procedure Calls_TimerTimer(Sender: TObject);
     procedure SocketTimerTimer(Sender: TObject);
@@ -1310,6 +1313,9 @@ begin
     end;
   finally
     ClientList.AfterScroll := ClientListAfterScroll;
+    ClientList0.Close;
+    ClientList0.CopyFromDataSet(Dataset);
+    ClientList0.Open;
   end;
 end;
 

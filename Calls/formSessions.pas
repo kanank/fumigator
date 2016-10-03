@@ -182,6 +182,8 @@ begin
   frmSessionEdit := TfrmSessionEdit.Create(nil);
 
   try
+  DS.dataset.DisableControls;
+
   frmSessionResult := TfrmSessionResult.Create(nil);
   frmSessionResult.NeedCheckCall := False;
   frmSessionResult.Cancel_btn.Visible := False;
@@ -210,7 +212,7 @@ begin
   //карточка клиента
   DM.GetDataset(DM.Clients);
 
-  if DM.Clientlist.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
+  if DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
   begin
 
     prm := NewFrmCreateParam(asShow, DM.Clients);
@@ -236,18 +238,17 @@ begin
     else
       frmSessionEdit.btnClientEdit.Enabled := False;
 
-    frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
-      frm.Height + 5 + frmSessionEdit.pnlCalls.Height +
-       frmSessionEdit.RzPanel1.ClientHeight;
-
+    //frmSessionEdit.ScrollBox.Height:= frmSessionResult.Height + 5 +
+    //  frm.Height + 5 + frmSessionEdit.pnlCalls.Height;
     frmSessionEdit.pnlClient.Height := frm.Height + 5;
+
   end
   else
   begin
     frmSessionEdit.pnlClient.Visible := False;
-    frmSessionEdit.ClientHeight := frmSessionResult.Height + 5 +
-       frmSessionEdit.pnlCalls.Height +
-        frmSessionEdit.RzPanel1.ClientHeight;
+    frmSessionEdit.pnlClient.Height := 0;
+    //frmSessionEdit.ScrollBox.Height := frmSessionResult.Height + 5 +
+    //   frmSessionEdit.pnlCalls.Height;
   end;
 
     frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
@@ -281,6 +282,8 @@ begin
   finally
     FreeAndNil(frmSessionEdit);
     FreeAndNil(frmSessionResult);
+
+    DS.DataSet.EnableControls;
   end;
 end;
 
@@ -440,10 +443,10 @@ begin
 
      case cmbFilter.ItemIndex of
        0: ff := DataSet.FieldByName('ID').AsInteger > 0;
-       1: ff := (DataSet.FieldByName('CALLTYPE').AsInteger = 0) and
-                (DataSet.FieldByName('ISHOD').AsString <> '');
+       1: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 1);
        2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
        3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
+       4: ff := DataSet.FieldByName('DURATION').AsInteger > 40000;
      end;
   end;
   Accept := f0 and ff and f1 and f2;

@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask,
   Vcl.Samples.Spin, IdBaseComponent, IdComponent, IdCustomTCPServer,
   IdCustomHTTPServer, IdHTTPServer, IdContext, Data.DB, IBX.IBDatabase,
-  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs, System.Win.ScktComp,
+  IBX.IBCustomDataSet, IBX.IBQuery, SyncObjs,
   TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
   Vcl.IdAntiFreeze, IBX.IBSQL, RzCommon, RzSelDir, ATBinHex, Vcl.ComCtrls,
   cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer,
@@ -1607,9 +1607,13 @@ end;
 
 procedure TDbWriter.WriteLog(Amess: string; Ablock: Boolean);
 begin
-  fMess := Amess;
-  fMessLock := Ablock;
-  Synchronize(Log);
+  try
+    fMess := Amess;
+    fMessLock := Ablock;
+    Synchronize(Log);
+  finally
+
+  end;
 end;
 
 { TCallSession }
@@ -1682,7 +1686,7 @@ procedure TCallSession.Execute;
 begin
   fWorkTime := 0;
   while not Terminated do
-  begin
+  try
     Sleep(300);
     Inc(fWorkTime, 300);
 
@@ -1701,6 +1705,8 @@ begin
       Terminate;
       WriteLog('Уничтожен TCallSession: ' + CallId);
     end;
+  except
+    WriteLog('Ошибка TCallSession: ' + Exception(ExceptObject).Message);
   end;
   Terminate;
 end;
@@ -1805,7 +1811,7 @@ begin
        fParams.Text;
   WriteLog(s);
 
-  begin
+  try
     if fParams.indexOfName('CALLFLOW') = -1 then
       Exit;
 
@@ -1894,6 +1900,8 @@ begin
       SendCommandToUser(ats, Format('#callaccepted:%s', [fParams.Values['CallID']]));
       AcceptCall(fParams.Values['CallID']);
     end;
+  except
+    WriteLog('Ошибка TEventWriter: ' + Exception(ExceptObject).Message);
   end;
 end;
 

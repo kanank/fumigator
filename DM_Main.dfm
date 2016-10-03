@@ -995,7 +995,7 @@ object DataModuleMain: TDataModuleMain
   end
   object DsClients: TDataSource
     AutoEdit = False
-    DataSet = Clients
+    DataSet = ClientList0
     Left = 333
     Top = 24
   end
@@ -1774,6 +1774,18 @@ object DataModuleMain: TDataModuleMain
       Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
+    end
+  end
+  object ClientList0: TdxMemData
+    Indexes = <>
+    SortOptions = []
+    Left = 320
+    Top = 80
+    object IntegerField2: TIntegerField
+      FieldName = 'ID'
+    end
+    object StringField2: TStringField
+      FieldName = 'NAME'
     end
   end
 end

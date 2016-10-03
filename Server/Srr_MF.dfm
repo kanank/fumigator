@@ -561,6 +561,10 @@ object MF: TMF
       object TabVersion: TTabSheet
         Caption = #1042#1077#1088#1089#1080#1080
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           613
           335)

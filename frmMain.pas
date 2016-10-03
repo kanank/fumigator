@@ -570,7 +570,9 @@ end;
 procedure TfrmMain.AppException(Sender: TObject; E: Exception);
 begin
   if E.ClassName = 'EIdNotConnected' then
-    Exit;
+    Exit
+  else
+    MsgBoxError('Непредвиденная ошибка программы: ' + Exception(ExceptObject).Message);
 end;
 
 procedure TfrmMain.btnClientsClick(Sender: TObject);

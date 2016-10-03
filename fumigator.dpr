@@ -141,5 +141,6 @@ begin
     Application.Run;
   except
     err := Exception(ExceptObject).Message;
+    MsgBoxError('Непредвиденная ошибка программы: ' + err);
   end;
 end.

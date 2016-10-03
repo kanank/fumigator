@@ -110,7 +110,6 @@ inherited frmMain: TfrmMain
     TabOrder = 2
     ThemeAware = False
     DropDownMenu = NewClientBtn_PUM
-    ShowArrow = False
   end
   object btnClients: TRzMenuButton
     Left = 8
@@ -130,7 +129,6 @@ inherited frmMain: TfrmMain
     ThemeAware = False
     OnClick = btnClientsClick
     DropDownMenu = Clients_PUM
-    ShowArrow = False
   end
   object RzMenuButton2: TRzMenuButton
     Left = 528

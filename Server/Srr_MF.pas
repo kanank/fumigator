@@ -263,6 +263,7 @@ var
   EventsMutex: THandle;
   CallMutex: THandle;
   CSectionMsg: TCriticalSection;
+  CDbSection:  TCriticalSection;
 
 implementation
 
@@ -643,6 +644,7 @@ begin
   CSectionCommand   := TCriticalSection.Create;
   CSectionLog       := TCriticalSection.Create;
   CSectionMsg       := TCriticalSection.Create;
+  CDbSection        := TCriticalSection.Create;
   fSessions         := TStringList.Create;
 
   AccessToken := TTelphinRingMeToken.Create;
@@ -678,6 +680,7 @@ begin
   CSectionCommand.Release;
   CSectionLog.Release;
   CSectionMsg.Release;
+  CDbSection.Release;
 
   FreeAndNil(AccessToken);
   //FreeAndNil(Caller);
@@ -1566,13 +1569,18 @@ begin
       while not fOk and (step < 10) do
       Try
         //WriteLog('Исполняем ' + fibSql.SQL.Text + #13#10 + fParams.Text);
-        Transaction. Active := True;
-        ExecQuery;
-        if Transaction.Active then
-           Transaction.Commit;
+        CDbSection.Enter; //временно. сделать диспетчер
+        try
+          Transaction. Active := True;
+          ExecQuery;
+          if Transaction.Active then
+             Transaction.Commit;
         //WriteLog('Записан Call Events с ID: '+ fParams.Values['CallID']+ ' - '
         //     + fParams.Values['CallStatus'], False);
-        fOk := True;
+          fOk := True;
+        finally
+          CDbSection.Leave;
+        end;
       Except
         on E : Exception do
         begin

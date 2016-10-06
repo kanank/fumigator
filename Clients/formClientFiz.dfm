@@ -5,6 +5,7 @@ inherited frmClientFiz: TfrmClientFiz
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  ExplicitTop = -92
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -123,9 +124,9 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitLeft = 885
       ExplicitTop = 6
     end
-    object butOK: TRzButton
-      Left = 685
-      Top = 6
+    object butOK: TRzButton [3]
+      Left = 683
+      Top = 5
       Width = 172
       Height = 41
       Margins.Left = 4
@@ -145,6 +146,12 @@ inherited frmClientFiz: TfrmClientFiz
       TabOrder = 1
       ThemeAware = False
       OnClick = butOKClick
+    end
+    inherited btnTransferCall: TRzButton
+      Left = 473
+      TabOrder = 3
+      Visible = True
+      ExplicitLeft = 473
     end
   end
   object ID_edt: TcxDBTextEdit

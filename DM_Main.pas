@@ -22,6 +22,20 @@ type
     destructor Destroy;
 end;
 
+type TUserRights = class
+  private
+    data: TDataSet;
+    fUserId: Integer;
+    procedure SetUserId(AValue: Integer);
+    procedure GetData;
+  public
+    property UserId: integer read fUserId write SetUserId;
+    constructor Create(AUserId: Integer = 0); overload;
+    destructor Destroy; overload;
+    procedure Refresh;
+    function Right(ACode: string): Boolean;
+end;
+
 type
   TDataModuleMain = class(TDataModule)
     DB: TIBDatabase;
@@ -205,6 +219,7 @@ end;
 var
   DM: TDataModuleMain;
   _ClientExtUr: TClientExtUr;
+  UserRights: TUserRights;
 
 
 implementation
@@ -1848,6 +1863,68 @@ begin
   fQuery.Close;
   fQuery.ParamByName('id').AsInteger := fId;
   fQuery.Open;
+end;
+
+{ TUserRights }
+
+constructor TUserRights.Create(AUserId: Integer);
+begin
+  inherited Create;
+  fUserId := 0;
+
+  data := TIBQuery.Create(nil);
+  TIBQuery(data).Database := DM.DB;
+  TIBQuery(data).SQL.Add('select * from get_rights_by_user(:user_id)');
+
+  if AUserId > 0  then
+    UserId := AUserId;
+end;
+
+destructor TUserRights.Destroy;
+begin
+  if data.Active then
+    data.Close;
+  FreeAndNil(data);
+end;
+
+procedure TUserRights.GetData;
+begin
+  if fUserId = 0 then
+    Exit;
+
+  try
+    try
+      data.Close;
+      TIBQuery(data).Params[0].AsInteger := fUserId;
+      data.Open;
+    except
+      raise Exception.Create('Ошибка получения прав: ' + Exception(ExceptObject).Message);
+    end;
+  finally
+
+  end;
+end;
+
+procedure TUserRights.Refresh;
+begin
+  GetData;
+end;
+
+function TUserRights.Right(ACode: string): Boolean;
+begin
+  if Data.Active then
+    if data.Locate('right_code', ACode, [loCaseInsensitive]) then
+      Result := data.FieldByName('val').AsInteger = 1;
+end;
+
+procedure TUserRights.SetUserId(AValue: Integer);
+begin
+  if fUserId <> AValue then
+  begin
+    fUserId := AValue;
+    if AValue > 0 then
+      GetData;
+  end;
 end;
 
 end.

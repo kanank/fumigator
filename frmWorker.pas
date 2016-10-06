@@ -54,6 +54,8 @@ type
     cxDBTextEdit3: TcxDBTextEdit;
     DS: TDataSource;
     FrameRegions: TFrameWorkerRegions;
+    Label4: TLabel;
+    cmbUserType: TcxDBLookupComboBox;
     procedure FullForm_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Save_btnClick(Sender: TObject);

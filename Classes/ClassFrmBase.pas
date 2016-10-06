@@ -37,10 +37,13 @@ type
     procedure WmFinishCall(var Msg: TMessage); message WM_FINISHCALL;
     procedure WmAcceptCall(var Msg: TMessage); message WM_ACCEPTCALL;
     procedure WmTransferCall(var Msg: TMessage); message WM_TRANSFERCALL;
+    procedure WMActivateForm(var Msg: TMessage); message WM_ACTIVATE;
     procedure DoStartCall; virtual;
     procedure DoFinishCall; virtual;
     procedure DoAcceptCall; virtual;
     procedure DoTransferCall; virtual;
+
+    procedure SetControls; virtual;
 
     function CalcHideOnClose: boolean; virtual;
   public
@@ -185,6 +188,11 @@ begin
   Caption := AppCaption + '. ' + AValue;
 end;
 
+procedure TBaseForm.SetControls;
+begin
+
+end;
+
 procedure TBaseForm.SetNonValidate(Alist: string);
 begin
   fNonValidateList.DelimitedText := Alist;
@@ -301,6 +309,11 @@ end;
 procedure TBaseForm.WmAcceptCall(var Msg: TMessage);
 begin
   DoAcceptCall;
+end;
+
+procedure TBaseForm.WMActivateForm(var Msg: TMessage);
+begin
+  SetControls;
 end;
 
 procedure TBaseForm.WmFinishCall(var Msg: TMessage);

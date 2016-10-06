@@ -126,6 +126,15 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       Spacing = 8
       ExplicitTop = 6
     end
+    inherited btnTransferCall: TRzButton
+      Left = 267
+      Top = 6
+      Height = 40
+      Visible = True
+      ExplicitLeft = 267
+      ExplicitTop = 6
+      ExplicitHeight = 40
+    end
   end
   inherited cxDBLookupComboBox2: TcxDBLookupComboBox
     Margins.Left = 6

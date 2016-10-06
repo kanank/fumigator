@@ -79,7 +79,7 @@ object DataModuleMain: TDataModuleMain
       
         'select w.*, p.family, p.name, p.surname, p.prof_id profession_id' +
         ','
-      'is_deleted, '
+      'is_deleted, USER_TYPE_DEF,'
       '(select first 1 phone from phones '
       'where w.person_id = client_id and "TYPE"=1 and ismain=1) phone'
       'from workers w'
@@ -120,7 +120,8 @@ object DataModuleMain: TDataModuleMain
       #9'USER_PASSWORD = :USER_PASSWORD,'
       #9'USER_TYPE = :USER_TYPE,'
       #9'USER_BLOCKED = :USER_BLOCKED,'
-      #9'ATS_NUM  = :ATS_NUM'
+      #9'ATS_NUM  = :ATS_NUM,'
+      #9'USER_TYPE_DEF = :USER_TYPE_DEF'
       'where id = :ID')
     InsertSQL.Strings = (
       'INSERT INTO WORKERS ('
@@ -136,7 +137,8 @@ object DataModuleMain: TDataModuleMain
       #9'USER_TYPE,'
       #9'USER_BLOCKED,'
       #9'ATS_NUM,'
-      #9'WORKER_ID)'
+      #9'WORKER_ID,'
+      #9'USER_TYPE_DEF)'
       'Values('
       #9':ID,'
       '    '#9':PERSON_ID,'
@@ -150,7 +152,8 @@ object DataModuleMain: TDataModuleMain
       #9':USER_TYPE,'
       #9':USER_BLOCKED,'
       #9':ATS_NUM,'
-      #9':WORKER_ID)'#9)
+      #9':WORKER_ID,'
+      #9':USER_TYPE_DEF)'#9)
     DeleteSQL.Strings = (
       'update workers'
       'set IS_DELETED = 1'
@@ -983,7 +986,6 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1142,7 +1144,6 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
-    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (
@@ -1635,7 +1636,7 @@ object DataModuleMain: TDataModuleMain
     CachedUpdates = True
     ParamCheck = True
     SQL.Strings = (
-      'select *  from Dic_Area_Volume')
+      'select *  from Dic_Area_Volume order by ord')
     UpdateObject = DicAreaVolume_upd
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_DIC_AREA_VOLUME_ID'
@@ -1779,7 +1780,7 @@ object DataModuleMain: TDataModuleMain
   object ClientList0: TdxMemData
     Indexes = <>
     SortOptions = []
-    Left = 320
+    Left = 327
     Top = 80
     object IntegerField2: TIntegerField
       FieldName = 'ID'

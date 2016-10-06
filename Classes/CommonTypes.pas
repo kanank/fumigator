@@ -350,8 +350,7 @@ end;
 
 procedure TCallProto.SetTransfered(const AValue: boolean);
 begin
-  if Avalue <> AValue then
-    fTransfered := AValue;
+  fTransfered := AValue;
 
   if fTransfered then
     PostMessageToAll(WM_TRANSFERCALL);
@@ -470,5 +469,6 @@ end;
 //   //inherited SetFiltered(Value);
 //   fFiltered := Value;
 //end;
+
 
 end.

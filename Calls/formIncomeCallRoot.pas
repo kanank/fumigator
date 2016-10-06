@@ -198,13 +198,13 @@ begin
     begin
       if Assigned(frmIncomeCall) then
       begin
-        fNeedFinish := true;
+        fNeedFinish := True;
         frmIncomeCall.CloseAbsolute;
         Exit;
       end;
       if Assigned(frmIncomeCallUr) then
       begin
-        fNeedFinish := true;
+        fNeedFinish := True;
         frmIncomeCallUr.CloseAbsolute;
         Exit;
       end;

@@ -2,8 +2,6 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitWidth = 657
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage
@@ -33,10 +31,10 @@ inherited frmMain: TfrmMain
     ParentFont = False
   end
   object lblCall: TRzLabel
-    Left = 379
-    Top = 270
+    Left = 377
+    Top = 257
     Width = 77
-    Height = 94
+    Height = 105
     Anchors = [akRight, akBottom]
     Caption = ')'
     Font.Charset = SYMBOL_CHARSET
@@ -47,10 +45,12 @@ inherited frmMain: TfrmMain
     ParentFont = False
     Transparent = False
     Visible = False
+    Angle = 160
     BlinkColor = clLime
     BlinkIntervalOff = 1000
     BlinkIntervalOn = 1000
     FlyByColor = clLime
+    Rotation = roFlat
   end
   object btnWorkers: TRzMenuButton
     Left = 8
@@ -91,7 +91,6 @@ inherited frmMain: TfrmMain
     ThemeAware = False
     OnClick = btnTuneClick
     DropDownMenu = mOptions
-    ShowArrow = False
   end
   object RzMenuButton1: TRzMenuButton
     Left = 8

@@ -131,15 +131,22 @@ begin
       begin
         Q.FieldByName('RESULT').AsString := edtResult.Text;
         Q.FieldByName('ISHOD').AsString  := edtIshod.Text;
+        Q.FieldByName('WORKER_ID').AsInteger := DM.CurrentUserSets.ID;
+        if Assigned(frmIncomeCallRoot) then
+          Q.FieldByName('CLIENT_ID').AsInteger := frmIncomeCallRoot.ClientId;
         try
           Q.Post;
           if Q.Transaction.Active then
             Q.Transaction.CommitRetaining;
+          Self.ModalResult := mrOk;
         except
+          MsgBoxError('Ошибка сохранения результатов: '+#13#10 +
+            Exception(ExceptObject).Message);
           if Q.Transaction.Active then
             Q.Transaction.RollbackRetaining;
+          ModalResult := mrNone;
         end;
-        Self.ModalResult := mrOk;
+
       end;
    end
    else

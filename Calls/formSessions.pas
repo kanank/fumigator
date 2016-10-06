@@ -298,6 +298,7 @@ begin
   frmPlay.BorderIcons := [];
   frmPlay.BorderStyle := bsNone;
   pnlForm.Visible := False;
+  //pnlForm.Parent := TWinControl(GridView.GetParentComponent);
 
   MemHeader.Open;
   MemHeader.Append;
@@ -436,16 +437,16 @@ begin
            DM.isWorkerClient(DataSet.FieldByName('Client_id').asInteger));
   if f0 then
   begin
-    if miFilterAccepted.Checked then
+    if miFilterAccepted.Checked or (cmbFilter.ItemIndex = 2) then
       f1 := DataSet.FieldByName('ACCEPTED').AsInteger = 1;
-    if miFilterDuration.Checked then
+    if miFilterDuration.Checked or (cmbFilter.ItemIndex = 4) then
       f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
 
      case cmbFilter.ItemIndex of
        0: ff := DataSet.FieldByName('ID').AsInteger > 0;
        1: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 1);
        2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
-       3: ff := DataSet.FieldByName('ANSWER').AsInteger = 0;
+       3: ff := DataSet.FieldByName('ACCEPTED').AsInteger = 0;
        4: ff := DataSet.FieldByName('DURATION').AsInteger > 40000;
      end;
   end;

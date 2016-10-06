@@ -283,6 +283,7 @@ begin
 
   SetValidateList('NAME,FORMAT_ID,STATUS_ID');
 
+  FramePerson.SetNonValidate('FAMILY');
   FramePerson.Transaction := TIBQuery(fFrmParam.Dataset).Transaction;
   FramePerson.AddParam('CLIENT_ID', DS.DataSet.FindField('ID'));
   FramePerson.AddParam('PERSON_ID', DS.DataSet.FindField('PERSON_ID'));

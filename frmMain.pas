@@ -127,6 +127,8 @@ type
 
     procedure SetConnectCaption;
     procedure SetIsServerCmd(AValue: Boolean);
+
+    procedure SetControls; override;
   public
     ReadThread: TReadingThread;
     isBusy: Boolean; //выполняются обновления
@@ -328,6 +330,8 @@ begin
   CallObj.OnStartCall := OnCallStart;
   CallObj.OnFinishCall := OnCallFinish;
   CallObj.OnTransferCall := OnCallTransfer;
+
+  UserRights := TUserRights.Create(DM.CurrentUserSets.ID);
 end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
@@ -454,7 +458,7 @@ begin
       //PostMessageToAll(WM_TRANSFERCALL);
     end;
   finally
-
+    FreeAndNil(frmListActivePhones);
   end;
 
 end;
@@ -492,6 +496,12 @@ begin
       s := '—оединение с сервером ограничено(!!!)'
   end;
   lblSocket.Caption := s;
+end;
+
+procedure TfrmMain.SetControls;
+begin
+  btnWorkers.Enabled := UserRights.Right('SHOW_WORKER_LIST');
+
 end;
 
 procedure TfrmMain.SetIsServerCmd(AValue: Boolean);
@@ -669,7 +679,7 @@ end;
 
 procedure TfrmMain.WmShowMsg(var Msg: TMessage);
 begin
-  MessageBox(Handle, PChar(msgText), '—ообщение от сервера', MB_ICONINFORMATION);
+  MsgBoxInformation(msgText, '—ообщение от сервера');
 end;
 
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
@@ -1051,9 +1061,9 @@ begin
   else
   if cmd = SCMD_NEEDUPDATE then  //необходимо обновление программы
   try
-    msgText := 'Ќеобходимо обновление программы до версии: ' + arg;
-    PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
-    Application.ProcessMessages;
+    //msgText := 'Ќеобходимо обновление программы до версии: ' + arg;
+    //PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
+    //Application.ProcessMessages;
   finally
   end
 
@@ -1161,6 +1171,7 @@ finalization
   //CloseHandle(hMutex);
   FreeAndNil(CallObj);
   FreeAndNil(CallInfo);
+  FreeAndNil(UserRights);
 
   FreeAndNil(frmCallUnknown);
 end.

@@ -2,27 +2,68 @@ inherited frmWorkers: TfrmWorkers
   Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082#1080
   Position = poDesktopCenter
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 18
+  inherited img1: TImage
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+  end
+  inherited RzPanel2: TRzPanel
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    inherited Image1: TImage
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+    end
+  end
   inherited RzPanel1: TRzPanel
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     inherited Cancel_btn: TRzButton
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Font.Color = clWindowText
     end
     inherited Edit_btn: TRzButton
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Font.Color = clWindowText
       OnClick = Edit_btnClick
     end
     inherited Del_btn: TRzButton
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Font.Color = clWindowText
       OnClick = Del_btnClick
     end
     inherited Add_btn: TRzButton
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
       Font.Color = clWindowText
       OnClick = Add_btnClick
     end
   end
   inherited Grid: TcxGrid
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
     inherited GridView: TcxGridDBTableView
       FilterBox.CustomizeDialog = False
       DataController.DataSource = DataModuleMain.DSWorkers

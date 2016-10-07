@@ -57,6 +57,8 @@ type
     procedure tvMaterialsEnter(Sender: TObject);
   private
     { Private declarations }
+  protected
+    procedure SetControls; override;
   public
     { Public declarations }
   end;
@@ -194,6 +196,11 @@ begin
   pnlEdit.Left := TcxGrid(Sender).Left;
   pnlEdit.Tag := Integer(TcxGrid(Sender));
  end;
+
+procedure TfrmDictionaries.SetControls;
+begin
+  pnlEdit.Enabled := UserRights.EditDic;
+end;
 
 procedure TfrmDictionaries.tvMaterialsEnter(Sender: TObject);
 begin

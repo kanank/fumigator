@@ -500,8 +500,9 @@ end;
 
 procedure TfrmMain.SetControls;
 begin
-  btnWorkers.Enabled := UserRights.Right('SHOW_WORKER_LIST');
-
+  btnWorkers.Enabled := UserRights.ShowWorkerList;
+  miListCli.Enabled  := UserRights.TuneClientList;
+  btnClients.Enabled := UserRights.ShowClientList
 end;
 
 procedure TfrmMain.SetIsServerCmd(AValue: Boolean);

@@ -33,7 +33,7 @@ inherited frmMain: TfrmMain
   object lblCall: TRzLabel
     Left = 377
     Top = 257
-    Width = 77
+    Width = 115
     Height = 105
     Anchors = [akRight, akBottom]
     Caption = ')'

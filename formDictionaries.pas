@@ -194,7 +194,7 @@ end;
 procedure TfrmDictionaries.GridUserTypesEnter(Sender: TObject);
 begin
   pnlEdit.Left := TcxGrid(Sender).Left;
-  pnlEdit.Tag := Integer(TcxGrid(Sender));
+  pnlEdit.Tag  := Integer(TcxGrid(Sender));
  end;
 
 procedure TfrmDictionaries.SetControls;

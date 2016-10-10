@@ -132,6 +132,7 @@ type
     procedure SetDelButton(AButton: TRzButton);
   protected
     procedure SetFormRegim(AValue: TSprFormRegim); override;
+    procedure SetControls; override;
   public
     constructor Create(AOwner: TComponent; ADataSet: TDataset = nil; AisUr: Integer=0); overload;
     property isUr: Integer read FisUr write SetIsUr;
@@ -549,6 +550,14 @@ begin
       AButton.Color  := $00E9F4F8;
       Abutton.Font.Style := Abutton.Font.Style - [fsBold];
     end;
+end;
+
+procedure TfrmClients.SetControls;
+begin
+  Add_btn1.Enabled := UserRights.WorkClientCard;
+  Add_btn.Enabled  := Add_btn1.Enabled;
+  Edit_btn.Enabled := Add_btn1.Enabled;
+  Del_btn.Enabled := Add_btn1.Enabled;
 end;
 
 procedure TfrmClients.SetDelButton(AButton: TRzButton);

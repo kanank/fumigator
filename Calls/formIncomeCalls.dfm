@@ -369,6 +369,7 @@ inherited frmIncomeCall: TfrmIncomeCall
           ExplicitLeft = 119
           ExplicitTop = 191
           ExplicitWidth = 294
+          ExplicitHeight = 26
           Width = 294
         end
         inherited cmbDateBirth: TcxDBDateEdit
@@ -396,6 +397,7 @@ inherited frmIncomeCall: TfrmIncomeCall
           ExplicitLeft = 134
           ExplicitTop = 82
           ExplicitWidth = 391
+          ExplicitHeight = 26
           Width = 391
         end
         inherited edtName: TcxDBTextEdit
@@ -408,6 +410,7 @@ inherited frmIncomeCall: TfrmIncomeCall
           ExplicitLeft = 134
           ExplicitTop = 44
           ExplicitWidth = 391
+          ExplicitHeight = 26
           Width = 391
         end
         inherited edtFamily: TcxDBTextEdit
@@ -420,6 +423,7 @@ inherited frmIncomeCall: TfrmIncomeCall
           ExplicitLeft = 134
           ExplicitTop = 7
           ExplicitWidth = 391
+          ExplicitHeight = 26
           Width = 391
         end
         inherited cmbSex: TcxDBComboBox
@@ -447,6 +451,7 @@ inherited frmIncomeCall: TfrmIncomeCall
           ExplicitLeft = 119
           ExplicitTop = 154
           ExplicitWidth = 274
+          ExplicitHeight = 26
           Width = 274
         end
       end

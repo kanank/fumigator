@@ -68,7 +68,7 @@ type
     procedure Execute; override;
     procedure DeleteSession;
     procedure StartCall(CallApiId: string; ats: string);
-    procedure EndCall(CallApiId, CallStatus: string);
+    procedure EndCall(CallApiId, ats, CallStatus: string);
     procedure TransferCall(CallId: string; ats: string);
     procedure AcceptCall(CallId: string);
     procedure SendMess;
@@ -102,7 +102,7 @@ type
     function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
     function FindSession(ACallId:string; ALock: boolean = true): TCallSession;
     procedure StartCall(CallId: string; ats: string);
-    function EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+    function EndCall(ACallApiId, ACallId, ats, ACallStatus: string): boolean;
     procedure AcceptCall(ACallId: string);
   public
     constructor Create(AParam: TStrings; AURI, AUserId, ASql: string); overload;
@@ -1671,15 +1671,14 @@ begin
   inherited;
 end;
 
-procedure TCallSession.EndCall(CallApiId, CallStatus: string);
+procedure TCallSession.EndCall(CallApiId, ats, CallStatus: string);
 var
   ind: Integer;
-  ats: string;
 begin
   //fFinished := True;
   if LockMutex(CallMutex, 2000) then
   try
-    ind := fCallIdList.IndexOf(CallApiId);
+    ind := fCallIdList.IndexOf(ats);
     if ind = -1 then
       Exit;
     fCallIdList.Delete(ind);
@@ -1729,7 +1728,7 @@ procedure TCallSession.StartCall(CallApiId, ats: string);
 begin
   if LockMutex(CallMutex, 1000) then
   try
-    fCallIdList.Add(CallApiId );
+    fCallIdList.Add(ats);
     fStopTime := 0;
   finally
     UnlockMutex(CallMutex);
@@ -1789,7 +1788,7 @@ begin
   inherited;
 end;
 
-function TEventWriter.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
+function TEventWriter.EndCall(ACallApiId, ACallId, ats, ACallStatus: string): boolean;
 var
   ind: Integer;
 begin
@@ -1798,7 +1797,7 @@ begin
     ind := MF.fSessions.IndexOf(ACallId);
     if ind > -1 then
     begin
-      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallApiId, ACallStatus);
+      TCallSession(MF.fSessions.Objects[ind]).EndCall(ACallApiId, ats, ACallStatus);
       Exit;
     end;
   finally
@@ -1898,7 +1897,7 @@ begin
           fParams.Values['CallAPIID'] + ',' +
           fParams.Values['CallStatus']);
         //if cf = 0 then
-        EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID'], fParams.Values['CallStatus']);
+        EndCall(fParams.Values['CallAPIID'], fParams.Values['CallID'], ats, fParams.Values['CallStatus']);
       end;
     end
 

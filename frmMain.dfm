@@ -31,10 +31,11 @@ inherited frmMain: TfrmMain
     ParentFont = False
   end
   object lblCall: TRzLabel
-    Left = 377
-    Top = 257
-    Width = 115
-    Height = 105
+    Left = 381
+    Top = 262
+    Width = 69
+    Height = 92
+    Alignment = taRightJustify
     Anchors = [akRight, akBottom]
     Caption = ')'
     Font.Charset = SYMBOL_CHARSET
@@ -92,7 +93,7 @@ inherited frmMain: TfrmMain
     OnClick = btnTuneClick
     DropDownMenu = mOptions
   end
-  object RzMenuButton1: TRzMenuButton
+  object btnNewClient: TRzMenuButton
     Left = 8
     Top = 8
     Width = 170
@@ -169,7 +170,7 @@ inherited frmMain: TfrmMain
     OnClick = RzMenuButton3Click
     ShowArrow = False
   end
-  object RzMenuButton4: TRzMenuButton
+  object btnSessions: TRzMenuButton
     Left = 8
     Top = 82
     Width = 170
@@ -185,7 +186,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
     TabOrder = 6
     ThemeAware = False
-    OnClick = RzMenuButton4Click
+    OnClick = btnSessionsClick
     ShowArrow = False
   end
   object btnReports: TRzMenuButton

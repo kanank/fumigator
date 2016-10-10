@@ -1443,6 +1443,7 @@ begin
   try
     try
       Q.ParamByName('callapiid').AsString := callapiid;
+      Q.ParamByName('ATSNUM').AsString    := '%*' + DM.CurrentUserSets.ATS_Phone_Num;
 
       if Q.Active then
        Q.Close;
@@ -1935,7 +1936,7 @@ end;
 function TUserRights.GetRightById(AIndex: Integer): boolean;
 begin
   if Data.Active then
-    if data.Locate('id', AIndex, []) then
+    if data.Locate('right_id', AIndex, []) then
       Result := data.FieldByName('val').AsInteger = 1;
 end;
 

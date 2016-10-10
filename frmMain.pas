@@ -56,7 +56,7 @@ type
   TfrmMain = class(TBaseForm)
     btnWorkers: TRzMenuButton;
     btnTune: TRzMenuButton;
-    RzMenuButton1: TRzMenuButton;
+    btnNewClient: TRzMenuButton;
     btnClients: TRzMenuButton;
     NewClientBtn_PUM: TPopupMenu;
     NewFizClnt_mi: TMenuItem;
@@ -67,7 +67,7 @@ type
     RzMenuButton2: TRzMenuButton;
     lblSocket: TLabel;
     RzMenuButton3: TRzMenuButton;
-    RzMenuButton4: TRzMenuButton;
+    btnSessions: TRzMenuButton;
     TrayIcon: TRzTrayIcon;
     TrayMenu: TPopupMenu;
     miShowMain: TMenuItem;
@@ -100,7 +100,7 @@ type
     // ErrorEvent: TErrorEvent; var ErrorCode: Integer);
     //procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
-    procedure RzMenuButton4Click(Sender: TObject);
+    procedure btnSessionsClick(Sender: TObject);
     procedure FizClients_miClick(Sender: TObject);
     procedure miExitClick(Sender: TObject);
     procedure miShowMainClick(Sender: TObject);
@@ -476,7 +476,7 @@ begin
   DM.ShowClientsForCall;
 end;
 
-procedure TfrmMain.RzMenuButton4Click(Sender: TObject);
+procedure TfrmMain.btnSessionsClick(Sender: TObject);
 begin
   frmSessions := TfrmSessions.Create(self);
   frmSessions.ShowModal;
@@ -500,9 +500,13 @@ end;
 
 procedure TfrmMain.SetControls;
 begin
-  btnWorkers.Enabled := UserRights.ShowWorkerList;
-  miListCli.Enabled  := UserRights.TuneClientList;
-  btnClients.Enabled := UserRights.ShowClientList
+  btnWorkers.Enabled   := UserRights.ShowWorkerList;
+  miListCli.Enabled    := UserRights.TuneClientList;
+  btnClients.Enabled   := UserRights.ShowClientList;
+  btnNewClient.Enabled := UserRights.ShowClientCard and UserRights.WorkClientCard;
+  btnSessions.Enabled  := UserRights.ShowSessions;
+  miOptions.Enabled    := UserRights.TuneSystem;
+  miListCli.Enabled    := UserRights.TuneClientList;
 end;
 
 procedure TfrmMain.SetIsServerCmd(AValue: Boolean);
@@ -666,7 +670,7 @@ end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  if Assigned(frmClientFiz) or Assigned(frmClientUr) or
+  if not UserRights.DoCallIncom or Assigned(frmClientFiz) or Assigned(frmClientUr) or
      Assigned(frmSessionResult)  then
     Exit;
   try
@@ -686,6 +690,9 @@ end;
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
 begin
    //CallObj.OnFinishCall := OnCallFinish;
+   if not UserRights.DoCallOutcome then
+      Exit;
+
    try
      CallObj.StartCall(CallInfo);
      DM.ShowOutcomCall(CallInfo.CallId, CallInfo.CallApiid, CallInfo.Phone);

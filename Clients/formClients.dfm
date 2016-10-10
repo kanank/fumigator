@@ -4,7 +4,8 @@ inherited frmClients: TfrmClients
   ClientWidth = 1277
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitTop = -19
+  ExplicitLeft = -372
+  ExplicitTop = -120
   ExplicitWidth = 1293
   ExplicitHeight = 640
   PixelsPerInch = 96
@@ -329,8 +330,6 @@ inherited frmClients: TfrmClients
       object GridViewColumn6: TcxGridDBColumn
         Caption = #1050#1086#1083'-'#1074#1086' '#1074#1099#1087'. '#1079#1072#1103#1074#1086#1082
         DataBinding.FieldName = 'CNT_DOG'
-        PropertiesClassName = 'TcxDateEditProperties'
-        Properties.DisplayFormat = 'dd.mm.yy'
         HeaderAlignmentHorz = taCenter
       end
       object GridViewColumn9: TcxGridDBColumn
@@ -533,9 +532,6 @@ inherited frmClients: TfrmClients
         DataBinding.FieldName = 'act'
         Visible = False
       end
-    end
-    inherited GridLevel1: TcxGridLevel
-      GridView = GridViewUr
     end
   end
   object btnCli: TRzButton

@@ -115,6 +115,15 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       ExplicitLeft = 449
       ExplicitTop = 7
     end
+    inherited btnTransferCall: TRzButton
+      Left = 267
+      Top = 6
+      Height = 40
+      Visible = True
+      ExplicitLeft = 267
+      ExplicitTop = 6
+      ExplicitHeight = 40
+    end
     inherited RzBitBtn1: TRzBitBtn
       Top = 6
       Margins.Left = 6
@@ -125,15 +134,6 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       Margin = 4
       Spacing = 8
       ExplicitTop = 6
-    end
-    inherited btnTransferCall: TRzButton
-      Left = 267
-      Top = 6
-      Height = 40
-      Visible = True
-      ExplicitLeft = 267
-      ExplicitTop = 6
-      ExplicitHeight = 40
     end
   end
   inherited cxDBLookupComboBox2: TcxDBLookupComboBox

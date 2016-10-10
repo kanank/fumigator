@@ -57,6 +57,8 @@ type
     Label8: TLabel;
     frameClientCalls: TframeClientCalls;
     btnHide: TRzButton;
+    Label9: TLabel;
+    cmbDate: TcxDBDateEdit;
     procedure FormCreate(Sender: TObject);
     procedure butOKClick(Sender: TObject);
     procedure FramePersoncmbDateBirthPropertiesInitPopup(Sender: TObject);

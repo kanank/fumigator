@@ -116,11 +116,13 @@ end;
 procedure TfrmSessionResult.Cancel_btnClick(Sender: TObject);
 begin
   if not Q.Active then
+  begin
     Q.ParamByName('CALLAPIID').AsString := CallObj.CallInfo.CallApiId;
+    Q.ParamByName('ATSNUM').AsString    := '%*' + DM.CurrentUserSets.ATS_Phone_Num;
     Q.Open;
-
-  if Q.RecordCount = 0 then
-    MsgBoxWarning('Не найдена сессия в БД');
+    if Q.RecordCount = 0 then
+      MsgBoxWarning('Не найдена сессия в БД');
+  end;
 
    if Q.RecordCount > 0 then
    begin

@@ -100,6 +100,8 @@ type
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
     procedure SetFilter;
+  protected
+    procedure SetControls; override;
   public
     frmPlay: TfrmRecordPlay;
   end;
@@ -474,6 +476,11 @@ begin
   finally
     Screen.Cursor := crDefault;
   end;
+end;
+
+procedure TfrmSessions.SetControls;
+begin
+  Edit_btn.Enabled := UserRights.InputSessionResult;
 end;
 
 procedure TfrmSessions.SetFilter;

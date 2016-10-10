@@ -29,6 +29,7 @@ type
     fInUpdate: Boolean; //признак сохранения
     fOnTopMost: Boolean; //находится в режиме TopMost
     fTransfered: Boolean;
+    fCallObj: TCallProto;
 
     procedure SetCaption(AValue: string); virtual;
     procedure SetNonValidate(Alist: string);
@@ -48,6 +49,7 @@ type
     function CalcHideOnClose: boolean; virtual;
   public
     property OnCalcHideOnClose: TBooleanFunc read fOnCalcHideOnClose write fOnCalcHideOnClose;
+    property CallObject: TCallProto read fCallObj write fCallObj;
 
     constructor Create(AOwner: TComponent;  ATitle: string=''; AParam: PFrmCreateParam=nil); overload; virtual;
     class function ValidateData(ADataSource: TDataSource; AComponent: TComponent = nil; ANonValidList: TStringList=nil; AValidList: TStringList=nil): Boolean; //проверка заполненности необходимых полей
@@ -118,7 +120,7 @@ end;
 
 procedure TBaseForm.DoFinishCall;
 begin
-  if CallObj.Cancelled or CallObj.Transfered then
+  if (CallObj.Cancelled and not CallObj.Accepted) or CallObj.Transfered then
     if fCloseOnCancelCall then
       Self.CloseAbsolute
     else

@@ -4,7 +4,6 @@ inherited frmWorker: TfrmWorker
   ClientWidth = 1069
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -293
   ExplicitWidth = 1085
   ExplicitHeight = 499
   PixelsPerInch = 96
@@ -630,7 +629,6 @@ inherited frmWorker: TfrmWorker
         Align = alClient
         BorderOuter = fsNone
         TabOrder = 1
-        ExplicitTop = -1
         object Label25: TLabel
           Left = 8
           Top = 30

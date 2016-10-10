@@ -108,7 +108,7 @@ end;
 
 procedure TfrmIncomeCallRoot.doFinishCall;
 begin
-  inherited;
+  //inherited;
 
   //frmCallEvent.ModalResult := mrCancel;
   //if fClose then

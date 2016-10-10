@@ -2,6 +2,8 @@ inherited frmMain: TfrmMain
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  ExplicitWidth = 657
+  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage
@@ -32,9 +34,9 @@ inherited frmMain: TfrmMain
   end
   object lblCall: TRzLabel
     Left = 381
-    Top = 262
-    Width = 69
-    Height = 92
+    Top = 255
+    Width = 68
+    Height = 105
     Alignment = taRightJustify
     Anchors = [akRight, akBottom]
     Caption = ')'

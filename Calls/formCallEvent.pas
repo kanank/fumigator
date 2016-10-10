@@ -38,6 +38,8 @@ procedure TfrmCallEvent.btnDeclineClick(Sender: TObject);
 begin
   formMain.TCPClient.IOHandler.WriteLn(Format('#calldelete:%s,%s',
      [CallObj.CallInfo.CallApiId, DM.CurrentUserSets.ATS_Phone_Num]));
+  //если не придет событие на отмену звонка
+  CallObj.FinishCall('CANCEL');
 end;
 
 procedure TfrmCallEvent.FormShow(Sender: TObject);

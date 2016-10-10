@@ -194,6 +194,9 @@ begin
   frmSessionResult.Parent := frmSessionEdit.pnlResult;
   frmSessionResult.Q.ParamByName('callapiid').AsString :=
     DS.DataSet.FieldByName('callapiid').AsString;
+  frmSessionResult.Q.ParamByName('atsnum').AsString :=
+    DS.DataSet.FieldByName('localnum').AsString;
+
   frmSessionResult.Q.Open;
   frmSessionResult.Q.Edit;
 
@@ -440,13 +443,15 @@ begin
   if f0 then
   begin
     if miFilterAccepted.Checked or (cmbFilter.ItemIndex = 2) then
-      f1 := DataSet.FieldByName('ACCEPTED').AsInteger = 1;
+      f1 := (DataSet.FieldByName('ACCEPTED').AsInteger = 1) and
+            (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
     if miFilterDuration.Checked or (cmbFilter.ItemIndex = 4) then
       f2 := DataSet.FieldByName('DURATION').AsInteger > 40000;
 
      case cmbFilter.ItemIndex of
        0: ff := DataSet.FieldByName('ID').AsInteger > 0;
-       1: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 1);
+       1: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 1) and
+                (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
        2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
        3: ff := DataSet.FieldByName('ACCEPTED').AsInteger = 0;
        4: ff := DataSet.FieldByName('DURATION').AsInteger > 40000;

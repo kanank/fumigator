@@ -71,7 +71,6 @@ uses
   DM_Main, IBX.IBQuery, formClientFiz, formClientUr,
   formIncomeCalls, formIncomeCallsUr, formCallUnknown,
   formCallEvent, frmMain, formContact, formSessionResult;
-
 { TfrmIncomeCallRoot }
 
 procedure TfrmIncomeCallRoot.DoCallCancel;

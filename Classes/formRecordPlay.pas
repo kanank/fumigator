@@ -167,7 +167,8 @@ begin
       Exit;
     end;
 
-    if MediaPlayer.FileName <> fFileName then
+    if (MediaPlayer.FileName = '') or
+       (ExtractFileName(MediaPlayer.FileName) <> (RecId + '.mp3')) then
     begin
       f := GetFileFromHttp;
       if not f then

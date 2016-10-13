@@ -161,14 +161,14 @@ begin
   frmPlay.RecId := sRecId;
 
   frmPlay.FileName  := '';
-  frmPlay.Width  := GridViewColumn5.Width;
+  frmPlay.Width  := 36;//GridViewColumn5.Width;
   frmPlay.Height := focusedCell.Height-2;
   pnlForm.Width  := frmPlay.Width;
   pnlForm.Height := frmPlay.Height;
   frmPlay.Top := 0;
   frmPlay.Left := 0;
   frmPlay.Visible := True;
-  pnlForm.Visible := True;
+  pnlForm.Visible := frmPlay.RecId <> '';;
   pnlForm.BringToFront;
   frmPlay.BringToFront;
 end;

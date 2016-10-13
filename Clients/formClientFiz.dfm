@@ -5,7 +5,8 @@ inherited frmClientFiz: TfrmClientFiz
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitTop = -69
+  ExplicitLeft = -351
+  ExplicitTop = -210
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -2024,7 +2025,7 @@ inherited frmClientFiz: TfrmClientFiz
       ExplicitLeft = 3
       ExplicitTop = -1
       ExplicitWidth = 363
-      ExplicitHeight = 153
+      ExplicitHeight = 164
       inherited grdPhone: TcxGrid
         Left = 7
         Top = 21
@@ -2074,7 +2075,7 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = -12
+          ExplicitTop = 9
           ExplicitWidth = 39
           ExplicitHeight = 39
         end
@@ -2088,7 +2089,7 @@ inherited frmClientFiz: TfrmClientFiz
           Margins.Bottom = 4
           Margin = 3
           Spacing = 6
-          ExplicitTop = 32
+          ExplicitTop = 53
           ExplicitWidth = 39
           ExplicitHeight = 39
         end

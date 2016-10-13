@@ -1,10 +1,10 @@
 object DataModuleMain: TDataModuleMain
   OldCreateOrder = False
-  OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   Height = 536
   Width = 816
   object DB: TIBDatabase
+    Connected = True
     DatabaseName = '81.177.48.139:C:\Projects\Fumigator\Db\fumigator.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -13,6 +13,7 @@ object DataModuleMain: TDataModuleMain
     DefaultTransaction = DefTr
     ServerType = 'IBServer'
     AllowStreamedConnected = False
+    AfterDisconnect = DBAfterDisconnect
     Left = 24
     Top = 24
   end
@@ -1142,6 +1143,7 @@ object DataModuleMain: TDataModuleMain
       end>
   end
   object Calls_Tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     DefaultAction = TACommitRetaining
     Params.Strings = (

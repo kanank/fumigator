@@ -87,7 +87,7 @@ begin
   Application.Title := 'Фумигатор';
 
   try
-    if CheckStartRepeat(CheckAppName) then  //проверяем повторный запуск
+    if CheckStartRepeat(CheckAppName, FindParam('RESTART')) then  //проверяем повторный запуск
     begin
       UnlockMutex(hMutex);
       Application.Terminate;

@@ -84,6 +84,7 @@ type
     btnReports: TRzMenuButton;
     lblCall: TRzLabel;
     TimerCheck: TTimer;
+    TimerUpdate: TTimer;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -112,10 +113,13 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnReportsClick(Sender: TObject);
     procedure TimerCheckTimer(Sender: TObject);
+    procedure TimerUpdateTimer(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     fPhoneListUpdated: Boolean;
     FisServerCmd: boolean; //нет ответа от сервера
+    fNeedUpdate: Boolean;
+
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
     procedure WmShowOutcomeCall(var Msg: TMessage); message WM_SHOWOUTCOMECALL;
@@ -127,12 +131,14 @@ type
 
     procedure SetConnectCaption;
     procedure SetIsServerCmd(AValue: Boolean);
+    procedure SetNeedUpdate(AValue: Boolean);
 
     procedure SetControls; override;
   public
     ReadThread: TReadingThread;
     isBusy: Boolean; //выполнЯютсЯ обновлениЯ
     property IsServerCmd: Boolean read FisServerCmd write SetIsServerCmd;
+    property NeedUpdate: Boolean read fNeedUpdate write SetNeedUpdate;
 
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
@@ -165,7 +171,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IniFiles,
+  System.IniFiles, Winapi.ShellAPI,
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
@@ -308,6 +314,8 @@ end;
 
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  DM.DB.Tag := 1;
+  TCPClient.IOHandler.WriteLn('Окончание работы');
   TCPClient.Disconnect;
 
 end;
@@ -518,6 +526,20 @@ begin
   end;
 end;
 
+procedure TfrmMain.SetNeedUpdate(AValue: Boolean);
+begin
+  if Avalue = fNeedUpdate then
+    Exit;
+
+  fNeedUpdate := AValue;
+
+  if fNeedUpdate and not TimerUpdate.Enabled then
+  begin
+    TimerUpdate.Enabled := True;;
+    TimerUpdate.OnTimer(TimerUpdate);
+  end;
+end;
+
 procedure TfrmMain.TCPClientConnected(Sender: TObject);
 begin
   DM.SocketTimer.Interval := 0;
@@ -538,17 +560,23 @@ begin
   //TCPClient.Socket.WriteLn(Format('#setphone:%s',
   //  [DM.CurrentUserSets.ATS_Phone_Num]));
   TimerCheck.Enabled := True;
+
+  if not DM.DB.Connected then //реконнект к БД, если нужно
+    DM.DBAfterDisconnect(DM.DB);
 end;
 
 procedure TfrmMain.TCPClientDisconnected(Sender: TObject);
 begin
+  lblSocket.Caption := 'Соединение с сервером не установлено';
+  isServerCmd := False;
+
   if ReadThread <> nil then
   begin
     ReadThread.Terminate;
     ReadThread.WaitFor;
     FreeAndNil(ReadThread);
   end;
-   lblSocket.Caption := 'Соединение с сервером не установлено'
+
 end;
 
 procedure TfrmMain.TimerCheckTimer(Sender: TObject);
@@ -556,6 +584,18 @@ begin
   TimerCheck.Enabled := False;
   if not isServerCmd then
     MsgBoxWarning('Не получен ответ от сервера. Возможны проблемы со звонками');
+end;
+
+procedure TfrmMain.TimerUpdateTimer(Sender: TObject);
+begin
+  if MsgBoxQuestion('Версия программы устарела, необходимо обновление.' + #13#10 +
+    'Перезапустить программу сейчас, или сделать это позже?') = idNo then
+    Exit;
+
+  ShellExecute(0, 'open', PChar(Application.ExeName), 'RESTART', nil, SW_SHOW);
+  DM.DB.Tag := 1;
+  Application.Terminate;
+  Exit;
 end;
 
 procedure TfrmMain.DoSocketConnect;
@@ -658,8 +698,11 @@ end;
 
 procedure TfrmMain.WmCmdFumigator(var Msg: TMessage);
 begin
-  if Msg.WParam = 1 then
-    UpdateClients;
+  case Msg.WParam of
+    1: UpdateClients;
+    2: if Assigned(UserRights) then
+         UserRights.Refresh;
+  end;
 end;
 
 procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
@@ -905,12 +948,14 @@ begin
       if argList.Count > 0 then
       with CallInfo do
       begin
-        CallFlow    := argList[0];
-        CallId      := arglist[1];
-        CallApiId   := argList[2];
-        Phone       := argList[3];
-        ClientId    := StrToInt(argList[4]);
-        ClientType  := argList[5];
+        CallFlow     := argList[0];
+        CallId       := arglist[1];
+        CallApiId    := argList[2];
+        Phone        := argList[3];
+        ClientId     := StrToInt(argList[4]);
+        ClientType   := argList[5];
+        CalledNumber := argList[6];
+        CallerIDNum  := argList[7];
       end;
     finally
       argList.free;
@@ -1043,7 +1088,10 @@ begin
   if cmd = 'cmdfumigator' then
   begin
     if arg = 'updateclients' then
-      PostMessage(formMain.Handle, WM_CMDFUMIGATOR, 1,0);
+      PostMessage(formMain.Handle, WM_CMDFUMIGATOR, 1,0)
+    else
+    if arg = 'updaterights' then
+      PostMessage(formMain.Handle, WM_CMDFUMIGATOR, 2,0)
   end
 
   else
@@ -1069,6 +1117,7 @@ begin
   else
   if cmd = SCMD_NEEDUPDATE then  //необходимо обновление программы
   try
+     formMain.NeedUpdate := True;
     //msgText := 'Необходимо обновление программы до версии: ' + arg;
     //PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
     //Application.ProcessMessages;

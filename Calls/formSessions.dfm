@@ -24,6 +24,7 @@ inherited frmSessions: TfrmSessions
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
+    Transparent = True
     ExplicitWidth = 1250
     inherited Image1: TImage
       Left = 1123
@@ -89,7 +90,7 @@ inherited frmSessions: TfrmSessions
     end
     object RzButton1: TRzButton
       Left = 508
-      Top = 7
+      Top = 4
       Width = 115
       Height = 29
       Margins.Left = 4
@@ -477,8 +478,8 @@ inherited frmSessions: TfrmSessions
       'from sessions s'
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
-        'ot null')
-    OnFilterRecord = QFilterRecord
+        'ot null'
+      'order by starttime')
     Left = 72
     Top = 80
     ParamData = <

@@ -33,9 +33,9 @@ inherited frmMain: TfrmMain
     ParentFont = False
   end
   object lblCall: TRzLabel
-    Left = 381
+    Left = 334
     Top = 255
-    Width = 68
+    Width = 115
     Height = 105
     Alignment = taRightJustify
     Anchors = [akRight, akBottom]
@@ -300,6 +300,13 @@ inherited frmMain: TfrmMain
     Interval = 2000
     OnTimer = TimerCheckTimer
     Left = 456
+    Top = 136
+  end
+  object TimerUpdate: TTimer
+    Enabled = False
+    Interval = 120000
+    OnTimer = TimerUpdateTimer
+    Left = 512
     Top = 136
   end
 end

@@ -118,7 +118,8 @@ begin
   if not Q.Active then
   begin
     Q.ParamByName('CALLAPIID').AsString := CallObj.CallInfo.CallApiId;
-    Q.ParamByName('ATSNUM').AsString    := '%*' + DM.CurrentUserSets.ATS_Phone_Num;
+    Q.ParamByName('CALLEDNUM').AsString := CallObj.CallInfo.CalledNumber;
+    Q.ParamByName('CALLERNUM').AsString := CallObj.CallInfo.CallerIDNum;
     Q.Open;
     if Q.RecordCount = 0 then
       MsgBoxWarning('Не найдена сессия в БД');

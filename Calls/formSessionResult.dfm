@@ -248,7 +248,7 @@ inherited frmSessionResult: TfrmSessionResult
         't, localnum'
       'from sessions'
       'where callapiid = :callapiid and '
-      '(CALLERNUM like :ATSNUM or CALLEDNUM like :ATSNUM)')
+      'CALLERNUM = :CALLERNUM and CALLEDNUM= :CALLEDNUM')
     UpdateObject = Q_upd
     Left = 88
     Top = 15
@@ -260,12 +260,12 @@ inherited frmSessionResult: TfrmSessionResult
       end
       item
         DataType = ftUnknown
-        Name = 'ATSNUM'
+        Name = 'CALLERNUM'
         ParamType = ptUnknown
       end
       item
         DataType = ftUnknown
-        Name = 'ATSNUM'
+        Name = 'CALLEDNUM'
         ParamType = ptUnknown
       end>
   end

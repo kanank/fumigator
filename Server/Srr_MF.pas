@@ -15,6 +15,7 @@ uses
 
 const
   WM_REOPEN_PHONES = WM_USER + 1;
+  WM_REOPEN_RIGHTS = WM_USER + 2;
 
 type
   TLogger = class
@@ -225,6 +226,7 @@ type
 
     procedure ReopenPhones;
     procedure WmReopenPhones(var Msg: TMessage); message WM_REOPEN_PHONES;
+    procedure WmReopenRights(var Msg: TMessage); message WM_REOPEN_RIGHTS;
 
     function GetRecordFile(ARecord_uuid: string): string;
   public
@@ -463,8 +465,18 @@ begin
 end;
 
 procedure TMF.Button6Click(Sender: TObject);
+var
+  i: Integer;
+  s: string;
 begin
-  SendCommandToUser('*', Edit1.Text);
+  i := Pos('#', Edit1.Text);
+  if i <= 1 then
+    SendCommandToUser('*', Edit1.Text)
+  else
+  begin
+    s := LeftStr(Edit1.Text, i - 1);
+    SendCommandToUser(s, Copy(Edit1.Text, i, Length(Edit1.Text)));
+  end;
 end;
 
 procedure TMF.Button7Click(Sender: TObject);
@@ -711,6 +723,9 @@ begin
     else
     if EventName = 'PHONES_CHANGED' then
       PostMessage(Self.Handle, WM_REOPEN_PHONES, 0, 1)
+    else
+     if EventName = 'RIGHTS_CHANGED' then
+        PostMessage(Self.Handle, WM_REOPEN_RIGHTS, 0, 0);
 
 
   finally
@@ -929,7 +944,7 @@ begin
     begin
       Context := TMyContext(List[I]);
       Result := Result + Format('%s | %s',
-       [Context.Nick, Context.Version]);
+       [Context.Nick, Context.Version]) + #13#10;
     end;
 
   finally
@@ -1021,6 +1036,7 @@ begin
         try
           Context.Connection.IOHandler.WriteLn(AMsg);
           Result := True;
+          AddLogMemo(Format('Отправлено [%s]: %s', [Context.Nick, AMsg]));
           CheckContextVersion(Context);
         except
           Context.Connection.IOHandler.Close;
@@ -1185,7 +1201,7 @@ begin
     if s = '' then
       Exit;
 
-    AddLogMemo('#Клиент прислал сообщение: ' + s);
+    AddLogMemo(Format('Клиент [%s] прислал сообщение: %s',[TMyContext(AContext).Nick, s]));
     if Copy(s, 1, 1) = '#' then
     begin
       p := Pos(':', s);
@@ -1341,8 +1357,13 @@ begin
     ReopenPhones;
   finally
     if Msg.LParam = 0 then
-      SendCommandToUser('*', '#cmdfumigator:updateclients');
+
   end;
+end;
+
+procedure TMF.WmReopenRights(var Msg: TMessage);
+begin
+  SendCommandToUser('*', '#cmdfumigator:updaterights');
 end;
 
 procedure TMF.WriteLog(s: string);
@@ -1857,7 +1878,12 @@ begin
     begin
       client_id := 0; client_type := '';
       if pos(fUserId + '*', tel) = 0 then
-         FindClientByPhone(fParams.Values['CALLFLOW'], fParams.Values['CALLID'], fParams.Values['CALLAPIID'], tel, ats, client_type)
+         FindClientByPhone(fParams.Values['CALLFLOW'],
+                           fParams.Values['CALLID'],
+                           fParams.Values['CALLAPIID'],
+                           tel,
+                           ats,
+                           client_type)
       else
       begin
          CallObj := nil;
@@ -1883,7 +1909,9 @@ begin
            fParams.Values['CallAPIID'] + ',' +
            tel + ',' +
            //IntToStr(client_id) + ',' +
-           client_type)
+           client_type  + ',' +
+           fParams.Values['CalledNumber'] + ',' +
+           fParams.Values['CallerIDNum'])
     end
     //end
 

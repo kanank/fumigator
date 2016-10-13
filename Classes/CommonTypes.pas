@@ -30,6 +30,8 @@ type
     ClientType: string;
     ClientSubType: string;
     CallResult: string;
+    CalledNumber: string; //телфин сменил идентификацию звонков CallApiId + CalledNumber + CallerIDNum
+    CallerIDNum: string;
     procedure Clear;
     procedure Assign(ASource: TCallInfo);
 end;
@@ -72,7 +74,7 @@ type
     property OnCheckTimer: TNotifyEvent read fOnCheckTimer write fOnCheckTimer;
     constructor Create; overload;
     destructor Destroy; overload;
-    procedure StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);overload;
+    procedure StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType, ACalledNumber, ACallIdNum: string);overload;
     procedure StartCall(ACallInfo: TCallInfo); overload;
 
     procedure FinishCall(ACallResult: string);
@@ -359,7 +361,8 @@ end;
 procedure TCallProto.StartCall(ACallInfo: TCallInfo);
 begin
   StartCall(ACallInfo.CallFlow, ACallInfo.CallId, ACallInfo.CallApiId,
-    ACallInfo.Phone, IntToStr(ACallInfo.ClientId), ACallInfo.ClientType);
+    ACallInfo.Phone, IntToStr(ACallInfo.ClientId), ACallInfo.ClientType,
+    ACallInfo.CalledNumber, ACallInfo.CallerIDNum);
 end;
 
 procedure TCallProto.TransferCall;
@@ -384,20 +387,22 @@ begin
     Transfered := True;
 end;
 
-procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType: string);
+procedure TCallProto.StartCall(ACallFlow, ACallId, ACallApiId, APhone, AClientId, AClientType, ACalledNumber, ACallIdNum: string);
 begin
   if CallInfo <> nil then
 
   with fCallInfo do
   begin
-    CallId     := ACallId;
-    CallApiId  := ACallApiId;
-    CallFlow   := ACallFlow;
-    Phone      := APhone;
-    ClientId   := StrToInt(AClientId);
-    ClientType := AClientType;
-    CallResult :='';
-    Accepted   := false;
+    CallId       := ACallId;
+    CallApiId    := ACallApiId;
+    CallFlow     := ACallFlow;
+    Phone        := APhone;
+    ClientId     := StrToInt(AClientId);
+    ClientType   := AClientType;
+    CalledNumber := ACalledNumber;
+    CallerIDNum  := ACallIdNum;
+    CallResult   :='';
+    Accepted     := false;
   end;
 
   fActive := True;
@@ -416,12 +421,14 @@ end;
 
 procedure TCallInfo.Assign(ASource: TCallInfo);
 begin
-    CallId     := ASource.CallId;
-    CallApiId  := ASource.CallApiId;
-    CallFlow   := ASource.CallFlow;
-    ClientId   := ASource.ClientId;
-    ClientType := ASource.ClientType;
+    CallId        := ASource.CallId;
+    CallApiId     := ASource.CallApiId;
+    CallFlow      := ASource.CallFlow;
+    ClientId      := ASource.ClientId;
+    ClientType    := ASource.ClientType;
     ClientSubType := ASource.ClientSubType;
+    CalledNumber  := ASource.CalledNumber;
+    CallerIDNum   := ASource.CallerIDNum;
 end;
 
 procedure TCallInfo.Clear;

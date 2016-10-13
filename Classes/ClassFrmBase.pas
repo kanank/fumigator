@@ -254,6 +254,7 @@ class function TBaseForm.ValidateData(ADataSource: TDataSource; AComponent: TCom
       if c.ComponentCount > 0 then
       begin
         SetRequiredBorder(C, AField);
+
         if (C is TDbFrameBase) and not TDbFrameBase(C).ReadOnly then
           if not TDbFrameBase(C).ValidateData then
             res := False;

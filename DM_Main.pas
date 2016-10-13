@@ -163,10 +163,10 @@ type
     procedure SocketTimerTimer(Sender: TObject);
     procedure ClientsAfterOpen(DataSet: TDataSet);
     procedure ClientsBeforeClose(DataSet: TDataSet);
-    procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure ClientListAfterScroll(DataSet: TDataSet);
     procedure ClientsAfterPost(DataSet: TDataSet);
+    procedure DBAfterDisconnect(Sender: TObject);
   private
     procedure CreateContactTypesPopup(Adata: TDataset); // создаем попап менютипов клиентов
   public
@@ -318,6 +318,9 @@ end;
 
 function ClientExtUr(Aid: integer): TClientExtUr;
 begin
+  if _ClientExtUr = nil then
+   _ClientExtUr := TClientExtUr.Create;
+
   Result := _ClientExtUr;
   Result.ID := Aid;
 end;
@@ -358,7 +361,7 @@ begin
     butOK.Visible := False;
   end;
 
-  frmSmallCardFiz := TfrmSmallCardFiz.Create(frmClientFiz);
+  frmSmallCardFiz := TfrmSmallCardFiz.Create(nil);
   with frmSmallCardFiz do
   begin
     edtName.DataBinding.DataSource   := frmClientFiz.FramePerson.DS;
@@ -419,7 +422,7 @@ begin
     butOK.Visible := False;
   end;
 
-  frmSmallCardUr := TfrmSmallCardUr.Create(frmClientUr);
+  frmSmallCardUr := TfrmSmallCardUr.Create(nil);
   with frmSmallCardUr do
   begin
     edtName.DataBinding.DataSource   := frmClientUr.FramePerson.DS;
@@ -1443,7 +1446,8 @@ begin
   try
     try
       Q.ParamByName('callapiid').AsString := callapiid;
-      Q.ParamByName('ATSNUM').AsString    := '%*' + DM.CurrentUserSets.ATS_Phone_Num;
+      Q.ParamByName('callednum').AsString := CallObj.CallInfo.CalledNumber;
+      Q.ParamByName('callernum').AsString := CallObj.CallInfo.CallerIDNum;
 
       if Q.Active then
        Q.Close;
@@ -1509,34 +1513,24 @@ begin
   end;
 end;
 
-
-procedure TDataModuleMain.DataModuleCreate(Sender: TObject);
-begin
-//  Clients := TIBQueryFilt.Create(self);
-//  //Clients.UpdateObject :=  _Clients.UpdateObject;
-// // Clients.CachedUpdates := _Clients.CachedUpdates;
-//  //Clients.
-//  DsClients.DataSet := Clients;
-//
-//  Clients.Database      := DB;
-//  Clients.Transaction   := _Clients.Transaction;
-//  Clients.ObjectView    := _Clients.ObjectView;
-//  Clients.FieldOptions.UpdatePersistent := _Clients.FieldOptions.UpdatePersistent;
-//  Clients.AfterOpen     := _Clients.AfterOpen;
-//  Clients.BeforeClose   := _Clients.BeforeClose;
-//  Clients.BufferChunks  := _Clients.BufferChunks;
-//  Clients.CachedUpdates := _Clients.CachedUpdates;
-//  Clients.ParamCheck    := _Clients.ParamCheck;
-//  Clients.SQL.AddStrings(_Clients.SQL);
-//  Clients.UpdateObject  := _Clients.UpdateObject;
-//  Clients.GeneratorField.Field      := _Clients.GeneratorField.Field;
-//  Clients.GeneratorField.Generator  := _Clients.GeneratorField.Generator;
-//  Clients.GeneratorField.ApplyEvent := _Clients.GeneratorField.ApplyEvent;
-end;
-
 procedure TDataModuleMain.DataModuleDestroy(Sender: TObject);
 begin
   Clients.Free;
+end;
+
+procedure TDataModuleMain.DBAfterDisconnect(Sender: TObject);
+begin
+  if DB.Tag = 0 then
+  begin
+    try
+      DB.Open;
+      MsgBoxInformation('Соединение с БД было восстановлено после несанкционированного отключения');
+    Except
+      MsgBoxError('Соединение с БД не было восстановлено после несанкционированного отключения!' + #13#10 +
+        'Проверьте сетевое подключение');
+    end;
+
+  end;
 end;
 
 procedure TDataModuleMain.DsWorkerDataChange(Sender: TObject; Field: TField);
@@ -1621,6 +1615,9 @@ end;
 function TDataModuleMain.GetDataset(AQuery: TIBQuery): TIBQuery;
 begin
   result := AQuery;
+  if not DB.Connected then
+    DB.Open;
+
   if not AQuery.Active then
   try
     try
@@ -1638,9 +1635,13 @@ function TDataModuleMain.GetPersonFullName(f, i, o: string): string;
 begin
   Result := f;
 
-  if (Result <> '') and (i <> '') then
+  if (i <> '') then
   begin
-    Result  := Result + ' ' + i;
+    if Result <> '' then
+      Result := Result + ' ';
+
+    Result  := Result + i;
+
     if o <> '' then
     begin
       Result  := Result + ' ' + o;

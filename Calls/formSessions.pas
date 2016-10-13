@@ -114,7 +114,7 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, formSessionEdit, formSessionResult, formClientFiz, formClientUr,
-  formClientResult, CommonTypes;
+  formClientResult, CommonTypes, CommonVars;
 
 procedure TfrmSessions.CalcHeader;
 var
@@ -194,8 +194,10 @@ begin
   frmSessionResult.Parent := frmSessionEdit.pnlResult;
   frmSessionResult.Q.ParamByName('callapiid').AsString :=
     DS.DataSet.FieldByName('callapiid').AsString;
-  frmSessionResult.Q.ParamByName('atsnum').AsString :=
-    DS.DataSet.FieldByName('localnum').AsString;
+  frmSessionResult.Q.ParamByName('callednum').AsString :=
+    DS.DataSet.FieldByName('callednum').AsString;
+  frmSessionResult.Q.ParamByName('callernum').AsString :=
+    DS.DataSet.FieldByName('callernum').AsString;
 
   frmSessionResult.Q.Open;
   frmSessionResult.Q.Edit;
@@ -383,14 +385,16 @@ begin
   frmPlay.RecId := sRecId;
 
   frmPlay.FileName  := '';
-  frmPlay.Width  := GridViewColumn5.Width;
+  frmPlay.Width  := 35;//GridViewColumn5.Width;
   frmPlay.Height := focusedCell.Height-2;
   pnlForm.Width  := frmPlay.Width;
   pnlForm.Height := frmPlay.Height;
   frmPlay.Top := 0;
   frmPlay.Left := 0;
   frmPlay.Visible := True;
-  pnlForm.Visible := True;
+
+  pnlForm.Visible := frmPlay.RecId <> '';
+
   pnlForm.BringToFront;
   frmPlay.BringToFront;
 end;
@@ -442,7 +446,7 @@ begin
            DM.isWorkerClient(DataSet.FieldByName('Client_id').asInteger));
   if f0 then
   begin
-    if miFilterAccepted.Checked or (cmbFilter.ItemIndex = 2) then
+    if miFilterAccepted.Checked or (cmbFilter.ItemIndex = 1) then
       f1 := (DataSet.FieldByName('ACCEPTED').AsInteger = 1) and
             (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
     if miFilterDuration.Checked or (cmbFilter.ItemIndex = 4) then
@@ -451,9 +455,10 @@ begin
      case cmbFilter.ItemIndex of
        0: ff := DataSet.FieldByName('ID').AsInteger > 0;
        1: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 1) and
-                (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
+                  (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
        2: ff := DataSet.FieldByName('CALLTYPE').AsInteger = 1;
-       3: ff := DataSet.FieldByName('ACCEPTED').AsInteger = 0;
+       3: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 0) and
+                  (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
        4: ff := DataSet.FieldByName('DURATION').AsInteger > 40000;
      end;
   end;
@@ -463,7 +468,10 @@ end;
 procedure TfrmSessions.RzButton1Click(Sender: TObject);
 begin
   try
+   try
     Screen.Cursor := crSQLWait;
+    MemQ.DisableControls;
+
     Q.Close;
     MemQ.Close;
 
@@ -478,7 +486,14 @@ begin
     MemQ.CopyFromDataSet(Q);
 
     CalcHeader;
+    MemQ.First;
+   except
+     MsgBoxError('Ошибка открытия списка сессий:' + #13#10 +
+       Exception(ExceptObject).Message);
+
+   end;
   finally
+    MemQ.EnableControls;
     Screen.Cursor := crDefault;
   end;
 end;

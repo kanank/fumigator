@@ -576,12 +576,12 @@ begin
 
     end
     else
-    if fClientCallPrm.Client_Type = 'U' then
+    if CallObj.CallInfo.ClientType = 'U' then
     begin
       DM.ShowUrCallForm(fClientCallPrm);
     end
     else
-    if fClientCallPrm.Client_Type = 'C' then
+    if CallObj.CallInfo.ClientType = 'C' then
     begin
       DM.ShowContactCallForm(fClientCallPrm);
     end;

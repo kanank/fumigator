@@ -103,7 +103,8 @@ end;
 procedure TfrmClientFiz.butOKClick(Sender: TObject);
 var
   res: Boolean;
-  err: string;
+  err, name: string;
+
 begin
   fInUpdate := True;
   if not (DM.isModifiedData(Ds.DataSet) or
@@ -119,10 +120,9 @@ begin
 
   //проверка
   res := False;
-  if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson)) then
+  if not (ValidateData(DS, self) and ValidateData(FramePerson.DS, FramePerson, FramePerson.NonValidateList)) then
   begin
-    Application.MessageBox('Не заполнены все необходимые поля!',
-     'Внимание', MB_ICONWARNING + MB_OK);
+    MsgBoxWarning('Не заполнены все необходимые поля!', 'Внимание');
     self.ModalResult := mrNone;
     Exit;
   end
@@ -137,11 +137,20 @@ begin
 
       if not TIBQuery(DS.DataSet).Transaction.Active then
         TIBQuery(DS.DataSet).Transaction.StartTransaction;
-      DS.DataSet.FieldByName('name').AsString :=
-        //сохраняем имя
-        DM.GetPersonFullName(FramePerson.Query.FieldByName('FAMILY').AsString,
+      name := DM.GetPersonFullName(FramePerson.Query.FieldByName('FAMILY').AsString,
           FramePerson.Query.FieldByName('NAME').AsString,
           FramePerson.Query.FieldByName('SURNAME').AsString);
+
+      //сохраняем имя
+      if DS.DataSet.FieldByName('name').AsString <> name then
+      try
+        if not (DS.DataSet.State in [dsInsert, dsEdit]) then
+          DS.DataSet.Edit;
+        DS.DataSet.FieldByName('name').AsString := name;
+      except
+        MsgBoxError('Ошибка сохранения имени: ' + Exception(ExceptObject).Message);
+        Exit;
+      end;
 
       //сохраняем ссылки
       res := FramePerson.SaveData;

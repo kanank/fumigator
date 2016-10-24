@@ -5,10 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, RzButton, Vcl.StdCtrls, RzLabel,
-  Vcl.ExtCtrls;
+  Vcl.ExtCtrls, ClassFrmBase;
 
 type
-  TfrmCallEvent = class(TForm)
+  TfrmCallEvent = class(TBaseForm)
     RzLabel1: TRzLabel;
     btnAccept: TRzButton;
     btnDecline: TRzButton;

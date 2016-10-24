@@ -4,8 +4,6 @@ inherited frmClients: TfrmClients
   ClientWidth = 1277
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitLeft = -372
-  ExplicitTop = -120
   ExplicitWidth = 1293
   ExplicitHeight = 640
   PixelsPerInch = 96

@@ -79,6 +79,10 @@ type
     GridViewColumn12: TcxGridDBColumn;
     GridViewColumn13: TcxGridDBColumn;
     GridViewColumn14: TcxGridDBColumn;
+    GridViewColumn15: TcxGridDBColumn;
+    pnlFiltered: TPanel;
+    Label2: TLabel;
+    lblCount: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -100,6 +104,8 @@ type
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
     procedure SetFilter;
+    procedure SetMemDataset;
+    procedure FilterNonAnswer;
   protected
     procedure SetControls; override;
   public
@@ -114,7 +120,7 @@ implementation
 {$R *.dfm}
 uses
   DM_Main, formSessionEdit, formSessionResult, formClientFiz, formClientUr,
-  formClientResult, CommonTypes, CommonVars;
+  formClientResult, CommonTypes, CommonVars, CommonFunc;
 
 procedure TfrmSessions.CalcHeader;
 var
@@ -294,6 +300,35 @@ begin
   end;
 end;
 
+procedure TfrmSessions.FilterNonAnswer;
+var
+  scur, s: string;
+begin
+  if not Q.Active then
+    Exit;
+
+  MemQ.Close;
+  MemQ.CreateFieldsFromDataSet(Q);
+  MemQ.Open;
+
+  Q.First;
+  while not Q.Eof do
+  begin
+    if (Q.FieldByName('CALLTYPE').AsInteger = 0) and
+       (Q.FieldByName('answer').AsInteger = 0) then
+    begin
+      if scur <> Q.FieldByName('CALLAPIID').AsString then
+      begin
+        MemQ.Append;
+        CopyRecord(Q, MemQ);
+        scur := Q.FieldByName('CALLAPIID').AsString;
+      end
+    end;
+
+    Q.Next;
+  end;
+end;
+
 procedure TfrmSessions.FormCreate(Sender: TObject);
 begin
   edtTimeStart.Date := Date;
@@ -358,7 +393,8 @@ begin
   if RecColumn.FocusedCellViewInfo = nil then
   begin
     if GridView.ViewData.RowCount > 0 then
-      focusedCell := GridView.ViewData.Rows[0].ViewInfo.GetCellViewInfoByItem(GridViewColumn5);
+      if GridView.ViewData.Rows[0].ViewInfo <> nil then
+        focusedCell := GridView.ViewData.Rows[0].ViewInfo.GetCellViewInfoByItem(GridViewColumn5);
   end
   else
     focusedCell := RecColumn.FocusedCellViewInfo;
@@ -460,6 +496,8 @@ begin
        3: ff := (DataSet.FieldByName('ACCEPTED').AsInteger = 0) and
                   (DataSet.FieldByName('CALLTYPE').AsInteger = 0);
        4: ff := DataSet.FieldByName('DURATION').AsInteger > 40000;
+       5: ff := DataSet.FieldByName('ACCEPTED').AsInteger = 1;
+       //6: ff :=
      end;
   end;
   Accept := f0 and ff and f1 and f2;
@@ -483,7 +521,8 @@ begin
     Q.ParamByName('date1').AsDateTime := edtTimeStart.Date;
     Q.ParamByName('date2').AsDateTime := edtTimeEnd.Date + 1;
     Q.Open;
-    MemQ.CopyFromDataSet(Q);
+    //MemQ.CopyFromDataSet(Q);
+    SetMemDataset;
 
     CalcHeader;
     MemQ.First;
@@ -508,12 +547,59 @@ begin
   try
     GridView.OnFocusedRecordChanged := nil;
     Screen.Cursor := crHourGlass;
-    MemQ.Filtered := False;
-    MemQ.Filtered := True;
+    //MemQ.Filtered := False;
+    //MemQ.Filtered := True;
+    SetMemDataset;
   finally
     Screen.Cursor := crDefault;
     GridView.OnFocusedRecordChanged := GridViewFocusedRecordChanged;
     pnlForm.Visible := (MemQ.RecordCount > 0);
+  end;
+end;
+
+procedure TfrmSessions.SetMemDataset;
+var
+  f: Boolean;
+  i: integer;
+begin
+  if not Q.Active then
+    Exit;
+
+  MemQ.ControlsDisabled;
+  try
+    case cmbFilter.ItemIndex  of
+      0: begin
+           MemQ.CopyFromDataSet(Q);
+           Exit;
+         end;
+      6: begin
+           FilterNonAnswer;
+         end;
+      else
+      begin
+        MemQ.Close;
+        MemQ.CreateFieldsFromDataSet(Q);
+        MemQ.Open;
+
+        Q.First;
+        while not Q.Eof do
+        begin
+          QFilterRecord(Q, f);
+          if f then
+          begin
+            MemQ.Append;
+            CopyRecord(Q, MemQ);
+          end;
+          Q.Next;
+        end;
+      end;
+    end;
+
+    MemQ.First;
+  finally
+    MemQ.EnableControls;
+    lblCount.Caption := IntToStr(MemQ.RecordCount);
+    pnlFiltered.Visible := MemQ.Active and (MemQ.RecordCount > 0);
   end;
 end;
 

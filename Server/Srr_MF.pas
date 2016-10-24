@@ -520,10 +520,10 @@ begin
   begin
     DecodeVersion(edtVersion.Text, v01, v02, v03, v04);
     DecodeVersion(AContext.Version, v1, v2, v3, v4);
-    if (v01 - v1 < 0) or
-       (v02 - v2 < 0) or
-       (v03 - v3 < 0) or
-       (v04 - v4 < 0) then
+    if (v01 - v1 > 0) or
+       (v02 - v2 > 0) or
+       (v03 - v3 > 0) or
+       (v04 - v4 > 0) then
        AContext.Connection.IOHandler.WriteLn(Format(GetSocketCmdSrv(SCMD_NEEDUPDATE), [edtVersion.Text]));
   end;
 end;
@@ -1233,6 +1233,10 @@ begin
 
       if cmd = 'terminate' then
         Application.Terminate
+
+      else
+      if cmd = 'checkconnect' then
+         AContext.Connection.IOHandler.WriteLn('#echo:')
 
       else
         SocketCommand(AContext, cmd, arg);

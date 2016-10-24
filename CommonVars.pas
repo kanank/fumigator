@@ -2,7 +2,7 @@ unit CommonVars;
 
 interface
 uses
-  CommonTypes;
+  CommonTypes, CallClasses;
 
 const
   FormAlphaBlend :byte = 100;

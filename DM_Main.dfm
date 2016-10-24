@@ -18,6 +18,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object DefTr: TIBTransaction
+    Active = True
     DefaultAction = TACommitRetaining
     Params.Strings = (
       'isc_tpb_read_committed'
@@ -985,6 +986,7 @@ object DataModuleMain: TDataModuleMain
     Top = 24
   end
   object Clients_tr: TIBTransaction
+    Active = True
     DefaultDatabase = DB
     Params.Strings = (
       'read_committed'
@@ -1743,10 +1745,13 @@ object DataModuleMain: TDataModuleMain
   object ClientList: TdxMemData
     Indexes = <>
     SortOptions = []
+    AfterPost = ClientListAfterPost
     Left = 376
     Top = 80
     object IntegerField1: TIntegerField
+      FieldKind = fkLookup
       FieldName = 'ID'
+      Lookup = True
     end
     object StringField1: TStringField
       FieldName = 'NAME'

@@ -77,7 +77,8 @@ uses
   ClassFormSmallCard in 'Classes\ClassFormSmallCard.pas' {frmSmallCard},
   formSmallClientFiz in 'Clients\formSmallClientFiz.pas' {frmSmallCardFiz},
   formSmallClientUr in 'Clients\formSmallClientUr.pas' {frmSmallCardUr},
-  formListActivePhones in 'Calls\formListActivePhones.pas' {frmListActivePhones};
+  formListActivePhones in 'Calls\formListActivePhones.pas' {frmListActivePhones},
+  CallClasses in 'Classes\CallClasses.pas';
 
 {$R *.res}
 var

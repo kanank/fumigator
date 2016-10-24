@@ -274,11 +274,6 @@ var
   //id: integer;
 begin
   try
-//    id := DS.DataSet.FieldByName('id').AsInteger;
-//    DS.DataSet.Filtered := False;
-//    if not DS.DataSet.Locate('id', id, []) then
-//      Exit;
-
     DM.GetDataset(DM.Clients);
 
     prm := NewFrmCreateParam(asEdit, DM.Clients);

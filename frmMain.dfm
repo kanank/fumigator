@@ -1,13 +1,14 @@
 inherited frmMain: TfrmMain
+  ClientWidth = 688
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitWidth = 657
+  ExplicitWidth = 704
   ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage
-    Left = 389
+    Left = 436
     Top = 274
     Width = 249
     Height = 81
@@ -19,11 +20,12 @@ inherited frmMain: TfrmMain
     ExplicitHeight = 81
   end
   object lblSocket: TLabel
-    Left = 435
+    Left = 477
     Top = 0
     Width = 203
     Height = 13
     Alignment = taRightJustify
+    Anchors = [akTop, akRight]
     Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077' '#1089' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1085#1077' '#1091#1089#1090#1072#1085#1086#1074#1083#1077#1085#1086
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
@@ -33,7 +35,7 @@ inherited frmMain: TfrmMain
     ParentFont = False
   end
   object lblCall: TRzLabel
-    Left = 334
+    Left = 381
     Top = 255
     Width = 115
     Height = 105
@@ -54,6 +56,7 @@ inherited frmMain: TfrmMain
     BlinkIntervalOn = 1000
     FlyByColor = clLime
     Rotation = roFlat
+    ExplicitLeft = 334
   end
   object btnWorkers: TRzMenuButton
     Left = 8
@@ -135,7 +138,7 @@ inherited frmMain: TfrmMain
   object RzMenuButton2: TRzMenuButton
     Left = 528
     Top = 19
-    Width = 87
+    Width = 134
     Height = 31
     Anchors = [akLeft, akRight, akBottom]
     Caption = #1058#1077#1089#1090' '#1079#1074#1086#1085#1082#1072
@@ -287,7 +290,9 @@ inherited frmMain: TfrmMain
     Left = 576
     Top = 136
   end
-  object Timer1: TTimer
+  object TimerEcho: TTimer
+    Interval = 60000
+    OnTimer = TimerEchoTimer
     Left = 400
     Top = 136
   end

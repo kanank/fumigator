@@ -167,6 +167,7 @@ type
     procedure ClientListAfterScroll(DataSet: TDataSet);
     procedure ClientsAfterPost(DataSet: TDataSet);
     procedure DBAfterDisconnect(Sender: TObject);
+    procedure ClientListAfterPost(DataSet: TDataSet);
   private
     procedure CreateContactTypesPopup(Adata: TDataset); // создаем попап менютипов клиентов
   public
@@ -260,7 +261,7 @@ uses
   formClientUr, formIncomeCalls, formIncomeCallsUr, formCalling,
   frmMain, formClientsForCall, formIncomeCallRoot, formSessionResult,
   formClientResult, formContact, formLogo,
-  formSmallClientFiz, formSmallClientUr, formCallEvent;
+  formSmallClientFiz, formSmallClientUr, formCallEvent, CommonFunc;
 
 function SetFieldValue(AField: TField; AValue: Variant; DoPost: Boolean=True): Boolean;
 var
@@ -1335,6 +1336,33 @@ begin
     if QSessionCheckAct.Transaction.Active then
      QSessionCheckAct.Transaction.RollbackRetaining;
   end;
+end;
+
+procedure TDataModuleMain.ClientListAfterPost(DataSet: TDataSet);
+var
+  i: Integer;
+begin
+  if not ClientList0.Active then
+    Exit;
+
+  if ClientList0.Locate('id', DataSet.FieldByName('id').AsInteger, []) then
+  try
+    ClientList0.Edit;
+    CopyRecord(DataSet, ClientList0);
+
+    //ClientList0.FieldByName(Dataset.Fields[i].FieldName).Value := Dataset.Fields[i].Value;
+  finally
+    if ClientList0.State <> dsBrowse then
+      ClientList0.Post;
+  end
+  else
+  try
+    ClientList0.Append;
+    CopyRecord(DataSet, ClientList0);
+  finally
+    if ClientList0.State <> dsBrowse then
+      ClientList0.Post;
+  end
 end;
 
 procedure TDataModuleMain.ClientListAfterScroll(DataSet: TDataSet);

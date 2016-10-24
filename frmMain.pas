@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls, RzButton, Vcl.Menus, Vcl.StdCtrls, System.Win.ScktComp, RzTray,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,
   IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze,
-  CommonTypes, RzLabel;
+  CommonTypes, CallClasses, RzLabel;
 
 const
   WM_SHOWMSG         = WM_USER + 100;
@@ -79,7 +79,7 @@ type
     miOptions: TMenuItem;
     TCPClient: TIdTCPClient;
     XPManifest1: TXPManifest;
-    Timer1: TTimer;
+    TimerEcho: TTimer;
     mExceptList: TPopupMenu;
     btnReports: TRzMenuButton;
     lblCall: TRzLabel;
@@ -114,6 +114,7 @@ type
     procedure btnReportsClick(Sender: TObject);
     procedure TimerCheckTimer(Sender: TObject);
     procedure TimerUpdateTimer(Sender: TObject);
+    procedure TimerEchoTimer(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     fPhoneListUpdated: Boolean;
@@ -137,6 +138,7 @@ type
   public
     ReadThread: TReadingThread;
     isBusy: Boolean; //выполнЯютсЯ обновлениЯ
+    TimeServerMsg: TDateTime; //время последнего сообщения от сервера (каждую минуту отправляется сообщение с ответом)
     property IsServerCmd: Boolean read FisServerCmd write SetIsServerCmd;
     property NeedUpdate: Boolean read fNeedUpdate write SetNeedUpdate;
 
@@ -316,8 +318,11 @@ procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   DM.DB.Tag := 1;
   TCPClient.IOHandler.WriteLn('Окончание работы');
-  TCPClient.Disconnect;
+  try
+    TCPClient.Disconnect;
+  except
 
+  end;
 end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -545,6 +550,7 @@ begin
   DM.SocketTimer.Interval := 0;
   ReadThread := TReadingThread.Create(TCPClient);
 
+  SetConnectCaption;
 
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
@@ -570,6 +576,16 @@ begin
   lblSocket.Caption := 'Соединение с сервером не установлено';
   isServerCmd := False;
 
+  if DM.DB.Tag = 0 then // если не окончание
+  begin
+    TrayIcon.ShowBalloonHint('Разрыв соединения с сервером', 'Ограниченный режим работы', bhiWarning);
+
+    DM.SocketTimer.Interval := 1000; //запуск проверки
+
+    if CallObj.Active then
+      CallObj.Active := False;
+  end;
+
   if ReadThread <> nil then
   begin
     ReadThread.Terminate;
@@ -584,6 +600,17 @@ begin
   TimerCheck.Enabled := False;
   if not isServerCmd then
     MsgBoxWarning('Не получен ответ от сервера. Возможны проблемы со звонками');
+end;
+
+procedure TfrmMain.TimerEchoTimer(Sender: TObject);
+begin
+  if not TCPClient.Connected then
+    Exit;
+
+  if SecondsBetween(Now, TimeServerMsg) > 120 then // не было ответа от сервера
+    try TCPClient.Disconnect except end
+  else
+    TCPClient.IOHandler.WriteLn('#checkconnect:');
 end;
 
 procedure TfrmMain.TimerUpdateTimer(Sender: TObject);
@@ -713,12 +740,12 @@ end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  if not UserRights.DoCallIncom or Assigned(frmClientFiz) or Assigned(frmClientUr) or
-     Assigned(frmSessionResult)  then
+  if not UserRights.DoCallIncom or Assigned(frmClientFiz) or
+       Assigned(frmClientUr) or Assigned(frmSessionResult) then
     Exit;
+
   try
     CallObj.StartCall(CallInfo);
-
     DM.ShowCall;
   finally
     CallObj.Ready := True;
@@ -879,6 +906,7 @@ var
   argList: TStringList;
 begin
   s := FMsg;
+  formMain.TimeServerMsg := Now();
 
   if s <> '' then
     formMain.isServerCmd := True;
@@ -961,8 +989,11 @@ begin
       argList.free;
     end;
 
-    if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершилсЯ звонок
-      exit;
+    //if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершилсЯ звонок
+    //  exit;
+
+    if CallObj.Active then
+      Exit;
 
     if Callinfo.CallFlow = 'in' then
       PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
@@ -1152,7 +1183,8 @@ begin
       try
         s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
       except
-        FConn.IOHandler.Close;
+        //FConn.IOHandler.Close;
+        FConn.Disconnect;
         if not Terminated then
           PostMessage(formMain.Handle, WM_CONNECTSOCKET, 0,0);
       end;

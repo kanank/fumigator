@@ -160,6 +160,7 @@ inherited frameClientCalls: TframeClientCalls
     ModifySQL.Strings = ()
   end
   inherited Query: TIBQuery
+    BeforeOpen = QueryBeforeOpen
     SQL.Strings = (
       'select * from sessions '
       'where client_id = :client_id and starttime > current_date-30')

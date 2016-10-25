@@ -144,6 +144,7 @@ type
 
     procedure DoSocketConnect;
     procedure AppException(Sender: TObject; E: Exception);
+    function SocketWriteLn(Amsg: string): Boolean;
 
     procedure OnCallFinish(Sender: TObject);
     procedure OnCallStart(Sender: TObject);
@@ -317,7 +318,7 @@ end;
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   DM.DB.Tag := 1;
-  TCPClient.IOHandler.WriteLn('Окончание работы');
+  SocketWriteLn('Окончание работы');
   try
     TCPClient.Disconnect;
   except
@@ -344,7 +345,7 @@ begin
   CallObj.OnFinishCall := OnCallFinish;
   CallObj.OnTransferCall := OnCallTransfer;
 
-  UserRights := TUserRights.Create(DM.CurrentUserSets.ID);
+  //UserRights := TUserRights.Create(DM.CurrentUserSets.ID);
 end;
 
 function TfrmMain.GetHideOnCloseForAll(Sender: tObject): Boolean;
@@ -442,7 +443,7 @@ procedure TfrmMain.OnCallTransfer(Sender: TObject);
 var
   i: Integer;
 begin
-  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
+  SocketWriteLn('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
   fPhoneListUpdated :=False;
   i := 0;
   while i < 20 do
@@ -465,7 +466,7 @@ begin
     frmListActivePhones.ShowModal;
     if frmListActivePhones.ModalResult = mrOk then
     begin
-      TCPClient.Socket.WriteLn (Format('#calltransfer:%s,%s',
+      SocketWriteLn(Format('#calltransfer:%s,%s',
        [CallObj.CallInfo.CallApiId,
         DM.ActivePhones.FieldByName('phone').AsString]));
       //PostMessageToAll(WM_TRANSFERCALL);
@@ -480,7 +481,7 @@ procedure TfrmMain.RzMenuButton2Click(Sender: TObject);
 var
   n: string;
 begin
-  TCPClient.Socket.WriteLn ('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
+  SocketWriteLn('#getuserlist:' + DM.CurrentUserSets.ATS_Phone_Num);
 end;
 
 procedure TfrmMain.RzMenuButton3Click(Sender: TObject);
@@ -513,13 +514,14 @@ end;
 
 procedure TfrmMain.SetControls;
 begin
-  btnWorkers.Enabled   := UserRights.ShowWorkerList;
-  miListCli.Enabled    := UserRights.TuneClientList;
-  btnClients.Enabled   := UserRights.ShowClientList;
-  btnNewClient.Enabled := UserRights.ShowClientCard and UserRights.WorkClientCard;
-  btnSessions.Enabled  := UserRights.ShowSessions;
-  miOptions.Enabled    := UserRights.TuneSystem;
-  miListCli.Enabled    := UserRights.TuneClientList;
+  btnWorkers.Enabled   := DM.CurrentUserSets.Rights.ShowWorkerList;
+  miListCli.Enabled    := DM.CurrentUserSets.Rights.TuneClientList;
+  btnClients.Enabled   := DM.CurrentUserSets.Rights.ShowClientList;
+  btnNewClient.Enabled := DM.CurrentUserSets.Rights.ShowClientCard and
+                            DM.CurrentUserSets.Rights.WorkClientCard;
+  btnSessions.Enabled  := DM.CurrentUserSets.Rights.ShowSessions;
+  miOptions.Enabled    := DM.CurrentUserSets.Rights.TuneSystem;
+  miListCli.Enabled    := DM.CurrentUserSets.Rights.TuneClientList;
 end;
 
 procedure TfrmMain.SetIsServerCmd(AValue: Boolean);
@@ -545,6 +547,35 @@ begin
   end;
 end;
 
+function TfrmMain.SocketWriteLn(Amsg: string): Boolean;
+var
+  cnt: Integer;
+begin
+  Result := False;
+  if not TCPClient.Connected then
+    Exit;
+
+  cnt := 0;
+  while cnt < 10 do
+  begin
+    try
+      TCPClient.Socket.WriteLn(Amsg);
+      Result := True;
+    except
+       Result := False;
+    end;
+    if result then
+      Break;
+    inc(cnt);
+  end;
+  if not Result then
+  begin
+    try TCPClient.Disconnect; except end;
+    if (DM.DB.Tag = 0) and TCPClient.Connected then
+      MsgBoxError('Произошла ошибка при отправке сообщения на сервер');
+  end;
+end;
+
 procedure TfrmMain.TCPClientConnected(Sender: TObject);
 begin
   DM.SocketTimer.Interval := 0;
@@ -554,7 +585,8 @@ begin
 
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
-  TCPClient.Socket.WriteLn(Format('#setphone:%s,%d,%s',
+  //TCPClient.Socket.WriteLn
+  SocketWriteLn(Format('#setphone:%s,%d,%s',
     [DM.CurrentUserSets.ATS_Phone_Num,
      DM.CurrentUserSets.ID,
      FileVersion(Application.ExeName)
@@ -607,10 +639,11 @@ begin
   if not TCPClient.Connected then
     Exit;
 
-  if SecondsBetween(Now, TimeServerMsg) > 120 then // не было ответа от сервера
+  if SecondsBetween(Now, TimeServerMsg) >
+      TimerEcho.Interval/1000*2 then // не было ответа от сервера
     try TCPClient.Disconnect except end
   else
-    TCPClient.IOHandler.WriteLn('#checkconnect:');
+    SocketWriteLn(Format('#checkconnect: Ready=%s', [BoolToStr(CallObj.Ready, True)]));
 end;
 
 procedure TfrmMain.TimerUpdateTimer(Sender: TObject);
@@ -727,20 +760,20 @@ procedure TfrmMain.WmCmdFumigator(var Msg: TMessage);
 begin
   case Msg.WParam of
     1: UpdateClients;
-    2: if Assigned(UserRights) then
-         UserRights.Refresh;
+    2: if Assigned(DM.CurrentUserSets.Rights) then
+         DM.CurrentUserSets.Rights.Refresh;
   end;
 end;
 
 procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
 begin
-  TCPClientDisconnected(TCPClient);
+  //TCPClientDisconnected(TCPClient);
   DM.SocketTimer.Interval := 100;
 end;
 
 procedure TfrmMain.WmShowIncomeCall(var Msg: TMessage);
 begin
-  if not UserRights.DoCallIncom or Assigned(frmClientFiz) or
+  if not DM.CurrentUserSets.Rights.DoCallIncom or Assigned(frmClientFiz) or
        Assigned(frmClientUr) or Assigned(frmSessionResult) then
     Exit;
 
@@ -760,7 +793,7 @@ end;
 procedure TfrmMain.WmShowOutcomeCall(var Msg: TMessage);
 begin
    //CallObj.OnFinishCall := OnCallFinish;
-   if not UserRights.DoCallOutcome then
+   if not DM.CurrentUserSets.Rights.DoCallOutcome then
       Exit;
 
    try
@@ -1147,13 +1180,20 @@ begin
 
   else
   if cmd = SCMD_NEEDUPDATE then  //необходимо обновление программы
-  try
-     formMain.NeedUpdate := True;
-    //msgText := 'Необходимо обновление программы до версии: ' + arg;
-    //PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
-    //Application.ProcessMessages;
-  finally
-  end
+    try
+       formMain.NeedUpdate := True;
+      //msgText := 'Необходимо обновление программы до версии: ' + arg;
+      //PostMessage(formMain.Handle, WM_SHOWMSG, 0,0);
+      //Application.ProcessMessages;
+    finally
+    end
+
+  else
+  if cmd = SCMD_ECHO then  //ответ
+    try
+      formMain.SocketWriteLn(Format('#echo:Ready=%s', [BoolToStr(CallObj.Ready, true)]));
+    finally
+    end
 
 end;
 
@@ -1184,7 +1224,7 @@ begin
         s := FConn.IOHandler.ReadLn; // UTF8ToString(FConn.IOHandler.ReadLn);
       except
         //FConn.IOHandler.Close;
-        FConn.Disconnect;
+        try FConn.Disconnect except end;
         if not Terminated then
           PostMessage(formMain.Handle, WM_CONNECTSOCKET, 0,0);
       end;
@@ -1260,7 +1300,7 @@ finalization
   //CloseHandle(hMutex);
   FreeAndNil(CallObj);
   FreeAndNil(CallInfo);
-  FreeAndNil(UserRights);
+  //FreeAndNil(UserRights);
 
   FreeAndNil(frmCallUnknown);
 end.

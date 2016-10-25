@@ -291,7 +291,7 @@ inherited frmMain: TfrmMain
     Top = 136
   end
   object TimerEcho: TTimer
-    Interval = 60000
+    Interval = 120000
     OnTimer = TimerEchoTimer
     Left = 400
     Top = 136
@@ -302,7 +302,7 @@ inherited frmMain: TfrmMain
   end
   object TimerCheck: TTimer
     Enabled = False
-    Interval = 2000
+    Interval = 60000
     OnTimer = TimerCheckTimer
     Left = 456
     Top = 136

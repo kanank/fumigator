@@ -242,7 +242,7 @@ end;
 procedure TfrmClientResult.btnDeleteCallClick(Sender: TObject);
 begin
   try
-    formMain.TCPClient.Socket.WriteLn('#calldelete:' + Self.CallApiId);
+    formMain.SocketWriteLn('#calldelete:' + Self.CallApiId);
   finally
     DM.inCalling := False;
   end;

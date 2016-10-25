@@ -549,7 +549,7 @@ end;
 
 procedure TfrmClients.SetControls;
 begin
-  Add_btn1.Enabled := UserRights.WorkClientCard;
+  Add_btn1.Enabled := DM.CurrentUserSets.Rights.WorkClientCard;
   Add_btn.Enabled  := Add_btn1.Enabled;
   Edit_btn.Enabled := Add_btn1.Enabled;
   Del_btn.Enabled := Add_btn1.Enabled;

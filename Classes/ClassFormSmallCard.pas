@@ -56,7 +56,7 @@ uses
 
 procedure TfrmSmallCard.SetControls;
 begin
-  RzBitBtn1.Enabled := UserRights.WorkClientCard;
+  RzBitBtn1.Enabled := DM.CurrentUserSets.Rights.WorkClientCard;
 end;
 
 end.

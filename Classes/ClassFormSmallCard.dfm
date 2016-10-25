@@ -2,6 +2,7 @@ inherited frmSmallCard: TfrmSmallCard
   Caption = #1050#1088#1072#1090#1082#1072#1103' '#1082#1072#1088#1090#1086#1095#1082#1072'. '#1053#1086#1074#1099#1081' '#1082#1083#1080#1077#1085#1090
   ClientHeight = 436
   Position = poDesktopCenter
+  ExplicitWidth = 320
   ExplicitHeight = 474
   PixelsPerInch = 96
   TextHeight = 18

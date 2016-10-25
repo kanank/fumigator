@@ -22,47 +22,6 @@ type
     destructor Destroy;
 end;
 
-type TUserRights = class
-  private
-    data: TDataSet;
-    fUserId: Integer;
-    procedure SetUserId(AValue: Integer);
-    procedure GetData;
-    function GetRightById(AIndex: Integer): boolean;
-  public
-    property UserId: integer read fUserId write SetUserId;
-
-    property CreateLogin: boolean         index 1  read GetRightById; // Создание учетных записей
-    property EditDic: boolean             index 2  read GetRightById; // Редактирование справочников
-    property TuneClientList: boolean      index 3  read GetRightById; // Настройка списка клиентов
-    property WorkClientCard: boolean      index 4  read GetRightById; // Работа с карточками клиента
-    property WorkWorkerCard: boolean      index 5  read GetRightById; // Работа с карточками сотрудника
-    property ShowWorkerList: boolean      index 6  read GetRightById; // Просмотр списка сотрудников
-    property ShowClientList: boolean      index 7  read GetRightById; // Просмотр списков клиентов включая и физические и юридические лица
-    property ShowClientCard: boolean      index 8  read GetRightById; // Просмотр карточек клиентов и физических и юридических лиц
-    property ShowWorkerInfoSmall: boolean index 9  read GetRightById; // Просмотр общей информации карточки сотрудника
-    property ShowWorkerInfoFull: boolean  index 10 read GetRightById; // Просмотр полной информации карточки сотрудника
-    property DoCallIncom: boolean         index 11 read GetRightById; // Возможность принять входящий вызов
-    property DoCallOutcome: boolean       index 12 read GetRightById; // Осуществление исходящего вызова
-    property DoTransfer: boolean          index 13 read GetRightById; // Возможность перевести вызов
-    property DoCallEnd: boolean           index 14 read GetRightById; // Возможность закончить вызов
-    property DoCallLater: boolean         index 15 read GetRightById; // Доступность функции «Перезвонить позднее»
-    property ShowSessions: boolean        index 16 read GetRightById; // Просмотр сессий
-    property ShowSessionStat: boolean     index 17 read GetRightById; // Просмотр статистики по сессиям
-    property InputSessionResult: boolean  index 18 read GetRightById; // Ввод информации в окно сессий
-    property AccessSklad: boolean         index 19 read GetRightById; // Работа со «Складом»
-    property MonitorZakaz: boolean        index 20 read GetRightById; // Мониторинг заказов
-    property ShowDogReestr: boolean       index 21 read GetRightById; // Просмотр реестра договоров
-    property WorkDogCard: boolean         index 22 read GetRightById; // Работа с карточками договоров
-    property CreateTask: boolean          index 23 read GetRightById; // Создание задач
-    property TuneSystem: boolean          index 24 read GetRightById; // Настройка системы
-
-    constructor Create(AUserId: Integer = 0); overload;
-    destructor Destroy; overload;
-    procedure Refresh;
-    function Right(ACode: string): Boolean;
-end;
-
 type
   TDataModuleMain = class(TDataModule)
     DB: TIBDatabase;
@@ -228,7 +187,7 @@ type
     function isModifiedData(Ds: TIBQuery): Boolean; overload;//проверка наличия изменений
     function isModifiedData(Ds: TDataset): Boolean; overload;
   var
-    CurrentUserSets: CurrentUserRec;
+    CurrentUserSets: TCurrentUser;
     //FtpProp: FtpProps;
     //TrayView: TTrayView;
     MissCount: integer;
@@ -247,7 +206,7 @@ end;
 var
   DM: TDataModuleMain;
   _ClientExtUr: TClientExtUr;
-  UserRights: TUserRights;
+  //UserRights: TUserRights;
 
 
 implementation
@@ -286,35 +245,7 @@ function CreateRWQuery: TIBQuery;
 var
   TR: TIBTransaction;
 begin
-  TR := TIBTransaction.Create(nil);
-  TR.DefaultDatabase := DM.DB;
-  TR.DefaultAction := TACommit;
-  TR.AutoStopAction := saCommit;
-
-  TR.Params.Add('isc_tpb_read_committed');
-  //TR.Params.Add('isc_tpb_no_rec_version');
-  TR.Params.Add('isc_tpb_rec_version');
-  TR.Params.Add('isc_tpb_wait');
-
-  // Только для чтения
-  //TR.Params.Add('read');
-  //TR.Params.Add('nowait');
-  //TR.Params.Add('rec_version');
-  //TR.Params.Add('read_committed');
-
-  // Для записи
-  //TR.AllowAutoStart := False;
-  //TR.DefaultDatabase := DB;
-  //TR.DefaultAction := TACommit;
-  //TR.Params.Add('write');
-  //TR.Params.Add('nowait');
-  //TR.Params.Add('read_committed');
-  //TR.Params.Add('rec_version');
-
-  result := TIBQuery.Create(nil);
-  result.Database := DM.DB;
-  result.Transaction := TR;
-
+  result := CommonTypes.CreateRWQuery(DM.DB);
 end;
 
 function ClientExtUr(Aid: integer): TClientExtUr;
@@ -1129,7 +1060,7 @@ begin
    //   Exit;
 
     //inCalling := True;
-    formMain.TCPClient.Socket.WriteLn('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
+    formMain.SocketWriteLn('#call:' + AtsNumber + ',' + APhone + ',' + AtsNumber);
     WaitCalling := true;
     while waitCalling and (cnt < 60) do
     begin
@@ -1922,73 +1853,9 @@ begin
   fQuery.Open;
 end;
 
-{ TUserRights }
 
-constructor TUserRights.Create(AUserId: Integer);
-begin
-  inherited Create;
-  fUserId := 0;
-
-  data := TIBQuery.Create(nil);
-  TIBQuery(data).Database := DM.DB;
-  TIBQuery(data).SQL.Add('select * from get_rights_by_user(:user_id)');
-
-  if AUserId > 0  then
-    UserId := AUserId;
-end;
-
-destructor TUserRights.Destroy;
-begin
-  if data.Active then
-    data.Close;
-  FreeAndNil(data);
-end;
-
-procedure TUserRights.GetData;
-begin
-  if fUserId = 0 then
-    Exit;
-
-  try
-    try
-      data.Close;
-      TIBQuery(data).Params[0].AsInteger := fUserId;
-      data.Open;
-    except
-      raise Exception.Create('Ошибка получения прав: ' + Exception(ExceptObject).Message);
-    end;
-  finally
-
-  end;
-end;
-
-function TUserRights.GetRightById(AIndex: Integer): boolean;
-begin
-  if Data.Active then
-    if data.Locate('right_id', AIndex, []) then
-      Result := data.FieldByName('val').AsInteger = 1;
-end;
-
-procedure TUserRights.Refresh;
-begin
-  GetData;
-end;
-
-function TUserRights.Right(ACode: string): Boolean;
-begin
-  if Data.Active then
-    if data.Locate('right_code', ACode, [loCaseInsensitive]) then
-      Result := data.FieldByName('val').AsInteger = 1;
-end;
-
-procedure TUserRights.SetUserId(AValue: Integer);
-begin
-  if fUserId <> AValue then
-  begin
-    fUserId := AValue;
-    if AValue > 0 then
-      GetData;
-  end;
-end;
+initialization
+finalization
+  FreeAndNil(DM.CurrentUserSets);
 
 end.

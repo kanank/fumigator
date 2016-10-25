@@ -4,7 +4,6 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1258
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -393
   ExplicitWidth = 1274
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -26,7 +25,7 @@ inherited frmSessions: TfrmSessions
     Margins.Right = 6
     Margins.Bottom = 6
     Transparent = True
-    ExplicitWidth = 1250
+    ExplicitWidth = 1258
     inherited Image1: TImage
       Left = 1131
       Top = 2
@@ -154,7 +153,7 @@ inherited frmSessions: TfrmSessions
     Margins.Right = 6
     Margins.Bottom = 6
     ExplicitTop = 607
-    ExplicitWidth = 1250
+    ExplicitWidth = 1258
     ExplicitHeight = 53
     inherited Cancel_btn: TRzButton
       Left = 1070
@@ -163,7 +162,7 @@ inherited frmSessions: TfrmSessions
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1062
+      ExplicitLeft = 1070
       ExplicitTop = 6
     end
     inherited Del_btn: TRzButton [1]
@@ -204,7 +203,7 @@ inherited frmSessions: TfrmSessions
     Margins.Bottom = 6
     Align = alClient
     PopupMenu = GridPopup
-    ExplicitTop = 130
+    ExplicitTop = 129
     ExplicitWidth = 1258
     ExplicitHeight = 478
     inherited GridView: TcxGridDBTableView
@@ -264,7 +263,6 @@ inherited frmSessions: TfrmSessions
         DataBinding.FieldName = 'USLUGI'
         HeaderAlignmentHorz = taCenter
         Options.Editing = False
-        Options.FilteringAddValueItems = False
         Styles.Header = cxStyle1
         Width = 65
       end
@@ -379,7 +377,6 @@ inherited frmSessions: TfrmSessions
     Align = alTop
     BorderSides = []
     TabOrder = 4
-    ExplicitWidth = 1250
     DesignSize = (
       1258
       83)
@@ -394,7 +391,6 @@ inherited frmSessions: TfrmSessions
       Margins.Bottom = 4
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1250
       object cxGridDBTableView1: TcxGridDBTableView
         Navigator.Buttons.CustomButtons = <>
         Navigator.InfoPanel.Visible = True
@@ -509,8 +505,8 @@ inherited frmSessions: TfrmSessions
         ParentFont = False
       end
       object lblCount: TLabel
-        Left = 189
-        Top = 6
+        Left = 185
+        Top = 2
         Width = 116
         Height = 18
         Margins.Left = 4
@@ -529,6 +525,8 @@ inherited frmSessions: TfrmSessions
         GlowSize = 10
         ParentColor = False
         ParentFont = False
+        ExplicitLeft = 189
+        ExplicitTop = 6
       end
     end
   end

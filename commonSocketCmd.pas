@@ -4,6 +4,7 @@ interface
 
 const
   SCMD_NEEDUPDATE = 'needupdate';
+  SCMD_ECHO = 'echo';
 
   function GetSocketCmdSrv(ACommand: string): string;
 

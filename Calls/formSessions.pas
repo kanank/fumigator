@@ -539,7 +539,7 @@ end;
 
 procedure TfrmSessions.SetControls;
 begin
-  Edit_btn.Enabled := UserRights.InputSessionResult;
+  Edit_btn.Enabled := DM.CurrentUserSets.Rights.InputSessionResult;
 end;
 
 procedure TfrmSessions.SetFilter;

@@ -69,6 +69,7 @@ type TUserRights = class
     property TuneSystem: boolean          index 24 read GetRightById; // Настройка системы
 
     constructor Create(AUserId: Integer = 0); overload;
+    constructor Create(ADb: TIBDatabase; AUserId: Integer = 0); overload;
     destructor Destroy; overload;
     procedure Refresh;
     function Right(ACode: string): Boolean;
@@ -313,8 +314,7 @@ begin
   inherited Create;
   fDB := ADb;
 
-  fRights := TUserRights.Create;
-  fRights.fDb := fDB;
+  fRights := TUserRights.Create(fDB, AId);
 
   if AId > 0 then
     ID := AId;
@@ -378,6 +378,20 @@ begin
   TIBQuery(data).SQL.Add('select * from get_rights_by_user(:user_id)');
 
   if AUserId > 0  then
+    UserId := AUserId;
+end;
+
+constructor TUserRights.Create(ADb: TIBDatabase; AUserId: Integer = 0);
+begin
+  inherited Create;
+  fUserId := 0;
+  fDb := ADb;
+
+  data := TIBQuery.Create(nil);
+  TIBQuery(data).Database := fDB;
+  TIBQuery(data).SQL.Add('select * from get_rights_by_user(:user_id)');
+
+   if AUserId > 0  then
     UserId := AUserId;
 end;
 

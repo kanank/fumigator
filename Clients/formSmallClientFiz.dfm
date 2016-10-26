@@ -142,6 +142,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Margins.Right = 6
     Margins.Bottom = 6
     DataBinding.DataSource = frmClientFiz.DS
+    Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 3
     ExplicitHeight = 26
   end
@@ -151,6 +152,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Margins.Right = 6
     Margins.Bottom = 6
     DataBinding.DataSource = frmClientFiz.DS
+    Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 4
     ExplicitWidth = 94
     ExplicitHeight = 26
@@ -178,6 +180,8 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Anchors = [akLeft, akTop, akRight]
     BeepOnEnter = False
     DataBinding.DataField = 'NAME'
+    Properties.ValidationOptions = [evoShowErrorIcon]
+    Properties.OnValidate = edtNamePropertiesValidate
     Style.BorderStyle = ebsFlat
     Style.HotTrack = False
     Style.LookAndFeel.Kind = lfFlat
@@ -241,6 +245,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
         ExplicitHeight = 83
         inherited grdPhoneDBTableView1: TcxGridDBTableView
           inherited grdPhoneDBTableView1Column1: TcxGridDBColumn
+            Properties.ValidationOptions = [evoShowErrorIcon]
             IsCaptionAssigned = True
           end
         end
@@ -255,6 +260,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
         ExplicitTop = 105
         ExplicitWidth = 266
         inherited btnAdd: TRzBitBtn
+          Width = 38
           Height = 34
           Margins.Left = 6
           Margins.Top = 6
@@ -262,10 +268,12 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
           Margins.Bottom = 6
           Margin = 4
           Spacing = 8
+          ExplicitWidth = 38
           ExplicitHeight = 34
         end
         inherited btnEdit: TRzBitBtn
           Top = 0
+          Width = 38
           Height = 35
           Margins.Left = 6
           Margins.Top = 6
@@ -274,6 +282,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
           Margin = 4
           Spacing = 8
           ExplicitTop = 0
+          ExplicitWidth = 38
           ExplicitHeight = 35
         end
         inherited btnDel: TRzBitBtn
@@ -310,6 +319,7 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Margins.Right = 6
     Margins.Bottom = 6
     DataBinding.DataSource = frmClientFiz.DS
+    Properties.ValidationOptions = [evoShowErrorIcon]
     ExplicitLeft = 350
     ExplicitTop = 223
     ExplicitWidth = 272

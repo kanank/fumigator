@@ -139,7 +139,7 @@ end;
 
 procedure TframeClientCalls.QueryBeforeOpen(DataSet: TDataSet);
 begin
-  if Query.ParamByName('client_id').AsInteger <= -1 then
+  if Query.ParamByName('client_id').AsInteger <= 0 then
        Query.ParamByName('client_id').AsInteger := -11111111;
 
 end;

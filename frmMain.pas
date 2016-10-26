@@ -601,6 +601,8 @@ begin
 
   if not DM.DB.Connected then //реконнект к БД, если нужно
     DM.DBAfterDisconnect(DM.DB);
+
+  TrayIcon.ShowBalloonHint('Фумигатор', 'Соединение с сервером установлено', bhiInfo);
 end;
 
 procedure TfrmMain.TCPClientDisconnected(Sender: TObject);
@@ -610,7 +612,7 @@ begin
 
   if DM.DB.Tag = 0 then // если не окончание
   begin
-    TrayIcon.ShowBalloonHint('Разрыв соединения с сервером', 'Ограниченный режим работы', bhiWarning);
+    TrayIcon.ShowBalloonHint('Фумигатор. Ограниченный режим работы', 'Разрыв соединения с сервером', bhiWarning);
 
     DM.SocketTimer.Interval := 1000; //запуск проверки
 
@@ -637,7 +639,10 @@ end;
 procedure TfrmMain.TimerEchoTimer(Sender: TObject);
 begin
   if not TCPClient.Connected then
+  begin
+    TrayIcon.ShowBalloonHint('Фумигатор. Ограниченный режим работы', 'Нет соединения с сервером', bhiWarning);
     Exit;
+  end;
 
   if SecondsBetween(Now, TimeServerMsg) >
       TimerEcho.Interval/1000*2 then // не было ответа от сервера

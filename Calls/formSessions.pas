@@ -100,6 +100,8 @@ type
       ANewItemRecordFocusingChanged: Boolean);
     procedure FormDestroy(Sender: TObject);
     procedure QAfterRefresh(DataSet: TDataSet);
+    procedure GridViewDataControllerFilterChanged(Sender: TObject);
+
   private
     procedure CalcHeader;
     function MillesecondToDateTime(ms: int64): TDateTime;
@@ -346,6 +348,9 @@ begin
   MemHeader.Append;
   MemHeader.Post;
   cmbFilter.ItemIndex := 0;
+
+  chkWorkerClients.Checked := DM.CurrentUserSets.HasClient;
+  chkWorkerClients.Enabled := chkWorkerClients.Checked;
 end;
 
 
@@ -374,6 +379,11 @@ begin
    ACanvas.Canvas.Font.Style := [fsBold]
  else
    ACanvas.Canvas.Font.Style := [];
+end;
+
+procedure TfrmSessions.GridViewDataControllerFilterChanged(Sender: TObject);
+begin
+  lblCount.Caption := IntToStr(GridView.DataController.DataRowCount);
 end;
 
 procedure TfrmSessions.GridViewFocusedRecordChanged(

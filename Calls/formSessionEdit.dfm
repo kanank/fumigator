@@ -46,6 +46,9 @@ inherited frmSessionEdit: TfrmSessionEdit
       Margins.Bottom = 6
       ExplicitLeft = 1161
     end
+    inherited btnTransferCall: TRzButton
+      TabOrder = 3
+    end
     object RzButton1: TRzButton
       Left = 846
       Top = 5
@@ -103,8 +106,6 @@ inherited frmSessionEdit: TfrmSessionEdit
     AutoSize = True
     BevelInner = bvNone
     TabOrder = 1
-    ExplicitWidth = 1029
-    ExplicitHeight = 545
     DesignSize = (
       1023
       546)
@@ -120,14 +121,15 @@ inherited frmSessionEdit: TfrmSessionEdit
       BorderOuter = fsNone
       TabOrder = 0
       inline frameClientCalls: TframeClientCalls
-        Left = -3
+        Left = 0
         Top = 0
-        Width = 1059
-        Height = 209
+        Width = 1025
+        Height = 213
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -15
@@ -267,7 +269,7 @@ inherited frmSessionEdit: TfrmSessionEdit
     object pnlClient: TRzPanel
       Left = 0
       Top = 224
-      Width = 1021
+      Width = 1017
       Height = 117
       Margins.Left = 4
       Margins.Top = 4
@@ -278,7 +280,6 @@ inherited frmSessionEdit: TfrmSessionEdit
       BorderOuter = fsFlat
       BorderSides = [sdBottom]
       TabOrder = 1
-      ExplicitWidth = 1023
     end
     object pnlResult: TRzPanel
       Left = 0
@@ -293,8 +294,6 @@ inherited frmSessionEdit: TfrmSessionEdit
       BorderOuter = fsFlat
       BorderSides = [sdBottom]
       TabOrder = 2
-      ExplicitLeft = -32
-      ExplicitTop = -72
     end
   end
 end

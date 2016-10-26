@@ -4,6 +4,7 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1258
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -487
   ExplicitWidth = 1274
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -194,9 +195,9 @@ inherited frmSessions: TfrmSessions
     end
   end
   inherited Grid: TcxGrid
-    Top = 129
+    Top = 119
     Width = 1258
-    Height = 478
+    Height = 488
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
@@ -210,6 +211,7 @@ inherited frmSessions: TfrmSessions
       OnCustomDrawCell = GridViewCustomDrawCell
       OnFocusedRecordChanged = GridViewFocusedRecordChanged
       DataController.DataSource = DS
+      DataController.Filter.OnChanged = GridViewDataControllerFilterChanged
       OptionsData.CancelOnExit = False
       OptionsData.Deleting = False
       OptionsData.DeletingConfirmation = False
@@ -369,7 +371,7 @@ inherited frmSessions: TfrmSessions
     Left = 0
     Top = 46
     Width = 1258
-    Height = 83
+    Height = 73
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -379,12 +381,12 @@ inherited frmSessions: TfrmSessions
     TabOrder = 4
     DesignSize = (
       1258
-      83)
+      73)
     object cxGrid1: TcxGrid
       Left = 0
       Top = 0
       Width = 1258
-      Height = 74
+      Height = 73
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
@@ -460,7 +462,7 @@ inherited frmSessions: TfrmSessions
     end
     object pnlFiltered: TPanel
       Left = 944
-      Top = 52
+      Top = 41
       Width = 313
       Height = 31
       Margins.Left = 4
@@ -506,7 +508,7 @@ inherited frmSessions: TfrmSessions
       end
       object lblCount: TLabel
         Left = 185
-        Top = 2
+        Top = 8
         Width = 116
         Height = 18
         Margins.Left = 4
@@ -525,8 +527,6 @@ inherited frmSessions: TfrmSessions
         GlowSize = 10
         ParentColor = False
         ParentFont = False
-        ExplicitLeft = 189
-        ExplicitTop = 6
       end
     end
   end

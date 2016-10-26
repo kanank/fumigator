@@ -32,6 +32,8 @@ type
     procedure RzBitBtn1Click(Sender: TObject);
     procedure Exit_bntClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure edtNamePropertiesValidate(Sender: TObject;
+      var DisplayValue: Variant; var ErrorText: TCaption; var Error: Boolean);
   private
     function CheckFields: Boolean;
   public
@@ -59,6 +61,14 @@ begin
      MsgBoxWarning('Не заполнены все необходимые поля!');
      Result := False;
    end;
+end;
+
+procedure TfrmSmallCardFiz.edtNamePropertiesValidate(Sender: TObject;
+  var DisplayValue: Variant; var ErrorText: TCaption; var Error: Boolean);
+begin
+  //if DisplayValue = '' then
+  //  Error := true;
+
 end;
 
 procedure TfrmSmallCardFiz.Exit_bntClick(Sender: TObject);

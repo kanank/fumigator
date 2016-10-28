@@ -82,7 +82,8 @@ begin
     SaveClient;
 
   if not fResultSaved then
-    SaveResult;
+    if not SaveResult then
+      exit;
 
   if fClientSaved and fResultSaved then
   begin
@@ -144,6 +145,7 @@ end;
 function TfrmClientResult.CheckFinish: boolean;
 begin
   Result := not CallObj.Active;
+  fCanClose := Result;
   if not Result then
     Application.MessageBox('Действие не разрешено во время звонка!',
      'Исходящий звонок', MB_ICONSTOP);

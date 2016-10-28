@@ -75,7 +75,7 @@ object MF: TMF
       Top = 1
       Width = 621
       Height = 363
-      ActivePage = TabMain
+      ActivePage = TabPhones
       Align = alClient
       TabOrder = 0
       object TabMain: TTabSheet
@@ -549,6 +549,7 @@ object MF: TMF
             '105'
             '106'
             '107'
+            '301'
             '755'
             '757')
           TabOrder = 0

@@ -134,6 +134,9 @@ begin
     inherited OpenData(AId);
   finally
     fInQuery := False;
+    if Query.RecordCount > 0  then
+      GridViewFocusedRecordChanged(GridView, GridView.ViewData.Rows[0],
+        GridView.ViewData.Rows[0], True);
   end;
 end;
 

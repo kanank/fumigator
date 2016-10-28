@@ -734,6 +734,8 @@ begin
   end;
 end;
 
+
+
 procedure TMF.QPhonesBeforeOpen(DataSet: TDataSet);
 begin
   if not DB.Connected then

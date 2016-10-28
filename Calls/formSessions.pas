@@ -83,6 +83,7 @@ type
     pnlFiltered: TPanel;
     Label2: TLabel;
     lblCount: TLabel;
+    GridViewColumn16: TcxGridDBColumn;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -248,10 +249,10 @@ begin
       frmSessionEdit.frm := frmClientUr;
     end;
 
-    if Assigned(frmSessionEdit.frm) then
-      frmSessionEdit.SetClientForm
-    else
-      frmSessionEdit.btnClientEdit.Enabled := False;
+    //if Assigned(frmSessionEdit.frm) then
+    //  frmSessionEdit.SetClientForm
+    //else
+    frmSessionEdit.btnClientEdit.Enabled := Assigned(frmSessionEdit.frm);
 
     //frmSessionEdit.ScrollBox.Height:= frmSessionResult.Height + 5 +
     //  frm.Height + 5 + frmSessionEdit.pnlCalls.Height;

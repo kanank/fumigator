@@ -186,8 +186,12 @@ begin
   begin
     if not fResultSaved then
     begin
-      fCallResult  := DM.FinishSession(CallObj.CallInfo.CallApiId, ClientId);
-      fResultSaved := True;
+      try
+        fCallResult  := DM.FinishSession(CallObj.CallInfo.CallApiId, ClientId);
+        fResultSaved := True;
+      except
+        fResultSaved := False;
+      end;
     end;
   end;
 
@@ -220,12 +224,14 @@ begin
     end;
 
     if not fResultSaved then
-    begin
+    try
       fCallResult  := DM.FinishSession(CallObj.CallInfo.CallApiId, ClientId);
       fResultSaved := True;
+    except
+      fResultSaved := False;
     end;
 
-    fCanClose := True;
+    fCanClose := fResultSaved;
     ModalResult := mrOk;
   end;
 end;

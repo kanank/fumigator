@@ -4,6 +4,7 @@ inherited frmWorker: TfrmWorker
   ClientWidth = 1069
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitLeft = -333
   ExplicitWidth = 1085
   ExplicitHeight = 499
   PixelsPerInch = 96
@@ -554,10 +555,6 @@ inherited frmWorker: TfrmWorker
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1072#1103' '#1092#1086#1088#1084#1072
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object RzPanel3: TRzPanel
         Left = 0
         Top = 335
@@ -874,7 +871,6 @@ inherited frmWorker: TfrmWorker
               ExplicitLeft = 46
               ExplicitTop = 93
               ExplicitWidth = 106
-              ExplicitHeight = 21
               Width = 106
             end
             inherited edtSurName: TcxDBTextEdit
@@ -931,7 +927,6 @@ inherited frmWorker: TfrmWorker
               ExplicitLeft = 75
               ExplicitTop = 91
               ExplicitWidth = 73
-              ExplicitHeight = 21
               Width = 73
             end
             inherited cmbProf: TcxDBLookupComboBox
@@ -1035,7 +1030,6 @@ inherited frmWorker: TfrmWorker
               ExplicitLeft = 810
               ExplicitTop = 7
               ExplicitWidth = 118
-              ExplicitHeight = 21
               Width = 118
             end
             inherited FramePhones: TFramePhones
@@ -1059,7 +1053,8 @@ inherited frmWorker: TfrmWorker
                 ExplicitWidth = 241
                 ExplicitHeight = 122
                 inherited RzPanel2: TRzPanel
-                  Left = 185
+                  Left = 197
+                  Top = 19
                   Width = 43
                   Height = 102
                   Margins.Left = 4
@@ -1067,6 +1062,7 @@ inherited frmWorker: TfrmWorker
                   Margins.Right = 4
                   Margins.Bottom = 4
                   ExplicitLeft = 197
+                  ExplicitTop = 19
                   ExplicitWidth = 43
                   ExplicitHeight = 102
                   inherited btnDel: TRzBitBtn
@@ -1486,7 +1482,6 @@ inherited frmWorker: TfrmWorker
             Properties.ListOptions.GridLines = glNone
             Properties.ListOptions.ShowHeader = False
             Properties.ListSource = DataModuleMain.DSDicUserTypes
-            Properties.ReadOnly = False
             TabOrder = 2
             Width = 207
           end
@@ -1592,7 +1587,7 @@ inherited frmWorker: TfrmWorker
               ExplicitHeight = 140
             end
             inherited RzPanel2: TRzPanel
-              Left = 238
+              Left = 250
               Width = 43
               Height = 143
               Margins.Left = 4

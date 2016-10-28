@@ -5,8 +5,7 @@ inherited frmClientFiz: TfrmClientFiz
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitLeft = -351
-  ExplicitTop = -210
+  ExplicitTop = -194
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -2438,14 +2437,15 @@ inherited frmClientFiz: TfrmClientFiz
     BorderOuter = fsNone
     TabOrder = 2
     inline frameClientCalls: TframeClientCalls
-      Left = -3
-      Top = 1
-      Width = 1059
-      Height = 177
+      Left = 0
+      Top = 0
+      Width = 1070
+      Height = 181
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
+      Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -15

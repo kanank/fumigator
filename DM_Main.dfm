@@ -126,7 +126,7 @@ object DataModuleMain: TDataModuleMain
     InsertSQL.Strings = (
       'INSERT INTO WORKERS ('
       #9'ID,'
-      '                PERSON_ID,'
+      '              PERSON_ID,'
       #9'FULL_NAME,'
       #9'SHORT_NAME,'
       #9'STATUS,'
@@ -137,7 +137,6 @@ object DataModuleMain: TDataModuleMain
       #9'USER_TYPE,'
       #9'USER_BLOCKED,'
       #9'ATS_NUM,'
-      #9'WORKER_ID,'
       #9'USER_TYPE_DEF)'
       'Values('
       #9':ID,'
@@ -152,7 +151,6 @@ object DataModuleMain: TDataModuleMain
       #9':USER_TYPE,'
       #9':USER_BLOCKED,'
       #9':ATS_NUM,'
-      #9':WORKER_ID,'
       #9':USER_TYPE_DEF)'#9)
     DeleteSQL.Strings = (
       'update workers'

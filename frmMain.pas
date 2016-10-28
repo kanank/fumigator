@@ -692,7 +692,9 @@ begin
   if E.ClassName = 'EIdNotConnected' then
     Exit
   else
-    MsgBoxError('Непредвиденная ошибка программы: ' + Exception(ExceptObject).Message);
+    MsgBoxError(Format('Непредвиденная ошибка программы (%s): %s',
+    [Sender.UnitName, Exception(ExceptObject).Message]));
+
 end;
 
 procedure TfrmMain.btnClientsClick(Sender: TObject);
@@ -1194,7 +1196,7 @@ begin
     end
 
   else
-  if cmd = SCMD_ECHO then  //ответ
+  if cmd = SCMD_CHECKECHO then  //ответ
     try
       formMain.SocketWriteLn(Format('#echo:Ready=%s', [BoolToStr(CallObj.Ready, true)]));
     finally

@@ -1,16 +1,15 @@
 inherited frmSessions: TfrmSessions
   Caption = #1057#1077#1089#1089#1080#1080
   ClientHeight = 660
-  ClientWidth = 1258
+  ClientWidth = 1284
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -487
-  ExplicitWidth = 1274
+  ExplicitWidth = 1300
   ExplicitHeight = 698
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage
-    Left = 991
+    Left = 1017
     Top = 516
     Margins.Left = 6
     Margins.Top = 6
@@ -20,15 +19,15 @@ inherited frmSessions: TfrmSessions
     ExplicitTop = 572
   end
   inherited RzPanel2: TRzPanel
-    Width = 1258
+    Width = 1284
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
     Transparent = True
-    ExplicitWidth = 1258
+    ExplicitWidth = 1284
     inherited Image1: TImage
-      Left = 1131
+      Left = 1157
       Top = 2
       Height = 42
       Margins.Left = 6
@@ -147,23 +146,23 @@ inherited frmSessions: TfrmSessions
   end
   inherited RzPanel1: TRzPanel
     Top = 607
-    Width = 1258
+    Width = 1284
     Height = 53
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
     ExplicitTop = 607
-    ExplicitWidth = 1258
+    ExplicitWidth = 1284
     ExplicitHeight = 53
     inherited Cancel_btn: TRzButton
-      Left = 1070
+      Left = 1096
       Top = 6
       Margins.Left = 6
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1070
+      ExplicitLeft = 1096
       ExplicitTop = 6
     end
     inherited Del_btn: TRzButton [1]
@@ -196,7 +195,7 @@ inherited frmSessions: TfrmSessions
   end
   inherited Grid: TcxGrid
     Top = 119
-    Width = 1258
+    Width = 1284
     Height = 488
     Margins.Left = 6
     Margins.Top = 6
@@ -204,9 +203,9 @@ inherited frmSessions: TfrmSessions
     Margins.Bottom = 6
     Align = alClient
     PopupMenu = GridPopup
-    ExplicitTop = 129
-    ExplicitWidth = 1258
-    ExplicitHeight = 478
+    ExplicitTop = 119
+    ExplicitWidth = 1284
+    ExplicitHeight = 488
     inherited GridView: TcxGridDBTableView
       OnCustomDrawCell = GridViewCustomDrawCell
       OnFocusedRecordChanged = GridViewFocusedRecordChanged
@@ -260,6 +259,22 @@ inherited frmSessions: TfrmSessions
         Styles.Header = cxStyle1
         Width = 90
       end
+      object GridViewColumn16: TcxGridDBColumn
+        Caption = #1056#1077#1075#1080#1086#1085
+        DataBinding.FieldName = 'Region_id'
+        PropertiesClassName = 'TcxLookupComboBoxProperties'
+        Properties.HideSelection = False
+        Properties.KeyFieldNames = 'REGION_ID'
+        Properties.ListColumns = <
+          item
+            FieldName = 'NAME'
+          end>
+        Properties.ListOptions.ShowHeader = False
+        Properties.ListSource = DataModuleMain.DsDicRegions
+        HeaderAlignmentHorz = taCenter
+        Styles.Header = cxStyle1
+        Width = 74
+      end
       object GridViewColumn15: TcxGridDBColumn
         Caption = #1059#1089#1083#1091#1075#1080
         DataBinding.FieldName = 'USLUGI'
@@ -295,7 +310,7 @@ inherited frmSessions: TfrmSessions
         DataBinding.FieldName = 'ISHOD'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 131
+        Width = 110
       end
       object GridViewColumn10: TcxGridDBColumn
         Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081' '#1082' '#1089#1077#1089#1089#1080#1080
@@ -318,7 +333,7 @@ inherited frmSessions: TfrmSessions
         Properties.DisplayFormat = 'dd.mm.yy hh:nn:ss.zzz'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 106
+        Width = 101
       end
       object GridViewColumn5: TcxGridDBColumn
         Caption = #1050#1086#1085#1077#1094
@@ -327,7 +342,7 @@ inherited frmSessions: TfrmSessions
         Properties.DisplayFormat = 'dd.mm.yy hh:nn:ss.zzz'
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 114
+        Width = 106
       end
       object GridViewColumn11: TcxGridDBColumn
         DataBinding.FieldName = 'DURATION'
@@ -340,7 +355,7 @@ inherited frmSessions: TfrmSessions
         Caption = #1047#1072#1087#1080#1089#1100
         HeaderAlignmentHorz = taCenter
         Styles.Header = cxStyle1
-        Width = 70
+        Width = 57
       end
       object GridViewColumn12: TcxGridDBColumn
         DataBinding.FieldName = 'CALLAPIID'
@@ -370,7 +385,7 @@ inherited frmSessions: TfrmSessions
   object RzPanel3: TRzPanel
     Left = 0
     Top = 46
-    Width = 1258
+    Width = 1284
     Height = 73
     Margins.Left = 4
     Margins.Top = 4
@@ -380,12 +395,12 @@ inherited frmSessions: TfrmSessions
     BorderSides = []
     TabOrder = 4
     DesignSize = (
-      1258
+      1284
       73)
     object cxGrid1: TcxGrid
       Left = 0
       Top = 0
-      Width = 1258
+      Width = 1284
       Height = 73
       Margins.Left = 4
       Margins.Top = 4
@@ -463,7 +478,7 @@ inherited frmSessions: TfrmSessions
     object pnlFiltered: TPanel
       Left = 944
       Top = 41
-      Width = 313
+      Width = 339
       Height = 31
       Margins.Left = 4
       Margins.Top = 4
@@ -482,7 +497,7 @@ inherited frmSessions: TfrmSessions
       TabOrder = 1
       Visible = False
       DesignSize = (
-        311
+        337
         29)
       object Label2: TLabel
         Left = 3
@@ -507,18 +522,16 @@ inherited frmSessions: TfrmSessions
         ParentFont = False
       end
       object lblCount: TLabel
-        Left = 185
-        Top = 8
-        Width = 116
-        Height = 18
+        Left = 209
+        Top = 5
+        Width = 24
+        Height = 38
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Anchors = [akRight, akBottom]
-        AutoSize = False
+        Anchors = [akLeft, akBottom]
         Color = clBtnShadow
-        EllipsisPosition = epPathEllipsis
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -15
@@ -527,6 +540,7 @@ inherited frmSessions: TfrmSessions
         GlowSize = 10
         ParentColor = False
         ParentFont = False
+        ExplicitTop = 7
       end
     end
   end
@@ -561,8 +575,9 @@ inherited frmSessions: TfrmSessions
         ' (select count(*)from sessions where callapiid=s.callapiid  and ' +
         'accepted=1) answer,'
       ' recid as recapiid,'
-      ' (select str from get_services_client(s.client_id)) uslugi'
-      'from sessions s'
+      ' (select str from get_services_client(s.client_id)) uslugi,'
+      ' c.region_id'
+      'from sessions s left join clients c on c.id = s.client_id'
       
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
         'ot null'

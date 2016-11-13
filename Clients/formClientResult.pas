@@ -191,7 +191,7 @@ procedure TfrmClientResult.FormCloseQuery(Sender: TObject;
 begin
   if not (fClientSaved and fResultSaved) then
     CanClose := False;
-  inherited;
+  //inherited;
 end;
 
 procedure TfrmClientResult.FormDestroy(Sender: TObject);

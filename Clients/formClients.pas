@@ -80,6 +80,7 @@ type
     mnuEdit: TPopupMenu;
     miEditCli: TMenuItem;
     miChangeTypeCli: TMenuItem;
+    btnSelect: TRzButton;
     procedure Fiz_btnClick(Sender: TObject);
     procedure Ur_btnClick(Sender: TObject);
     procedure Edit_btnClick(Sender: TObject);
@@ -121,6 +122,7 @@ type
       ANewItemRecordFocusingChanged: Boolean);
     procedure miEditCliClick(Sender: TObject);
     procedure miChangeTypeCliClick(Sender: TObject);
+    procedure btnSelectClick(Sender: TObject);
   private
     FisUr: integer;
     fStatus: Integer;
@@ -213,6 +215,11 @@ procedure TfrmClients.btnLidClick(Sender: TObject);
 begin
   inherited;
   status := 2;
+end;
+
+procedure TfrmClients.btnSelectClick(Sender: TObject);
+begin
+  ModalResult := mrOk;
 end;
 
 procedure TfrmClients.chkDeletedClick(Sender: TObject);
@@ -593,14 +600,15 @@ begin
   inherited;
   f := fFormRegim = sfrSelect;
 
-  if f then
+  if fFormRegim = sfrSelect then
   begin
     Add_btn1.Caption := 'Œ ';
     Add_btn1.DropDownMenu := nil;
   end;
 
-  Edit_btn.Visible := not f;
-  Del_btn.Visible  := not f;
+  Edit_btn.Visible  := fFormRegim = sfrEdit;
+  Del_btn.Visible   := fFormRegim = sfrEdit;
+  btnSelect.Visible := fFormRegim = sfrSelectAdd;
 end;
 
 procedure TfrmClients.SetIsUr(AValue: integer);

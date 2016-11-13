@@ -17,6 +17,7 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure CheckTimerTimer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     fCallId: string;
     fCallApiId: string;
@@ -297,6 +298,12 @@ begin
   inherited;
   if Assigned(frmCallEvent) then
     frmCallEvent.ModalResult := mrOk;
+end;
+
+procedure TfrmIncomeCallRoot.FormCreate(Sender: TObject);
+begin
+  inherited;
+  NoDefaultCallEvent := False; //события звонков нужны
 end;
 
 procedure TfrmIncomeCallRoot.FormShow(Sender: TObject);

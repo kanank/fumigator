@@ -35,6 +35,7 @@ type
     FrameUslugi: TFrameUslugi;
     cxDBMemo1: TcxDBMemo;
     Label4: TLabel;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -53,6 +54,12 @@ uses
   DM_Main;
 
 { TfrmSmallCard }
+
+procedure TfrmSmallCard.FormCreate(Sender: TObject);
+begin
+  inherited;
+  NoDefaultCallEvent := True;
+end;
 
 procedure TfrmSmallCard.SetControls;
 begin

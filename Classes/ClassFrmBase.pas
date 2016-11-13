@@ -30,6 +30,7 @@ type
     fOnTopMost: Boolean; //находится в режиме TopMost
     fTransfered: Boolean;
     fCallObj: TCallProto;
+    fNoDefaultCallEvent: Boolean; //не использовать события звонков по умолчанию
 
     procedure SetCaption(AValue: string); virtual;
     procedure SetNonValidate(Alist: string);
@@ -67,6 +68,7 @@ type
     property HideOnClose: boolean read CalcHideOnClose;
     property InUpdate: Boolean read fInUpdate;
     property OnTopMost: Boolean read fOnTopMost;
+    property NoDefaultCallEvent: Boolean read fNoDefaultCallEvent write fNoDefaultCallEvent;
   end;
 
 implementation
@@ -104,6 +106,7 @@ begin
   fNonValidateList := TStringList.Create;
   fValidateList := TStringList.Create;
   fCanClose := True;
+  fNoDefaultCallEvent := True; //по умолчанию гасим события
 end;
 
 //destructor TBaseForm.Destroy;
@@ -120,6 +123,9 @@ end;
 
 procedure TBaseForm.DoFinishCall;
 begin
+  if fNoDefaultCallEvent then
+    Exit;
+
   if (CallObj.Cancelled and not CallObj.Accepted) or CallObj.Transfered then
     if fCloseOnCancelCall then
       Self.CloseAbsolute

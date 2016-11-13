@@ -5,7 +5,6 @@ inherited frmClientResult: TfrmClientResult
   FormStyle = fsStayOnTop
   Position = poDesktopCenter
   OnShow = FormShow
-  ExplicitLeft = -346
   ExplicitWidth = 1081
   ExplicitHeight = 611
   PixelsPerInch = 96

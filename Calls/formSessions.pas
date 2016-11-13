@@ -84,6 +84,7 @@ type
     Label2: TLabel;
     lblCount: TLabel;
     GridViewColumn16: TcxGridDBColumn;
+    updQ: TIBUpdateSQL;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -195,43 +196,46 @@ begin
   try
   DS.dataset.DisableControls;
 
-  frmSessionResult := TfrmSessionResult.Create(nil);
-  frmSessionResult.NeedCheckCall := False;
-  frmSessionResult.Cancel_btn.Visible := False;
-  frmSessionResult.Height := frmSessionResult.Height -
-    frmSessionResult.Cancel_btn.Height - 10;
-  frmSessionResult.Parent := frmSessionEdit.pnlResult;
-  frmSessionResult.Q.ParamByName('callapiid').AsString :=
-    DS.DataSet.FieldByName('callapiid').AsString;
-  frmSessionResult.Q.ParamByName('callednum').AsString :=
-    DS.DataSet.FieldByName('callednum').AsString;
-  frmSessionResult.Q.ParamByName('callernum').AsString :=
-    DS.DataSet.FieldByName('callernum').AsString;
+  with frmSessionEdit do
+  begin
+    frmResult := TfrmSessionResult.Create(nil);
+    TfrmSessionResult(frmResult).NeedCheckCall := False;
+    TfrmSessionResult(frmResult).Cancel_btn.Visible := False;
+    TfrmSessionResult(frmResult).Height := frmResult.Height -
+      TfrmSessionResult(frmResult).Cancel_btn.Height - 10;
+    TfrmSessionResult(frmResult).Parent := frmSessionEdit.pnlResult;
+    TfrmSessionResult(frmResult).Q.ParamByName('callapiid').AsString :=
+      Self.DS.DataSet.FieldByName('callapiid').AsString;
+    TfrmSessionResult(frmResult).Q.ParamByName('callednum').AsString :=
+      Self.DS.DataSet.FieldByName('callednum').AsString;
+    TfrmSessionResult(frmResult).Q.ParamByName('callernum').AsString :=
+      Self.DS.DataSet.FieldByName('callernum').AsString;
 
-  frmSessionResult.Q.Open;
-  frmSessionResult.Q.Edit;
+    TfrmSessionResult(frmResult).Q.Open;
+    TfrmSessionResult(frmResult).Q.Edit;
 
-  (*frmSessionResult.edtResult.Text :=
-    frmSessionResult.Q.FieldByName('RESULT').AsString;
-  frmSessionResult.edtIshod.Text :=
-    frmSessionResult.Q.FieldByName('ISHOD').AsString;*)
+    (*frmSessionResult.edtResult.Text :=
+      frmSessionResult.Q.FieldByName('RESULT').AsString;
+    frmSessionResult.edtIshod.Text :=
+      frmSessionResult.Q.FieldByName('ISHOD').AsString;*)
 
-  frmSessionResult.Position := poDefault;
+    frmResult.Position := poDefault;
 
-  frmSessionResult.BorderIcons := [];
-  frmSessionResult.BorderStyle := bsNone;
+    frmResult.BorderIcons := [];
+    frmResult.BorderStyle := bsNone;
 
-  //frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
-  frmSessionEdit.frmResult := frmSessionResult;
-  frmSessionResult.Show;
+    //frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
+    //frmSessionEdit.frmResult := frmSessionResult;
+    frmResult.Show;
+  end;
 
   //карточка клиента
   DM.GetDataset(DM.Clients);
 
   if DM.Clients.Locate('id', DS.DataSet.FieldByName('client_id').AsInteger, []) then
   begin
-
-    prm := NewFrmCreateParam(asShow, DM.Clients);
+    frmSessionEdit.SetupClientForm(DS.DataSet.FieldByName('client_id').AsInteger);
+    {prm := NewFrmCreateParam(asShow, DM.Clients);
     if DM.Clients.FieldByName('type_cli').AsInteger = 0 then
     begin
       frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
@@ -252,11 +256,11 @@ begin
     //if Assigned(frmSessionEdit.frm) then
     //  frmSessionEdit.SetClientForm
     //else
-    frmSessionEdit.btnClientEdit.Enabled := Assigned(frmSessionEdit.frm);
+    //frmSessionEdit.btnClientEdit.Enabled := Assigned(frmSessionEdit.frm);
 
     //frmSessionEdit.ScrollBox.Height:= frmSessionResult.Height + 5 +
     //  frm.Height + 5 + frmSessionEdit.pnlCalls.Height;
-    frmSessionEdit.pnlClient.Height := frm.Height + 5;
+    frmSessionEdit.pnlClient.Height := frm.Height + 5; }
 
   end
   else
@@ -267,37 +271,60 @@ begin
     //   frmSessionEdit.pnlCalls.Height;
   end;
 
-    frmSessionEdit.pnlResult.Height := frmSessionResult.Height + 5;
+    frmSessionEdit.pnlResult.Height := frmSessionEdit.frmResult.Height + 5;
 
     frmSessionEdit.frameClientCalls.AddParam('client_id', DS.DataSet.FieldByName('client_id'));
     frmSessionEdit.frameClientCalls.OpenData;
 
     frmSessionEdit.ShowModal;
 
-    if (frmSessionEdit.ModalResult = mrOk) and
-       frmSessionResult.isModified  then
+    if (frmSessionEdit.ModalResult = mrOk) then
+    begin
+      if TfrmSessionResult(frmSessionEdit.frmResult).isModified  then
       try
-        frmSessionResult.Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
-        frmSessionResult.Q.Post;
-          if frmSessionResult.Q.Transaction.Active then
-             frmSessionResult.Q.Transaction.CommitRetaining;
+        TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
+        TfrmSessionResult(frmSessionEdit.frmResult).Q.Post;
+          if TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.Active then
+             TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.CommitRetaining;
           MemQ.Edit;
           MemQ.FieldByName('ISHOD').AsString :=
-            frmSessionResult.Q.FieldByName('ISHOD').AsString;
+            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('ISHOD').AsString;
           MemQ.FieldByName('RESULT').AsString :=
-            frmSessionResult.Q.FieldByName('RESULT').AsString;
+            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('RESULT').AsString;
           MemQ.FieldByName('WORKER_ID').AsString :=
-            frmSessionResult.Q.FieldByName('WORKER_ID').AsString;
+            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('WORKER_ID').AsString;
 
           MemQ.Post;
         except
-           if frmSessionResult.Q.Transaction.Active then
-             frmSessionResult.Q.Transaction.RollbackRetaining;
-        end
-
+           if TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.Active then
+             TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.RollbackRetaining;
+          MsgBoxError('Ошибка сохранения данных:' + #13#10 +
+            Exception(ExceptObject).Message);
+        end;
+      if frmSessionEdit.AddedClientId <> 0 then //добавили клиента в сессию
+      begin
+        if Q.Locate('id', MemQ.FieldByName('id').AsInteger, []) then
+        try
+          Q.Edit;
+          Q.FieldByName('CLIENT_ID').AsInteger := frmSessionEdit.AddedClientId;
+          Q.Post;
+        except
+          if Q.Transaction.Active then
+            Q.Transaction.RollbackRetaining;
+          MsgBoxError('Ошибка сохранения данных сессии:' + #13#10 +
+            Exception(ExceptObject).Message);
+        end;
+        try
+          MemQ.Edit;
+          MemQ.FieldByName('CLIENT_ID').AsInteger := frmSessionEdit.AddedClientId;
+          MemQ.Post;
+        finally
+        end;
+      end;
+    end;
   finally
     FreeAndNil(frmSessionEdit);
-    FreeAndNil(frmSessionResult);
+    //FreeAndNil(frmSessionResult);
 
     DS.DataSet.EnableControls;
   end;

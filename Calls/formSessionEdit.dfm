@@ -113,7 +113,6 @@ inherited frmSessionEdit: TfrmSessionEdit
     AutoSize = True
     BevelInner = bvNone
     TabOrder = 1
-    ExplicitTop = -2
     object pnlCalls: TRzPanel
       Left = 0
       Top = 333
@@ -126,8 +125,6 @@ inherited frmSessionEdit: TfrmSessionEdit
       Align = alBottom
       BorderOuter = fsNone
       TabOrder = 0
-      ExplicitTop = 328
-      ExplicitWidth = 1025
       inline frameClientCalls: TframeClientCalls
         Left = 0
         Top = 0
@@ -145,7 +142,7 @@ inherited frmSessionEdit: TfrmSessionEdit
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1025
+        ExplicitWidth = 1023
         ExplicitHeight = 213
         inherited grpPhone: TRzGroupBox
           Left = 0
@@ -316,7 +313,6 @@ inherited frmSessionEdit: TfrmSessionEdit
         BorderSides = [sdRight]
         TabOrder = 1
         OnResize = pnlClientResize
-        ExplicitHeight = 328
       end
     end
   end

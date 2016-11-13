@@ -4,6 +4,7 @@ inherited frmClients: TfrmClients
   ClientWidth = 1277
   Position = poDesktopCenter
   OnShow = FormShow
+  ExplicitLeft = -432
   ExplicitWidth = 1293
   ExplicitHeight = 640
   PixelsPerInch = 96
@@ -243,6 +244,28 @@ inherited frmClients: TfrmClients
       OnClick = Edit_btnClick
       Layout = blGlyphRight
       DropDownMenu = mnuEdit
+    end
+    object btnSelect: TRzButton
+      Left = 907
+      Top = 11
+      Width = 168
+      Height = 40
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      Caption = #1054#1050
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 7
+      ThemeAware = False
+      OnClick = btnSelectClick
     end
   end
   inherited Grid: TcxGrid

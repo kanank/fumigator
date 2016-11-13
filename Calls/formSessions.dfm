@@ -523,7 +523,7 @@ inherited frmSessions: TfrmSessions
       end
       object lblCount: TLabel
         Left = 209
-        Top = 5
+        Top = 3
         Width = 24
         Height = 38
         Margins.Left = 4
@@ -564,7 +564,7 @@ inherited frmSessions: TfrmSessions
     AutoCalcFields = False
     AfterRefresh = QAfterRefresh
     BufferChunks = 1000
-    CachedUpdates = True
+    CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
       
@@ -582,6 +582,7 @@ inherited frmSessions: TfrmSessions
         'where starttime >=:date1 and  starttime <:date2 and endtime is n' +
         'ot null'
       'order by starttime')
+    UpdateObject = updQ
     Left = 72
     Top = 80
     ParamData = <
@@ -669,5 +670,13 @@ inherited frmSessions: TfrmSessions
     OnFilterRecord = QFilterRecord
     Left = 144
     Top = 80
+  end
+  object updQ: TIBUpdateSQL
+    ModifySQL.Strings = (
+      'update sessions'
+      'set client_id = :client_id'
+      'where id = :id')
+    Left = 72
+    Top = 128
   end
 end

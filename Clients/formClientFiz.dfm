@@ -5,7 +5,6 @@ inherited frmClientFiz: TfrmClientFiz
   Position = poDesktopCenter
   OnClose = FormClose
   OnCreate = FormCreate
-  ExplicitTop = -194
   ExplicitWidth = 1086
   ExplicitHeight = 784
   PixelsPerInch = 96
@@ -2453,10 +2452,8 @@ inherited frmClientFiz: TfrmClientFiz
       Font.Style = []
       ParentFont = False
       TabOrder = 0
-      ExplicitLeft = -3
-      ExplicitTop = 1
-      ExplicitWidth = 1059
-      ExplicitHeight = 177
+      ExplicitWidth = 1070
+      ExplicitHeight = 181
       inherited grpPhone: TRzGroupBox
         Width = 1069
         Height = 175

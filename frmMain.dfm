@@ -4,7 +4,6 @@ inherited frmMain: TfrmMain
   OnClose = FormClose
   OnCreate = FormCreate
   ExplicitWidth = 704
-  ExplicitHeight = 396
   PixelsPerInch = 96
   TextHeight = 18
   inherited img1: TImage

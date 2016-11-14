@@ -4,6 +4,7 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1284
   Position = poDesktopCenter
   OnCreate = FormCreate
+  ExplicitTop = -63
   ExplicitWidth = 1300
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -523,7 +524,7 @@ inherited frmSessions: TfrmSessions
       end
       object lblCount: TLabel
         Left = 209
-        Top = 3
+        Top = 1
         Width = 24
         Height = 38
         Margins.Left = 4
@@ -672,6 +673,19 @@ inherited frmSessions: TfrmSessions
     Top = 80
   end
   object updQ: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      
+        'select s.*, case when calltype=0 then localnum else CALLEDNUM en' +
+        'd CALLEDN,'
+      ' (select datestring from diffdatestr(starttime, endtime)),'
+      
+        ' (select count(*)from sessions where callapiid=s.callapiid  and ' +
+        'accepted=1) answer,'
+      ' recid as recapiid,'
+      ' (select str from get_services_client(s.client_id)) uslugi,'
+      ' c.region_id'
+      'from sessions s left join clients c on c.id = s.client_id'
+      'where s.id = :id')
     ModifySQL.Strings = (
       'update sessions'
       'set client_id = :client_id'

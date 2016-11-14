@@ -120,6 +120,7 @@ type
     fPhoneListUpdated: Boolean;
     FisServerCmd: boolean; //нет ответа от сервера
     fNeedUpdate: Boolean;
+    fStarting: Boolean; //процесс запуска
 
     procedure WmShowMsg(var Msg: TMessage); message WM_SHOWMSG;
     procedure WmShowIncomeCall(var Msg: TMessage); message WM_SHOWINCOMECALL;
@@ -174,7 +175,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IniFiles, Winapi.ShellAPI,
+  System.IniFiles, Winapi.ShellAPI, DB,
   DM_Main, frmWorkers, formOptions, formClients, formClientFiz,
   formClientUr, formLogo, formCalling, formSessions,
   formIncomeCallRoot, System.DateUtils, formClientResult,
@@ -338,13 +339,17 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
+  fStarting := True;
+  try
   Title := 'Пользователь - ' + DM.CurrentUserSets.UserName +
     ' (' + DM.CurrentUserSets.UserTypeName + ')' + ' [вер.: ' + FileVersion(Application.ExeName) + ']';
   DoSocketConnect;
   CallObj.OnStartCall := OnCallStart;
   CallObj.OnFinishCall := OnCallFinish;
   CallObj.OnTransferCall := OnCallTransfer;
-
+  finally
+    fStarting := False;
+  end;
   //UserRights := TUserRights.Create(DM.CurrentUserSets.ID);
 end;
 
@@ -586,6 +591,7 @@ begin
   DM.DateStart := Now;
   TCPClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
   //TCPClient.Socket.WriteLn
+
   SocketWriteLn(Format('#setphone:%s,%d,%s',
     [DM.CurrentUserSets.ATS_Phone_Num,
      DM.CurrentUserSets.ID,
@@ -594,6 +600,10 @@ begin
      + '.DEV'
 {$ENDIF}
      ])); //посылаем номер телефона
+
+  if fStarting then
+    SocketWriteLn(Format('Старт программы',
+      [DM.CurrentUserSets.ATS_Phone_Num]));
 
   //TCPClient.Socket.WriteLn(Format('#setphone:%s',
   //  [DM.CurrentUserSets.ATS_Phone_Num]));
@@ -733,7 +743,7 @@ begin
     (Assigned(frmClientUr) and frmClientUr.InUpdate) then
     Exit;
 
-  while not CallObj.Ready do
+  while not (CallObj.Ready or (DM.Clients.State = dsBrowse)) do
   begin
     Application.ProcessMessages;
     Sleep(500);

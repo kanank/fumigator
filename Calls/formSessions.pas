@@ -190,7 +190,11 @@ var
   prm: TFrmCreateParam;
   mres: TModalResult;
   frm: TForm;
+  f: Boolean;
 begin
+  if not TRzButton(Sender).Enabled then
+    Exit;
+
   frmSessionEdit := TfrmSessionEdit.Create(nil);
 
   try
@@ -279,22 +283,26 @@ begin
     frmSessionEdit.ShowModal;
 
     if (frmSessionEdit.ModalResult = mrOk) then
-    begin
+    try
+      f := Q.Locate('id', MemQ.FieldByName('id').AsInteger, []);
+
       if TfrmSessionResult(frmSessionEdit.frmResult).isModified  then
       try
         TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('worker_id').AsInteger := DM.CurrentUserSets.ID;
         TfrmSessionResult(frmSessionEdit.frmResult).Q.Post;
           if TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.Active then
              TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.CommitRetaining;
-          MemQ.Edit;
-          MemQ.FieldByName('ISHOD').AsString :=
-            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('ISHOD').AsString;
-          MemQ.FieldByName('RESULT').AsString :=
-            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('RESULT').AsString;
-          MemQ.FieldByName('WORKER_ID').AsString :=
-            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('WORKER_ID').AsString;
+          //обновление датасетов
 
-          MemQ.Post;
+//  перенос в finally        MemQ.Edit;
+//          MemQ.FieldByName('ISHOD').AsString :=
+//            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('ISHOD').AsString;
+//          MemQ.FieldByName('RESULT').AsString :=
+//            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('RESULT').AsString;
+//          MemQ.FieldByName('WORKER_ID').AsString :=
+//            TfrmSessionResult(frmSessionEdit.frmResult).Q.FieldByName('WORKER_ID').AsString;
+//
+//          MemQ.Post;
         except
            if TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.Active then
              TfrmSessionResult(frmSessionEdit.frmResult).Q.Transaction.RollbackRetaining;
@@ -303,7 +311,7 @@ begin
         end;
       if frmSessionEdit.AddedClientId <> 0 then //добавили клиента в сессию
       begin
-        if Q.Locate('id', MemQ.FieldByName('id').AsInteger, []) then
+        if f then
         try
           Q.Edit;
           Q.FieldByName('CLIENT_ID').AsInteger := frmSessionEdit.AddedClientId;
@@ -321,6 +329,10 @@ begin
         finally
         end;
       end;
+    finally
+      //обновление датасетов
+      Q.Refresh;
+      CopyRecord(Q, MemQ);
     end;
   finally
     FreeAndNil(frmSessionEdit);
@@ -345,7 +357,10 @@ begin
   while not Q.Eof do
   begin
     if (Q.FieldByName('CALLTYPE').AsInteger = 0) and
-       (Q.FieldByName('answer').AsInteger = 0) then
+       (Q.FieldByName('answer').AsInteger = 0) and
+       (not chkWorkerClients.Checked  or
+        (chkWorkerClients.Checked and
+        DM.isWorkerClient(Q.FieldByName('Client_id').asInteger))) then
     begin
       if scur <> Q.FieldByName('CALLAPIID').AsString then
       begin
@@ -517,6 +532,7 @@ begin
   f1 := True; f2 := True;
   f0 := not chkWorkerClients.Checked  or
         (chkWorkerClients.Checked and
+         (DataSet.FieldByName('Client_id').asInteger > 0) and
            DM.isWorkerClient(DataSet.FieldByName('Client_id').asInteger));
   if f0 then
   begin
@@ -603,11 +619,15 @@ begin
   if not Q.Active then
     Exit;
 
+  memQ.OnFilterRecord := nil;
+  MemQ.Filtered := false;
   MemQ.ControlsDisabled;
   try
     case cmbFilter.ItemIndex  of
       0: begin
            MemQ.CopyFromDataSet(Q);
+           MemQ.OnFilterRecord := QFilterRecord;
+           MemQ.Filtered := True;
            Exit;
          end;
       6: begin

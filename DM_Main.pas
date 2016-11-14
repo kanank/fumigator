@@ -149,10 +149,10 @@ type
     function isWorkersRegion(ARegion_Id: integer): Boolean; //регион пользователя или нет
     function isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean; // проверка клиента по сотруднику и региону
 
-    function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientFiz(AAction: TActionStr; AExtPrm: TClientParam; ATopMost: Boolean=false): FormResult;
     function ShowClientFizForCall(AAction: TActionStr; AExtPrm: TClientParam): FormResult; // при звонке вместе с краткой формой
 
-    function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
+    function ShowClientUr(AAction: TActionStr; AExtPrm: TClientParam; ATopMost: Boolean=false): FormResult;
     function ShowClientUrForCall(AAction: TActionStr; AExtPrm: TClientParam): FormResult;
     function ShowClientsForCall: FormResult;
 
@@ -258,7 +258,7 @@ begin
 end;
 
 function TDataModuleMain.ShowClientFiz(AAction: TActionStr;
-  AExtPrm: TClientParam): FormResult;
+  AExtPrm: TClientParam; ATopMost: Boolean=false): FormResult;
 var
   prm: TFrmCreateParam;
 begin
@@ -268,6 +268,7 @@ begin
   prm :=  TFrmCreateParam.Init(AACtion, DM.Clients, @AExtPrm);  //NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
   frmClientFiz := TfrmClientFiz.Create(nil, '', @prm);
   try
+    frmClientFiz.OnTopMost := ATopMost;
     if frmClientFiz.ShowModal = mrOk then
       DM.Clients.Refresh;
     Result.ModalRes := frmClientFiz.ModalResult;
@@ -319,7 +320,7 @@ begin
 end;
 
 function TDataModuleMain.ShowClientUr(AAction: TActionStr;
-  AExtPrm: TClientParam): FormResult;
+  AExtPrm: TClientParam; ATopMost: Boolean=false): FormResult;
 var
   prm: TFrmCreateParam;
 begin
@@ -329,6 +330,7 @@ begin
   prm := NewFrmCreateParam(AACtion, DM.Clients, @AExtPrm);
   frmClientUr := TfrmClientUr.Create(nil, '', @prm);
   try
+    frmClientUr.OnTopMost := ATopMost;
     if frmClientUr.ShowModal = mrOk then
       DM.Clients.Refresh;
     Result.ModalRes := frmClientUr.ModalResult;
@@ -1316,7 +1318,7 @@ begin
         ClientList.Locate('id', DataSet.Tag, []);
     end;
   finally
-    ClientList.AfterScroll := ClientListAfterScroll;
+//    ClientList.AfterScroll := ClientListAfterScroll;
     ClientList0.Close;
     ClientList0.CopyFromDataSet(Dataset);
     ClientList0.Open;
@@ -1644,6 +1646,9 @@ end;
 
 function TDataModuleMain.isWorkerClient(AClient_id: integer; AWithRegion: boolean=true): boolean;
 begin
+   if AClient_id = 0 then
+     Exit;
+
    if Clients.Locate('id', AClient_id, []) then
    begin
      result := (Clients.FieldByName('worker_id').AsInteger =

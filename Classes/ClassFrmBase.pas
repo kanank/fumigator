@@ -61,13 +61,14 @@ type
     procedure PostMessageToAll(AMsg: TMessage);
     procedure SetTopMost;
     procedure UnSetTopMost;
+    procedure SetUnSetTopMost(Avalue: Boolean);
   published
     property Title: string read fTitle write SetCaption;
     property CloseEnable: Boolean read fCanClose write fCanClose;
     property CloseOnCancelCall: Boolean read fCloseOnCancelCall write fCloseOnCancelCall;
     property HideOnClose: boolean read CalcHideOnClose;
     property InUpdate: Boolean read fInUpdate;
-    property OnTopMost: Boolean read fOnTopMost;
+    property OnTopMost: Boolean read fOnTopMost write SetUnSetTopMost;
     property NoDefaultCallEvent: Boolean read fNoDefaultCallEvent write fNoDefaultCallEvent;
   end;
 
@@ -217,6 +218,17 @@ begin
       Height,
       SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
   fOnTopMost := True;
+end;
+
+procedure TBaseForm.SetUnSetTopMost(Avalue: Boolean);
+begin
+  if fOnTopMost <> AValue then
+  begin
+    if Avalue then
+      SetTopMost
+    else
+      UnSetTopMost;
+  end;
 end;
 
 procedure TBaseForm.SetValidateList(Alist: string);

@@ -1300,9 +1300,9 @@ end;
 
 procedure TDataModuleMain.ClientListAfterScroll(DataSet: TDataSet);
 begin
-  if Clients.FieldByName('id').AsInteger <>
-             ClientList.FieldByName('id').AsInteger then
-    Clients.Locate('id', DataSet.FieldByName('id').AsInteger, []);
+//  if Clients.FieldByName('id').AsInteger <>
+//             ClientList.FieldByName('id').AsInteger then
+ //   Clients.Locate('id', DataSet.FieldByName('id').AsInteger, []);
 end;
 
 procedure TDataModuleMain.ClientsAfterOpen(DataSet: TDataSet);

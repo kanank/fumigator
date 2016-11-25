@@ -252,6 +252,7 @@ type
     function GetUserList(Exclude: string): string; //список подключенных пользователей
     function GetActiveContext: string; //список подключенных пользователей
     procedure CheckContextVersion(AContext: TMyContext);
+    function DataLocate(AData: TDataSet; Akey: string; AValue: Variant): Boolean;
 
   end;
 
@@ -579,6 +580,19 @@ begin
   result.Database := DB;
   result.Transaction := TR;
 
+end;
+
+function TMF.DataLocate(AData: TDataSet; Akey: string;
+  AValue: Variant): Boolean;
+begin
+  Result := False;
+  if not AData.Active then
+    try
+      AData.Open;
+    finally
+
+    end;
+  result := AData.Locate(Akey, AValue, []);
 end;
 
 (*function TMF.EndCall(ACallApiId, ACallId, ACallStatus: string): boolean;
@@ -1976,7 +1990,7 @@ begin
 
     if ind = -1 then
     begin
-      if MF.QPhones.Locate('phone', Aphone, []) then
+      if MF.DataLocate(MF.QPhones, 'phone', Aphone) then //MF.QPhones.Locate('phone', Aphone, []) then
       begin
         AClientIDType   := //QPhones.FieldByName('client_id').AsString + ',' +
           MF.QPhones.FieldByName('type_cli').AsString;

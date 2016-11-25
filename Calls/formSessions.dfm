@@ -4,7 +4,8 @@ inherited frmSessions: TfrmSessions
   ClientWidth = 1284
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitTop = -63
+  ExplicitLeft = -548
+  ExplicitTop = -84
   ExplicitWidth = 1300
   ExplicitHeight = 698
   PixelsPerInch = 96
@@ -132,7 +133,7 @@ inherited frmSessions: TfrmSessions
     end
     object chkWorkerClients: TcxCheckBox
       Left = 875
-      Top = 8
+      Top = 0
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
@@ -140,6 +141,20 @@ inherited frmSessions: TfrmSessions
       Caption = #1058#1086#1083#1100#1082#1086' '#1082#1083#1080#1077#1085#1090#1099' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
       State = cbsChecked
       TabOrder = 3
+      Transparent = True
+      OnClick = chkWorkerClientsClick
+      Width = 235
+    end
+    object chkExtCallOnly: TcxCheckBox
+      Left = 875
+      Top = 20
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = #1058#1086#1083#1100#1082#1086' '#1074#1085#1077#1096#1085#1080#1077' '#1079#1074#1086#1085#1082#1080
+      State = cbsChecked
+      TabOrder = 4
       Transparent = True
       OnClick = chkWorkerClientsClick
       Width = 235
@@ -192,6 +207,28 @@ inherited frmSessions: TfrmSessions
       OnClick = Edit_btnClick
       ExplicitLeft = 13
       ExplicitTop = 6
+    end
+    object btnExport: TRzButton
+      Left = 750
+      Top = 6
+      Width = 168
+      Height = 40
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' '#1092#1072#1081#1083
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HotTrack = True
+      HotTrackColor = 16625984
+      ParentFont = False
+      TabOrder = 4
+      ThemeAware = False
+      OnClick = btnExportClick
     end
   end
   inherited Grid: TcxGrid
@@ -524,7 +561,7 @@ inherited frmSessions: TfrmSessions
       end
       object lblCount: TLabel
         Left = 209
-        Top = 1
+        Top = -1
         Width = 24
         Height = 38
         Margins.Left = 4
@@ -541,7 +578,6 @@ inherited frmSessions: TfrmSessions
         GlowSize = 10
         ParentColor = False
         ParentFont = False
-        ExplicitTop = 7
       end
     end
   end
@@ -692,5 +728,15 @@ inherited frmSessions: TfrmSessions
       'where id = :id')
     Left = 72
     Top = 128
+  end
+  object FileSaveDialog: TFileSaveDialog
+    DefaultExtension = 'xls'
+    FavoriteLinks = <>
+    FileTypes = <>
+    OkButtonLabel = #1069#1082#1089#1087#1086#1088#1090
+    Options = [fdoOverWritePrompt]
+    Title = #1042#1099#1073#1086#1088' '#1092#1072#1081#1083#1072' '#1076#1083#1103' '#1089#1086#1093#1088#1072#1085#1077#1085#1080#1103
+    Left = 952
+    Top = 328
   end
 end

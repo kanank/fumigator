@@ -339,6 +339,10 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   inherited;
+  DM.GetDataset(DM.Clients);
+  CallObj := TCallProto.Create(DM.Clients);
+  CallInfo := TCallInfo.Create;
+
   fStarting := True;
   try
   Title := 'ѕользователь - ' + DM.CurrentUserSets.UserName +
@@ -1019,6 +1023,9 @@ begin
     if not CallObj.Ready then
       Exit;
 
+    if CallObj.Active then
+      Exit;
+
     argList := TStringList.Create;
     try
       arglist.Delimiter := ',';
@@ -1036,14 +1043,13 @@ begin
         CallerIDNum  := argList[7];
       end;
     finally
-      argList.free;
+      argList.Free;
     end;
 
     //if CallObj.CallInfo.CallId = CallInfo.CallId then //уже завершился звонок
     //  exit;
 
-    if CallObj.Active then
-      Exit;
+
 
     if Callinfo.CallFlow = 'in' then
       PostMessage(formMain.Handle, WM_SHOWINCOMECALL, 0,0)
@@ -1308,9 +1314,6 @@ end;
 initialization
   //hMutex := CreateMutex(nil, True,
   //  Pchar(ExtractFileName((Application.ExeName))));
-  CallObj := TCallProto.Create;
-  CallInfo := TCallInfo.Create;
-
   frmCallUnknown := TfrmCallUnknown.Create(nil);
 
 finalization

@@ -303,7 +303,7 @@ end;
 procedure TfrmIncomeCallRoot.FormCreate(Sender: TObject);
 begin
   inherited;
-  NoDefaultCallEvent := False; //события звонков нужны
+  //NoDefaultCallEvent := False; //события звонков нужны
 end;
 
 procedure TfrmIncomeCallRoot.FormShow(Sender: TObject);
@@ -496,10 +496,14 @@ begin
  try
  try
   Timer2.Enabled := True;
+  CallPrm.Setup;
+  CallPrm.TelNum      := CallObj.CallInfo.Phone;
+  CallPrm.Client_id   := CallObj.CallInfo.ClientId;
+  CallPrm.Client_Type := CallObj.CallInfo.ClientType;
+  fClientCallPrm.Assign(CallPrm);
+
   if CallObj.CallInfo.ClientType = '' then
   try  // Вызываем неизвестный звонок.
-   CallPrm.Setup;
-   CallPrm.TelNum := CallObj.CallInfo.Phone;
    ExtPrm.CallParam := @CallPrm;
    fClientClose := False;
    case DM.ShowUnknownCallForm(CallObj.CallInfo.Phone, false).ModalRes of

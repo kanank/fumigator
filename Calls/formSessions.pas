@@ -85,6 +85,9 @@ type
     lblCount: TLabel;
     GridViewColumn16: TcxGridDBColumn;
     updQ: TIBUpdateSQL;
+    btnExport: TRzButton;
+    FileSaveDialog: TFileSaveDialog;
+    chkExtCallOnly: TcxCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure RzButton1Click(Sender: TObject);
     procedure GridViewCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -103,6 +106,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure QAfterRefresh(DataSet: TDataSet);
     procedure GridViewDataControllerFilterChanged(Sender: TObject);
+    procedure btnExportClick(Sender: TObject);
 
   private
     procedure CalcHeader;
@@ -123,8 +127,18 @@ implementation
 
 {$R *.dfm}
 uses
+  cxGridExportLink,
   DM_Main, formSessionEdit, formSessionResult, formClientFiz, formClientUr,
   formClientResult, CommonTypes, CommonVars, CommonFunc;
+
+procedure TfrmSessions.btnExportClick(Sender: TObject);
+var
+  fname: string;
+begin
+  FileSaveDialog.FileName := 'Сессии_' + FormatDateTime('ddmmyy_hhnnss', Now);
+  if FileSaveDialog.Execute then
+    ExportGridToExcel(FileSaveDialog.FileName, Grid, False, True, False);
+end;
 
 procedure TfrmSessions.CalcHeader;
 var
@@ -534,6 +548,10 @@ begin
         (chkWorkerClients.Checked and
          (DataSet.FieldByName('Client_id').asInteger > 0) and
            DM.isWorkerClient(DataSet.FieldByName('Client_id').asInteger));
+  if chkExtCallOnly.Checked then
+    f0 := f0 and
+      not ((Pos('*', DataSet.FieldByName('CALLERNUM').AsString) > 0) and
+          (Pos('*', DataSet.FieldByName('CALLEDN').AsString) > 0));
   if f0 then
   begin
     if miFilterAccepted.Checked or (cmbFilter.ItemIndex = 1) then

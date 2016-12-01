@@ -118,6 +118,7 @@ begin
   frmSessionResult.Q.ParamByName('callapiid').AsString := CallObj.CallInfo.CallApiId;
   frmSessionResult.Q.ParamByName('callednum').AsString := CallObj.CallInfo.CalledNumber;
   frmSessionResult.Q.ParamByName('callernum').AsString := CallObj.CallInfo.CallerIDNum;
+  step := 0;
   while 1=1 do
   begin
     frmSessionResult.Q.Close;

@@ -54,7 +54,7 @@ begin
    Result := (edtName.Text <> '') and
     (cmbRegion.EditValue <> 0) and(
     (FrameUslugi.DS.DataSet.RecordCount > 0) or
-    (cxDBMemo1.Text <> ''));
+    (edtGoods.Text <> ''));
 
    if not Result then
    begin

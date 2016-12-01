@@ -84,6 +84,7 @@ type
     procedure TransferCall; virtual;
 
     procedure SetClient(AId: integer); //установка датасета по клиенту
+    function CF(AFieldName: string): TField; // поле из локального датасета
 end;
 
 implementation
@@ -130,6 +131,14 @@ procedure TCallProto.AcceptCall(ACallId: string);
 begin
   if ACallId <> Self.CallInfo.CallId then
     Exit;
+end;
+
+function TCallProto.CF(AFieldName: string): TField;
+begin
+  if not (Assigned(FClientData) and FClientData.Active) then
+    Exit;
+
+  Result := FClientData.FindField(AFieldName);
 end;
 
 procedure TCallProto.ClientIdChange(Sender: TObject);

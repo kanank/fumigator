@@ -161,7 +161,7 @@ inherited frmSmallCard: TfrmSmallCard
       Spacing = 6
     end
   end
-  object cxDBLookupComboBox2: TcxDBLookupComboBox
+  object cmbArea: TcxDBLookupComboBox
     Left = 93
     Top = 138
     Margins.Left = 4
@@ -181,7 +181,7 @@ inherited frmSmallCard: TfrmSmallCard
     TabOrder = 1
     Width = 122
   end
-  object cxDBLookupComboBox3: TcxDBLookupComboBox
+  object cmbAreaUnit: TcxDBLookupComboBox
     Left = 223
     Top = 138
     Margins.Left = 4
@@ -358,7 +358,7 @@ inherited frmSmallCard: TfrmSmallCard
       end
     end
   end
-  object cxDBMemo1: TcxDBMemo
+  object edtGoods: TcxDBMemo
     Left = 359
     Top = 248
     Margins.Left = 4

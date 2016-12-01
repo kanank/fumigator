@@ -747,7 +747,7 @@ begin
     (Assigned(frmClientUr) and frmClientUr.InUpdate) then
     Exit;
 
-  while not (CallObj.Ready or (DM.Clients.State = dsBrowse)) do
+  while not (CallObj.Ready) do// or (DM.Clients.State = dsBrowse)) do
   begin
     Application.ProcessMessages;
     Sleep(500);

@@ -302,6 +302,10 @@ begin
     edtPhone.Text          := RightStr(AExtPrm.CallParam.TelNum, 10);
     FrameUslugi.Query      := frmClientFiz.FrameUslugi.Query;
     FrameUslugi.DS.DataSet := frmClientFiz.FrameUslugi.Query;
+    cmbArea.DataBinding.DataSource     := frmClientFiz.DS;
+    cmbAreaUnit.DataBinding.DataSource := frmClientFiz.DS;
+    cmbRegion.DataBinding.DataSource   := frmClientFiz.DS;
+    edtGoods.DataBinding.DataSource    := frmClientFiz.DS;
     ShowModal;
   end;
   Result.ModalRes := frmClientFiz.ModalResult;
@@ -364,6 +368,10 @@ begin
     edtPhone.Text          := RightStr(AExtPrm.CallParam.TelNum, 10);
     FrameUslugi.Query      := frmClientUr.FrameUslugi.Query;
     FrameUslugi.DS.DataSet := frmClientUr.FrameUslugi.Query;
+    cmbArea.DataBinding.DataSource     := frmClientFiz.DS;
+    cmbAreaUnit.DataBinding.DataSource := frmClientFiz.DS;
+    cmbRegion.DataBinding.DataSource   := frmClientFiz.DS;
+    edtGoods.DataBinding.DataSource    := frmClientFiz.DS;
     ShowModal;
   end;
   Result.ModalRes := frmClientUr.ModalResult;
@@ -405,21 +413,28 @@ end;
 function TDataModuleMain.ShowFizCallForm(CLP: ClientCallParams): FormResult;
 var
   prm: TClientParam;
+  callPrm: ClientCallParams;
 begin
   DM.GetDataset(DM.Clients);
   DM.Clients.Locate('ID', CallObj.CallInfo.ClientId, []);
 
   if Assigned(frmIncomeCall) then
     frmIncomeCall.CloseAbsolute;
+  prm.Setup;
+  CallPrm.Setup;
+  CallPrm.TelNum      := CallObj.CallInfo.Phone;
+  CallPrm.Client_id   := CallObj.CallInfo.ClientId;
+  CallPrm.Client_Type := CallObj.CallInfo.ClientType;
+  prm.CallParam := @CallPrm;
 
   frmIncomeCall := TfrmIncomeCall.Create(nil);
   try
     frmIncomeCall.CloseOnCancelCall := True;
     frmIncomeCall.edtPhone.Text := RightStr(CallObj.CallInfo.Phone, 10);
-    frmIncomeCall.FramePerson.OpenData(DM.Clients.FieldByName('PERSON_ID').AsInteger);
-    frmIncomeCall.cmbFormat.EditValue := DM.Clients.FieldByName('FORMAT_ID').AsInteger;
-    frmIncomeCall.cmbStatus.EditValue := DM.Clients.FieldByName('STATUS_ID').AsInteger;
-    frmIncomeCall.lblWorker.Caption   := DM.Clients.FieldByName('WORKER_NAME').AsString;
+    frmIncomeCall.FramePerson.OpenData(CallObj.CF('PERSON_ID').AsInteger); //DM.Clients.FieldByName('PERSON_ID').AsInteger);
+    frmIncomeCall.cmbFormat.EditValue := CallObj.CF('FORMAT_ID').AsInteger; //DM.Clients.FieldByName('FORMAT_ID').AsInteger;
+    frmIncomeCall.cmbStatus.EditValue := CallObj.CF('STATUS_ID').AsInteger; //DM.Clients.FieldByName('STATUS_ID').AsInteger;
+    frmIncomeCall.lblWorker.Caption   := CallObj.CF('WORKER_NAME').AsString; //DM.Clients.FieldByName('WORKER_NAME').AsString;
     frmIncomeCall.ShowModal;
     if frmIncomeCall.ModalResult = mrOk then
     begin

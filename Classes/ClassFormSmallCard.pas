@@ -26,14 +26,14 @@ type
   TfrmSmallCard = class(TSimpleForm)
     RzBitBtn1: TRzBitBtn;
     Label7: TLabel;
-    cxDBLookupComboBox2: TcxDBLookupComboBox;
-    cxDBLookupComboBox3: TcxDBLookupComboBox;
+    cmbArea: TcxDBLookupComboBox;
+    cmbAreaUnit: TcxDBLookupComboBox;
     edtPhone: TcxMaskEdit;
     Label1: TLabel;
     Label8: TLabel;
     cmbRegion: TcxDBLookupComboBox;
     FrameUslugi: TFrameUslugi;
-    cxDBMemo1: TcxDBMemo;
+    edtGoods: TcxDBMemo;
     Label4: TLabel;
     procedure FormCreate(Sender: TObject);
   private

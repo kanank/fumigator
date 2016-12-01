@@ -4,7 +4,6 @@ inherited frmWorker: TfrmWorker
   ClientWidth = 1069
   Position = poDesktopCenter
   OnCreate = FormCreate
-  ExplicitLeft = -333
   ExplicitWidth = 1085
   ExplicitHeight = 499
   PixelsPerInch = 96
@@ -927,6 +926,7 @@ inherited frmWorker: TfrmWorker
               ExplicitLeft = 75
               ExplicitTop = 91
               ExplicitWidth = 73
+              ExplicitHeight = 26
               Width = 73
             end
             inherited cmbProf: TcxDBLookupComboBox
@@ -1030,6 +1030,7 @@ inherited frmWorker: TfrmWorker
               ExplicitLeft = 810
               ExplicitTop = 7
               ExplicitWidth = 118
+              ExplicitHeight = 26
               Width = 118
             end
             inherited FramePhones: TFramePhones
@@ -1054,7 +1055,6 @@ inherited frmWorker: TfrmWorker
                 ExplicitHeight = 122
                 inherited RzPanel2: TRzPanel
                   Left = 197
-                  Top = 19
                   Width = 43
                   Height = 102
                   Margins.Left = 4
@@ -1062,11 +1062,10 @@ inherited frmWorker: TfrmWorker
                   Margins.Right = 4
                   Margins.Bottom = 4
                   ExplicitLeft = 197
-                  ExplicitTop = 19
                   ExplicitWidth = 43
                   ExplicitHeight = 102
                   inherited btnDel: TRzBitBtn
-                    Top = 65
+                    Top = 72
                     Width = 39
                     Height = 27
                     Margins.Left = 4
@@ -1075,12 +1074,12 @@ inherited frmWorker: TfrmWorker
                     Margins.Bottom = 4
                     Margin = 3
                     Spacing = 6
-                    ExplicitTop = 65
+                    ExplicitTop = 72
                     ExplicitWidth = 39
                     ExplicitHeight = 27
                   end
                   inherited btnAdd: TRzBitBtn
-                    Top = -6
+                    Top = 0
                     Width = 39
                     Height = 35
                     Margins.Left = 4
@@ -1089,7 +1088,7 @@ inherited frmWorker: TfrmWorker
                     Margins.Bottom = 4
                     Margin = 3
                     Spacing = 6
-                    ExplicitTop = -6
+                    ExplicitTop = 0
                     ExplicitWidth = 39
                     ExplicitHeight = 35
                   end
@@ -1278,18 +1277,18 @@ inherited frmWorker: TfrmWorker
             end
           end
           inherited edtEmailPrivate: TcxDBTextEdit
-            Left = 395
+            Left = 389
             Top = 80
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            ExplicitLeft = 395
+            ExplicitLeft = 389
             ExplicitTop = 80
-            ExplicitWidth = 198
+            ExplicitWidth = 204
             ExplicitHeight = 29
             Height = 29
-            Width = 198
+            Width = 204
           end
           inherited Query: TIBQuery
             Left = 144

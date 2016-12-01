@@ -136,26 +136,22 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       ExplicitTop = 6
     end
   end
-  inherited cxDBLookupComboBox2: TcxDBLookupComboBox
+  inherited cmbArea: TcxDBLookupComboBox
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    DataBinding.DataSource = frmClientFiz.DS
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 3
-    ExplicitHeight = 26
   end
-  inherited cxDBLookupComboBox3: TcxDBLookupComboBox
+  inherited cmbAreaUnit: TcxDBLookupComboBox
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    DataBinding.DataSource = frmClientFiz.DS
     Properties.ValidationOptions = [evoShowErrorIcon]
     TabOrder = 4
     ExplicitWidth = 94
-    ExplicitHeight = 26
     Width = 94
   end
   inherited edtPhone: TcxMaskEdit
@@ -203,12 +199,10 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    DataBinding.DataSource = frmClientFiz.DS
     TabOrder = 2
     ExplicitLeft = 415
     ExplicitTop = 10
     ExplicitWidth = 207
-    ExplicitHeight = 26
     Width = 207
   end
   inherited FrameUslugi: TFrameUslugi
@@ -311,17 +305,16 @@ inherited frmSmallCardFiz: TfrmSmallCardFiz
       Top = 43
     end
   end
-  inherited cxDBMemo1: TcxDBMemo
-    Left = 350
-    Top = 223
+  inherited edtGoods: TcxDBMemo
+    Left = 351
+    Top = 227
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    DataBinding.DataSource = frmClientFiz.DS
     Properties.ValidationOptions = [evoShowErrorIcon]
-    ExplicitLeft = 350
-    ExplicitTop = 223
+    ExplicitLeft = 351
+    ExplicitTop = 227
     ExplicitWidth = 272
     ExplicitHeight = 71
     Height = 71

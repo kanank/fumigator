@@ -11,7 +11,7 @@ uses
   TelpinRingMeAPI, IBX.IBEvents, IdTCPServer, idSync, IdGlobal, IdAntiFreezeBase,
   Vcl.IdAntiFreeze, IBX.IBSQL, RzCommon, RzSelDir, ATBinHex, Vcl.ComCtrls,
   cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxContainer,
-  cxEdit, cxListBox;
+  cxEdit, cxListBox, System.IniFiles;
 
 const
   WM_REOPEN_PHONES = WM_USER + 1;
@@ -74,7 +74,6 @@ type
     procedure AcceptCall(CallId: string);
     procedure SendMess;
   public
-    //CallApiId: string;
     CallID: string; // в новом API общий ID - в CALLID
     Str: string;
     property Transfered: boolean read fTransfered write fTransfered;
@@ -120,6 +119,7 @@ type
       UserId: Integer;
       Con: TDateTime;
       Version: string;
+      EchoTime: TDateTime;
       function SendMsg(const ANick: String; const AMsg: String) : Boolean;
       procedure BroadcastMsg(const bmsg: String);
       procedure BroadcastMsgAll(const ANick: String; const bmsg: String);
@@ -143,7 +143,7 @@ type
     GroupBox1: TGroupBox;
     Label2: TLabel;
     Label9: TLabel;
-    Button2: TButton;
+    btnSocket: TButton;
     edtSocketPort: TSpinEdit;
     Edit1: TEdit;
     Button4: TButton;
@@ -159,7 +159,7 @@ type
     TelStatus_lbl: TLabel;
     Label11: TLabel;
     Label12: TLabel;
-    Button1: TButton;
+    btnCallEvents: TButton;
     TelPort_spin: TSpinEdit;
     TelIP_edt: TEdit;
     TelURI_edt: TEdit;
@@ -185,13 +185,16 @@ type
     edtVersion: TEdit;
     Label14: TLabel;
     btnVersion: TButton;
-    procedure Button1Click(Sender: TObject);
+    Label15: TLabel;
+    lbl_Socket: TLabel;
+    CheckTimer: TTimer;
+    procedure btnCallEventsClick(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
     procedure TestDb_btnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure btnSocketClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure btnPhoneClick(Sender: TObject);
     procedure Button5Click(Sender: TObject);
@@ -206,6 +209,8 @@ type
     procedure Button9Click(Sender: TObject);
     procedure QPhonesBeforeOpen(DataSet: TDataSet);
     procedure btnVersionClick(Sender: TObject);
+    procedure CheckTimerTimer(Sender: TObject);
+    procedure Tel_SRVContextCreated(AContext: TIdContext);
   private
     fSessions: TStringList;
 
@@ -242,6 +247,7 @@ type
     AtsUserPrefix: string;
 
     LogName: string;
+    Ini: TIniFile;
     Logger: TLogger;
 
     procedure AddLogMemo(Logstr :string; ALock: Boolean=True);
@@ -381,8 +387,10 @@ end;
 procedure TMF.btnPhoneClick(Sender: TObject);
 begin
   AtsUserPrefix := Trim(edtUserId.Text) + '*';
-  AccessToken.GetToken;
-  AddLogMemo('Получен токен доступа');
+  if AccessToken.GetToken then
+    AddLogMemo('Получен токен доступа')
+  else
+    AddLogMemo('Токена доступа не получен!');
 end;
 
 procedure TMF.btnVersionClick(Sender: TObject);
@@ -390,7 +398,7 @@ begin
   edtVersion.Text := FileVersion(ExtractFilePath(Application.ExeName) + 'fumigator.exe');
 end;
 
-procedure TMF.Button1Click(Sender: TObject);
+procedure TMF.btnCallEventsClick(Sender: TObject);
 begin
   Tel_SRV.Active := false;
   Tel_srv.Bindings.Clear;
@@ -413,7 +421,7 @@ begin
 
   if Tel_SRV.Active = true then
   begin
-  AddLog('#Служба Call_Events запущена на интерфейсе '
+  AddLog('Служба Call_Events запущена на интерфейсе '
           + TelIP_edt.Text+':' + IntToStr(TelPort_spin.Value)+ TelURI_edt.Text);
 
           TelStatus_lbl.Caption := 'Работает';
@@ -421,19 +429,18 @@ begin
   end;
 end;
 
-procedure TMF.Button2Click(Sender: TObject);
+procedure TMF.btnSocketClick(Sender: TObject);
 begin
   try
   TCPServer.Active := False;
   TCPServer.DefaultPort := edtSocketPort.Value;
-  TCPServer.Active := true;
+  TCPServer.Active := True;
 
-  //MsgThread := TMsgThread.Create(TCPServer);
-  //MsgThread.Start;
-
-  AddLog('#Сервер сокетов запущен. Порт: ' + IntToStr(TCPServer.DefaultPort));
+  lbl_Socket.Caption := 'Запущен';
+  lbl_Socket.Font.Color := $00408000;
+  AddLog('Сервер сокетов запущен. Порт: ' + IntToStr(TCPServer.DefaultPort));
   except
-    AddLogMemo('#Ошибка при запуске сервер сокетов: ' +
+    AddLogMemo('Ошибка при запуске сервера сокетов: ' +
       Exception(ExceptObject).Message);
   end;
 
@@ -527,6 +534,37 @@ begin
        (v04 - v4 > 0) then
        AContext.Connection.IOHandler.WriteLn(Format(GetSocketCmdSrv(SCMD_NEEDUPDATE), [edtVersion.Text]));
   end;
+end;
+
+procedure TMF.CheckTimerTimer(Sender: TObject);
+var
+  Context: TMyContext;
+  List: TList;
+  ListDel: TStringList;
+  i: Integer;
+begin
+  if not Assigned(TCPServer.Contexts) then
+    Exit;
+
+   ListDel := TStringList.Create;
+   try
+     List := TCPServer.Contexts.LockList;
+     for I := 0 to List.Count-1 do
+     begin
+       Context := TMyContext(List[I]);
+       if SecondsBetween(Now, Context.EchoTime) > 300 then
+         ListDel.AddObject(IntToStr(i), Context);
+     end;
+     for I := 0 to ListDel.Count - 1 do
+     begin
+       TMyContext(ListDel.Objects[i]).Connection.Disconnect;
+       AddLogMemo(Format('Удалено неактивное соединение %s',
+                   [TMyContext(ListDel.Objects[i]).Nick]));
+     end;
+   finally
+     TCPServer.Contexts.UnlockList;
+     ListDel.Free;
+   end;
 end;
 
 function TMF.CreateRWQuery: TIBQuery;
@@ -674,8 +712,6 @@ begin
   fSessions         := TStringList.Create;
 
   AccessToken := TTelphinRingMeToken.Create;
-  AccessToken.AppId := 'f6444c4e28b14529bfcbf2cdfaff00ae';
-  AccessToken.AppSecret := '363999ae34484bef86c4831aa5e9e89f';
 
   TCPServer.ContextClass := TMyContext;
 
@@ -687,6 +723,38 @@ begin
 
   LogText.Open(LogName, True);
   LogText.PosPercent := 100;
+
+  try
+    INI := TIniFile.Create(ChangeFileExt(Application.ExeName, '.ini'));
+    DBPath_edt.Text := Ini.ReadString('database', 'DBPath', '212.152.36.68:c:\@fumigator\db\fumigator.fdb');
+    DBUser_edt.Text := Ini.ReadString('database',  'user' , 'SYSDBA');
+    DBPass_edt.Text := Ini.ReadString('database',  'password' , 'masterkey');
+
+    TelIP_edt.Text     := Ini.ReadString('callevents', 'ip', '127.0.0.1');
+    TelPort_spin.Text  := Ini.ReadString('callevents', 'port', '45455');
+    TelURI_edt.Text    := Ini.ReadString('callevents', 'URI', '/calls');
+    edtUserId.Text     := Ini.ReadString('callevents', 'UserId', '9738');
+    edtRecordPath.Text := Ini.ReadString('callevents', 'recorddir', 'records');
+
+    edtSocketPort.Text := Ini.ReadString('SocketServer', 'port', '1025');
+
+    AccessToken.AppId     := Ini.ReadString('Telphin', 'AppId', 'f6444c4e28b14529bfcbf2cdfaff00ae');
+    AccessToken.AppSecret := Ini.ReadString('Telphin', 'AppSecret', '363999ae34484bef86c4831aa5e9e89f');
+
+    if not DB.Connected then
+      TestDb_btn.Click;
+
+    if not Tel_SRV.Active then
+      btnCallEvents.Click;
+
+    if not TCPServer.Active then
+      btnSocket.Click;
+
+    if not AccessToken.TokenIsActive then
+      btnPhone.Click;
+  except
+
+  end;
 
   btnVersion.Click; //обновляем версию
 end;
@@ -1005,7 +1073,7 @@ begin
         SendMsg(atsnum, command);
         //Application.ProcessMessages;
       except
-        AddLogMemo('#Ошибка сообщения: ' + command + #13#10 +
+        AddLogMemo('Ошибка сообщения: ' + command + #13#10 +
         Exception(ExceptObject).Message);
       end;
 
@@ -1013,7 +1081,7 @@ begin
 
     else   //всем
     begin
-        AddLogMemo('#Посылаем всем сообщение: ' + command);
+        AddLogMemo('Посылаем всем сообщение: ' + command);
         if TCPServer.Contexts.Count > 0 then
           (*with TCPServer.Contexts.LockList do
           try
@@ -1185,7 +1253,7 @@ begin
     if (Connection.Socket <> nil) then
     begin
       IP := Connection.Socket.Binding.PeerIP;
-      MF.AddLogMemo('#Присоединение клиента');
+      MF.AddLogMemo('Присоединение клиента');
     end;
     //Nick := Connection.IOHandler.ReadLn;
     //BroadcastMsg('addlist|' + Nick);
@@ -1195,7 +1263,7 @@ end;
 procedure TMF.TCPServerDisconnect(AContext: TIdContext);
 begin
 //tmycontext(acontext).broadcastMsg('deletelist|' + tmycontext(acontext).Nick);
-  AddLogMemo('#Отсоединение клиента: ' + TMyContext(AContext).Nick);
+  AddLogMemo('Отсоединение клиента: ' + TMyContext(AContext).Nick);
 end;
 
 procedure TMF.TCPServerExecute(AContext: TIdContext);
@@ -1211,7 +1279,7 @@ begin
     try
       s := AContext.Connection.IOHandler.ReadLn;
     except
-      AContext.Connection.IOHandler.Close;
+      AContext.Connection.Disconnect;
     end;
 
     if s = '' then
@@ -1235,12 +1303,13 @@ begin
           TMyContext(AContext).UserId := StrToInt(arglist[1]);
         if arglist.Count > 2 then
           TMyContext(AContext).Version := arglist[2];
+        TMyContext(AContext).EchoTime  := Now;
         try
           AContext.Connection.IOHandler.WriteLn('#servertime:' + IntToStr(SecondOfTheDay(Now)));
           CheckContextVersion(TMyContext(AContext));
         except
-          try AContext.Connection.IOHandler.Close; except end;
-          AddLogMemo('#Ошибка записи: ' +Exception(ExceptObject).Message);
+          try AContext.Connection.Disconnect; except end;
+          AddLogMemo('Ошибка записи: ' +Exception(ExceptObject).Message);
         end;
       finally
         arglist.Free;
@@ -1252,8 +1321,10 @@ begin
 
       else
       if cmd = 'checkconnect' then
+      begin
+         TMyContext(AContext).EchoTime := Now();
          AContext.Connection.IOHandler.WriteLn('#echo:')
-
+      end
       else
         SocketCommand(AContext, cmd, arg);
 
@@ -1308,6 +1379,11 @@ if ARequestInfo.URI = Trim(TelURI_edt.Text) then
 
 end;
 
+procedure TMF.Tel_SRVContextCreated(AContext: TIdContext);
+begin
+  TMyContext(AContext).EchoTime := Now;
+end;
+
 procedure TMF.TestDb_btnClick(Sender: TObject);
 begin
 
@@ -1320,7 +1396,7 @@ begin
     DB.Open;
   except
     on E: Exception do begin
-       AddLog('#Не удалось подключиться к БД. Проверьте настройки. Текст ошибки "'+E.Message+'"');
+       AddLog('Не удалось подключиться к БД. Проверьте настройки. Текст ошибки "'+E.Message+'"');
 
     DBStatus_lbl.Caption := 'Не установлено';
     DBStatus_lbl.Font.Color := clMaroon;
@@ -1329,7 +1405,7 @@ begin
 
   if Db.Connected then
   begin
-    AddLog('#Соединение с БД установлено.');
+    AddLog('Соединение с БД установлено.');
 
     DBStatus_lbl.Caption := 'Установлено';
     DBStatus_lbl.Font.Color := $00408000;
@@ -1356,7 +1432,7 @@ begin
     Except
       on E : Exception do
       begin
-        AddLog('#Ошибка обновления сессии: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
+        AddLog('Ошибка обновления сессии: "' +E.Message + '". SQL: '+Q.SQL.Text+'.');
         Result := false;
       end;
 
@@ -1627,7 +1703,7 @@ begin
         begin
           if Transaction.Active then
              Transaction.Rollback;
-          WriteLog('#Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.', false);
+          WriteLog('Ошибка записи Call_Events! Ошибка: "' +E.Message + '". SQL: '+ SQL.Text+'.', false);
 
           fOk := Pos('deadlock', LowerCase(E.Message)) = 0;
           if not fOk then
@@ -1854,7 +1930,7 @@ var
   p, client_id: Integer;
   CallObj: TCallSession;
 begin
-  s := '#Поступление события на службы Call_Events' + #13#10 +
+  s := 'Поступление события на службы Call_Events' + #13#10 +
        fUri + #13#10 +
        fParams.Text;
   WriteLog(s);

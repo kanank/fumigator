@@ -190,8 +190,9 @@ end;
 
 function TTelphinRingMeToken.GetToken: Boolean;
 begin
-  GetTokenProc;
-  GetExtList;
+  Result := GetTokenProc;
+  if Result then
+    GetExtList;
 end;
 
 function TTelphinRingMeToken.GetExtList: boolean;

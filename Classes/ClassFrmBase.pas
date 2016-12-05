@@ -40,6 +40,7 @@ type
     procedure WmAcceptCall(var Msg: TMessage); message WM_ACCEPTCALL;
     procedure WmTransferCall(var Msg: TMessage); message WM_TRANSFERCALL;
     procedure WMActivateForm(var Msg: TMessage); message WM_ACTIVATE;
+    procedure WmConnectDB(var Msg: TMessage);  message WM_CONNECTDB;
     procedure DoStartCall; virtual;
     procedure DoFinishCall; virtual;
     procedure DoAcceptCall; virtual;
@@ -333,6 +334,11 @@ begin
 end;
 
 procedure TBaseForm.WMActivateForm(var Msg: TMessage);
+begin
+  SetControls;
+end;
+
+procedure TBaseForm.WmConnectDB(var Msg: TMessage);
 begin
   SetControls;
 end;

@@ -983,7 +983,6 @@ end;
 function TDataModuleMain.BeforeLogin: boolean;
 var
   answer: integer;
-  DBFileName0: string;
 begin
   {Result := false;
 
@@ -1129,7 +1128,7 @@ begin
 end;
 
 procedure TDataModuleMain.Calls_TimerTimer(Sender: TObject);
-var Q : TIBQuery;
+var
     ClP :ClientCallParams;
     tel :string;
     id: integer;
@@ -1287,8 +1286,6 @@ begin
 end;
 
 procedure TDataModuleMain.ClientListAfterPost(DataSet: TDataSet);
-var
-  i: Integer;
 begin
   if not ClientList0.Active then
     Exit;
@@ -1500,7 +1497,9 @@ begin
   begin
     try
       DB.Open;
-      MsgBoxInformation('Соединение с БД было восстановлено после несанкционированного отключения');
+      ///MsgBoxInformation('Соединение с БД было восстановлено после несанкционированного отключения');
+      PostMessageToAll(WM_CONNECTDB);
+      formMain.TrayBalloon('Фумигатор. Соединение с БД', 'Соединение с БД было восстановлено после несанкционированного отключения', mtInfo);
     Except
       MsgBoxError('Соединение с БД не было восстановлено после несанкционированного отключения!' + #13#10 +
         'Проверьте сетевое подключение');

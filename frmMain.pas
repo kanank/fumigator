@@ -10,12 +10,6 @@ uses
   IdSync, IdGlobal, Vcl.XPMan, IdAntiFreezeBase, Vcl.IdAntiFreeze,
   CommonTypes, CallClasses, RzLabel;
 
-const
-  WM_SHOWMSG         = WM_USER + 100;
-  WM_SHOWINCOMECALL  = WM_USER + 101;
-  WM_SHOWOUTCOMECALL = WM_USER + 102;
-  WM_CONNECTSOCKET   = WM_USER + 103;
-
 type
   TAppOptions = class
     DbServer: string;
@@ -85,6 +79,7 @@ type
     lblCall: TRzLabel;
     TimerCheck: TTimer;
     TimerUpdate: TTimer;
+    TimerDB: TTimer;
 
     procedure btnWorkersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -95,11 +90,6 @@ type
     procedure NewURClnt_miClick(Sender: TObject);
     procedure btnClientsClick(Sender: TObject);
     procedure RzMenuButton2Click(Sender: TObject);
-    //procedure ClientSocketDisconnect(Sender: TObject; Socket: TCustomWinSocket);
-    //procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
-    //procedure ClientSocketError(Sender: TObject; Socket: TCustomWinSocket;
-    // ErrorEvent: TErrorEvent; var ErrorCode: Integer);
-    //procedure ClientSocketRead(Sender: TObject; Socket: TCustomWinSocket);
     procedure RzMenuButton3Click(Sender: TObject);
     procedure btnSessionsClick(Sender: TObject);
     procedure FizClients_miClick(Sender: TObject);
@@ -115,6 +105,7 @@ type
     procedure TimerCheckTimer(Sender: TObject);
     procedure TimerUpdateTimer(Sender: TObject);
     procedure TimerEchoTimer(Sender: TObject);
+    procedure TimerDBTimer(Sender: TObject);
   private
     fCanClose: Boolean; // можно закрыть
     fPhoneListUpdated: Boolean;
@@ -152,6 +143,8 @@ type
     procedure OnCallTransfer(Sender: TObject);
 
     function GetHideOnCloseForAll(Sender: tObject): Boolean; // длЯ расчета HideOnClose
+
+    procedure TrayBalloon(ATitle, AMsg: string; AType: TMsgType=mtInfo);
   end;
 
 procedure LoadOptions(AIniFile: string);
@@ -650,9 +643,23 @@ begin
     MsgBoxWarning('Не получен ответ от сервера. Возможны проблемы со звонками');
 end;
 
+procedure TfrmMain.TimerDBTimer(Sender: TObject);
+var
+  f: Boolean;
+begin
+  f := True;
+  try
+    f := DM.DB.TestConnected;
+  except
+    f := False;
+  end;
+  if not f then
+    DM.DB.ForceClose;
+end;
+
 procedure TfrmMain.TimerEchoTimer(Sender: TObject);
 begin
-  if not TCPClient.Connected then
+  if not TCPClient.Connected or not DM.DB.Connected then
   begin
     TrayIcon.ShowBalloonHint('Фумигатор. Ограниченный режим работы', 'Нет соединения с сервером', bhiWarning);
     Exit;
@@ -675,6 +682,23 @@ begin
   DM.DB.Tag := 1;
   Application.Terminate;
   Exit;
+end;
+
+procedure TfrmMain.TrayBalloon(ATitle, AMsg: string; AType: TMsgType);
+var
+  mtt: TRzBalloonHintIcon;
+begin
+  case Atype of
+    mtInfo:
+      mtt := bhiInfo;
+    mtWarning:
+      mtt := bhiWarning;
+    mtError:
+      mtt := bhiError;
+    else
+      mtt := bhiInfo;
+  end;
+  TrayIcon.ShowBalloonHint(ATitle, Amsg, mtt);
 end;
 
 procedure TfrmMain.DoSocketConnect;
@@ -785,6 +809,7 @@ begin
          DM.CurrentUserSets.Rights.Refresh;
   end;
 end;
+
 
 procedure TfrmMain.WmConnectSocket(var Msg: TMessage);
 begin

@@ -6,18 +6,25 @@ uses
   Vcl.Forms, Winapi.Windows, Vcl.ExtCtrls, IBX.IBQuery, IBX.IBDatabase;
 
 const
-  WM_STARTCALL    = WM_USER + 200;
-  WM_FINISHCALL   = WM_USER + 201;
-  WM_ACCEPTCALL   = WM_USER + 202;
-  WM_TRANSFERCALL = WM_USER + 203;
+  WM_SHOWMSG         = WM_USER + 100;
+  WM_SHOWINCOMECALL  = WM_USER + 101;
+  WM_SHOWOUTCOMECALL = WM_USER + 102;
+  WM_CONNECTSOCKET   = WM_USER + 103;
+  WM_CONNECTDB       = WM_USER + 104;
 
-  WM_CMDFUMIGATOR = WM_USER + 300; //команды Фумигатора
+  WM_STARTCALL       = WM_USER + 200;
+  WM_FINISHCALL      = WM_USER + 201;
+  WM_ACCEPTCALL      = WM_USER + 202;
+  WM_TRANSFERCALL    = WM_USER + 203;
+
+  WM_CMDFUMIGATOR    = WM_USER + 300; //команды Фумигатора
         //wParam = 1 - обновить справочник клиентов
 
 type TClientType = (clFiz, clUr);
 type TTrayView =(trayNormal, trayMissed);
 
 type TActionStr = (asCreate,asEdit,asShow);
+type TMsgType = (mtInfo, mtWarning, mtError, mtQuestion);
 
 type
   CurrentUserRec = record

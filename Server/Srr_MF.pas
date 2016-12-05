@@ -234,6 +234,8 @@ type
     procedure WmReopenRights(var Msg: TMessage); message WM_REOPEN_RIGHTS;
 
     function GetRecordFile(ARecord_uuid: string): string;
+
+    procedure OnGetAccessToken(Sender: TObject);
   public
     CSection: TCriticalSection;
     CSectionFumigator: TCriticalSection;
@@ -712,6 +714,7 @@ begin
   fSessions         := TStringList.Create;
 
   AccessToken := TTelphinRingMeToken.Create;
+  AccessToken.OnGetToken := OnGetAccessToken;
 
   TCPServer.ContextClass := TMyContext;
 
@@ -817,6 +820,12 @@ begin
 end;
 
 
+
+procedure TMF.OnGetAccessToken(Sender: TObject);
+begin
+  AddLogMemo('Результат получения токена:' +
+    AccessToken.ResponseContent);
+end;
 
 procedure TMF.QPhonesBeforeOpen(DataSet: TDataSet);
 begin

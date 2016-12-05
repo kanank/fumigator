@@ -64,6 +64,9 @@ type
 
     fExtList: TStringList; //список extension
 
+    fOnGetToken: TNotifyEvent;
+    fResponseContent: string;
+
     procedure SetAutoReGet(AValue: boolean);
     function GetTokenProc(aRevoke: boolean = false): boolean;
     function CheckToken: Boolean;
@@ -80,6 +83,9 @@ type
     property TokenIsActive: Boolean read CheckToken;
 
     property ExtensionList: TStringList read fExtList;
+
+    property OnGetToken: TNotifyEvent read fOnGetToken write fOnGetToken;
+    property ResponseContent: string read fResponseContent write fResponseContent;
 
     function HttpGet(aUrl: string; aUseApiUrl: Boolean = true): string; override;
 
@@ -192,7 +198,10 @@ function TTelphinRingMeToken.GetToken: Boolean;
 begin
   Result := GetTokenProc;
   if Result then
-    GetExtList;
+    try GetExtList except end;
+  if Assigned(fOnGetToken) then
+    fOnGetToken(Self);
+
 end;
 
 function TTelphinRingMeToken.GetExtList: boolean;
@@ -269,6 +278,7 @@ begin
 
       if sResponse = '' then
         Exit;
+      fResponseContent := sResponse;
 
       json.Parse(BytesOf(sResponse), 0);
       fToken := json.Values['access_token'].ToString;
@@ -281,6 +291,8 @@ begin
     except
       Result := false;
       fToken := '';
+      fResponseContent := 'Ошибка: ' + Self.HttpErr + #13#10 +
+                   'Content: ' + fResponseContent;
     end;
   finally
     //stream.Free;

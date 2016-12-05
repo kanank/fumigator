@@ -553,6 +553,10 @@ object MF: TMF
       object TabPhones: TTabSheet
         Caption = #1058#1077#1083#1077#1092#1086#1085#1099
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Label13: TLabel
           Left = 3
           Top = 3
@@ -584,6 +588,10 @@ object MF: TMF
       object TabVersion: TTabSheet
         Caption = #1042#1077#1088#1089#1080#1080
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           613
           335)

@@ -188,6 +188,7 @@ type
     Label15: TLabel;
     lbl_Socket: TLabel;
     CheckTimer: TTimer;
+    CheckTest: TTimer;
     procedure btnCallEventsClick(Sender: TObject);
     procedure Tel_SRVCommandGet(AContext: TIdContext;
       ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -211,6 +212,9 @@ type
     procedure btnVersionClick(Sender: TObject);
     procedure CheckTimerTimer(Sender: TObject);
     procedure Tel_SRVContextCreated(AContext: TIdContext);
+    procedure CheckTestTimer(Sender: TObject);
+    procedure SetCheckTest;
+    procedure TCPServerContextCreated(AContext: TIdContext);
   private
     fSessions: TStringList;
 
@@ -223,7 +227,7 @@ type
 
     procedure AfterOutcomCall(Sender: TObject);
     procedure CallFinished(Sender: TObject);
-    function SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
+    function SendCommandToUser(atsnum, command: string; ALock: Boolean=true; ALog: boolean=True): Boolean;
     function UpdateSession(ACallId: string): Boolean;
     //function AcceptCall(ACallId, APhone: string): boolean;
     //function FindClientByPhone(ACallFlow, ACallId, ACallApiId: string; APhone: string; Aats: string; var AclientIdType: string): Integer;
@@ -275,6 +279,8 @@ var
   CallMutex: THandle;
   CSectionMsg: TCriticalSection;
   CDbSection:  TCriticalSection;
+
+  StopT: TDateTime;
 
 implementation
 
@@ -538,6 +544,27 @@ begin
   end;
 end;
 
+procedure TMF.SetCheckTest;
+var
+  f: boolean;
+begin
+  f := CheckTest.Enabled;
+  if (Now >= StopT) or (CheckTest.Tag = 1) then
+    CheckTest.Enabled := CheckTest.Tag > -1;
+  if f <> CheckTest.Enabled then
+    AddLogMemo(IfThen(CheckTest.Enabled, 'Тестовый период окончен',
+      'Тестовый период отключен'));
+
+end;
+
+procedure TMF.CheckTestTimer(Sender: TObject);
+begin
+  SetCheckTest;
+  if CheckTest.Tag > -1 then
+    SendCommandToUser('*', '#msg:' + 'Тестовый период окончен! ' +
+       'Обратитесь к разработчику', true, false);
+end;
+
 procedure TMF.CheckTimerTimer(Sender: TObject);
 var
   Context: TMyContext;
@@ -545,6 +572,7 @@ var
   ListDel: TStringList;
   i: Integer;
 begin
+  SetCheckTest;
   if not Assigned(TCPServer.Contexts) then
     Exit;
 
@@ -559,7 +587,7 @@ begin
      end;
      for I := 0 to ListDel.Count - 1 do
      begin
-       TMyContext(ListDel.Objects[i]).Connection.Disconnect;
+       TMyContext(ListDel.Objects[i]).Free;
        AddLogMemo(Format('Удалено неактивное соединение %s',
                    [TMyContext(ListDel.Objects[i]).Nick]));
      end;
@@ -760,6 +788,9 @@ begin
   end;
 
   btnVersion.Click; //обновляем версию
+
+  StopT := EncodeDate(2016,12,13);
+  SetCheckTest;
 end;
 
 procedure TMF.FormDestroy(Sender: TObject);
@@ -934,9 +965,23 @@ begin
         AResponseInfo.ResponseNo    := 404;
         AResponseInfo.WriteHeader;
       end;
-  finally
-    WriteLog(IntToStr(AResponseInfo.ResponseNo)+ ' | ' + s);
-  end;
+   finally
+     WriteLog(IntToStr(AResponseInfo.ResponseNo)+ ' | ' + s);
+   end
+   else // включить тест
+    if LowerCase(ARequestInfo.Params.Values['action']) =
+         LowerCase('EnableTest') then
+    begin
+      CheckTest.Tag := 1;
+      SetCheckTest;
+    end
+   else // отключить тест
+    if LowerCase(ARequestInfo.Params.Values['action']) =
+       LowerCase('DisableTest') then
+    begin
+      CheckTest.Tag := -1;
+      SetCheckTest;
+    end;
   finally
     CSectionFumigator.Leave;
     //if Assigned(stream) then
@@ -1045,7 +1090,7 @@ begin
   end;
 end;
 
-function TMF.SendCommandToUser(atsnum, command: string; ALock: Boolean=true): Boolean;
+function TMF.SendCommandToUser(atsnum, command: string; ALock: Boolean=True; ALog: boolean=True): Boolean;
 var
   i, p: Integer;
   List: TList;
@@ -1090,7 +1135,8 @@ begin
 
     else   //всем
     begin
-        AddLogMemo('Посылаем всем сообщение: ' + command);
+        if Alog then
+          AddLogMemo('Посылаем всем сообщение: ' + command);
         if TCPServer.Contexts.Count > 0 then
           (*with TCPServer.Contexts.LockList do
           try
@@ -1269,6 +1315,11 @@ begin
   end;
 end;
 
+procedure TMF.TCPServerContextCreated(AContext: TIdContext);
+begin
+  TMyContext(AContext).EchoTime := Now;
+end;
+
 procedure TMF.TCPServerDisconnect(AContext: TIdContext);
 begin
 //tmycontext(acontext).broadcastMsg('deletelist|' + tmycontext(acontext).Nick);
@@ -1282,6 +1333,7 @@ var
   arglist: TStringList;
 begin
   try
+    SetCheckTest;
     if not AContext.Connection.Connected then
       Exit;
 
@@ -1390,7 +1442,7 @@ end;
 
 procedure TMF.Tel_SRVContextCreated(AContext: TIdContext);
 begin
-  TMyContext(AContext).EchoTime := Now;
+  //TMyContext(AContext).EchoTime := Now;
 end;
 
 procedure TMF.TestDb_btnClick(Sender: TObject);

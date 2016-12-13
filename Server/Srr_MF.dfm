@@ -630,7 +630,6 @@ object MF: TMF
   end
   object Tel_SRV: TIdHTTPServer
     Bindings = <>
-    OnContextCreated = Tel_SRVContextCreated
     TerminateWaitTime = 30000
     AutoStartSession = True
     OnCommandGet = Tel_SRVCommandGet
@@ -796,6 +795,7 @@ object MF: TMF
   object TCPServer: TIdTCPServer
     Bindings = <>
     DefaultPort = 0
+    OnContextCreated = TCPServerContextCreated
     OnConnect = TCPServerConnect
     OnDisconnect = TCPServerDisconnect
     OnExecute = TCPServerExecute
@@ -846,5 +846,12 @@ object MF: TMF
     OnTimer = CheckTimerTimer
     Left = 373
     Top = 81
+  end
+  object CheckTest: TTimer
+    Enabled = False
+    Interval = 5000
+    OnTimer = CheckTestTimer
+    Left = 421
+    Top = 33
   end
 end
